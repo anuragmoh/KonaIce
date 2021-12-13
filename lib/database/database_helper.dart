@@ -63,7 +63,7 @@ class DatabaseHelper {
   }
 
   String _randomAlphaNumericString(int length) {
-    final allowedChars =
+    const allowedChars =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     var randomString = "";
     for (var i = 0; i <= length - 1; i++) {
