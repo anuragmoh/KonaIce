@@ -15,4 +15,6 @@ class AppColors {
   static const denotiveColor2 = Color(0xFF009227);
   static const denotiveColor3 = Color(0xFFC57900);
   static const denotiveColor4 = Color(0xFFB9B9B9);
+
+  static const whiteColor = Color(0xFFFFFFFF);
 }
