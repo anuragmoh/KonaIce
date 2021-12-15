@@ -11,10 +11,10 @@ class SessionDAO {
   Future insert(Session session) async {
     try {
       final db = await _db;
-      var res = await db.rawInsert(
+      var result = await db.rawInsert(
           "INSERT OR REPLACE INTO $tableName (key,value) VALUES (?,?)",
           [session.key, session.value]);
-      return res;
+      return result;
     } catch (error) {
       debugPrint(error.toString());
     }
@@ -23,10 +23,10 @@ class SessionDAO {
   Future<Session?> getValueForKey(String key) async {
     try {
       final db = await _db;
-      var res =
+      var result =
           await db.rawQuery("SELECT * from $tableName where key = ?", [key]);
-      if (res.isNotEmpty) {
-        return Session.fromMap(res.first);
+      if (result.isNotEmpty) {
+        return Session.fromMap(result.first);
       } else {
         return null;
       }
@@ -38,7 +38,7 @@ class SessionDAO {
   Future delete(String key) async {
     try {
       final db = await _db;
-      var res = await db.delete(tableName, where: "key = ?", whereArgs: [key]);
+      await db.delete(tableName, where: "key = ?", whereArgs: [key]);
     } catch (error) {
       debugPrint(error.toString());
     }
@@ -47,7 +47,7 @@ class SessionDAO {
   Future clearSessionData() async {
     try {
       final db = await _db;
-      var res = await db.rawDelete("DELETE from $tableName");
+      await db.rawDelete("DELETE from $tableName");
     } catch (error) {
       debugPrint(error.toString());
     }
