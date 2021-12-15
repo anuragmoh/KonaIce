@@ -38,7 +38,7 @@ class SessionDAO {
   Future delete(String key) async {
     try {
       final db = await _db;
-      var result = await db.delete(tableName, where: "key = ?", whereArgs: [key]);
+      await db.delete(tableName, where: "key = ?", whereArgs: [key]);
     } catch (error) {
       debugPrint(error.toString());
     }
@@ -47,7 +47,7 @@ class SessionDAO {
   Future clearSessionData() async {
     try {
       final db = await _db;
-      var result = await db.rawDelete("DELETE from $tableName");
+      await db.rawDelete("DELETE from $tableName");
     } catch (error) {
       debugPrint(error.toString());
     }
