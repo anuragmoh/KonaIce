@@ -7,6 +7,7 @@ class AppColors {
   static const textColor1 = Color(0xFF181818);
   static const textColor2 = Color(0xFF707070);
   static const textColor3 = Color(0xFFC8ECFF);
+  static const textColor4 = Color(0xFF444444);
 
   static const gradientColor1 = Color(0xFF15A0C9);
   static const gradientColor2 = Color(0xFF096798);

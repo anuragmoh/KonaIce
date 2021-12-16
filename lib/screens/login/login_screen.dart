@@ -4,6 +4,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -188,7 +189,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   onTapSingIn(){
-
+     Navigator.of(context).pushReplacement(
+         MaterialPageRoute(builder: (context) => const Dashboard())
+     );
   }
   onTapForgotPassword(){
     //print("onTap Forget password");
