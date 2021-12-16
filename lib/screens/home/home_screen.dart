@@ -38,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     stopTimer();
   }
@@ -106,56 +105,61 @@ class _HomeScreenState extends State<HomeScreen> {
               var eventDetails = eventList[index];
             return  Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
-              child: Card(
-                elevation: 0.0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 18.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: CommonWidgets().textWidget(eventDetails.eventName,
-                            StyleConstants.customTextStyle(fontSize:
-                            16.0, color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)
+              child: GestureDetector(
+                onTap: () {
+                  onTapEventItem(index);
+                },
+                child: Card(
+                  elevation: 0.0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 18.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: CommonWidgets().textWidget(eventDetails.eventName,
+                              StyleConstants.customTextStyle(fontSize:
+                              16.0, color: getMaterialColor(AppColors.textColor1),
+                                  fontFamily: FontConstants.montserratBold)
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 5.0),
-                        child: Row(
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Row(
+                            children: [
+                              CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 14.0, height: 19.0),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: CommonWidgets().textWidget(eventDetails.location,
+                                    StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Row(
                           children: [
-                            CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 14.0, height: 19.0),
+                            CommonWidgets().image(image: AssetsConstants.dateIcon, width: 14.0, height: 19.0),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: CommonWidgets().textWidget(eventDetails.location,
-                                  StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)
+                              child: CommonWidgets().textWidget(eventDetails.date,
+                                  StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 40),
+                              child: CommonWidgets().textWidget(eventDetails.time,
+                                StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          CommonWidgets().image(image: AssetsConstants.dateIcon, width: 14.0, height: 19.0),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: CommonWidgets().textWidget(eventDetails.date,
-                                StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 40),
-                            child: CommonWidgets().textWidget(eventDetails.time,
-                              StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                )
+                        )
+                      ],
+                    ),
+                  )
+                ),
               ),
             );
           }
@@ -224,6 +228,10 @@ class _HomeScreenState extends State<HomeScreen> {
       isClockIn = !isClockIn;
     });
        isClockIn ? startTimer() : stopTimer();
+  }
+
+  onTapEventItem(int index) {
+
   }
 
     startTimer() {
