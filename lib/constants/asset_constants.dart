@@ -17,4 +17,6 @@ class AssetsConstants {
   static const topBarAppIcon = assetsTopBarIconsPath + 'top_bar_app_icon.png';
   static const dropDownArrowIcon = assetsTopBarIconsPath + 'drop_down_arrow.png';
 
+  static const switchAccount = assetsPath + 'ic_switch_account.png';
+
 }
