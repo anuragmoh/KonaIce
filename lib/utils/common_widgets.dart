@@ -6,4 +6,7 @@ class CommonWidgets{
     return Image.asset(image,width: width,height: height);
   }
 
+  Widget textView(String text, TextStyle textStyle) =>
+      Text(text, style: textStyle);
+
 }
