@@ -6,6 +6,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
@@ -22,10 +23,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   String currentDate = Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
-  String clockInTime = '00:00:00';
+  String clockInTime = StringConstants.defaultClockInTime;
   late DateTime startDateTime;
   late Timer clockInTimer;
   bool isClockIn = false;
+
+  var tempEventHomeNavigation = false;
+
   List <PartyEvents> eventList = [
     PartyEvents(eventName: 'NEW YEAR EVE EVENT', location: 'Houston, Texas, 77001', date: '31 Dec 2021 - 01 Jan 2022', time: '04:30 PM - 10:30 PM'),
     PartyEvents(eventName: 'OCKERMAN SCHOOL EVENT', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
@@ -47,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Container(
          color: getMaterialColor(AppColors.textColor3),
-          child: body()
+          child: tempEventHomeNavigation ? showEventMenuScreen() : body()
       ),
     );
   }
@@ -98,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget listViewContainer() {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      //height: 400.0,
       child: ListView.builder(
             itemCount: eventList.length,
               itemBuilder: (BuildContext context, int index) {
@@ -231,7 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   onTapEventItem(int index) {
-
+    setState(() {
+      tempEventHomeNavigation = true;
+    });
   }
 
     startTimer() {
@@ -245,6 +250,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     stopTimer() {
       clockInTimer.cancel();
-      clockInTime = '00:00:00';
+      clockInTime = StringConstants.defaultClockInTime;
     }
+
+   //Navigation Events
+  Widget showEventMenuScreen() {
+    return EventMenuScreen();
+  }
 }

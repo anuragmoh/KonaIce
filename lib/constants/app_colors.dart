@@ -18,4 +18,5 @@ class AppColors {
   static const denotiveColor4 = Color(0xFFB9B9B9);
 
   static const whiteColor = Color(0xFFFFFFFF);
+  static const whiteBorderColor = Color(0xFFDCDCDC);
 }

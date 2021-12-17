@@ -14,18 +14,22 @@ class StringConstants {
   static const settings = 'Settings';
   static const clockOut = 'Clock Out';
   static const clockIn = 'Clock In';
+  static const defaultClockInTime = '00:00:00';
 
+  //Event Menu Screen Text
+  static const plusSymbol = '+' ;
+  static const customMenu = 'Custom Menu';
 
-static const orderDetails = 'Order Details';
-static const customerName= 'Customer Name:';
-static const phone = 'Phone';
-static const email = 'Email';
-static const orderItem = 'Order Item';
-static const foodCost = 'Food Cost(s):';
-static const salesTax = 'Sales Tax:';
-static const subTotal = 'Subtotal:';
-static const discount = 'Discount:';
-static const tip = 'Tip:';
-static const total = 'Total:';
+  static const orderDetails = 'Order Details';
+  static const customerName= 'Customer Name:';
+  static const phone = 'Phone';
+  static const email = 'Email';
+  static const orderItem = 'Order Item';
+  static const foodCost = 'Food Cost(s):';
+  static const salesTax = 'Sales Tax:';
+  static const subTotal = 'Subtotal:';
+  static const discount = 'Discount:';
+  static const tip = 'Tip:';
+  static const total = 'Total:';
 }
 
