@@ -31,4 +31,14 @@ class AssetsConstants {
 
   static const backArrow = assetsPath + 'ic_back_arrow.png';
 
+  static const success = assetsPath + 'ic_success.png';
+
+  static const send = assetsPath + 'ic_send.png';
+
+  static const qrCode = assetsPath + 'ic_qr_code.png';
+  static const creditCard = assetsPath + 'ic_credit_card.png';
+  static const cash = assetsPath + 'ic_cash.png';
+
+
+
 }

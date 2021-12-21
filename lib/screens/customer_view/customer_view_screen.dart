@@ -277,7 +277,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         CommonWidgets().textView(StringConstants.total,StyleConstants.customTextStyle(fontSize: 20.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
-    const SizedBox(width:38.0),
+        const SizedBox(width:38.0),
         CommonWidgets().textView("\$",StyleConstants.customTextStyle(fontSize: 24.0, color: getMaterialColor(AppColors.denotiveColor2), fontFamily: FontConstants.montserratBold)),
         CommonWidgets().textView('$totalAmount',StyleConstants.customTextStyle(fontSize: 24.0, color: getMaterialColor(AppColors.denotiveColor2), fontFamily: FontConstants.montserratBold)),
 
