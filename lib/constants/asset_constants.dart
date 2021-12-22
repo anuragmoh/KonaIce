@@ -19,4 +19,7 @@ class AssetsConstants {
 
   static const switchAccount = assetsPath + 'ic_switch_account.png';
 
+  static const addToCartIcon = assetsPath + 'add_to_cart.png';
+  static const addCustomerIcon = assetsPath + 'add_customer.png';
+
 }

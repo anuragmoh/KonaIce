@@ -11,8 +11,8 @@ class CommonWidgets{
     return Image.asset(image,width: width,height: height);
   }
 
-  Widget textWidget(String textTitle, TextStyle textStyle) {
-    return Text(textTitle, style: textStyle);
+  Widget textWidget(String textTitle, TextStyle textStyle, {TextAlign textAlign = TextAlign.start}) {
+    return Text(textTitle, style: textStyle, textAlign: textAlign);
   }
 
   Widget topBar(Widget child) {
