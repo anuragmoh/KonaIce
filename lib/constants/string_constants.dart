@@ -32,7 +32,7 @@ class StringConstants {
   static const noItemsAdded = 'No Items Added';
 
   static const orderDetails = 'Order Details';
-  static const customerName= 'Customer Name:';
+  static const customerName = 'Customer Name';
   static const phone = 'Phone';
   static const email = 'Email';
   static const orderItem = 'Order Item';
@@ -42,5 +42,34 @@ class StringConstants {
   static const discount = 'Discount:';
   static const tip = 'Tip:';
   static const total = 'Total:';
-}
+  static const foodOrders = 'Food Orders';
+  static const filterOrders = 'Filter Orders';
+  static const orderId = 'Order ID';
+  static const date = 'Date';
+  static const payment = 'Payment';
+  static const price = 'Price';
+  static const status = 'Status';
+  static const items = 'ITEMS';
+  static const inProcess = 'IN PROGRESS';
+  static const orderDate = 'Order Date';
+  static const street = 'Street';
+  static const storeAddress = 'Store Address';
+  static const completed = 'Completed';
+  static const pending = 'Pending';
+  static const preparing = 'Preparing';
+  static const saved = 'Saved';
+  static const qty = 'Qty';
 
+  static const totalAmount = 'Total Amount';
+  static const amountReceived =  'Amount Received';
+  static const amountToReturn = 'Amount To Return';
+  static const proceed ='Proceed';
+  static const cash = 'Cash';
+  static const creditCard = 'Credit Card';
+  static const qrCode = 'QR Code';
+  static const paymentSuccessful = 'Payment Successful';
+  static const howWouldYouLikeToReceiveTheReceipt = 'How would you like to receive the receipt ?';
+  static const transactionId ='Transaction ID';
+  static const textMessage= 'Text Message';
+  static const billTotal = 'Bill Total';
+}

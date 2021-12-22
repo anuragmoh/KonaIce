@@ -22,4 +22,17 @@ class AssetsConstants {
   static const addToCartIcon = assetsPath + 'add_to_cart.png';
   static const addCustomerIcon = assetsPath + 'add_customer.png';
 
+  static const greenTriangle = assetsPath + 'ic_green_triangle.png';
+  static const blueTriangle = assetsPath + 'ic_blue_triangle.png';
+  static const yellowTriangle = assetsPath + 'ic_yellow_triangle.png';
+  static const redTriangle = assetsPath + 'ic_red_triangle.png';
+  static const filter = assetsPath + 'ic_filter.png';
+  static const backArrow = assetsPath + 'ic_back_arrow.png';
+  static const success = assetsPath + 'ic_success.png';
+
+  static const send = assetsPath + 'ic_send.png';
+
+  static const qrCode = assetsPath + 'ic_qr_code.png';
+  static const creditCard = assetsPath + 'ic_credit_card.png';
+  static const cash = assetsPath + 'ic_cash.png';
 }

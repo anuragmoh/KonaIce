@@ -36,6 +36,8 @@ dependencies:
   flutter_secure_storage: ^4.2.1
   # used for date_format
   intl: ^0.17.0
+  # country_code_picker
+  country_code_picker: ^2.0.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

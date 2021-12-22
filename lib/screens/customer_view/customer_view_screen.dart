@@ -4,6 +4,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -80,21 +81,21 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
         ),
       );
 
-  Widget textView(String text, TextStyle textStyle) =>
-      Text(text, style: textStyle);
+  // Widget textView(String text, TextStyle textStyle) =>
+  //     Text(text, style: textStyle);
 
   Widget componentHead(String orderDate) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            textView(
+            CommonWidgets().textView(
                 StringConstants.orderDetails,
                 StyleConstants.customTextStyle(
                     fontSize: 22.0,
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratBold)),
-            textView(
+            CommonWidgets().textView(
                 orderDate,
                 StyleConstants.customTextStyle(
                     fontSize: 14.0,
@@ -113,21 +114,21 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                textView(
-                    StringConstants.customerName,
+                CommonWidgets().textView(
+                    "${StringConstants.customerName}:",
                     StyleConstants.customTextStyle(
                         fontSize: 14.0,
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratMedium)),
                 const SizedBox(height: 13.0),
-                textView(
+                CommonWidgets().textView(
                     StringConstants.phone,
                     StyleConstants.customTextStyle(
                         fontSize: 14.0,
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratMedium)),
                 const SizedBox(height: 13.0),
-                textView(
+                CommonWidgets().textView(
                     StringConstants.email,
                     StyleConstants.customTextStyle(
                         fontSize: 14.0,
@@ -143,21 +144,21 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    textView(
+                    CommonWidgets().textView(
                         customerName,
                         StyleConstants.customTextStyle(
                             fontSize: 14.0,
                             color: getMaterialColor(AppColors.textColor1),
                             fontFamily: FontConstants.montserratMedium)),
                     const SizedBox(height: 13.0),
-                    textView(
+                    CommonWidgets().textView(
                         phoneNumber,
                         StyleConstants.customTextStyle(
                             fontSize: 14.0,
                             color: getMaterialColor(AppColors.textColor1),
                             fontFamily: FontConstants.montserratMedium)),
                     const SizedBox(height: 13.0),
-                    textView(
+                    CommonWidgets().textView(
                         email,
                         StyleConstants.customTextStyle(
                             fontSize: 14.0,
@@ -175,7 +176,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        textView(StringConstants.orderItem, StyleConstants.customTextStyle(fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+        CommonWidgets().textView(StringConstants.orderItem, StyleConstants.customTextStyle(fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
         ListView.builder(
             shrinkWrap: true,
             itemCount: 5,
@@ -196,16 +197,16 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
         Row(children: [
-          textView(itemTitle,StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+          CommonWidgets().textView(itemTitle,StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
           const SizedBox(width: 5.0),
-          textView('x',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+          CommonWidgets().textView('x',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
           const SizedBox(width: 5.0),
-          textView('$itemCount',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+          CommonWidgets().textView('$itemCount',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
         ],),
         Row(
           children: [
-            textView("\$",StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
-            textView('$itemAmount',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+            CommonWidgets().textView("\$",StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+            CommonWidgets(). textView('$itemAmount',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
           ],
         ),
       ]),
@@ -260,11 +261,11 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
       Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            textView(billTitle,StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+            CommonWidgets().textView(billTitle,StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
             Row(
               children: [
-                textView("\$",StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
-                textView('$itemAmount',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+                CommonWidgets().textView("\$",StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+                CommonWidgets().textView('$itemAmount',StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
               ],
             ),
           ]),
@@ -275,10 +276,10 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   Widget totalBillView(double totalAmount)=> Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-    textView(StringConstants.total,StyleConstants.customTextStyle(fontSize: 20.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
-    const SizedBox(width:38.0),
-    textView("\$",StyleConstants.customTextStyle(fontSize: 24.0, color: getMaterialColor(AppColors.denotiveColor2), fontFamily: FontConstants.montserratBold)),
-    textView('$totalAmount',StyleConstants.customTextStyle(fontSize: 24.0, color: getMaterialColor(AppColors.denotiveColor2), fontFamily: FontConstants.montserratBold)),
+        CommonWidgets().textView(StringConstants.total,StyleConstants.customTextStyle(fontSize: 20.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+        const SizedBox(width:38.0),
+        CommonWidgets().textView("\$",StyleConstants.customTextStyle(fontSize: 24.0, color: getMaterialColor(AppColors.denotiveColor2), fontFamily: FontConstants.montserratBold)),
+        CommonWidgets().textView('$totalAmount',StyleConstants.customTextStyle(fontSize: 24.0, color: getMaterialColor(AppColors.denotiveColor2), fontFamily: FontConstants.montserratBold)),
 
   ]);
 

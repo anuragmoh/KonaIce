@@ -8,6 +8,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
+import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -534,6 +535,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   onTapChargeButton() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PaymentScreen()));
   }
 
   onTapSaveButton() {
