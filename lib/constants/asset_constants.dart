@@ -14,10 +14,12 @@ class AssetsConstants {
   static const notificationSelectedIcon = assetsBottomBarIconsPath + 'notification_selected.png';
   static const settingsUnSelectedIcon = assetsBottomBarIconsPath + 'settings_unselected.png';
   static const settingsSelectedIcon = assetsBottomBarIconsPath + 'settings_selected.png';
+  static const switchAccountUnSelectedIcon = assetsBottomBarIconsPath +'ic_switch_account_unselected.png';
   static const topBarAppIcon = assetsTopBarIconsPath + 'top_bar_app_icon.png';
   static const dropDownArrowIcon = assetsTopBarIconsPath + 'drop_down_arrow.png';
 
   static const switchAccount = assetsPath + 'ic_switch_account.png';
+
 
   static const addToCartIcon = assetsPath + 'add_to_cart.png';
   static const addCustomerIcon = assetsPath + 'add_customer.png';

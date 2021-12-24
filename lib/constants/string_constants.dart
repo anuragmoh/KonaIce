@@ -17,11 +17,14 @@ class StringConstants {
   static const defaultClockInTime = '00:00:00';
 
   //Event Menu Screen Text
-  static const plusSymbol = '+' ;
-  static const minusSymbol = '-' ;
+  static const plusSymbol = '+';
+
+  static const minusSymbol = '-';
+
   static const customMenu = 'Custom Menu';
   static const addFoodItems = 'Add food items ${StringConstants.plusSymbol}';
-  static const addFoodItemsExtras = 'Add Food Extras ${StringConstants.plusSymbol}';
+  static const addFoodItemsExtras =
+      'Add Food Extras ${StringConstants.plusSymbol}';
   static const addNewMenuItem = 'Add New Menu Item';
   static const clear = 'CLEAR';
   static const addCustomer = 'Add Customer';
@@ -61,15 +64,27 @@ class StringConstants {
   static const qty = 'Qty';
 
   static const totalAmount = 'Total Amount';
-  static const amountReceived =  'Amount Received';
+  static const amountReceived = 'Amount Received';
   static const amountToReturn = 'Amount To Return';
-  static const proceed ='Proceed';
+  static const proceed = 'Proceed';
   static const cash = 'Cash';
   static const creditCard = 'Credit Card';
   static const qrCode = 'QR Code';
   static const paymentSuccessful = 'Payment Successful';
-  static const howWouldYouLikeToReceiveTheReceipt = 'How would you like to receive the receipt ?';
-  static const transactionId ='Transaction ID';
-  static const textMessage= 'Text Message';
+  static const howWouldYouLikeToReceiveTheReceipt =
+      'How would you like to receive the receipt ?';
+  static const transactionId = 'Transaction ID';
+  static const textMessage = 'Text Message';
   static const billTotal = 'Bill Total';
+
+  //MyProfile
+  static const myProfile = 'My Profile';
+  static const firstName = 'First Name';
+  static const lastName = 'Last Name';
+  static const contactNumber = 'Contact Number';
+  static const changePassword = 'Change Password';
+  static const oldPassword = 'Old Password*';
+  static const newPassword = 'New Password*';
+  static const confirmPassword = 'Confirm Password*';
+  static const submit = 'Submit';
 }
