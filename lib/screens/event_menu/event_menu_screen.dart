@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -56,6 +57,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   Widget body() {
+    customerName = selectedMenuItems.isEmpty ? StringConstants.addCustomer : 'Nicholas Gibson';
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -79,9 +81,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
           child: Row(
             children: [
               Flexible(child: categoriesListContainer()),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: addCategoriesButton(),
+              Visibility(
+                visible: false,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: addCategoriesButton(),
+                ),
               )
             ],
           ),
@@ -155,7 +160,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
               onTap: () {
                 onTapGridItem(index);
               },
-              child: index == 0 ? addNewMenuItem() : menuItem(index));
+              child: menuItem(index));
+              //index == 0 ? addNewMenuItem() : menuItem(index));
         });
   }
 
@@ -311,7 +317,15 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               selectedItemDetailsComponent(index),
-              quantityCounter(index),
+              CommonWidgets().quantityIncrementDecrementContainer(
+                quantity: selectedMenuItems[index].selectedItemQuantity,
+                onTapPlus: () {
+                  onTapIncrementCountButton(index);
+                },
+                onTapMinus: () {
+                  onTapDecrementCountButton(index);
+                }
+              ),
             ],
           ),
         );
@@ -322,76 +336,42 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
   Widget selectedItemDetailsComponent(index) {
     MenuItems menuObjet = selectedMenuItems[index];
-     return Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Padding(
-           padding: const EdgeInsets.only(bottom: 2.0),
-           child: CommonWidgets().textWidget(menuObjet.itemName, StyleConstants.customTextStyle(
-               fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)),
-         ),
-         Visibility(
-           visible: (menuObjet.selectedExtras ?? []).isNotEmpty,
-           child: Padding(
-             padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
-             child: CommonWidgets().textWidget("Pumpkin Pie Syrup \n Sugar Free Vanilla", StyleConstants.customTextStyle(
-                 fontSize: 9.0, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratMedium)),
+     return GestureDetector(
+       onTap: () {
+         if (menuObjet.isItemHasExtras) {
+           onTapAddFoodExtras(index);
+         }
+       },
+       child: Column(
+         crossAxisAlignment: CrossAxisAlignment.start,
+         children: [
+           Padding(
+             padding: const EdgeInsets.only(bottom: 2.0),
+             child: CommonWidgets().textWidget(menuObjet.itemName, StyleConstants.customTextStyle(
+                 fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)),
            ),
-         ),
-         Visibility(
-           visible: menuObjet.isItemHasExtras,
-           child: GestureDetector(
-             onTap: () {
-               onTapFoodExtras(index);
-             },
+           Visibility(
+             visible: (menuObjet.selectedExtras).isNotEmpty,
+             child: Padding(
+               padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
+               child: CommonWidgets().textWidget("Pumpkin Pie Syrup \n Sugar Free Vanilla", StyleConstants.customTextStyle(
+                   fontSize: 9.0, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratMedium)),
+             ),
+           ),
+           Visibility(
+             visible: menuObjet.isItemHasExtras,
              child: Padding(
                padding: const EdgeInsets.only(bottom: 2.0),
                child: CommonWidgets().textWidget(StringConstants.addFoodItemsExtras, StyleConstants.customTextStyle(
                    fontSize: 9.0, color: getMaterialColor(AppColors.primaryColor1), fontFamily: FontConstants.montserratMedium)),
              ),
            ),
-         ),
-         CommonWidgets().textWidget('${StringConstants.symbolDollar}${menuObjet.totalPrice}', StyleConstants.customTextStyle(
-             fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
-       ],
+           CommonWidgets().textWidget('${StringConstants.symbolDollar}${menuObjet.totalPrice}', StyleConstants.customTextStyle(
+               fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+         ],
+       ),
      );
   }
-
-  Widget quantityCounter(index) {
-    return Row(
-        children: [
-         GestureDetector(
-           onTap: () {
-             onTapDecrementCountButton(index);
-           },
-             child: incrementDecrementButton(StringConstants.minusSymbol)),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: CommonWidgets().textWidget('${selectedMenuItems[index].selectedItemQuantity}', StyleConstants.customTextStyle(
-                fontSize: 12.0, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratSemiBold)),
-          ),
-          GestureDetector(
-            onTap: () {
-              onTapIncrementCountButton(index);
-            },
-              child: incrementDecrementButton(StringConstants.plusSymbol)),
-        ],
-    );
-  }
-
-  Widget incrementDecrementButton(String title) {
-    return  Container(
-      width: 15.0,
-      height: 15.0,
-      decoration: BoxDecoration(
-        color: getMaterialColor(AppColors.primaryColor2),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
-          fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratSemiBold), textAlign: TextAlign.center),
-    );
-  }
-
 
   Widget categoriesNameButton(int index) {
     return InkWell(
@@ -512,6 +492,20 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     );
   }
 
+  //FoodExtra popup
+  showAddFoodExtrasPopUp(MenuItems item) async {
+   var result = await showDialog(
+        barrierDismissible: false,
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return FoodExtraPopup(item: item);
+        });
+   setState(() {
+
+   });
+   print('$result');
+  }
 
   //Action Event
   onTapAddCategoryButton() {
@@ -535,7 +529,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   onTapChargeButton() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PaymentScreen()));
+    showPaymentScreen();
   }
 
   onTapSaveButton() {
@@ -575,9 +569,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   onTapGridItem(int index) {
-    if (index == 0) {
-      print('add New Item');
-    } else {
+    // if (index == 0) {
+    //   print('add New Item');
+    // } else {
     if (!menuItems[index].isItemSelected) {
     setState(() {
     menuItems[index].isItemSelected = true;
@@ -585,31 +579,37 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     selectedMenuItems.add(menuItems[index]);
     });
     }
-    }
+   // }
   }
 
   onTapFoodExtras(int index) {
-    print(index);
+   showAddFoodExtrasPopUp(menuItems[index]);
   }
 
   onTapAddFoodExtras(int index) {
-
+    showAddFoodExtrasPopUp(menuItems[index]);
   }
+
+  //Navigation
+  showPaymentScreen() {
+   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PaymentScreen()));
+ }
 
 }
   
   getMenuItems() {
     return [
-      MenuItems(itemName: StringConstants.addNewMenuItem, price: 0.0),
-      MenuItems(itemName: 'Klassic', price: 3.0, isItemHasExtras: true),
+      // MenuItems(itemName: StringConstants.addNewMenuItem, price: 0.0),
+      MenuItems(itemName: 'Kiddie', price: 5.0),
+      MenuItems(itemName: 'Klassic', price: 3.0, isItemHasExtras: true, extraContents: getFoodExtras()),
       MenuItems(itemName: 'Kollectible', price: 5.0),
-    MenuItems(itemName: 'Kona Special', price: 5.0),
-    MenuItems(itemName: 'Fruityful', price: 5.0),
-    MenuItems(itemName: 'Kiddie', price: 5.0),
+      MenuItems(itemName: 'Kona Special', price: 5.0),
+      MenuItems(itemName: 'Fruityful', price: 5.0),
+      MenuItems(itemName: 'Kiddie', price: 5.0),
       MenuItems(itemName: 'Klassic', price: 3.0),
       MenuItems(itemName: 'Kollectible', price: 5.0),
       MenuItems(itemName: 'Kona Special', price: 5.0),
-      MenuItems(itemName: 'Fruityful', price: 5.0, isItemHasExtras: true),
+      MenuItems(itemName: 'Fruityful', price: 5.0, isItemHasExtras: true, extraContents: getFoodExtras()),
       MenuItems(itemName: 'Kiddie', price: 5.0),
       MenuItems(itemName: 'Klassic', price: 3.0),
       MenuItems(itemName: 'Kollectible', price: 5.0),
@@ -620,15 +620,29 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
       MenuItems(itemName: 'Kollectible', price: 5.0),
       MenuItems(itemName: 'Kona Special', price: 5.0),
       MenuItems(itemName: 'Fruityful', price: 5.0),
-      MenuItems(itemName: 'Kiddie', price: 5.0, isItemHasExtras: true),
+      MenuItems(itemName: 'Kiddie', price: 5.0, isItemHasExtras: true, extraContents: getFoodExtras()),
       MenuItems(itemName: 'Klassic', price: 3.0),
       MenuItems(itemName: 'Kollectible', price: 5.0),
       MenuItems(itemName: 'Kona Special', price: 5.0),
       MenuItems(itemName: 'Fruityful', price: 5.0),
-      MenuItems(itemName: 'Kiddie', price: 5.0, isItemHasExtras: true),
+      MenuItems(itemName: 'Kiddie', price: 5.0, isItemHasExtras: true, extraContents: getFoodExtras()),
       MenuItems(itemName: 'Klassic', price: 3.0),
       MenuItems(itemName: 'Kollectible', price: 5.0),
       MenuItems(itemName: 'Kona Special', price: 5.0),
       MenuItems(itemName: 'Fruityful', price: 5.0),
     ];
   }
+
+List<FoodExtras> getFoodExtras() {
+  return [
+    FoodExtras(contentName: 'Pumpkin Pie Syrup', price: 5.0),
+    FoodExtras(contentName: 'Sugar Free Vanilla', price: 4.0),
+    FoodExtras(contentName: 'Hazelnut Syrup', price: 3.0),
+    FoodExtras(contentName: 'Sugar Free Caramel', price: 2.0),
+    FoodExtras(contentName: 'Lemonade Flavour Shots', price: 5.0),
+    FoodExtras(contentName: 'Dairy Additives', price: 4.0),
+    FoodExtras(contentName: 'Frappe Flavour Shots', price: 4.0),
+    FoodExtras(contentName: 'Tea Flavour Shots', price: 5.0),
+    FoodExtras(contentName: 'Coffee Flavour Shots', price: 5.0),
+  ];
+}

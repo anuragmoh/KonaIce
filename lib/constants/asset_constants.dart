@@ -35,4 +35,5 @@ class AssetsConstants {
   static const qrCode = assetsPath + 'ic_qr_code.png';
   static const creditCard = assetsPath + 'ic_credit_card.png';
   static const cash = assetsPath + 'ic_cash.png';
+  static const popupCloseIcon = assetsPath + 'close.png';
 }

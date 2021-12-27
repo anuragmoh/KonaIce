@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
+import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -20,6 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
 
   bool isPasswordVisible = true;
+  bool isLoginView = true;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.only(top: 52.0, bottom: 39.0),
                 child: icon(),
               ),
-              loginContainer(),
+              isLoginView ? loginContainer() : ForgetPasswordScreen(navigateBackToLoginView: onTapFromForgetPasswordView,),
+             // loginContainer(),
             ],
           ),
         ),
@@ -50,8 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget loginContainer() {
     return Container(
-      color: getMaterialColor(AppColors.whiteColor),
       width: 360.0,
+      decoration: StyleConstants.customBoxShadowDecorationStyle(circularRadius: 3.6),
       child: Column(
         children: [
           Padding(
@@ -194,8 +197,14 @@ class _LoginScreenState extends State<LoginScreen> {
      );
   }
   onTapForgotPassword(){
-    //print("onTap Forget password");
+   setState(() {
+     isLoginView = false;
+   });
   }
-
+  onTapFromForgetPasswordView() {
+    setState(() {
+      isLoginView = true;
+    });
+  }
 
 }
