@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
-import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
@@ -94,6 +93,8 @@ class CommonWidgets {
 
   Widget textView(String text, TextStyle textStyle) =>
       Text(text, style: textStyle);
+
+
 
   Widget quantityIncrementDecrementContainer(
       {required int quantity, required Function onTapMinus, required Function onTapPlus}) {
