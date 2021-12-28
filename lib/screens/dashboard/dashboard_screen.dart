@@ -56,7 +56,7 @@ class _DashboardState extends State<Dashboard> {
             //   child: body(),
           ),
           // CommonWidgets().bottomBar(true, onTapBottomListItem),
-          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,)
+          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: true,)
         ],
       ),
     );

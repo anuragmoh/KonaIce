@@ -256,7 +256,7 @@ class CommonWidgets {
   //         }),
   //   );
   // }
-
+/*
   Widget bottomBarSwitchAccountImage(bool accountImageVisibility) {
     return Visibility(
       visible: accountImageVisibility,
@@ -272,5 +272,5 @@ class CommonWidgets {
         ),
       ),
     );
-  }
+  }*/
 }

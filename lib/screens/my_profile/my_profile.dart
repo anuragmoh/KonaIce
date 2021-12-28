@@ -40,7 +40,7 @@ class _MyProfileState extends State<MyProfile> {
             ),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
-              accountImageVisibility: false,
+              accountImageVisibility: false,isFromDashboard: false,
             )
             // CommonWidgets().bottomBar(false),
           ],

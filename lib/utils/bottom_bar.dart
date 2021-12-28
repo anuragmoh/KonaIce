@@ -16,11 +16,13 @@ import 'common_widgets.dart';
 class BottomBarWidget extends StatefulWidget {
   final Function onTapCallBack;
   final bool accountImageVisibility;
+  final bool isFromDashboard;
 
   const BottomBarWidget(
       {Key? key,
         required this.onTapCallBack,
-        required this.accountImageVisibility})
+        required this.accountImageVisibility,
+      required this.isFromDashboard,})
       : super(key: key);
 
   @override
@@ -88,6 +90,9 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                   currentIndex = index;
                   widget.onTapCallBack(index);
                 });
+                if(!widget.isFromDashboard){
+                  Navigator.popUntil(context, (route) => route.isFirst);
+                }
               },
               child: Row(
                 children: [

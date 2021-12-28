@@ -50,6 +50,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
               accountImageVisibility: false,
+              isFromDashboard: false,
             )
             // CommonWidgets().bottomBar(false),
           ],
