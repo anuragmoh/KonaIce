@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
-import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'constants/app_colors.dart';
