@@ -74,7 +74,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
           Expanded(
             child: isProduct ? body() : const AllOrdersScreen(),
           ),
-          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,)
+          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: false,)
         ],
       ),
     );
