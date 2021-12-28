@@ -39,9 +39,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               width: MediaQuery.of(context).size.width,
             )),
             Expanded(child: bodyWidget()),
-            CommonWidgets().bottomBar(SizedBox(
-              width: MediaQuery.of(context).size.width,
-            )),
+            // CommonWidgets().bottomBar(false),
           ],
         ),
       ),
@@ -64,13 +62,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
         InkWell(
           onTap: onTapBackButton,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 14.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 19.0, vertical: 14.0),
             child: CommonWidgets().image(
                 image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
           ),
         ),
         leftSideTopComponent(totalAmount),
-        const SizedBox(height: 36.0,),
+        const SizedBox(
+          height: 36.0,
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Divider(
@@ -111,7 +112,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               // Amount to return field
               Visibility(
-                visible: isPaymentDone== false && paymentModeType == 0 ? true : false,
+                visible: isPaymentDone == false && paymentModeType == 0
+                    ? true
+                    : false,
                 child: Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,8 +135,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 '\$',
                                 StyleConstants.customTextStyle(
                                     fontSize: 22.0,
-                                    color: getMaterialColor(AppColors.textColor1),
-                                    fontFamily: FontConstants.montserratMedium)),
+                                    color:
+                                        getMaterialColor(AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
                             const SizedBox(
                               width: 10.0,
                             ),
@@ -141,7 +146,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 decoration: BoxDecoration(
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(8.0)),
-                                    color: getMaterialColor(AppColors.whiteColor),
+                                    color:
+                                        getMaterialColor(AppColors.whiteColor),
                                     border: Border.all(
                                         color: getMaterialColor(
                                             AppColors.primaryColor2))),
@@ -181,7 +187,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               // Return Amount
               Visibility(
-                visible: isPaymentDone== false && paymentModeType == 0 ? true : false,
+                visible: isPaymentDone == false && paymentModeType == 0
+                    ? true
+                    : false,
                 child: Expanded(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,14 +208,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 '\$',
                                 StyleConstants.customTextStyle(
                                     fontSize: 22.0,
-                                    color: getMaterialColor(AppColors.textColor1),
-                                    fontFamily: FontConstants.montserratMedium)),
+                                    color:
+                                        getMaterialColor(AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
                             CommonWidgets().textWidget(
                                 '$returnAmount',
                                 StyleConstants.customTextStyle(
                                     fontSize: 22.0,
-                                    color: getMaterialColor(AppColors.textColor1),
-                                    fontFamily: FontConstants.montserratMedium)),
+                                    color:
+                                        getMaterialColor(AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
                           ],
                         )
                       ]),
@@ -215,7 +227,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               // Button
               buttonWidget(
-                  isPaymentDone== true
+                  isPaymentDone == true
                       ? StringConstants.newOrder
                       : StringConstants.proceed,
                   StyleConstants.customTextStyle(
@@ -227,7 +239,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
     return GestureDetector(
-      onTap: isPaymentDone == false  ? onTapProceed :onTapNewOrder,
+      onTap: isPaymentDone == false ? onTapProceed : onTapNewOrder,
       child: Container(
         decoration: BoxDecoration(
           color: getMaterialColor(AppColors.primaryColor2),
@@ -242,247 +254,314 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Widget leftBodyComponent() => SingleChildScrollView(
-    child: Column(children: [
-      paymentModeWidget(),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Divider(
-          color: getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-          thickness: 1,
+        child: Column(children: [
+          paymentModeWidget(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Divider(
+              color:
+                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+              thickness: 1,
+            ),
+          ),
+          SingleChildScrollView(child: paymentSuccess('35891456')),
+        ]),
+      );
+
+  Widget paymentModeWidget() => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 19.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
+            paymentModeView(
+                StringConstants.creditCard, 1, AssetsConstants.creditCard),
+            paymentModeView(StringConstants.qrCode, 2, AssetsConstants.qrCode),
+          ],
         ),
-      ),
-      SingleChildScrollView(child: paymentSuccess('35891456')),
-    ]),
-  );
-  
-  Widget paymentModeWidget()=> Padding(
-    padding: const EdgeInsets.symmetric(vertical: 19.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-      paymentModeView(StringConstants.cash,0,AssetsConstants.cash),
-      paymentModeView(StringConstants.creditCard,1,AssetsConstants.creditCard),
-      paymentModeView(StringConstants.qrCode,2,AssetsConstants.qrCode),
-    ],),
-  );
-  
-  Widget paymentModeView(String title,int index,String icon)=> GestureDetector(
-    onTap: (){
-      setState(() {
-        paymentModeType = index;
-      });
-    },
-    child: Row(children: [
-      Container(
-        decoration: BoxDecoration(
-          color: paymentModeType == index ? getMaterialColor(AppColors.primaryColor2) : null,
-          border: Border.all(color: getMaterialColor(AppColors.primaryColor2)),
-          borderRadius: const BorderRadius.all(Radius.circular(8.0))
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 7.0,vertical: 8.0) ,
-          child: CommonWidgets().image(image: icon, width: 25.0, height: 25.0),
-        ),
-      ),
-      const SizedBox(width: 10.0),
-      CommonWidgets().textWidget(title, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
-    ],),
-  );
-    
-  Widget paymentSuccess(String transactionId)=> Column(
-    children: [
-      const SizedBox(height: 68.0),
-    CommonWidgets().image(image: AssetsConstants.success, width: 72.0, height: 72.0),
-      const SizedBox(height: 21.0),
-      CommonWidgets().textWidget(StringConstants.paymentSuccessful, StyleConstants.customTextStyle(fontSize: 22.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
-      const SizedBox(height: 8.0),
-      Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-      CommonWidgets().textWidget('${StringConstants.transactionId}:', StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratSemiBold)),
-      CommonWidgets().textWidget(transactionId, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratSemiBold)),
-    ]),
-      const SizedBox(height: 38.0),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 135.0),
-        child: Divider(
-          color: getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-          thickness: 1,
-        ),
-      ),
-      const SizedBox(height: 28.0),
-      CommonWidgets().textWidget(StringConstants.howWouldYouLikeToReceiveTheReceipt, StyleConstants.customTextStyle(fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
-      const SizedBox(height: 12.0),
-      Container(
-  width:203.0,
-    decoration: BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      border: Border.all(color: getMaterialColor(AppColors.primaryColor2))
-    ),
-    child: Row(
-      children: [
+      );
+
+  Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
-        onTap: (){
+        onTap: () {
           setState(() {
-            receiptMode = 1;
+            paymentModeType = index;
           });
         },
-        child: Container(
-          decoration:BoxDecoration(
-          borderRadius:const BorderRadius.all(Radius.circular(8.0)),
-            color: receiptMode ==1 ? getMaterialColor(AppColors.primaryColor2) : null,
-           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 38.0,vertical: 9.0),
-            child: CommonWidgets().textWidget(StringConstants.email,StyleConstants.customTextStyle(fontSize: 9.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratRegular)),
-          ),
-        ),
-      ),
-      GestureDetector(
-        onTap:(){
-          setState(() {
-            receiptMode = 2;
-          });
-        },
-        child: Container(
-          decoration:BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            color: receiptMode ==2 ? getMaterialColor(AppColors.primaryColor2) : null,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 19.0,vertical: 9.0),
-            child: CommonWidgets().textWidget(StringConstants.textMessage,StyleConstants.customTextStyle(fontSize: 9.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratRegular)),
-          )
-        ),
-      ),
-    ],),
-  ),
-      const SizedBox(height: 19.0),
-      receiptMode ==1  ? emailReceiptWidget() : textMessageReceiptWidget(),
-
-    ],);
-
-  Widget emailReceiptWidget()=> Container(
-    width: 253.0,
-    height: 40.0,
-    decoration: BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      color: getMaterialColor(AppColors.gradientColor1),
-      border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
-    ),
-    child: Row(
-      children: [
-        Container(
-          width: 203.0,
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.whiteColor),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            // border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
-          ),
-          child:Row(children: [
-            Expanded(
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: paymentModeType == index
+                      ? getMaterialColor(AppColors.primaryColor2)
+                      : null,
+                  border: Border.all(
+                      color: getMaterialColor(AppColors.primaryColor2)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 9.0,left: 4.0),
-                child: TextField(
-                  controller: emailController,
-                  style: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratSemiBold),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
+                child: CommonWidgets()
+                    .image(image: icon, width: 25.0, height: 25.0),
+              ),
+            ),
+            const SizedBox(width: 10.0),
+            CommonWidgets().textWidget(
+                title,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratMedium)),
+          ],
+        ),
+      );
+
+  Widget paymentSuccess(String transactionId) => Column(
+        children: [
+          const SizedBox(height: 68.0),
+          CommonWidgets()
+              .image(image: AssetsConstants.success, width: 72.0, height: 72.0),
+          const SizedBox(height: 21.0),
+          CommonWidgets().textWidget(
+              StringConstants.paymentSuccessful,
+              StyleConstants.customTextStyle(
+                  fontSize: 22.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratMedium)),
+          const SizedBox(height: 8.0),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            CommonWidgets().textWidget(
+                '${StringConstants.transactionId}:',
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratSemiBold)),
+            CommonWidgets().textWidget(
+                transactionId,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratSemiBold)),
+          ]),
+          const SizedBox(height: 38.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 135.0),
+            child: Divider(
+              color:
+                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+              thickness: 1,
+            ),
+          ),
+          const SizedBox(height: 28.0),
+          CommonWidgets().textWidget(
+              StringConstants.howWouldYouLikeToReceiveTheReceipt,
+              StyleConstants.customTextStyle(
+                  fontSize: 16.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratMedium)),
+          const SizedBox(height: 12.0),
+          Container(
+            width: 203.0,
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                border: Border.all(
+                    color: getMaterialColor(AppColors.primaryColor2))),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      receiptMode = 1;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(8.0)),
+                      color: receiptMode == 1
+                          ? getMaterialColor(AppColors.primaryColor2)
+                          : null,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 38.0, vertical: 9.0),
+                      child: CommonWidgets().textWidget(
+                          StringConstants.email,
+                          StyleConstants.customTextStyle(
+                              fontSize: 9.0,
+                              color: getMaterialColor(AppColors.textColor1),
+                              fontFamily: FontConstants.montserratRegular)),
+                    ),
                   ),
                 ),
-              ),
-            ),
-
-          ],),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 11.0,vertical: 8.0),
-          child: CommonWidgets().image(image: AssetsConstants.send, width: 25.0, height: 25.0),
-        )
-      ],
-    ),
-  );
-  Widget textMessageReceiptWidget()=> Container(
-    width: 253.0,
-    height: 40.0,
-    decoration: BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      color: getMaterialColor(AppColors.gradientColor1),
-      border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
-    ),
-    child: Row(
-      children: [
-        Container(
-          width: 203.0,
-          height: 40.0,
-          decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.whiteColor),
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-           // border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
-          ),
-          child:Row(children: [
-            SizedBox(
-                width:50.0,
-                child: countryPicker()),
-            Container(
-              width: 1.0,
-              height: 20.0,
-              color: getMaterialColor(AppColors.primaryColor1),
-            ),
-             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 9.0,left: 4.0),
-                child: TextField(
-                controller: phoneNumberController,
-                keyboardType: TextInputType.phone,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  style: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratSemiBold),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      receiptMode = 2;
+                    });
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8.0)),
+                        color: receiptMode == 2
+                            ? getMaterialColor(AppColors.primaryColor2)
+                            : null,
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 19.0, vertical: 9.0),
+                        child: CommonWidgets().textWidget(
+                            StringConstants.textMessage,
+                            StyleConstants.customTextStyle(
+                                fontSize: 9.0,
+                                color: getMaterialColor(AppColors.textColor1),
+                                fontFamily: FontConstants.montserratRegular)),
+                      )),
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 19.0),
+          receiptMode == 1 ? emailReceiptWidget() : textMessageReceiptWidget(),
+        ],
+      );
+
+  Widget emailReceiptWidget() => Container(
+        width: 253.0,
+        height: 40.0,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          color: getMaterialColor(AppColors.gradientColor1),
+          border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 203.0,
+              height: 40.0,
+              decoration: BoxDecoration(
+                color: getMaterialColor(AppColors.whiteColor),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                // border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
               ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
+                      child: TextField(
+                        controller: emailController,
+                        style: StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.textColor1),
+                            fontFamily: FontConstants.montserratSemiBold),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-
-          ],),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+              child: CommonWidgets().image(
+                  image: AssetsConstants.send, width: 25.0, height: 25.0),
+            )
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 11.0,vertical: 8.0),
-          child: CommonWidgets().image(image: AssetsConstants.send, width: 25.0, height: 25.0),
-        )
-      ],
-    ),
-  );
-  Widget countryPicker()=> CountryCodePicker(
-    onChanged: (value){},
-    padding: EdgeInsets.zero,
-    textStyle: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium),
-    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-    initialSelection: '+91',
-    showFlag: false,
-    // optional. Shows only country name and flag
-    showCountryOnly: true,
-    // optional. Shows only country name and flag when popup is closed.
-    showOnlyCountryWhenClosed: false,
-    // optional. aligns the flag and the Text left
-    alignLeft: false,
-  );
+      );
+
+  Widget textMessageReceiptWidget() => Container(
+        width: 253.0,
+        height: 40.0,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          color: getMaterialColor(AppColors.gradientColor1),
+          border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 203.0,
+              height: 40.0,
+              decoration: BoxDecoration(
+                color: getMaterialColor(AppColors.whiteColor),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                // border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(width: 50.0, child: countryPicker()),
+                  Container(
+                    width: 1.0,
+                    height: 20.0,
+                    color: getMaterialColor(AppColors.primaryColor1),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
+                      child: TextField(
+                        controller: phoneNumberController,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        style: StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.textColor1),
+                            fontFamily: FontConstants.montserratSemiBold),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+              child: CommonWidgets().image(
+                  image: AssetsConstants.send, width: 25.0, height: 25.0),
+            )
+          ],
+        ),
+      );
+
+  Widget countryPicker() => CountryCodePicker(
+        onChanged: (value) {},
+        padding: EdgeInsets.zero,
+        textStyle: StyleConstants.customTextStyle(
+            fontSize: 12.0,
+            color: getMaterialColor(AppColors.textColor1),
+            fontFamily: FontConstants.montserratMedium),
+        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+        initialSelection: '+91',
+        showFlag: false,
+        // optional. Shows only country name and flag
+        showCountryOnly: true,
+        // optional. Shows only country name and flag when popup is closed.
+        showOnlyCountryWhenClosed: false,
+        // optional. aligns the flag and the Text left
+        alignLeft: false,
+      );
+
   onAmountEnter(double value) {
     if (value > totalAmount) {
       setState(() {
         returnAmount = value - totalAmount;
       });
-    }else{
+    } else {
       setState(() {
         returnAmount = 0.0;
       });
-
     }
   }
-
 
   // Right side panel design
 
@@ -758,7 +837,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ]);
 
   onTapNewOrder() {}
-  onTapProceed(){
+
+  onTapProceed() {
     setState(() {
       isPaymentDone = true;
     });

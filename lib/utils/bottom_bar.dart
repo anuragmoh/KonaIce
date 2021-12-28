@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -6,21 +7,27 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
-import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
-import 'package:kona_ice_pos/utils/bottom_bar.dart';
-import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
-class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+import 'common_widgets.dart';
+
+class BottomBarWidget extends StatefulWidget {
+  final Function onTapCallBack;
+  final bool accountImageVisibility;
+
+  const BottomBarWidget(
+      {Key? key,
+        required this.onTapCallBack,
+        required this.accountImageVisibility})
+      : super(key: key);
 
   @override
-  _DashboardState createState() => _DashboardState();
+  _BottomBarWidgetState createState() => _BottomBarWidgetState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _BottomBarWidgetState extends State<BottomBarWidget> {
   int currentIndex = 0;
   List<Widget> bodyWidgets = [
     const HomeScreen(),
@@ -44,66 +51,43 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: getMaterialColor(AppColors.textColor3),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          CommonWidgets().topBar(topBarComponent()),
-          Expanded(
-            child: bodyWidgets[currentIndex],
-            //   child: CommonWidgets().bodyWidgets[],
-            //   child: body(),
+    return Column(
+      children: [
+        Container(
+          height: 43.0,
+          decoration: BoxDecoration(
+              color: getMaterialColor(AppColors.primaryColor1),
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(8.0),
+                  topRight: Radius.circular(8.0))),
+          child: Row(
+            children: [
+              bottomBarComponent(),
+              const Spacer(),
+              bottomBarSwitchAccountImage()
+            ],
           ),
-          // CommonWidgets().bottomBar(true, onTapBottomListItem),
-          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: true,)
-        ],
-      ),
+        ),
+      ],
     );
-  }
-
-  Widget topBarComponent() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 19.0, right: 22.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          konaTopBarIcon(),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 18),
-              child: CommonWidgets().textWidget(
-                  StringConstants.dashboard,
-                  StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.whiteColor),
-                      fontFamily: FontConstants.montserratBold)),
-            ),
-          ),
-          GestureDetector(
-            onTap: onProfileChange,
-              child: CommonWidgets().profileComponent('Justin Powell')),
-        ],
-      ),
-    );
-  }
-
-  Widget konaTopBarIcon() {
-    return CommonWidgets()
-        .image(image: AssetsConstants.topBarAppIcon, width: 31.0, height: 31.0);
   }
 
   Widget bottomBarComponent() {
     return Padding(
       padding: const EdgeInsets.only(left: 21.0),
       child: ListView.builder(
+          shrinkWrap: true,
           itemCount: bottomItemList.length,
           scrollDirection: Axis.horizontal,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                onTapBottomListItem(index);
+                setState(() {
+                  // onTapBottomListItem(index);
+                  currentIndex = index;
+                  widget.onTapCallBack(index);
+                });
               },
               child: Row(
                 children: [
@@ -133,15 +117,21 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  onTapBottomListItem(int index) {
-    print(index);
-    setState(() {
-      currentIndex = index;
-    });
-  }
-
-  void onProfileChange() {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const MyProfile()));
+  Widget bottomBarSwitchAccountImage() {
+    return Visibility(
+      visible: true,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 21.0),
+        child: Row(
+          children: [
+            CommonWidgets().image(
+                image: AssetsConstants.switchAccountUnSelectedIcon,
+                width: 26.0,
+                height: 26.0)
+          ],
+        ),
+      ),
+    );
   }
 }
+

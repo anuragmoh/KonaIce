@@ -4,15 +4,20 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
+import 'package:kona_ice_pos/screens/home/home_screen.dart';
+import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
+import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
-class CommonWidgets{
-
-  image({required String image, required double width,required double height}){
-    return Image.asset(image,width: width,height: height);
+class CommonWidgets {
+  image(
+      {required String image, required double width, required double height}) {
+    return Image.asset(image, width: width, height: height);
   }
 
-  Widget textWidget(String textTitle, TextStyle textStyle, {TextAlign textAlign = TextAlign.start}) {
+  Widget textWidget(String textTitle, TextStyle textStyle,
+      {TextAlign textAlign = TextAlign.start}) {
     return Text(textTitle, style: textStyle, textAlign: textAlign);
   }
 
@@ -23,20 +28,7 @@ class CommonWidgets{
           color: getMaterialColor(AppColors.primaryColor1),
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(8.0),
-              bottomRight: Radius.circular(8.0))
-      ),
-      child: child,
-    );
-  }
-
-  Widget bottomBar(Widget child) {
-    return Container(
-      height: 43.0,
-      decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))
-      ),
+              bottomRight: Radius.circular(8.0))),
       child: child,
     );
   }
@@ -51,11 +43,12 @@ class CommonWidgets{
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: textWidget(userName, StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: getMaterialColor(AppColors.whiteColor),
-              fontFamily: FontConstants.montserratSemiBold)
-          ),
+          child: textWidget(
+              userName,
+              StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.whiteColor),
+                  fontFamily: FontConstants.montserratSemiBold)),
         ),
         CommonWidgets().image(
             image: AssetsConstants.dropDownArrowIcon, width: 10.0, height: 8.0)
@@ -63,10 +56,47 @@ class CommonWidgets{
     );
   }
 
+  Widget profileImage(String imageName) {
+    return Stack(
+      children: [
+        const CircleAvatar(
+          radius: 80.0,
+          backgroundImage: AssetImage(AssetsConstants.konaIcon),
+        ),
+        Positioned(
+          child: buildEditIcon(AppColors.whiteColor),
+          right: 2,
+          top: 110,
+        )
+      ],
+    );
+  }
+
+  Widget buildEditIcon(Color color) =>
+      buildCircle(
+          all: 8,
+          child: Icon(
+            Icons.edit,
+            color: color,
+            size: 20,
+          ));
+
+  Widget buildCircle({
+    required Widget child,
+    required double all,
+  }) =>
+      ClipOval(
+          child: Container(
+            padding: EdgeInsets.all(all),
+            color: AppColors.textColor6,
+            child: child,
+          ));
+
   Widget textView(String text, TextStyle textStyle) =>
       Text(text, style: textStyle);
 
-  Widget quantityIncrementDecrementContainer({required int quantity, required Function onTapMinus, required Function onTapPlus}) {
+  Widget quantityIncrementDecrementContainer(
+      {required int quantity, required Function onTapMinus, required Function onTapPlus}) {
     return Row(
       children: [
         GestureDetector(
@@ -76,8 +106,11 @@ class CommonWidgets{
             child: incrementDecrementButton(StringConstants.minusSymbol)),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
-          child: CommonWidgets().textWidget('$quantity', StyleConstants.customTextStyle(
-              fontSize: 12.0, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratSemiBold)),
+          child: CommonWidgets().textWidget(
+              '$quantity', StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor2),
+              fontFamily: FontConstants.montserratSemiBold)),
         ),
         GestureDetector(
             onTap: () {
@@ -87,8 +120,9 @@ class CommonWidgets{
       ],
     );
   }
+
   Widget incrementDecrementButton(String title) {
-    return  Container(
+    return Container(
       width: 15.0,
       height: 15.0,
       decoration: BoxDecoration(
@@ -96,33 +130,65 @@ class CommonWidgets{
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
-          fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratSemiBold), textAlign: TextAlign.center),
+          fontSize: 12.0,
+          color: getMaterialColor(AppColors.textColor4),
+          fontFamily: FontConstants.montserratSemiBold),
+          textAlign: TextAlign.center),
     );
   }
 
-  Widget popUpTopView({required String title, required Function onTapCloseButton}) {
+  Widget popUpTopView(
+      {required String title, required Function onTapCloseButton}) {
     return Container(
-      decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 20, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
-                fontSize: 16.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratSemiBold)),
-            GestureDetector(
-              onTap: (){
-                onTapCloseButton();
-              },
-              child: CommonWidgets().image(image: AssetsConstants.popupCloseIcon, width: 25.0, height: 25.0),
-            ),
-          ],
+        decoration: BoxDecoration(
+            color: getMaterialColor(AppColors.primaryColor1),
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))
         ),
-      ),
+        child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 20, 10),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CommonWidgets().textWidget(
+                      title, StyleConstants.customTextStyle(
+                      fontSize: 16.0,
+                      color: getMaterialColor(AppColors.whiteColor),
+                      fontFamily: FontConstants.montserratSemiBold)),
+                  GestureDetector(
+                    onTap: () {
+                      onTapCloseButton();
+                    },
+                    child: CommonWidgets().image(
+                        image: AssetsConstants.popupCloseIcon,
+                        width: 25.0,
+                        height: 25.0),
+                  ),
+                ])
+        )
     );
   }
+
+  Widget buttonWidget(String buttonTitle, VoidCallback onTap) =>
+      GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: getMaterialColor(AppColors.primaryColor2),
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Padding(
+            padding:
+            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 84.0),
+            child: Text(
+              buttonTitle,
+              style: StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratBold),
+            ),
+          ),
+        ),
+      );
 
 }
