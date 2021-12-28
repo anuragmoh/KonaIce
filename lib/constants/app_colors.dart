@@ -23,4 +23,5 @@ class AppColors {
 
   static const whiteColor = Color(0xFFFFFFFF);
   static const whiteBorderColor = Color(0xFFDCDCDC);
+  static const skyBlueBorderColor = Color(0xFFC9EDFF);
 }

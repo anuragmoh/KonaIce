@@ -21,6 +21,7 @@ class AssetsConstants {
 
   static const addToCartIcon = assetsPath + 'add_to_cart.png';
   static const addCustomerIcon = assetsPath + 'add_customer.png';
+  static const editIcon = assetsPath + 'ic_pencil_edit_icon.png';
 
   static const greenTriangle = assetsPath + 'ic_green_triangle.png';
   static const blueTriangle = assetsPath + 'ic_blue_triangle.png';

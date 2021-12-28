@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
@@ -29,7 +30,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     'Kona Koffee',
     'Fruit Flavours'
   ];
-  int selectedCategoryIndex = 0;
+  int selectedCategoryIndex = -1;
 
   List<MenuItems> menuItems = getMenuItems();
   List<MenuItems> selectedMenuItems = [];
@@ -507,6 +508,17 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
    print('$result');
   }
 
+  //Custom Menu popup
+  showCustomMenuPopup() {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+           return const CustomMenuPopup();
+        });
+  }
+
   //Action Event
   onTapAddCategoryButton() {
     print('tapped');
@@ -516,6 +528,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     if (index != selectedCategoryIndex) {
       setState(() {
         selectedCategoryIndex = index;
+        if (index == 0) {
+          showCustomMenuPopup();
+        }
       });
     }
   }

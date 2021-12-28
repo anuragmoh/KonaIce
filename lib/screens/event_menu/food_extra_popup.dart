@@ -40,33 +40,11 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          popUpTopView(title: '${StringConstants.customize} \'${item.itemName}\''),
+          CommonWidgets().popUpTopView(title: '${StringConstants.customize} \'${item.itemName}\'',
+            onTapCloseButton: onTapCloseButton, ),
           popUpBodyContainer(item),
           addFoodExtraPopUpButton(item)
         ],
-      ),
-    );
-  }
-
-  Widget popUpTopView({required String title}) {
-    return Container(
-      decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 10, 20, 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
-                fontSize: 16.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratSemiBold)),
-            GestureDetector(
-              onTap: onTapCloseButton,
-              child: CommonWidgets().image(image: AssetsConstants.popupCloseIcon, width: 25.0, height: 25.0),
-            ),
-          ],
-        ),
       ),
     );
   }
