@@ -630,7 +630,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
   //Navigation
   showPaymentScreen() {
-   Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PaymentScreen()));
+   Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentScreen( events:widget.events)));
  }
 
 }

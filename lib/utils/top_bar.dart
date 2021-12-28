@@ -52,10 +52,13 @@ class _TopBarState extends State<TopBar> {
                     eventNameAndAddress(widget.eventName, widget.eventAddress),
               ),
             ),
-            Flexible(
-              flex: 1,
-              child: Container(
-                child: centerWidget(),
+            Visibility(
+              visible: widget.showCenterWidget,
+              child: Flexible(
+                flex: 1,
+                child: Container(
+                  child: centerWidget(),
+                ),
               ),
             ),
             Flexible(
