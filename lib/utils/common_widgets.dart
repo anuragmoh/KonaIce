@@ -94,6 +94,40 @@ class CommonWidgets {
   Widget textView(String text, TextStyle textStyle) =>
       Text(text, style: textStyle);
 
+  Widget quantityIncrementDecrementContainer({required int quantity, required Function onTapMinus, required Function onTapPlus}) {
+    return Row(
+      children: [
+        GestureDetector(
+            onTap: () {
+              onTapMinus();
+            },
+            child: incrementDecrementButton(StringConstants.minusSymbol)),
+        Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: CommonWidgets().textWidget('$quantity', StyleConstants.customTextStyle(
+              fontSize: 12.0, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratSemiBold)),
+        ),
+        GestureDetector(
+            onTap: () {
+              onTapPlus();
+            },
+            child: incrementDecrementButton(StringConstants.plusSymbol)),
+      ],
+    );
+  }
+  Widget incrementDecrementButton(String title) {
+    return  Container(
+      width: 15.0,
+      height: 15.0,
+      decoration: BoxDecoration(
+        color: getMaterialColor(AppColors.primaryColor2),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
+          fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratSemiBold), textAlign: TextAlign.center),
+    );
+  }
+
   Widget buttonWidget(String buttonTitle, VoidCallback onTap) =>
       GestureDetector(
         onTap: onTap,

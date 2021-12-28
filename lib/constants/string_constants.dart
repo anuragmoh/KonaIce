@@ -5,6 +5,8 @@ class StringConstants {
   static const password = 'Password';
   static const forgotPassword = 'Forgot Password ?';
   static const signIn = 'Sign In';
+  static const rememberPassword = 'Remember Password ?';
+  static const submit = 'Submit';
 
 //DASHBOARD TEXT
   static const dashboard = 'DASHBOARD';
@@ -33,6 +35,8 @@ class StringConstants {
   static const saveOrder = 'Save Order';
   static const newOrder = 'New Order';
   static const noItemsAdded = 'No Items Added';
+  static const customize = 'Customize';
+  static const add = 'Add';
 
   static const orderDetails = 'Order Details';
   static const customerName = 'Customer Name';
@@ -86,5 +90,4 @@ class StringConstants {
   static const oldPassword = 'Old Password*';
   static const newPassword = 'New Password*';
   static const confirmPassword = 'Confirm Password*';
-  static const submit = 'Submit';
 }
