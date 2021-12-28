@@ -72,7 +72,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
         children: [
           TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: true, onTapCallBack: onTapCallBack),
           Expanded(
-            child: isProduct ? body() : const AllOrdersScreen(),
+            child: isProduct ? body() :  AllOrdersScreen(onBackTap: onTapCallBack),
           ),
           BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: false,)
         ],

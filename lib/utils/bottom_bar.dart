@@ -5,6 +5,8 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
+import 'package:kona_ice_pos/screens/customer_view/customer_view_screen.dart';
 import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
 import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
@@ -34,7 +36,8 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
   List<Widget> bodyWidgets = [
     const HomeScreen(),
     const NotificationScreen(),
-    const SettingScreen()
+    const SettingScreen(),
+    const AccountSwitchScreen(),
   ];
   List<BottomItems> bottomItemList = [
     BottomItems(
@@ -124,16 +127,19 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
 
   Widget bottomBarSwitchAccountImage() {
     return Visibility(
-      visible: true,
+      visible: widget.accountImageVisibility,
       child: Padding(
         padding: const EdgeInsets.only(right: 21.0),
-        child: Row(
-          children: [
-            CommonWidgets().image(
-                image: AssetsConstants.switchAccountUnSelectedIcon,
-                width: 26.0,
-                height: 26.0)
-          ],
+        child: InkWell(
+          onTap:(){ Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CustomerViewScreen()));},
+          child: Row(
+            children: [
+              CommonWidgets().image(
+                  image: AssetsConstants.switchAccountUnSelectedIcon,
+                  width: 26.0,
+                  height: 26.0)
+            ],
+          ),
         ),
       ),
     );

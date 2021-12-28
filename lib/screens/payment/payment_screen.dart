@@ -54,7 +54,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             Expanded(child: bodyWidget()),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
-              accountImageVisibility: false,
+              accountImageVisibility: true,
               isFromDashboard: false,
             )
             // CommonWidgets().bottomBar(false),
@@ -143,12 +143,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CommonWidgets().textWidget(
-                            StringConstants.amountToReturn,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor2),
-                                fontFamily: FontConstants.montserratMedium)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: CommonWidgets().textWidget(
+                              StringConstants.amountToReturn,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 12.0,
+                                  color: getMaterialColor(AppColors.textColor2),
+                                  fontFamily: FontConstants.montserratMedium)),
+                        ),
                         const SizedBox(
                           height: 5.0,
                         ),
@@ -210,6 +213,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
               // Return Amount
+              const SizedBox(width: 15.0,),
               Visibility(
                 visible: isPaymentDone == false && paymentModeType == 0
                     ? true
@@ -250,14 +254,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ),
               // Button
-              buttonWidget(
-                  isPaymentDone == true
-                      ? StringConstants.newOrder
-                      : StringConstants.proceed,
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold)),
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: buttonWidget(
+                    isPaymentDone == true
+                        ? StringConstants.newOrder
+                        : StringConstants.proceed,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratBold)),
+              ),
             ]),
       );
 

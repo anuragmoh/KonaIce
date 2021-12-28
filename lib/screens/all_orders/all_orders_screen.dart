@@ -8,7 +8,8 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class AllOrdersScreen extends StatefulWidget {
-  const AllOrdersScreen({Key? key}) : super(key: key);
+  final Function onBackTap;
+  const AllOrdersScreen({Key? key,required this.onBackTap}) : super(key: key);
 
   @override
   _AllOrdersScreenState createState() => _AllOrdersScreenState();
@@ -79,17 +80,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       Padding(
         padding: const EdgeInsets.only(left: 18.8,top: 20.9,right: 17.0,bottom: 21.1),
         child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(children: [
-            CommonWidgets().image(
-                image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
-            const SizedBox(width: 21.0),
-            CommonWidgets().textView(
-                StringConstants.foodOrders,
-                StyleConstants.customTextStyle(
-                    fontSize: 22.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
-          ]),
+          GestureDetector(
+            onTap: (){widget.onBackTap(true);},
+            child: Row(children: [
+              CommonWidgets().image(
+                  image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+              const SizedBox(width: 21.0),
+              CommonWidgets().textView(
+                  StringConstants.foodOrders,
+                  StyleConstants.customTextStyle(
+                      fontSize: 22.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratBold)),
+            ]),
+          ),
           Container(
               decoration: BoxDecoration(
                 color: getMaterialColor(AppColors.whiteColor),
