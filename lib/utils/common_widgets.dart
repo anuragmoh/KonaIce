@@ -202,7 +202,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
             children: [
               bottomBarComponent(),
               const Spacer(),
-              bottomBarSwitchAccountImage()
+              bottomBarSwitchAccountImage(widget.accountImageVisibility)
             ],
           ),
         ),
@@ -255,9 +255,9 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
     );
   }
 
-  Widget bottomBarSwitchAccountImage() {
+  Widget bottomBarSwitchAccountImage(bool accountImageVisibility) {
     return Visibility(
-      visible: true,
+      visible: accountImageVisibility,
       child: Padding(
         padding: const EdgeInsets.only(right: 21.0),
         child: Row(
