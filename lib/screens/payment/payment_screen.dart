@@ -6,6 +6,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -27,6 +28,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  int currentIndex = 0;
+
+  onTapBottomListItem(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +47,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
               width: MediaQuery.of(context).size.width,
             )),
             Expanded(child: bodyWidget()),
+            BottomBarWidget(
+              onTapCallBack: onTapBottomListItem,
+              accountImageVisibility: false,
+            )
             // CommonWidgets().bottomBar(false),
           ],
         ),
@@ -84,8 +96,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonWidgets().image(
-                      image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+                 InkWell(
+                   onTap: (){
+                     Navigator.of(context).pop();
+                   },
+                   child:  CommonWidgets().image(
+                       image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+                 ),
                   const SizedBox(width: 22.0,),
                   Column(
                     children: [
