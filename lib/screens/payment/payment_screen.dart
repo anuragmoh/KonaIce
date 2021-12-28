@@ -43,7 +43,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: Column(
           children: [
-            CommonWidgets().topBar(SizedBox(
+            CommonWidgets().dashboardTopBar(SizedBox(
               width: MediaQuery.of(context).size.width,
             )),
             Expanded(child: bodyWidget()),

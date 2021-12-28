@@ -19,6 +19,10 @@ class StringConstants {
   static const defaultClockInTime = '00:00:00';
 
   //Event Menu Screen Text
+
+  static const product = 'Product';
+  static const orders = 'Orders';
+
   static const plusSymbol = '+';
 
   static const minusSymbol = '-';
