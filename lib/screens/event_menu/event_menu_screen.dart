@@ -7,21 +7,28 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
+import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
+import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class EventMenuScreen extends StatefulWidget {
-  const EventMenuScreen({Key? key}) : super(key: key);
+  final PartyEvents events;
+  const EventMenuScreen({Key? key, required this.events}) : super(key: key);
 
   @override
   _EventMenuScreenState createState() => _EventMenuScreenState();
 }
 
 class _EventMenuScreenState extends State<EventMenuScreen> {
+
+  bool isProduct = true;
 
   List<String> categoriesList = [
     StringConstants.customMenu,
@@ -47,12 +54,28 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     }
   }
 
+  onTapCallBack(bool callBackValue){
+    setState(() {
+      isProduct = callBackValue;
+    });
+  }
+  onTapBottomListItem(int index){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          color: getMaterialColor(AppColors.textColor3),
-          child: body()
+      backgroundColor: getMaterialColor(AppColors.textColor3),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: true, onTapCallBack: onTapCallBack),
+          Expanded(
+            child: isProduct ? body() : const AllOrdersScreen(),
+          ),
+          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,)
+        ],
       ),
     );
   }

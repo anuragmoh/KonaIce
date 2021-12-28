@@ -49,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          CommonWidgets().topBar(topBarComponent()),
+          CommonWidgets().dashboardTopBar(topBarComponent()),
           Expanded(
             child: bodyWidgets[currentIndex],
             //   child: CommonWidgets().bodyWidgets[],

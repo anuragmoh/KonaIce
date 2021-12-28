@@ -17,7 +17,7 @@ class CommonWidgets {
     return Text(textTitle, style: textStyle, textAlign: textAlign);
   }
 
-  Widget topBar(Widget child) {
+  Widget dashboardTopBar(Widget child) {
     return Container(
       height: 85.0,
       decoration: BoxDecoration(

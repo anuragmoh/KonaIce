@@ -28,7 +28,7 @@ class _MyProfileState extends State<MyProfile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CommonWidgets().topBar(topBarComponent()),
+            CommonWidgets().dashboardTopBar(topBarComponent()),
             Expanded(child: bodyWidget()),
             Padding(
               padding:

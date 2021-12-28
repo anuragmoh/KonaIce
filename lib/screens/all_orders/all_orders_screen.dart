@@ -25,9 +25,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: Column(
           children: [
-            topWidget(),
+            // topWidget(),
             Expanded(child: bodyWidget()),
-            bottomWidget(),
+            // bottomWidget(),
           ],
         ),
       ),

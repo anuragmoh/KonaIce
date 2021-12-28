@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Timer clockInTimer;
   bool isClockIn = false;
 
-  var tempEventHomeNavigation = false;
+
 
   List <PartyEvents> eventList = [
     PartyEvents(eventName: 'NEW YEAR EVE EVENT', location: 'Houston, Texas, 77001', date: '31 Dec 2021 - 01 Jan 2022', time: '04:30 PM - 10:30 PM'),
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Container(
          color: getMaterialColor(AppColors.textColor3),
-          child: tempEventHomeNavigation ? showEventMenuScreen() : body()
+          child: body()
       ),
     );
   }
@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.only(bottom: 20.0),
               child: GestureDetector(
                 onTap: () {
-                  onTapEventItem(index);
+                  onTapEventItem(eventDetails);
                 },
                 child: Card(
                   elevation: 0.0,
@@ -233,10 +233,11 @@ class _HomeScreenState extends State<HomeScreen> {
        isClockIn ? startTimer() : stopTimer();
   }
 
-  onTapEventItem(int index) {
-    setState(() {
-      tempEventHomeNavigation = true;
-    });
+  onTapEventItem(PartyEvents events) {
+    // setState(() {
+    //   tempEventHomeNavigation = true;
+    // });
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> EventMenuScreen(events: events)));
   }
 
     startTimer() {
@@ -253,8 +254,4 @@ class _HomeScreenState extends State<HomeScreen> {
       clockInTime = StringConstants.defaultClockInTime;
     }
 
-   //Navigation Events
-  Widget showEventMenuScreen() {
-    return EventMenuScreen();
-  }
 }
