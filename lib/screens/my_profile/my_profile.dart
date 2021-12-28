@@ -122,8 +122,8 @@ class _MyProfileState extends State<MyProfile> {
                   const EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
               child: Row(
                 children: [
-                  profileDetailsComponent(StringConstants.firstName, ""),
-                  profileDetailsComponent(StringConstants.lastName, ""),
+                  profileDetailsComponent(StringConstants.firstName, "",StringConstants.enterFirstName),
+                  profileDetailsComponent(StringConstants.lastName, "",StringConstants.enterLastName),
                 ],
               ),
             ),
@@ -132,14 +132,14 @@ class _MyProfileState extends State<MyProfile> {
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 24.0),
               child: Row(
                 children: [
-                  profileDetailsComponent(StringConstants.contactNumber, ""),
-                  profileDetailsComponent(StringConstants.emailId, ""),
+                  profileDetailsComponent(StringConstants.contactNumber, "",StringConstants.enterContactNumber),
+                  profileDetailsComponent(StringConstants.emailId, "",StringConstants.enterEmailId),
                 ],
               ),
             )
           ]);
 
-  Widget profileDetailsComponent(String txtName, String txtValue) => Column(
+  Widget profileDetailsComponent(String txtName, String txtValue,String txtHint) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonWidgets().textWidget(
@@ -165,6 +165,7 @@ class _MyProfileState extends State<MyProfile> {
                 padding: const EdgeInsets.only(left: 4.0),
                 child: TextField(
                   decoration: InputDecoration(
+                    hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle(
@@ -190,36 +191,38 @@ class _MyProfileState extends State<MyProfile> {
               fontFamily: FontConstants.montserratSemiBold),
         ),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-            child: profileDetailsComponent(StringConstants.oldPassword, ""),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-            child: profileDetailsComponent(StringConstants.newPassword, ""),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-            child: profileDetailsComponent(StringConstants.confirmPassword, ""),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 23.0, vertical: 40.0),
-              child: CommonWidgets().buttonWidget(
-                StringConstants.submit,
-                onTapSubmitChangePassword,
-              ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
+              child: profileDetailsComponent(StringConstants.oldPassword, "",StringConstants.oldPassword),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
+              child: profileDetailsComponent(StringConstants.newPassword, "",StringConstants.newPassword),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
+              child: profileDetailsComponent(StringConstants.confirmPassword, "",StringConstants.confirmPassword),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 23.0, vertical: 40.0),
+                child: CommonWidgets().buttonWidget(
+                  StringConstants.submit,
+                  onTapSubmitChangePassword,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
