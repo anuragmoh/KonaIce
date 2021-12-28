@@ -65,4 +65,6 @@ class CommonWidgets{
   Widget textView(String text, TextStyle textStyle) =>
       Text(text, style: textStyle);
 
+  
+
 }

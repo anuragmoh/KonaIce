@@ -62,12 +62,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 14.0),
-          child: CommonWidgets().image(
-              image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 14.0),
+          child:  leftSideTopComponent(totalAmount),
         ),
-        leftSideTopComponent(totalAmount),
-        const SizedBox(height: 36.0,),
+        // leftSideTopComponent(totalAmount),
+        const SizedBox(height: 20.0,),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Divider(
@@ -81,26 +80,34 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget leftSideTopComponent(double totalAmount) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Row(
-            // crossAxisAlignment: CrossAxisAlignment.start,
+             //crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CommonWidgets().textWidget(
-                      StringConstants.totalAmount,
-                      StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: getMaterialColor(AppColors.textColor2),
-                          fontFamily: FontConstants.montserratMedium)),
-                  const SizedBox(
-                    height: 2.0,
+                  CommonWidgets().image(
+                      image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+                  const SizedBox(width: 22.0,),
+                  Column(
+                    children: [
+                      CommonWidgets().textWidget(
+                          StringConstants.totalAmount,
+                          StyleConstants.customTextStyle(
+                              fontSize: 12.0,
+                              color: getMaterialColor(AppColors.textColor2),
+                              fontFamily: FontConstants.montserratMedium)),
+                      const SizedBox(
+                        height: 2.0,
+                      ),
+                      CommonWidgets().textWidget(
+                          '\$$totalAmount',
+                          StyleConstants.customTextStyle(
+                              fontSize: 34.0,
+                              color: getMaterialColor(AppColors.textColor1),
+                              fontFamily: FontConstants.montserratBold))
+                    ],
                   ),
-                  CommonWidgets().textWidget(
-                      '\$$totalAmount',
-                      StyleConstants.customTextStyle(
-                          fontSize: 34.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratBold))
                 ],
               ),
               const SizedBox(
@@ -484,51 +491,54 @@ class _PaymentScreenState extends State<PaymentScreen> {
   // Right side panel design
 
   Widget rightSideWidget() => Padding(
-        padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.307,
-          decoration: BoxDecoration(
-              color: getMaterialColor(AppColors.whiteColor),
-              borderRadius: const BorderRadius.all(Radius.circular(8.0))),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 22.0, right: 19.0),
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
-                      child: CommonWidgets().textView(
-                          StringConstants.orderDetails,
-                          StyleConstants.customTextStyle(
-                              fontSize: 22.0,
-                              color: getMaterialColor(AppColors.textColor1),
-                              fontFamily: FontConstants.montserratBold))),
-                  customerNameWidget(customerName: 'Nicholas Gibson'),
-                  const SizedBox(height: 7.0),
-                  orderDetailsWidget(
-                      orderId: 'F001587', orderDate: '03/09/2021 at 06:45 PM'),
-                  const SizedBox(height: 8.0),
-                  customerDetailsComponent(
-                      street: '34 View City: Dublin, NH Zip: 43766',
-                      email: 'nic.gibson@mail.com',
-                      storeAddress: '7 Gullet City, San Dimas, NY 54356-1822',
-                      phone: '+1 528 6568 220'),
-                  const SizedBox(height: 10.0),
-                  Expanded(
-                      child: SingleChildScrollView(
-                    child: Container(
-                        color: getMaterialColor(AppColors.whiteColor),
-                        child: itemView()),
-                  )),
-                  DottedLine(
-                      height: 2.0,
-                      color: getMaterialColor(AppColors.textColor1)),
-                  componentBill(),
-                ]),
+    padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
+    child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.307,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+                color: getMaterialColor(AppColors.whiteColor),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0))),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0, right: 19.0),
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
+                        child: CommonWidgets().textView(
+                            StringConstants.orderDetails,
+                            StyleConstants.customTextStyle(
+                                fontSize: 22.0,
+                                color: getMaterialColor(AppColors.textColor1),
+                                fontFamily: FontConstants.montserratBold))),
+                    customerNameWidget(customerName: 'Nicholas Gibson'),
+                    const SizedBox(height: 7.0),
+                    orderDetailsWidget(
+                        orderId: 'F001587', orderDate: '03/09/2021 at 06:45 PM'),
+                    const SizedBox(height: 8.0),
+                    customerDetailsComponent(
+                        street: '34 View City: Dublin, NH Zip: 43766',
+                        email: 'nic.gibson@mail.com',
+                        storeAddress: '7 Gullet City, San Dimas, NY 54356-1822',
+                        phone: '+1 528 6568 220'),
+                    const SizedBox(height: 10.0),
+                    Expanded(
+                        child: SingleChildScrollView(
+                      child: Container(
+                          color: getMaterialColor(AppColors.whiteColor),
+                          child: itemView()),
+                    )),
+                    DottedLine(
+                        height: 2.0,
+                        color: getMaterialColor(AppColors.textColor1)),
+                    componentBill(),
+                  ]),
+            ),
           ),
         ),
-      );
+  );
 
   // customer Name
   Widget customerNameWidget({required String customerName}) =>
