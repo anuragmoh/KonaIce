@@ -100,13 +100,18 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               },
               child: Row(
                 children: [
-                  CommonWidgets().image(
-                      image: currentIndex == index
-                          ? bottomItemList[index].selectedImage
-                          : bottomItemList[index].basicImage,
-                      width: 3.38 * SizeConfig.imageSizeMultiplier,
-                      height: 3.38 * SizeConfig.imageSizeMultiplier
-                  ),
+                 Container(
+                   color: getMaterialColor(AppColors.primaryColor1),
+                   child: Padding(
+                     padding: const EdgeInsets.all(4.0),
+                   child: CommonWidgets().image(
+                       image: currentIndex == index
+                           ? bottomItemList[index].selectedImage
+                           : bottomItemList[index].basicImage,
+                       width: 3.38 * SizeConfig.imageSizeMultiplier,
+                       height: 3.38 * SizeConfig.imageSizeMultiplier
+                   ),),
+                 ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 35.0),
                     child: CommonWidgets().textWidget(
