@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'constants/app_colors.dart';
 
@@ -13,13 +14,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: StringConstants.title,
-      theme: ThemeData(
-        primarySwatch: getMaterialColor(AppColors.primaryColor2),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+    return LayoutBuilder(
+      builder: (context, constraints){
+        return OrientationBuilder(builder: (context,orientation){
+          SizeConfig().init(constraints, orientation);
+          return MaterialApp(
+            title: StringConstants.title,
+            theme: ThemeData(
+              primarySwatch: getMaterialColor(AppColors.primaryColor2),
+            ),
+            debugShowCheckedModeBanner: false,
+            home: const SplashScreen(),
+          );
+        });
+      }
     );
   }
 }

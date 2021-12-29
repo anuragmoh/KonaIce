@@ -11,6 +11,7 @@ import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
 import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 import 'common_widgets.dart';
@@ -59,7 +60,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
     return Column(
       children: [
         Container(
-          height: 43.0,
+          height: 4.19 * SizeConfig.heightSizeMultiplier,
           decoration: BoxDecoration(
               color: getMaterialColor(AppColors.primaryColor1),
               borderRadius: const BorderRadius.only(
@@ -103,8 +104,9 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                       image: currentIndex == index
                           ? bottomItemList[index].selectedImage
                           : bottomItemList[index].basicImage,
-                      width: 26.0,
-                      height: 26.0),
+                      width: 3.38 * SizeConfig.imageSizeMultiplier,
+                      height: 3.38 * SizeConfig.imageSizeMultiplier
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 35.0),
                     child: CommonWidgets().textWidget(

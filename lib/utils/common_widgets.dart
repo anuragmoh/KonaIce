@@ -4,6 +4,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class CommonWidgets {
@@ -121,17 +122,19 @@ class CommonWidgets {
 
   Widget incrementDecrementButton(String title) {
     return Container(
-      width: 15.0,
-      height: 15.0,
+      width: 3 * SizeConfig.imageSizeMultiplier,
+      height: 3 * SizeConfig.imageSizeMultiplier,
       decoration: BoxDecoration(
         color: getMaterialColor(AppColors.primaryColor2),
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(15.0),
       ),
-      child: CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
-          fontSize: 12.0,
-          color: getMaterialColor(AppColors.textColor4),
-          fontFamily: FontConstants.montserratSemiBold),
-          textAlign: TextAlign.center),
+      child: Center(
+        child: CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
+            fontSize: 12.0,
+            color: getMaterialColor(AppColors.textColor4),
+            fontFamily: FontConstants.montserratSemiBold),
+            textAlign: TextAlign.center),
+      ),
     );
   }
 
