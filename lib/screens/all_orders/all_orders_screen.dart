@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class AllOrdersScreen extends StatefulWidget {
@@ -84,7 +85,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
             onTap: (){widget.onBackTap(true);},
             child: Row(children: [
               CommonWidgets().image(
-                  image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+                  image: AssetsConstants.backArrow, width: 3.25*SizeConfig.imageSizeMultiplier, height: 3.25*SizeConfig.imageSizeMultiplier),
               const SizedBox(width: 21.0),
               CommonWidgets().textView(
                   StringConstants.foodOrders,
@@ -104,7 +105,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                     right: 10.0, bottom: 10.0, top: 9.0, left: 9.0),
                 child: Row(children: [
                   CommonWidgets().image(
-                      image: AssetsConstants.filter, width: 24.0, height: 25.0),
+                      image: AssetsConstants.filter, width: 3.38*SizeConfig.imageSizeMultiplier ,height: 3.25*SizeConfig.imageSizeMultiplier),
                   const SizedBox(width: 6.0),
                   CommonWidgets().textView(
                       StringConstants.filterOrders,
@@ -129,7 +130,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
               padding: const EdgeInsets.only(left: 17.0),
               child: DataTable(
                 sortAscending: false,
-                dataRowHeight: 77.0,
+                dataRowHeight: 7.51*SizeConfig.heightSizeMultiplier,
                 columns: [
                   DataColumn(label:CommonWidgets().textView(StringConstants.customerName, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),),
                   DataColumn(label: CommonWidgets().textView(StringConstants.orderId, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),),
@@ -250,8 +251,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   );
 
   Widget circularImage(String imageUrl)=> Container(
-    width: 35.0,
-    height: 35.0,
+    width: 4.55*SizeConfig.imageSizeMultiplier,
+    height: 4.55*SizeConfig.imageSizeMultiplier,
     decoration: BoxDecoration(
         shape: BoxShape.circle,
         image: DecorationImage(

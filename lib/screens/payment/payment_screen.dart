@@ -10,6 +10,7 @@ import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -333,7 +334,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
                 child: CommonWidgets()
-                    .image(image: icon, width: 25.0, height: 25.0),
+                    .image(image: icon, width:3.25*SizeConfig.imageSizeMultiplier , height: 3.25*SizeConfig.imageSizeMultiplier),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -351,7 +352,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           const SizedBox(height: 68.0),
           CommonWidgets()
-              .image(image: AssetsConstants.success, width: 72.0, height: 72.0),
+              .image(image: AssetsConstants.success, width: 9.3 * SizeConfig.imageSizeMultiplier, height: 9.3 * SizeConfig.imageSizeMultiplier),
           const SizedBox(height: 21.0),
           CommonWidgets().textWidget(
               StringConstants.paymentSuccessful,

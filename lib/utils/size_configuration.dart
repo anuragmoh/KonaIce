@@ -25,6 +25,12 @@ class SizeConfig{
     imageSizeMultiplier = _blockHorizontal;
     heightSizeMultiplier = _blockVertical;
 
+
+    print('textMultipier$textMultiplier');
+    print('imageSizeMultipier$imageSizeMultiplier');
+    print('heightSizeMultiplier$heightSizeMultiplier');
+
+
   }
 
 

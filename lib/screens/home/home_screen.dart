@@ -10,6 +10,7 @@ import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -132,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.only(bottom: 5.0),
                           child: Row(
                             children: [
-                              CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 14.0, height: 19.0),
+                              CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: CommonWidgets().textWidget(eventDetails.location,
@@ -144,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         Row(
                           children: [
-                            CommonWidgets().image(image: AssetsConstants.dateIcon, width: 14.0, height: 19.0),
+                            CommonWidgets().image(image: AssetsConstants.dateIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
                               child: CommonWidgets().textWidget(eventDetails.date,
