@@ -20,7 +20,7 @@ class CommonWidgets {
 
   Widget dashboardTopBar(Widget child) {
     return Container(
-      height: 85.0,
+      height: 8.30*SizeConfig.heightSizeMultiplier,
       decoration: BoxDecoration(
           color: getMaterialColor(AppColors.primaryColor1),
           borderRadius: const BorderRadius.only(
@@ -48,7 +48,7 @@ class CommonWidgets {
                   fontFamily: FontConstants.montserratSemiBold)),
         ),
         CommonWidgets().image(
-            image: AssetsConstants.dropDownArrowIcon, width: 10.0, height: 8.0)
+            image: AssetsConstants.dropDownArrowIcon, width: 1.30*SizeConfig.imageSizeMultiplier, height: 1.04*SizeConfig.imageSizeMultiplier)
       ],
     );
   }

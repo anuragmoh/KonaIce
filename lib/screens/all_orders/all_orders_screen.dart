@@ -251,7 +251,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   );
 
   Widget circularImage(String imageUrl)=> Container(
-    width: 4.55*SizeConfig.imageSizeMultiplier,
+      width: 4.55*SizeConfig.imageSizeMultiplier,
     height: 4.55*SizeConfig.imageSizeMultiplier,
     decoration: BoxDecoration(
         shape: BoxShape.circle,

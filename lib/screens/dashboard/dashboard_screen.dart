@@ -11,6 +11,7 @@ import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class Dashboard extends StatefulWidget {
@@ -90,7 +91,7 @@ class _DashboardState extends State<Dashboard> {
 
   Widget konaTopBarIcon() {
     return CommonWidgets()
-        .image(image: AssetsConstants.topBarAppIcon, width: 31.0, height: 31.0);
+        .image(image: AssetsConstants.topBarAppIcon, width: 4.03*SizeConfig.imageSizeMultiplier, height: 4.03*SizeConfig.imageSizeMultiplier);
   }
 
   Widget bottomBarComponent() {
