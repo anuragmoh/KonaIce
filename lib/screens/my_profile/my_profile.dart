@@ -4,9 +4,9 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class MyProfile extends StatefulWidget {
@@ -89,7 +89,7 @@ class _MyProfileState extends State<MyProfile> {
 
   Widget konaTopBarIcon() {
     return CommonWidgets()
-        .image(image: AssetsConstants.topBarAppIcon, width: 31.0, height: 31.0);
+        .image(image: AssetsConstants.topBarAppIcon, width: 4.03*SizeConfig.imageSizeMultiplier, height: 4.03*SizeConfig.imageSizeMultiplier);
   }
 
   Widget bodyWidget() => Container(
