@@ -256,7 +256,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               // Button
               Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding:  EdgeInsets.only(top: 1.95*SizeConfig.heightSizeMultiplier),
                 child: buttonWidget(
                     isPaymentDone == true
                         ? StringConstants.newOrder
