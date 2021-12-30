@@ -32,7 +32,7 @@ class _MyProfileState extends State<MyProfile> {
             Expanded(child: bodyWidget()),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 23.0, vertical: 40.0),
+                   EdgeInsets.symmetric(horizontal: 23.0, vertical: 3.90*SizeConfig.heightSizeMultiplier),
               child: CommonWidgets().buttonWidget(
                 StringConstants.changePassword,
                 onTapChangePassword,
@@ -214,7 +214,7 @@ class _MyProfileState extends State<MyProfile> {
               alignment: Alignment.center,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 23.0, vertical: 40.0),
+                     EdgeInsets.symmetric(horizontal: 23.0, vertical: 3.90*SizeConfig.heightSizeMultiplier),
                 child: CommonWidgets().buttonWidget(
                   StringConstants.submit,
                   onTapSubmitChangePassword,
