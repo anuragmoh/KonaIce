@@ -152,6 +152,112 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   fontSize: 12.0,
                                   color: getMaterialColor(AppColors.textColor2),
                                   fontFamily: FontConstants.montserratMedium)),
+                        ),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CommonWidgets().textWidget(
+                                '\$',
+                                StyleConstants.customTextStyle(
+                                    fontSize: 22.0,
+                                    color:
+                                        getMaterialColor(AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8.0)),
+                                    color:
+                                        getMaterialColor(AppColors.whiteColor),
+                                    border: Border.all(
+                                        color: getMaterialColor(
+                                            AppColors.primaryColor2))),
+                                width: 122.0,
+                                height: 42.0,
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, bottom: 2.0),
+                                    child: TextField(
+                                      controller: amountReceivedController,
+                                      style: StyleConstants.customTextStyle(
+                                          fontSize: 22.0,
+                                          color: getMaterialColor(
+                                              AppColors.textColor1),
+                                          fontFamily:
+                                              FontConstants.montserratMedium),
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                      onChanged: (value) {
+                                        if (value.isNotEmpty) {
+                                          onAmountEnter(double.parse(value));
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                )),
+                          ],
+                        )
+                      ]),
+                ),
+              ),
+              // Return Amount
+              const SizedBox(width: 15.0,),
+              Visibility(
+                visible: isPaymentDone == false && paymentModeType == 0
+                    ? true
+                    : false,
+                child: Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonWidgets().textWidget(
+                            StringConstants.amountToReturn,
+                            StyleConstants.customTextStyle(
+                                fontSize: 12.0,
+                                color: getMaterialColor(AppColors.textColor2),
+                                fontFamily: FontConstants.montserratMedium)),
+                        const SizedBox(height: 10.0),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CommonWidgets().textWidget(
+                                '\$',
+                                StyleConstants.customTextStyle(
+                                    fontSize: 22.0,
+                                    color:
+                                        getMaterialColor(AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
+                            CommonWidgets().textWidget(
+                                '$returnAmount',
+                                StyleConstants.customTextStyle(
+                                    fontSize: 22.0,
+                                    color:
+                                        getMaterialColor(AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
+                          ],
+                        )
+                      ]),
+                ),
+              ),
+              // Button
+              Padding(
+                padding:  EdgeInsets.only(top: 1.95*SizeConfig.heightSizeMultiplier),
+                child: buttonWidget(
                           const SizedBox(
                             height: 5.0,
                           ),
