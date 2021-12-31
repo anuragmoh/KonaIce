@@ -28,13 +28,13 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
     return Dialog(
       backgroundColor: getMaterialColor(AppColors.whiteColor),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: foodExtraPopUpComponent(item),
+      child: SingleChildScrollView(child: foodExtraPopUpComponent(item)),
     );
   }
 
   Widget foodExtraPopUpComponent(MenuItems item) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.43,
+      width: MediaQuery.of(context).size.width * 0.49,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

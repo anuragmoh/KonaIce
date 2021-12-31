@@ -105,12 +105,18 @@ class CommonWidgets {
             },
             child: incrementDecrementButton(StringConstants.minusSymbol)),
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: CommonWidgets().textWidget(
-              '$quantity', StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor2),
-              fontFamily: FontConstants.montserratSemiBold)),
+          padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+          child: SizedBox(
+            width: 3 * SizeConfig.imageSizeMultiplier,
+            height: 3 * SizeConfig.imageSizeMultiplier,
+            child: Center(
+              child: CommonWidgets().textWidget(
+                  '$quantity', StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratSemiBold)),
+            ),
+          ),
         ),
         GestureDetector(
             onTap: () {
@@ -123,8 +129,8 @@ class CommonWidgets {
 
   Widget incrementDecrementButton(String title) {
     return Container(
-      width: 3 * SizeConfig.imageSizeMultiplier,
-      height: 3 * SizeConfig.imageSizeMultiplier,
+      width: 3.5 * SizeConfig.imageSizeMultiplier,
+      height: 3.5 * SizeConfig.imageSizeMultiplier,
       decoration: BoxDecoration(
         color: getMaterialColor(AppColors.primaryColor2),
         borderRadius: BorderRadius.circular(15.0),

@@ -30,7 +30,6 @@ class SizeConfig{
     print('imageSizeMultiplier$imageSizeMultiplier');
     print('heightSizeMultiplier$heightSizeMultiplier');*/
 
-
   }
 
 

@@ -82,7 +82,7 @@ class _TopBarState extends State<TopBar> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CommonWidgets().image(
-              image: AssetsConstants.konaIcon, width: 31.0, height: 31.0),
+              image: AssetsConstants.topBarAppIcon, width: 31.0, height: 31.0),
           const SizedBox(
             width: 18.0,
           ),
