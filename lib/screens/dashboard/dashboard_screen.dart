@@ -135,7 +135,6 @@ class _DashboardState extends State<Dashboard> {
   }
 
   onTapBottomListItem(int index) {
-    print(index);
     setState(() {
       currentIndex = index;
     });
