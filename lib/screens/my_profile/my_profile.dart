@@ -50,7 +50,6 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   onTapBottomListItem(int index) {
-    print(index);
     setState(() {
       currentIndex = index;
     });
