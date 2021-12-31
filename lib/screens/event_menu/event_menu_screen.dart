@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -528,7 +525,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
    setState(() {
 
    });
-   print('$result');
   }
 
   //Custom Menu popup
@@ -544,7 +540,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
   //Action Event
   onTapAddCategoryButton() {
-    print('tapped');
   }
 
   onTapCategoriesButton({required int index}) {

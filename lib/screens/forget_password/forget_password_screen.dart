@@ -6,7 +6,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-
+//ignore: must_be_immutable
 class ForgetPasswordScreen extends StatefulWidget {
 
   Function navigateBackToLoginView;
