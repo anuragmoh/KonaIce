@@ -610,13 +610,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     // if (index == 0) {
     //   print('add New Item');
     // } else {
-    if (!menuItems[index].isItemSelected) {
     setState(() {
-    menuItems[index].isItemSelected = true;
-    menuItems[index].selectedItemQuantity = 1;
-    selectedMenuItems.add(menuItems[index]);
+      menuItems[index].selectedItemQuantity = menuItems[index].isItemSelected ? 0 : 1;
+      menuItems[index].isItemSelected ? selectedMenuItems.remove(menuItems[index]) : selectedMenuItems.add(menuItems[index]);
+      menuItems[index].isItemSelected = !menuItems[index].isItemSelected;
+
     });
-    }
    // }
   }
 
