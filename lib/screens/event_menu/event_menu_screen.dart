@@ -12,6 +12,7 @@ import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -118,35 +119,50 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   Widget rightContainer() {
-    return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width * 0.24,
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: getMaterialColor(AppColors.textColor1).withOpacity(0.2),
-                blurRadius: 8.0,
-                offset: const Offset(0, 2)
-            )
-          ]
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-              child: clearButton()
-          ),
-          customerDetails(),
-          Expanded(child: selectedMenuItems.isNotEmpty ? selectedItemList() : emptyCartView()
-          ),
-          chargeButton(),
-          saveAndNewOrderButton()
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.24,
+         height: MediaQuery.of(context).size.height*0.78,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: getMaterialColor(AppColors.textColor1).withOpacity(0.2),
+                  blurRadius: 8.0,
+                  offset: const Offset(0, 2)
+              )
+            ]
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+                child: clearButton()
+            ),
+            customerDetails(),
+            Expanded(child: selectedMenuItems.isNotEmpty ? CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: selectedItemList()
+                ),
+    SliverFillRemaining(
+      hasScrollBody: false,
+    fillOverscroll: true,
+    child: couponContainer(),
+    )
+              ],
+
+            ) : emptyCartView()
+            ),
+            chargeButton(),
+            saveAndNewOrderButton()
+          ],
+        ),
       ),
     );
   }
@@ -329,6 +345,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 20.0),
       child: ListView.builder(
+        shrinkWrap: true,
+         physics: const NeverScrollableScrollPhysics(),
           itemCount: selectedMenuItems.length,
           itemBuilder: (context, index) {
         return Padding(
@@ -392,6 +410,66 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
          ],
        ),
      );
+  }
+
+  Widget couponContainer() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Divider(
+              height: 1.0,
+              color: getMaterialColor(AppColors.textColor1).withOpacity(0.2),
+            ),
+          ),
+          commonTextFieldContainer(hintText: StringConstants.applyCoupon, imageName: AssetsConstants.couponIcon),
+          commonTextFieldContainer(hintText: StringConstants.addTip, imageName: AssetsConstants.dollarIcon),
+        ],
+      ),
+    );
+  }
+
+  Widget commonTextFieldContainer({required String hintText, required String imageName}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      child: Container(
+        height: 3.34 * SizeConfig.heightSizeMultiplier,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: getMaterialColor(AppColors.whiteBorderColor))
+          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+            padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+            child: CommonWidgets().image(image: imageName, width: 1.75*SizeConfig.heightSizeMultiplier, height: 1.75*SizeConfig.heightSizeMultiplier)
+      ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: TextField(
+                  style: StyleConstants.customTextStyle(fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratMedium),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  //  contentPadding: const EdgeInsets.only(bottom: 20),
+                    hintText: hintText,
+                    hintStyle: StyleConstants.customTextStyle(fontSize: 12.0,
+                        color: getMaterialColor(AppColors.textColor2),
+                        fontFamily: FontConstants.montserratMedium),
+                  ),
+
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget categoriesNameButton(int index) {

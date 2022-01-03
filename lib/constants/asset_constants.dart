@@ -7,6 +7,8 @@ class AssetsConstants {
   static const clockInOutIcon = assetsPath + 'clock_in_out.png';
   static const locationPinIcon = assetsPath + 'location_pin.png';
   static const dateIcon = assetsPath + 'date.png';
+  static const couponIcon = assetsPath + 'coupon_icon.png';
+  static const dollarIcon = assetsPath + 'doller_icon.png';
 
   static const homeUnSelectedIcon = assetsBottomBarIconsPath + 'home_unselected.png';
   static const homeSelectedIcon = assetsBottomBarIconsPath + 'home_selected.png';
