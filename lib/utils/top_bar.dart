@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class TopBar extends StatefulWidget {
@@ -92,13 +93,19 @@ class _TopBarState extends State<TopBar> {
             children: [
               Row(
                 children: [
-                  CommonWidgets().textWidget(
-                      eventName,
-                      StyleConstants.customTextStyle(
-                          fontSize: 16.0,
-                          color: getMaterialColor(AppColors.whiteColor),
-                          fontFamily: FontConstants.montserratBold)),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: CommonWidgets().textWidget(
+                        eventName,
+                        StyleConstants.customTextStyle(
+                            fontSize: 16.0,
+                            color: getMaterialColor(AppColors.whiteColor),
+                            fontFamily: FontConstants.montserratBold)),
+                  ),
+                  CommonWidgets().image(
+                      image: AssetsConstants.dropDownArrowIcon, width: 1.30*SizeConfig.imageSizeMultiplier, height: 1.04*SizeConfig.imageSizeMultiplier)
                 ],
+
               ),
               CommonWidgets().textWidget(
                   eventAddress,
