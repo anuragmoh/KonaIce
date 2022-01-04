@@ -32,7 +32,7 @@ class _MyProfileState extends State<MyProfile> {
             Expanded(child: bodyWidget()),
             Padding(
               padding:
-                   EdgeInsets.symmetric(horizontal: 23.0, vertical: 3.90*SizeConfig.heightSizeMultiplier),
+                   const EdgeInsets.only(left: 23.0, top:15.0),
               child: CommonWidgets().buttonWidget(
                 StringConstants.changePassword,
                 onTapChangePassword,
@@ -51,7 +51,6 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   onTapBottomListItem(int index) {
-    print(index);
     setState(() {
       currentIndex = index;
     });
