@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:badges/badges.dart';
 
 class TopBar extends StatefulWidget {
   final String userName;
@@ -68,6 +69,10 @@ class _TopBarState extends State<TopBar> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  notificationWithCount(),
+                  const SizedBox(
+                    width: 20.0,
+                  ),
                   CommonWidgets().profileComponent(widget.userName),
                 ],
               ),
@@ -75,6 +80,19 @@ class _TopBarState extends State<TopBar> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget notificationWithCount() {
+    return Badge(
+      badgeContent: Text('3',style: StyleConstants.customTextStyle(
+          fontSize: 12.0,
+          color: getMaterialColor(AppColors.whiteColor),
+          fontFamily: FontConstants.montserratSemiBold),),
+      child: CommonWidgets().image(
+          image: AssetsConstants.notificationUnSelectedIcon,
+          width: 3.38 * SizeConfig.imageSizeMultiplier,
+          height: 3.38 * SizeConfig.imageSizeMultiplier),
     );
   }
 
@@ -103,9 +121,10 @@ class _TopBarState extends State<TopBar> {
                             fontFamily: FontConstants.montserratBold)),
                   ),
                   CommonWidgets().image(
-                      image: AssetsConstants.dropDownArrowIcon, width: 1.30*SizeConfig.imageSizeMultiplier, height: 1.04*SizeConfig.imageSizeMultiplier)
+                      image: AssetsConstants.dropDownArrowIcon,
+                      width: 1.30 * SizeConfig.imageSizeMultiplier,
+                      height: 1.04 * SizeConfig.imageSizeMultiplier)
                 ],
-
               ),
               CommonWidgets().textWidget(
                   eventAddress,
@@ -145,13 +164,15 @@ class _TopBarState extends State<TopBar> {
                       horizontal: 38.0, vertical: 9.0),
                   child: CommonWidgets().textWidget(
                       StringConstants.product,
-                      isProduct ? StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratBold) : StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: getMaterialColor(AppColors.whiteColor),
-                          fontFamily: FontConstants.montserratMedium)),
+                      isProduct
+                          ? StyleConstants.customTextStyle(
+                              fontSize: 12.0,
+                              color: getMaterialColor(AppColors.textColor1),
+                              fontFamily: FontConstants.montserratBold)
+                          : StyleConstants.customTextStyle(
+                              fontSize: 12.0,
+                              color: getMaterialColor(AppColors.whiteColor),
+                              fontFamily: FontConstants.montserratMedium)),
                 ),
               ),
             ),

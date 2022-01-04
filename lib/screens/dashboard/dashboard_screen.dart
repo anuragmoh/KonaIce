@@ -33,10 +33,10 @@ class _DashboardState extends State<Dashboard> {
         title: StringConstants.home,
         basicImage: AssetsConstants.homeUnSelectedIcon,
         selectedImage: AssetsConstants.homeSelectedIcon),
-    BottomItems(
+/*    BottomItems(
         title: StringConstants.notification,
         basicImage: AssetsConstants.notificationUnSelectedIcon,
-        selectedImage: AssetsConstants.notificationSelectedIcon),
+        selectedImage: AssetsConstants.notificationSelectedIcon),*/
     BottomItems(
         title: StringConstants.settings,
         basicImage: AssetsConstants.settingsUnSelectedIcon,
@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard> {
             //   child: body(),
           ),
           // CommonWidgets().bottomBar(true, onTapBottomListItem),
-          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: true,)
+          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: true,),
         ],
       ),
     );

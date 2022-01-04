@@ -65,6 +65,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: getMaterialColor(AppColors.textColor3),
+      // endDrawer: navigationDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -73,6 +74,35 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
             child: isProduct ? body() :  AllOrdersScreen(onBackTap: onTapCallBack),
           ),
           BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: false,)
+        ],
+      ),
+    );
+  }
+
+  Widget navigationDrawer(){
+    return Drawer(
+      child: ListView(
+        // Important: Remove any padding from the ListView.
+        padding: EdgeInsets.zero,
+        children: [
+          const DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Text('Drawer Header'),
+          ),
+          ListTile(
+            title: const Text('Setting'),
+            onTap: () {
+
+            },
+          ),
+          ListTile(
+            title: const Text('Notification'),
+            onTap: () {
+
+            },
+          ),
         ],
       ),
     );
