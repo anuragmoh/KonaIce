@@ -96,57 +96,57 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget leftSideTopComponent(double totalAmount) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        child: SizedBox(
-          height: 100.0,
-          child: Row(
-               //crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                   InkWell(
-                     onTap: (){
-                       Navigator.of(context).pop();
-                     },
-                     child:  CommonWidgets().image(
-                         image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
-                   ),
-                    const SizedBox(width: 22.0,),
-                    Column(
+        child: Row(
+             //crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                 InkWell(
+                   onTap: (){
+                     Navigator.of(context).pop();
+                   },
+                   child:  CommonWidgets().image(
+                       image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+                 ),
+                  const SizedBox(width: 22.0,),
+                  Column(
+                    children: [
+                      CommonWidgets().textWidget(
+                          StringConstants.totalAmount,
+                          StyleConstants.customTextStyle(
+                              fontSize: 12.0,
+                              color: getMaterialColor(AppColors.textColor2),
+                              fontFamily: FontConstants.montserratMedium)),
+                      const SizedBox(
+                        height: 2.0,
+                      ),
+                      CommonWidgets().textWidget(
+                          '\$$totalAmount',
+                          StyleConstants.customTextStyle(
+                              fontSize: 34.0,
+                              color: getMaterialColor(AppColors.textColor1),
+                              fontFamily: FontConstants.montserratBold))
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 51.0,
+              ),
+              // Amount to return field
+              Visibility(
+                visible: isPaymentDone == false && paymentModeType == 0
+                    ? true
+                    : false,
+                child: Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CommonWidgets().textWidget(
-                            StringConstants.totalAmount,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor2),
-                                fontFamily: FontConstants.montserratMedium)),
-                        const SizedBox(
-                          height: 2.0,
-                        ),
-                        CommonWidgets().textWidget(
-                            '\$$totalAmount',
-                            StyleConstants.customTextStyle(
-                                fontSize: 34.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold))
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 51.0,
-                ),
-                // Amount to return field
-                Visibility(
-                  visible: isPaymentDone == false && paymentModeType == 0
-                      ? true
-                      : false,
-                  child: Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CommonWidgets().textWidget(
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: CommonWidgets().textWidget(
                               StringConstants.amountToReturn,
                               StyleConstants.customTextStyle(
                                   fontSize: 12.0,
@@ -256,111 +256,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
               // Button
               Padding(
-                padding:  EdgeInsets.only(top: 1.95*SizeConfig.heightSizeMultiplier),
+                padding: const EdgeInsets.only(top: 20.0),
                 child: buttonWidget(
-                          const SizedBox(
-                            height: 5.0,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CommonWidgets().textWidget(
-                                  '\$',
-                                  StyleConstants.customTextStyle(
-                                      fontSize: 22.0,
-                                      color:
-                                          getMaterialColor(AppColors.textColor1),
-                                      fontFamily:
-                                          FontConstants.montserratMedium)),
-                              const SizedBox(
-                                width: 10.0,
-                              ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(8.0)),
-                                      color:
-                                          getMaterialColor(AppColors.whiteColor),
-                                      border: Border.all(
-                                          color: getMaterialColor(
-                                              AppColors.primaryColor2))),
-                                  width: 122.0,
-                                  height: 42.0,
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 8.0, bottom: 2.0),
-                                      child: TextField(
-                                        controller: amountReceivedController,
-                                        style: StyleConstants.customTextStyle(
-                                            fontSize: 22.0,
-                                            color: getMaterialColor(
-                                                AppColors.textColor1),
-                                            fontFamily:
-                                                FontConstants.montserratMedium),
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ],
-                                        decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                        ),
-                                        onChanged: (value) {
-                                          if (value.isNotEmpty) {
-                                            onAmountEnter(double.parse(value));
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  )),
-                            ],
-                          )
-                        ]),
-                  ),
-                ),
-                // Return Amount
-                const SizedBox(width: 15.0,),
-                Visibility(
-                  visible: isPaymentDone == false && paymentModeType == 0
-                      ? true
-                      : false,
-                  child: Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CommonWidgets().textWidget(
-                              StringConstants.amountToReturn,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 12.0,
-                                  color: getMaterialColor(AppColors.textColor2),
-                                  fontFamily: FontConstants.montserratMedium)),
-                          const SizedBox(height: 10.0),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CommonWidgets().textWidget(
-                                  '\$',
-                                  StyleConstants.customTextStyle(
-                                      fontSize: 22.0,
-                                      color:
-                                          getMaterialColor(AppColors.textColor1),
-                                      fontFamily:
-                                          FontConstants.montserratMedium)),
-                              CommonWidgets().textWidget(
-                                  '$returnAmount',
-                                  StyleConstants.customTextStyle(
-                                      fontSize: 22.0,
-                                      color:
-                                          getMaterialColor(AppColors.textColor1),
-                                      fontFamily:
-                                          FontConstants.montserratMedium)),
-                            ],
-                          )
-                        ]),
-                  ),
-                ),
-                // Button
-                buttonWidget(
                     isPaymentDone == true
                         ? StringConstants.newOrder
                         : StringConstants.proceed,
@@ -368,8 +265,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         fontSize: 12.0,
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratBold)),
-              ]),
-        ),
+              ),
+            ]),
       );
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
