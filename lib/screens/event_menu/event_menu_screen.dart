@@ -8,6 +8,7 @@ import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
+import 'package:kona_ice_pos/screens/event_menu/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
@@ -27,6 +28,7 @@ class EventMenuScreen extends StatefulWidget {
 class _EventMenuScreenState extends State<EventMenuScreen> {
 
   bool isProduct = true;
+  bool isSearchCustomer = false;
 
   List<String> categoriesList = [
     StringConstants.customMenu,
@@ -109,7 +111,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   Widget body() {
-    customerName = selectedMenuItems.isEmpty ? StringConstants.addCustomer : 'Nicholas Gibson';
+  //  customerName = selectedMenuItems.isEmpty ? StringConstants.addCustomer : 'Nicholas Gibson';
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -167,34 +169,43 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
               )
             ]
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-                child: clearButton()
-            ),
-            customerDetails(),
-            Expanded(child: selectedMenuItems.isNotEmpty ? CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: selectedItemList()
-                ),
-    SliverFillRemaining(
-      hasScrollBody: false,
-    fillOverscroll: true,
-    child: couponContainer(),
-    )
-              ],
-
-            ) : emptyCartView()
-            ),
-            chargeButton(),
-            saveAndNewOrderButton()
-          ],
-        ),
+        child: isSearchCustomer ? searchCustomerContainer() : rightCartViewContainer(),
       ),
     );
+  }
+
+  //Add to cart Container
+  Widget rightCartViewContainer () {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Align(
+            alignment: Alignment.topRight,
+            child: clearButton()
+        ),
+        customerDetails(),
+        Expanded(child: selectedMenuItems.isNotEmpty ? CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+                child: selectedItemList()
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              fillOverscroll: true,
+              child: couponContainer(),
+            )
+          ],
+
+        ) : emptyCartView()
+        ),
+        chargeButton(),
+        saveAndNewOrderButton()
+      ],
+    );
+  }
+  
+  Widget searchCustomerContainer() {
+    return SearchCustomers(onTapCustomer: onTapCustomerName,);
   }
 
   Widget categoriesListContainer() {
@@ -347,7 +358,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
               ),
             ),
             Visibility(
-              visible: !selectedMenuItems.isNotEmpty,
+              visible: customerName == StringConstants.addCustomer,
               child: CommonWidgets().textWidget(StringConstants.plusSymbol, StyleConstants.customTextStyle(
                   fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
             )
@@ -706,7 +717,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   onTapAddCustomer() {
-
+     setState(() {
+       isSearchCustomer = true;
+     });
   }
 
   onTapGridItem(int index) {
@@ -728,6 +741,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
   onTapAddFoodExtras(int index) {
     showAddFoodExtrasPopUp(menuItems[index]);
+  }
+  
+  onTapCustomerName(String name) {
+    setState(() {
+      customerName = name;
+      isSearchCustomer = false;
+    });
   }
 
   //Navigation
