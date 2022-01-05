@@ -304,7 +304,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                isItemClick = true;
                              });
                            },
-                           child: CommonWidgets().textView(StringConstants.items, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold))),
+                           child: Padding(
+                             padding: const EdgeInsets.only(left: 5.0,right: 5.0),
+                             child: CommonWidgets().textView(StringConstants.items, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+                           )),
                        const SizedBox(height: 11.0,),
                        Container(
                          color: getMaterialColor(isItemClick ? AppColors.primaryColor2 : AppColors.whiteColor),
@@ -321,7 +324,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                  isItemClick = false;
                                });
                              },
-                             child: CommonWidgets().textView(StringConstants.inProcess, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold))),
+                             child: Padding(
+                               padding:const EdgeInsets.only(left: 5.0,right: 5.0),
+                               child: CommonWidgets().textView(StringConstants.inProcess, StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+                             )),
                          const SizedBox(height: 11.0,),
                          Container(
                            color: getMaterialColor(isItemClick ? AppColors.whiteColor : AppColors.primaryColor2),

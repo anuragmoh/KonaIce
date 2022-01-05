@@ -38,6 +38,7 @@ class _MyProfileState extends State<MyProfile> {
                 onTapChangePassword,
               ),
             ),
+            SizedBox(height: 4.88*SizeConfig.heightSizeMultiplier,),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
               accountImageVisibility: false,isFromDashboard: false,
@@ -50,6 +51,7 @@ class _MyProfileState extends State<MyProfile> {
   }
 
   onTapBottomListItem(int index) {
+    print(index);
     setState(() {
       currentIndex = index;
     });
@@ -161,9 +163,11 @@ class _MyProfileState extends State<MyProfile> {
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
+                padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.whiteColor,
                     hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
