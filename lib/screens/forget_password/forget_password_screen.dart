@@ -4,8 +4,9 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-
+//ignore: must_be_immutable
 class ForgetPasswordScreen extends StatefulWidget {
 
   Function navigateBackToLoginView;
@@ -29,7 +30,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 25, bottom: 25),
+            padding:  EdgeInsets.only(top: 3.25*SizeConfig.imageSizeMultiplier, bottom: 3.25*SizeConfig.imageSizeMultiplier),
             child: CommonWidgets().textWidget(
                 StringConstants.forgotPassword,
                 StyleConstants.customTextStyle(
@@ -50,8 +51,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-                top: 5.0, bottom: 20.0, left: 22.0, right: 22.0),
+            padding:  EdgeInsets.only(
+                top:0.65*SizeConfig.imageSizeMultiplier,bottom: 2.60*SizeConfig.imageSizeMultiplier, left: 22.0, right: 22.0),
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
@@ -75,7 +76,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(bottom: 5.0),
+            padding:  EdgeInsets.only(bottom:0.65*SizeConfig.imageSizeMultiplier),
             child: GestureDetector(
               onTap: onTapSignIn,
               child: RichText(
@@ -102,7 +103,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   Widget submitButton(String buttonText, TextStyle textStyle){
     return Padding(
-      padding: const EdgeInsets.only(bottom: 35.0, top: 35.0),
+      padding:  EdgeInsets.only(bottom: 4.55*SizeConfig.imageSizeMultiplier, top: 4.55*SizeConfig.imageSizeMultiplier),
       child: GestureDetector(
         onTap:  onTapSubmit,
         child: Container(
@@ -111,7 +112,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0,horizontal: 84.0),
+            padding:  EdgeInsets.symmetric(vertical: 1.56*SizeConfig.imageSizeMultiplier,horizontal: 84.0),
             child: CommonWidgets().textWidget(buttonText, textStyle),
           ),
         ),

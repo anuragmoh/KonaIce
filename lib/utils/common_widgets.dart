@@ -19,8 +19,9 @@ class CommonWidgets {
   }
 
   Widget dashboardTopBar(Widget child) {
+    print('check for height in orientation ${8.30*SizeConfig.heightSizeMultiplier}');
     return Container(
-      height: 85.0,
+      height: 8.30*SizeConfig.heightSizeMultiplier,
       decoration: BoxDecoration(
           color: getMaterialColor(AppColors.primaryColor1),
           borderRadius: const BorderRadius.only(
@@ -48,7 +49,7 @@ class CommonWidgets {
                   fontFamily: FontConstants.montserratSemiBold)),
         ),
         CommonWidgets().image(
-            image: AssetsConstants.dropDownArrowIcon, width: 10.0, height: 8.0)
+            image: AssetsConstants.dropDownArrowIcon, width: 1.30*SizeConfig.imageSizeMultiplier, height: 1.04*SizeConfig.imageSizeMultiplier)
       ],
     );
   }
@@ -104,12 +105,18 @@ class CommonWidgets {
             },
             child: incrementDecrementButton(StringConstants.minusSymbol)),
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: CommonWidgets().textWidget(
-              '$quantity', StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor2),
-              fontFamily: FontConstants.montserratSemiBold)),
+          padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+          child: SizedBox(
+            width: 3 * SizeConfig.imageSizeMultiplier,
+            height: 3 * SizeConfig.imageSizeMultiplier,
+            child: Center(
+              child: CommonWidgets().textWidget(
+                  '$quantity', StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratSemiBold)),
+            ),
+          ),
         ),
         GestureDetector(
             onTap: () {
@@ -122,8 +129,8 @@ class CommonWidgets {
 
   Widget incrementDecrementButton(String title) {
     return Container(
-      width: 3 * SizeConfig.imageSizeMultiplier,
-      height: 3 * SizeConfig.imageSizeMultiplier,
+      width: 3.5 * SizeConfig.imageSizeMultiplier,
+      height: 3.5 * SizeConfig.imageSizeMultiplier,
       decoration: BoxDecoration(
         color: getMaterialColor(AppColors.primaryColor2),
         borderRadius: BorderRadius.circular(15.0),

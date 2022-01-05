@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
-import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
@@ -8,7 +7,7 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 import 'menu_items.dart';
-
+//ignore: must_be_immutable
 class FoodExtraPopup extends StatefulWidget {
   MenuItems item;
    FoodExtraPopup({required this.item, Key? key}) : super(key: key);
@@ -29,13 +28,13 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
     return Dialog(
       backgroundColor: getMaterialColor(AppColors.whiteColor),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: foodExtraPopUpComponent(item),
+      child: SingleChildScrollView(child: foodExtraPopUpComponent(item)),
     );
   }
 
   Widget foodExtraPopUpComponent(MenuItems item) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.43,
+      width: MediaQuery.of(context).size.width * 0.49,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
