@@ -4,3 +4,7 @@ serverVersion=7.4.0.18908
 dashboardUrl=https://gitlab.mobisoftinfotech.com:8443/dashboard?id=flutter%3AKonaIcePOS
 ceTaskId=AX4JqCfsp2yzIT8RR6Yt
 ceTaskUrl=https://gitlab.mobisoftinfotech.com:8443/api/ce/task?id=AX4JqCfsp2yzIT8RR6Yt
+ceTaskId=AX4JqCfsp2yzIT8RR6Yt
+ceTaskUrl=https://gitlab.mobisoftinfotech.com:8443/api/ce/task?id=AX4JqCfsp2yzIT8RR6Yt
+ceTaskId=AX4O4lvgp2yzIT8RR6Yw
+ceTaskUrl=https://gitlab.mobisoftinfotech.com:8443/api/ce/task?id=AX4O4lvgp2yzIT8RR6Yw

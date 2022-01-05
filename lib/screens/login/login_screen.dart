@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 52.0, bottom: 39.0),
+                padding:  EdgeInsets.only(top: 6.77*SizeConfig.imageSizeMultiplier, bottom: 5.07*SizeConfig.imageSizeMultiplier),
                 child: icon(),
               ),
               isLoginView ? loginContainer() : ForgetPasswordScreen(navigateBackToLoginView: onTapFromForgetPasswordView,),
@@ -48,18 +49,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget icon() {
-    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 161.0, height: 120.0);
+    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 20.96*SizeConfig.imageSizeMultiplier, height: 15.62*SizeConfig.imageSizeMultiplier);
   }
 
   Widget loginContainer() {
     return Container(
-      width: 360.0,
+      width: 360,
       decoration: StyleConstants.customBoxShadowDecorationStyle(circularRadius: 3.6),
       child: Column(
         children: [
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 25.0, horizontal: 141.0),
+                  EdgeInsets.symmetric(vertical: 3.25*SizeConfig.imageSizeMultiplier, horizontal: 141.0),
             child: textWidget(
                 StringConstants.loginText,
                 StyleConstants.customTextStyle(
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top:5.0,bottom: 20.0,left: 22.0,right: 22.0),
+            padding:  EdgeInsets.only(top:0.65*SizeConfig.imageSizeMultiplier,bottom: 2.60*SizeConfig.imageSizeMultiplier,left: 22.0,right: 22.0),
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
@@ -116,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top:5.0,bottom: 20.0,left: 22.0,right: 22.0),
+            padding:  EdgeInsets.only(top:0.65*SizeConfig.imageSizeMultiplier,bottom: 2.60*SizeConfig.imageSizeMultiplier,left: 22.0,right: 22.0),
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Align(
             alignment: Alignment.topRight,
             child: Padding(
-              padding: const EdgeInsets.only(top: 25.0,right: 21.0,bottom: 20.0),
+              padding:  EdgeInsets.only(top: 3.25*SizeConfig.imageSizeMultiplier,right: 21.0,bottom: 2.60*SizeConfig.imageSizeMultiplier),
               child: InkWell(
                 onTap: onTapForgotPassword,
                 child: textWidget(
@@ -174,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
   
   Widget signInButton(String buttonText,TextStyle textStyle){
     return Padding(
-      padding: const EdgeInsets.only(bottom: 44.0),
+      padding:  EdgeInsets.only(bottom: 5.72*SizeConfig.imageSizeMultiplier),
       child: GestureDetector(
         onTap:  onTapSingIn,
         child: Container(
@@ -183,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0,horizontal: 84.0),
+            padding:  EdgeInsets.symmetric(vertical: 1.56*SizeConfig.imageSizeMultiplier,horizontal: 84.0),
             child: Text(buttonText,style: textStyle),
           ),
         ),

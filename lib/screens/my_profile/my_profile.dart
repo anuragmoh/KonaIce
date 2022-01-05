@@ -4,9 +4,9 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class MyProfile extends StatefulWidget {
@@ -32,12 +32,13 @@ class _MyProfileState extends State<MyProfile> {
             Expanded(child: bodyWidget()),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 23.0, vertical: 40.0),
+                   EdgeInsets.symmetric(horizontal: 23.0, vertical: 3.90*SizeConfig.heightSizeMultiplier),
               child: CommonWidgets().buttonWidget(
                 StringConstants.changePassword,
                 onTapChangePassword,
               ),
             ),
+            SizedBox(height: 4.88*SizeConfig.heightSizeMultiplier,),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
               accountImageVisibility: false,isFromDashboard: false,
@@ -89,7 +90,7 @@ class _MyProfileState extends State<MyProfile> {
 
   Widget konaTopBarIcon() {
     return CommonWidgets()
-        .image(image: AssetsConstants.topBarAppIcon, width: 31.0, height: 31.0);
+        .image(image: AssetsConstants.topBarAppIcon, width: 4.03*SizeConfig.imageSizeMultiplier, height: 4.03*SizeConfig.imageSizeMultiplier);
   }
 
   Widget bodyWidget() => Container(
@@ -162,9 +163,11 @@ class _MyProfileState extends State<MyProfile> {
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
+                padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: AppColors.whiteColor,
                     hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
@@ -214,7 +217,7 @@ class _MyProfileState extends State<MyProfile> {
               alignment: Alignment.center,
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 23.0, vertical: 40.0),
+                     EdgeInsets.symmetric(horizontal: 23.0, vertical: 3.90*SizeConfig.heightSizeMultiplier),
                 child: CommonWidgets().buttonWidget(
                   StringConstants.submit,
                   onTapSubmitChangePassword,

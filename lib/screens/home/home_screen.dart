@@ -180,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(30.0)
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 15.0),
+          padding:  EdgeInsets.symmetric(vertical: 1.17*SizeConfig.heightSizeMultiplier, horizontal: 15.0),
           child: CommonWidgets().textWidget(buttonText, textStyle),
         ),
       ),
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: onTapClockInOutButton,
       child: Container(
-        height: 43.0,
+        height: 4.19*SizeConfig.heightSizeMultiplier,
         decoration: BoxDecoration(
           color: getMaterialColor(isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2),
           borderRadius: BorderRadius.circular(21.5),
@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(left: 20.0, right: 40.0),
           child: Row(
             children: [
-              CommonWidgets().image(image: AssetsConstants.clockInOutIcon, width: 26.0, height: 26.0),
+              CommonWidgets().image(image: AssetsConstants.clockInOutIcon, width: 3.38*SizeConfig.imageSizeMultiplier, height: 3.38*SizeConfig.imageSizeMultiplier),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Column(

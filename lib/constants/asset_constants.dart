@@ -7,6 +7,8 @@ class AssetsConstants {
   static const clockInOutIcon = assetsPath + 'clock_in_out.png';
   static const locationPinIcon = assetsPath + 'location_pin.png';
   static const dateIcon = assetsPath + 'date.png';
+  static const couponIcon = assetsPath + 'coupon_icon.png';
+  static const dollarIcon = assetsPath + 'doller_icon.png';
 
   static const homeUnSelectedIcon = assetsBottomBarIconsPath + 'home_unselected.png';
   static const homeSelectedIcon = assetsBottomBarIconsPath + 'home_selected.png';
@@ -19,7 +21,6 @@ class AssetsConstants {
   static const dropDownArrowIcon = assetsTopBarIconsPath + 'drop_down_arrow.png';
 
   static const switchAccount = assetsPath + 'ic_switch_account.png';
-
 
   static const addToCartIcon = assetsPath + 'add_to_cart.png';
   static const addCustomerIcon = assetsPath + 'add_customer.png';
