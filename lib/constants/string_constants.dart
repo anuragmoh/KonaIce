@@ -109,4 +109,6 @@ class StringConstants {
   static const enterNewPassword='Enter New Password';
   static const enterConfirmPassword='Enter Confirm Password';
 
+  static const markAllAsRead='Mark all as read';
+
 }

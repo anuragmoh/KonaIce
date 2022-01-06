@@ -51,7 +51,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: Column(
           children: [
-            TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: false, onTapCallBack: onTapCallBack),
+            TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: false, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
             Expanded(child: bodyWidget()),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
@@ -63,6 +63,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         ),
       ),
     );
+  }
+  onDrawerTap() {
+    Scaffold.of(context).openDrawer();
   }
 
   Widget bodyWidget() => Container(

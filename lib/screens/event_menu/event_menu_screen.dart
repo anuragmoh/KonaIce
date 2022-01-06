@@ -8,6 +8,7 @@ import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
+import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
@@ -17,6 +18,7 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class EventMenuScreen extends StatefulWidget {
+
   final PartyEvents events;
   const EventMenuScreen({Key? key, required this.events}) : super(key: key);
 
@@ -27,6 +29,7 @@ class EventMenuScreen extends StatefulWidget {
 class _EventMenuScreenState extends State<EventMenuScreen> {
 
   bool isProduct = true;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<String> categoriesList = [
     StringConstants.customMenu,
@@ -64,12 +67,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: getMaterialColor(AppColors.textColor3),
-      // endDrawer: navigationDrawer(),
+      endDrawer: NotificationDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: true, onTapCallBack: onTapCallBack),
+          TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: true, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
           Expanded(
             child: isProduct ? body() :  AllOrdersScreen(onBackTap: onTapCallBack),
           ),
@@ -79,34 +83,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     );
   }
 
-  Widget navigationDrawer(){
-    return Drawer(
-      child: ListView(
-        // Important: Remove any padding from the ListView.
-        padding: EdgeInsets.zero,
-        children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text('Drawer Header'),
-          ),
-          ListTile(
-            title: const Text('Setting'),
-            onTap: () {
-
-            },
-          ),
-          ListTile(
-            title: const Text('Notification'),
-            onTap: () {
-
-            },
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget body() {
     customerName = selectedMenuItems.isEmpty ? StringConstants.addCustomer : 'Nicholas Gibson';
@@ -735,6 +711,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PaymentScreen( events:widget.events)));
  }
 
+
+  onDrawerTap() {
+    print('nopendrwawer');
+    _scaffoldKey.currentState!.openEndDrawer();
+    // Scaffold.of(context).openDrawer();
+  }
 }
   
   getMenuItems() {
