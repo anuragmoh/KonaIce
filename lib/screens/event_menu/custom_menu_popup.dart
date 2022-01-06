@@ -128,7 +128,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: getMaterialColor(AppColors.skyBlueBorderColor)),
                 borderRadius: BorderRadius.circular(8.0),),
-              prefix: Row(
+              prefixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(

@@ -48,6 +48,7 @@ class StringConstants {
   static const enterMenuName = 'Enter Menu Name';
   static const applyCoupon = 'Apply Coupon';
   static const addTip = 'Add Tip';
+  static const searchCustomerName = 'Search Customer Name';
 
   static const orderDetails = 'Order Details';
   static const customerName = 'Customer Name';
