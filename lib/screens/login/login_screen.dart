@@ -4,9 +4,13 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/network/repository/login/login_presenter.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
+import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -17,15 +21,34 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen> implements ResponseContractor{
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  late LoginPresenter loginPresenter;
+
+  _LoginScreenState(){
+    loginPresenter = LoginPresenter(this);
+  }
+
+
   bool isPasswordVisible = true;
   bool isLoginView = true;
+  bool isApiProcess = false;
+
+  login(){
+    setState(() {
+      isApiProcess = true;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.primaryColor1),
@@ -206,6 +229,22 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isLoginView = true;
     });
+  }
+
+  @override
+  void showError(FetchException exception) {
+    setState(() {
+      isApiProcess = false;
+    });
+
+  }
+
+  @override
+  void showSuccess(response) {
+    setState(() {
+      isApiProcess = false;
+    });
+
   }
 
 }

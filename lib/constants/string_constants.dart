@@ -112,4 +112,8 @@ class StringConstants {
 
   static const markAllAsRead='Mark all as read';
 
+  static const internetConnectionError = 'No Internet connection';
+  static const apiNotResponding = 'API not responded in time';
+  static const errorOccurredWithCode = 'Error occurred with code ';
+
 }
