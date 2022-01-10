@@ -4,6 +4,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -15,6 +16,7 @@ class TopBar extends StatefulWidget {
   final String eventAddress;
   final bool showCenterWidget;
   final Function onTapCallBack;
+  final Function onDrawerTap;
 
   const TopBar(
       {Key? key,
@@ -22,7 +24,8 @@ class TopBar extends StatefulWidget {
       required this.eventName,
       required this.eventAddress,
       required this.showCenterWidget,
-      required this.onTapCallBack})
+      required this.onTapCallBack,
+      required this.onDrawerTap})
       : super(key: key);
 
   @override
@@ -34,65 +37,77 @@ class _TopBarState extends State<TopBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 85.0,
-      decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
-          borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(8.0),
-              bottomRight: Radius.circular(8.0))),
-      child: Padding(
-        padding: const EdgeInsets.only(
-            left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              flex: 1,
-              child: Container(
-                child:
-                    eventNameAndAddress(widget.eventName, widget.eventAddress),
-              ),
-            ),
-            Visibility(
-              visible: widget.showCenterWidget,
-              child: Flexible(
+    return
+       Container(
+        height: 85.0,
+        decoration: BoxDecoration(
+            color: getMaterialColor(AppColors.primaryColor1),
+            borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(8.0),
+                bottomRight: Radius.circular(8.0))),
+        child: Padding(
+          padding: const EdgeInsets.only(
+              left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
                 flex: 1,
                 child: Container(
-                  child: centerWidget(),
+                  child:
+                      eventNameAndAddress(widget.eventName, widget.eventAddress),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 1,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  notificationWithCount(),
-                  const SizedBox(
-                    width: 20.0,
+              Visibility(
+                visible: widget.showCenterWidget,
+                child: Flexible(
+                  flex: 1,
+                  child: Container(
+                    child: centerWidget(),
                   ),
-                  CommonWidgets().profileComponent(widget.userName),
-                ],
+                ),
               ),
-            ),
-          ],
+              Flexible(
+                flex: 1,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    notificationWithCount(),
+                    const SizedBox(
+                      width: 20.0,
+                    ),
+                    CommonWidgets().profileComponent(widget.userName),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+      // drawer: NotificationDrawer(),
   }
 
   Widget notificationWithCount() {
-    return Badge(
-      badgeContent: Text('3',style: StyleConstants.customTextStyle(
-          fontSize: 12.0,
-          color: getMaterialColor(AppColors.whiteColor),
-          fontFamily: FontConstants.montserratSemiBold),),
-      child: CommonWidgets().image(
-          image: AssetsConstants.notificationUnSelectedIcon,
-          width: 3.38 * SizeConfig.imageSizeMultiplier,
-          height: 3.38 * SizeConfig.imageSizeMultiplier),
+    return GestureDetector(
+      onTap: () {
+
+        // Scaffold.of(context).openDrawer();
+
+        print('ondrawerformtopbar');
+        widget.onDrawerTap();
+
+      },
+      child: Badge(
+        badgeContent: Text('3',style: StyleConstants.customTextStyle(
+            fontSize: 12.0,
+            color: getMaterialColor(AppColors.whiteColor),
+            fontFamily: FontConstants.montserratSemiBold),),
+        child: CommonWidgets().image(
+            image: AssetsConstants.notificationUnSelectedIcon,
+            width: 3.38 * SizeConfig.imageSizeMultiplier,
+            height: 3.38 * SizeConfig.imageSizeMultiplier),
+      ),
     );
   }
 
@@ -150,6 +165,7 @@ class _TopBarState extends State<TopBar> {
                 setState(() {
                   isProduct = true;
                 });
+
                 widget.onTapCallBack(isProduct);
               },
               child: Container(
@@ -210,4 +226,5 @@ class _TopBarState extends State<TopBar> {
           ],
         ),
       );
+
 }

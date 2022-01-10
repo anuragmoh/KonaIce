@@ -31,7 +31,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 eventName: "Waugh",
                 eventAddress: "Wachington",
                 showCenterWidget: false,
-                onTapCallBack: onTapCallBack),
+                onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap),
             Expanded(child: bodyWidget()),
             bottomWidget(),
           ],
@@ -94,6 +94,9 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   // Widget textView(String text, TextStyle textStyle) =>
   //     Text(text, style: textStyle);
 
+  onDrawerTap() {
+    Scaffold.of(context).openDrawer();
+  }
   Widget componentHead(String orderDate) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Row(
