@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -46,6 +49,8 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
   bool isPasswordVisible = true;
   bool isLoginView = true;
   bool isApiProcess = false;
+  String osVersion='';
+  String deviceName='';
 
   login(){
     setState(() {
@@ -53,19 +58,28 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
     });
     loginRequestModel.email = emailController.text.toString();
     loginRequestModel.password = passwordController.text.toString();
-    loginRequestModel.deviceId = 'iPad';
-    loginRequestModel.deviceType = 'iOS';
-    loginRequestModel.deviceModel = 'iPad Pro';
-    loginRequestModel.os = 'iOS';
-    loginRequestModel.osVersion = '15.2';
-    loginRequestModel.appVersion = '1.0';
-    loginRequestModel.deviceName = 'iPad Pro';
+    loginRequestModel.deviceId = deviceName;
+    loginRequestModel.deviceType = Platform.operatingSystem;
+    loginRequestModel.deviceModel = deviceName;
+    loginRequestModel.os = Platform.operatingSystem;
+    loginRequestModel.osVersion = osVersion;
+    loginRequestModel.appVersion = AssetsConstants.appVersion;
+    loginRequestModel.deviceName = deviceName;
     loginPresenter.login(loginRequestModel);
+  }
+
+  getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+    osVersion=iosInfo.systemVersion;
+    deviceName=iosInfo.localizedModel;
   }
 
 
   @override
   Widget build(BuildContext context) {
+    getDeviceInfo();
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
 
