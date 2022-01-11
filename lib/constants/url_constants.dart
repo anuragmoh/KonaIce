@@ -1,7 +1,7 @@
 class UrlConstants {
 
-  static const baseUrl = 'https://example.com/api/';
+  static const baseUrl = 'https://konaschoolsidedevapi.mi2.in';
 
-  static const login = '';
+  static const login = '/api/v1/sessions';
 
 }

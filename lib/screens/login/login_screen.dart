@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
+import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/network/repository/login/login_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
+import 'package:kona_ice_pos/screens/login/login_model.dart';
+import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -22,16 +27,22 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> implements ResponseContractor{
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   late LoginPresenter loginPresenter;
+  LoginRequestModel loginRequestModel = LoginRequestModel();
 
   _LoginScreenState(){
     loginPresenter = LoginPresenter(this);
   }
 
 
+  bool isEmailValid = true;
+  bool isPasswordValid = true;
   bool isPasswordVisible = true;
   bool isLoginView = true;
   bool isApiProcess = false;
@@ -40,6 +51,16 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
     setState(() {
       isApiProcess = true;
     });
+    loginRequestModel.email = emailController.text.toString();
+    loginRequestModel.password = passwordController.text.toString();
+    loginRequestModel.deviceId = 'iPad';
+    loginRequestModel.deviceType = 'iOS';
+    loginRequestModel.deviceModel = 'iPad Pro';
+    loginRequestModel.os = 'iOS';
+    loginRequestModel.osVersion = '15.2';
+    loginRequestModel.appVersion = '1.0';
+    loginRequestModel.deviceName = 'iPad Pro';
+    loginPresenter.login(loginRequestModel);
   }
 
 
@@ -50,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: Container(
         color: getMaterialColor(AppColors.primaryColor1),
         width: MediaQuery.of(context).size.width,
@@ -119,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'abc@gmail.com',
+                      errorText: isEmailValid ? null : StringConstants.enterValidEmail,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
                           color: getMaterialColor(AppColors.textColor1),
@@ -163,6 +186,7 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
                         child: isPasswordVisible ? const Icon(Icons.visibility_off) :const Icon(Icons.visibility) ),
                       border: InputBorder.none,
                       hintText: 'Password',
+                      errorText: isPasswordValid ? null : StringConstants.enterValidPassword,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
                           color: getMaterialColor(AppColors.textColor1),
@@ -200,7 +224,9 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
     return Padding(
       padding:  EdgeInsets.only(bottom: 5.72*SizeConfig.imageSizeMultiplier),
       child: GestureDetector(
-        onTap:  onTapSingIn,
+        onTap:  (){
+          onTapSingIn();
+        },
         child: Container(
           decoration: BoxDecoration(
             color: getMaterialColor(AppColors.primaryColor2),
@@ -215,10 +241,32 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
     );
   }
 
+
   onTapSingIn(){
-     Navigator.of(context).pushReplacement(
-         MaterialPageRoute(builder: (context) => const Dashboard())
-     );
+    setState(() {
+      emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
+      passwordController.text.isEmpty ? isPasswordValid = false : isPasswordValid = true;
+    });
+    if(emailController.text.isEmpty){
+      setState(() {
+        isEmailValid = false;
+      });
+      return false;
+    }
+    if(passwordController.text.isEmpty){
+      setState(() {
+        isPasswordValid = false;
+      });
+      return false;
+    }
+    CheckConnection().connectionState().then((value){
+      if(value == true){
+        login();
+      }else{
+        _scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('No internet connect.')));
+      }
+    });
+
   }
   onTapForgotPassword(){
    setState(() {
@@ -244,7 +292,15 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
     setState(() {
       isApiProcess = false;
     });
+    LoginResponseModel loginResponseModel = response;
+    storeInformation(loginResponseModel.sessionKey);
 
+  }
+  storeInformation(String? token) async{
+   await SessionDAO().insert(Session(key: DatabaseKeys.sessionKey,value: token!));
+   Navigator.of(context).pushReplacement(
+       MaterialPageRoute(builder: (context) => const Dashboard())
+   );
   }
 
 }

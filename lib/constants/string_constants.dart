@@ -116,4 +116,9 @@ class StringConstants {
   static const apiNotResponding = 'API not responded in time';
   static const errorOccurredWithCode = 'Error occurred with code ';
 
+  // Error Messages
+  static const enterValidEmail = 'Enter valid email';
+  static const enterValidPassword = 'Enter valid password';
+
+
 }

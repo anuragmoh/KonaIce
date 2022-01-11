@@ -10,12 +10,14 @@ import 'package:kona_ice_pos/network/app_exception.dart';
 class BaseClient {
 
   static const int timeOutDuration = 20;
+  Map<String, String> header = {"Content-Type": "application/json","Accept-Language" : "en-US"};
+
 
   //GET
   Future<dynamic> get(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     try {
-      var response = await http.get(uri).timeout(const Duration(seconds: timeOutDuration));
+      var response = await http.get(uri,headers: header).timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on SocketException {
       throw FetchDataException(StringConstants.internetConnectionError, uri.toString());
@@ -29,7 +31,7 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     try {
-      var response = await http.post(uri, body: payload).timeout(const Duration(seconds: timeOutDuration));
+      var response = await http.post(uri,headers: header,body: payload).timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on SocketException {
       throw FetchDataException(StringConstants.internetConnectionError, uri.toString());
@@ -45,11 +47,9 @@ class BaseClient {
   dynamic _processResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-      // var responseJson = utf8.decode(response.body.toString());
-        return response;
+        return response.body.toString();
       case 201:
-        var responseJson = utf8.decode(response.bodyBytes);
-        return responseJson;
+        return response.body.toString();
       case 400:
         throw BadRequestException(utf8.decode(response.bodyBytes), response.request!.url.toString());
       case 401:
