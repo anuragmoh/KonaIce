@@ -1,4 +1,5 @@
 class AssetsConstants {
+  static const appVersion='1.0';
   static const assetsPath = 'assets/images/';
   static const assetsTopBarIconsPath = assetsPath + 'top_bar_icons/';
   static const assetsBottomBarIconsPath = assetsPath + 'bottom_bar_icons/';
