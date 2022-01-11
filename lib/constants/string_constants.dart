@@ -119,6 +119,7 @@ class StringConstants {
   // Error Messages
   static const enterValidEmail = 'Enter valid email';
   static const enterValidPassword = 'Enter valid password';
+  static const noInternetConnection = 'Please check your internet connection.';
 
 
 }

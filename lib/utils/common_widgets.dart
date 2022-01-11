@@ -93,8 +93,6 @@ class CommonWidgets {
   Widget textView(String text, TextStyle textStyle) =>
       Text(text, style: textStyle);
 
-
-
   Widget quantityIncrementDecrementContainer(
       {required int quantity, required Function onTapMinus, required Function onTapPlus}) {
     return Row(
@@ -199,88 +197,12 @@ class CommonWidgets {
         ),
       );
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Column(
-  //     children: [
-  //       Container(
-  //         height: 43.0,
-  //         decoration: BoxDecoration(
-  //             color: getMaterialColor(AppColors.primaryColor1),
-  //             borderRadius: const BorderRadius.only(
-  //                 topLeft: Radius.circular(8.0),
-  //                 topRight: Radius.circular(8.0))),
-  //         child: Row(
-  //           children: [
-  //             bottomBarComponent(),
-  //             const Spacer(),
-  //             bottomBarSwitchAccountImage(widget.accountImageVisibility)
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-  //
-  // Widget bottomBarComponent() {
-  //   return Padding(
-  //     padding: const EdgeInsets.only(left: 21.0),
-  //     child: ListView.builder(
-  //         shrinkWrap: true,
-  //         itemCount: bottomItemList.length,
-  //         scrollDirection: Axis.horizontal,
-  //         physics: const NeverScrollableScrollPhysics(),
-  //         itemBuilder: (BuildContext context, int index) {
-  //           return GestureDetector(
-  //             onTap: () {
-  //               setState(() {
-  //                 // onTapBottomListItem(index);
-  //                 currentIndex = index;
-  //                 widget.onTapCallBack(index);
-  //               });
-  //             },
-  //             child: Row(
-  //               children: [
-  //                 CommonWidgets().image(
-  //                     image: currentIndex == index
-  //                         ? bottomItemList[index].selectedImage
-  //                         : bottomItemList[index].basicImage,
-  //                     width: 26.0,
-  //                     height: 26.0),
-  //                 Padding(
-  //                   padding: const EdgeInsets.only(left: 8.0, right: 35.0),
-  //                   child: CommonWidgets().textWidget(
-  //                       bottomItemList[index].title,
-  //                       StyleConstants.customTextStyle(
-  //                           fontSize: 13.0,
-  //                           color: currentIndex == index
-  //                               ? AppColors.primaryColor2
-  //                               : AppColors.whiteColor,
-  //                           fontFamily: currentIndex == index
-  //                               ? FontConstants.montserratSemiBold
-  //                               : FontConstants.montserratMedium)),
-  //                 )
-  //               ],
-  //             ),
-  //           );
-  //         }),
-  //   );
-  // }
-/*
-  Widget bottomBarSwitchAccountImage(bool accountImageVisibility) {
-    return Visibility(
-      visible: accountImageVisibility,
-      child: Padding(
-        padding: const EdgeInsets.only(right: 21.0),
-        child: Row(
-          children: [
-            CommonWidgets().image(
-                image: AssetsConstants.switchAccountUnSelectedIcon,
-                width: 26.0,
-                height: 26.0)
-          ],
-        ),
-      ),
-    );
-  }*/
+
+   showErrorSnackBar({required String errorMessage, required BuildContext context}) {
+     final snackBar = SnackBar(
+       content: textWidget(errorMessage, StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratMedium)),
+       backgroundColor: getMaterialColor(AppColors.denotiveColor1),
+     );
+     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }

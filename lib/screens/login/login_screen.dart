@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
@@ -19,6 +20,8 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
+
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -28,7 +31,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> implements ResponseContractor{
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -71,7 +73,6 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: Container(
         color: getMaterialColor(AppColors.primaryColor1),
         width: MediaQuery.of(context).size.width,
@@ -244,30 +245,21 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
 
   onTapSingIn(){
     setState(() {
-      emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
-      passwordController.text.isEmpty ? isPasswordValid = false : isPasswordValid = true;
-    });
-    if(emailController.text.isEmpty){
-      setState(() {
-        isEmailValid = false;
-      });
-      return false;
-    }
-    if(passwordController.text.isEmpty){
-      setState(() {
-        isPasswordValid = false;
-      });
-      return false;
-    }
-    CheckConnection().connectionState().then((value){
-      if(value == true){
-        login();
-      }else{
-        _scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('No internet connect.')));
-      }
+      isEmailValid = emailController.text.isValidEmail();
+      isPasswordValid = passwordController.text.isValidPassword();
     });
 
+    if (isEmailValid && isPasswordValid) {
+      CheckConnection().connectionState().then((value){
+        if(value == true){
+          login();
+        }else{
+          CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.noInternetConnection, context: context);
+        }
+      });
+    }
   }
+
   onTapForgotPassword(){
    setState(() {
      isLoginView = false;
