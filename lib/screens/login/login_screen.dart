@@ -99,13 +99,19 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
                 padding:  EdgeInsets.only(top: 6.77*SizeConfig.imageSizeMultiplier, bottom: 5.07*SizeConfig.imageSizeMultiplier),
                 child: icon(),
               ),
-              isLoginView ? loginContainer() : ForgetPasswordScreen(navigateBackToLoginView: onTapFromForgetPasswordView,),
+              isLoginView ? loginContainer() : ForgetPasswordScreen(navigateBackToLoginView: onTapFromForgetPasswordView,forgotPasswordLoader: onForgotPasswordScreenLoader,),
              // loginContainer(),
             ],
           ),
         ),
       ),
     );
+  }
+
+  onForgotPasswordScreenLoader(bool isLoaderOn){
+    setState(() {
+      isApiProcess = isLoaderOn;
+    });
   }
 
   Widget icon() {
