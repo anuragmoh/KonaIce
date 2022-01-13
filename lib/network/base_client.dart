@@ -20,7 +20,7 @@ class BaseClient {
       var response = await http.get(uri,headers: header).timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on SocketException {
-      throw FetchDataException(StringConstants.internetConnectionError, uri.toString());
+      throw FetchDataException(StringConstants.noInternetConnection, uri.toString());
     } on TimeoutException {
       throw ApiNotRespondingException(StringConstants.apiNotResponding, uri.toString());
     }
@@ -34,7 +34,7 @@ class BaseClient {
       var response = await http.post(uri,headers: header,body: payload).timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on SocketException {
-      throw FetchDataException(StringConstants.internetConnectionError, uri.toString());
+      throw FetchDataException(StringConstants.noInternetConnection, uri.toString());
     } on TimeoutException {
       throw ApiNotRespondingException(StringConstants.apiNotResponding, uri.toString());
     }

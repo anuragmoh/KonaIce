@@ -302,6 +302,7 @@ class _LoginScreenState extends State<LoginScreen> implements ResponseContractor
     storeInformation(loginResponseModel.sessionKey);
 
   }
+
   storeInformation(String? token) async{
    await SessionDAO().insert(Session(key: DatabaseKeys.sessionKey,value: token!));
    Navigator.of(context).pushReplacement(
