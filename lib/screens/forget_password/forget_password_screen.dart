@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/network/exception.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/forgot_password/forgot_password_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/forget_password/forgot_password_model.dart';
@@ -167,7 +168,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
  }
 
   @override
-  void showError(FetchException exception) {
+  void showError(GeneralErrorResponse exception) {
     print(exception);
     widget.forgotPasswordLoader(false);
   }

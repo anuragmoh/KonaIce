@@ -11,6 +11,7 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/login/login_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/network/exception.dart';
@@ -333,9 +334,10 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   @override
-  void showError(FetchException exception) {
+  void showError(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
+      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
     });
   }
 
