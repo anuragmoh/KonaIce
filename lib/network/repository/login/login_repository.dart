@@ -5,11 +5,9 @@ import 'package:kona_ice_pos/screens/login/login_model.dart';
 class LoginRepository{
   BaseClient baseClient = BaseClient();
 
-
   Future<LoginResponseModel> login(loginRequestModel){
     return baseClient.post(UrlConstants.login, loginRequestModel).then((value){
       return loginResponseModelFromJson(value);
     });
   }
-
 }
