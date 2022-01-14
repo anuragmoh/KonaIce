@@ -170,6 +170,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
   @override
   void showError(GeneralErrorResponse exception) {
     print(exception);
+    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
     widget.forgotPasswordLoader(false);
   }
 
