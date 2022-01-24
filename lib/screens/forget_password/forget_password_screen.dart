@@ -1,24 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/network/exception.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/repository/forgot_password/forgot_password_presenter.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
+import 'package:kona_ice_pos/screens/forget_password/forgot_password_model.dart';
+import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 //ignore: must_be_immutable
 class ForgetPasswordScreen extends StatefulWidget {
 
   Function navigateBackToLoginView;
+  Function forgotPasswordLoader;
 
-   ForgetPasswordScreen({required this.navigateBackToLoginView, Key? key}) : super(key: key);
+   ForgetPasswordScreen({required this.navigateBackToLoginView, required this.forgotPasswordLoader,Key? key}) : super(key: key);
 
   @override
   _ForgetPasswordScreenState createState() => _ForgetPasswordScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements ResponseContractor{
+  bool isApiProcess = false;
+  bool isEmailValid = true;
   TextEditingController emailController = TextEditingController();
+
+  late ForgotPasswordPresenter forgotPasswordPresenter;
+  ForgotPasswordRequestModel forgotPasswordRequestModel=ForgotPasswordRequestModel();
+
+  _ForgetPasswordScreenState() {
+    forgotPasswordPresenter = ForgotPasswordPresenter(this);
+  }
+    forgotPasswordApiCall(){
+
+    widget.forgotPasswordLoader(true);
+      forgotPasswordRequestModel.email=emailController.text.toString();
+      forgotPasswordPresenter.forgotPassword(forgotPasswordRequestModel);
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +125,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ),
     );
   }
-
   Widget submitButton(String buttonText, TextStyle textStyle){
     return Padding(
       padding:  EdgeInsets.only(bottom: 4.55*SizeConfig.imageSizeMultiplier, top: 4.55*SizeConfig.imageSizeMultiplier),
@@ -122,10 +146,38 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
   //Actions
  onTapSubmit() {
-   widget.navigateBackToLoginView();
+   setState(() {
+     isEmailValid = emailController.text.isValidEmail();
+   });
+
+   if (isEmailValid) {
+     CheckConnection().connectionState().then((value){
+       if(value == true){
+         forgotPasswordApiCall();
+       }else{
+         CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.noInternetConnection, context: context);
+       }
+     });
+   }
+
+
  }
 
  onTapSignIn() {
    widget.navigateBackToLoginView();
  }
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    print(exception);
+    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    widget.forgotPasswordLoader(false);
+  }
+
+  @override
+  void showSuccess(response) {
+    print('response$response');
+    widget.forgotPasswordLoader(false);
+    widget.navigateBackToLoginView();
+  }
 }
