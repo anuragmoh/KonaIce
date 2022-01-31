@@ -205,4 +205,30 @@ class CommonWidgets {
      );
      ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  Widget topEmptyBar() {
+    return Container(
+      alignment: Alignment.topCenter,
+      decoration: BoxDecoration(
+          color: getMaterialColor(AppColors.primaryColor1),
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0))),
+      child: const Padding(
+        padding:
+        EdgeInsets.only(left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
+      ),
+    );
+  }
+
+  Widget bottomEmptyBar() {
+    return Container(
+      alignment: Alignment.bottomCenter,
+      height: 4.19 * SizeConfig.heightSizeMultiplier,
+      decoration: BoxDecoration(
+          color: getMaterialColor(AppColors.primaryColor1),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
+    );
+  }
 }

@@ -7,6 +7,7 @@ class StringConstants {
   static const signIn = 'Sign In';
   static const rememberPassword = 'Remember Password ?';
   static const submit = 'Submit';
+  static const okay='Okay';
 
   //AccountSwitch Screen TEXT
   static const selectMode = 'Select Mode';
@@ -97,6 +98,8 @@ class StringConstants {
   static const transactionId = 'Transaction ID';
   static const textMessage = 'Text Message';
   static const billTotal = 'Bill Total';
+  static const orderCompleted='Your order is complete !';
+  static const selectPaymentOption='Select Payment Option';
 
   //MyProfile
   static const myProfile = 'My Profile';
