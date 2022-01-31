@@ -20,7 +20,7 @@ class ForgotPasswordPresenter {
         .then((value){
       _view.showSuccess(value);
     }).onError((error, stackTrace){
-      _view.showError(FetchException(error.toString()));
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }
 }
