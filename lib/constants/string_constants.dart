@@ -8,6 +8,11 @@ class StringConstants {
   static const rememberPassword = 'Remember Password ?';
   static const submit = 'Submit';
 
+  //AccountSwitch Screen TEXT
+  static const selectMode = 'Select Mode';
+  static const staffMode = 'Staff Mode';
+  static const customerMode = 'Customer Mode';
+
 //DASHBOARD TEXT
   static const dashboard = 'DASHBOARD';
   static const createAdhocEvent = 'Create Adhoc Event +';

@@ -11,6 +11,11 @@ class AssetsConstants {
   static const couponIcon = assetsPath + 'coupon_icon.png';
   static const dollarIcon = assetsPath + 'doller_icon.png';
 
+  static const radioSelected = assetsPath + 'radio_selected.png';
+  static const radioUnselected = assetsPath + 'radio_unselected.png';
+  static const staffMode = assetsPath + 'staff_selection_mode.png';
+  static const customerMode = assetsPath + 'user_selection_mode.png';
+
   static const homeUnSelectedIcon = assetsBottomBarIconsPath + 'home_unselected.png';
   static const homeSelectedIcon = assetsBottomBarIconsPath + 'home_selected.png';
   static const notificationUnSelectedIcon = assetsBottomBarIconsPath + 'notification_unselected.png';

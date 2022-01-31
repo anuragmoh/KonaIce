@@ -15,6 +15,7 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/login/login_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/network/exception.dart';
+import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
 import 'package:kona_ice_pos/screens/login/login_model.dart';
@@ -354,6 +355,6 @@ class _LoginScreenState extends State<LoginScreen>
     await SessionDAO()
         .insert(Session(key: DatabaseKeys.sessionKey, value: token!));
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Dashboard()));
+        MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));
   }
 }
