@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: getMaterialColor(AppColors.primaryColor2),
             ),
             debugShowCheckedModeBanner: false,
-            home: const SplashScreen(),
+            home: SplashScreen(),
           );
         });
       }

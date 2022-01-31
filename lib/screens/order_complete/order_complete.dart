@@ -4,6 +4,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -32,10 +33,6 @@ class _OrderCompleteState extends State<OrderComplete> {
       ),
     );
   }
-
-
-
-
 
   Widget paymentSuccess() => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -85,6 +82,7 @@ class _OrderCompleteState extends State<OrderComplete> {
       );
 
   onTapOkay() {
-    Navigator.pop(context);
+   // Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  SplashScreen()));
   }
 }

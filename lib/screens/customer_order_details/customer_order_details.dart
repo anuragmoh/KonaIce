@@ -3,6 +3,7 @@ import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/payment_option/payment_option.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
@@ -25,7 +26,13 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> {
           children: [
             CommonWidgets().topEmptyBar(),
             Expanded(child: bodyWidget()),
-            CommonWidgets().bottomEmptyBar(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: CommonWidgets().buttonWidget(StringConstants.confirm, () {
+                onTapConfirmButton();
+              }),
+            ),
+       //     CommonWidgets().bottomEmptyBar(),
           ],
         ),
       ),
@@ -324,4 +331,9 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> {
                 color: getMaterialColor(AppColors.denotiveColor2),
                 fontFamily: FontConstants.montserratBold)),
       ]);
+
+  //Action Event
+   onTapConfirmButton() {
+     Navigator.of(context).push( MaterialPageRoute(builder: (context) => const PaymentOption()));
+   }
 }

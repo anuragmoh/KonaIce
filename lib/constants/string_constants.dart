@@ -110,13 +110,14 @@ class StringConstants {
   static const oldPassword = 'Old Password*';
   static const newPassword = 'New Password*';
   static const confirmPassword = 'Confirm Password*';
-  static const enterFirstName='Enter First Name';
-  static const enterLastName='Enter Last Name';
-  static const enterContactNumber='Enter Contact Number';
-  static const enterEmailId='Enter EmailID';
-  static const enterOldPassword='Enter Old Password';
-  static const enterNewPassword='Enter New Password';
-  static const enterConfirmPassword='Enter Confirm Password';
+  static const enterFirstName ='Enter First Name';
+  static const enterLastName ='Enter Last Name';
+  static const enterContactNumber ='Enter Contact Number';
+  static const enterEmailId ='Enter EmailID';
+  static const enterOldPassword ='Enter Old Password';
+  static const enterNewPassword ='Enter New Password';
+  static const enterConfirmPassword ='Enter Confirm Password';
+  static const confirm = "Confirm";
 
   static const markAllAsRead='Mark all as read';
 

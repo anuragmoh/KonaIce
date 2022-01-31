@@ -171,7 +171,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
     await SessionDAO()
         .insert(Session(key: DatabaseKeys.selectedMode, value: isStaffModeSelected ? StringConstants.staffMode : StringConstants.customerMode));
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => isStaffModeSelected ? const Dashboard() : const SplashScreen()));
+        MaterialPageRoute(builder: (context) => isStaffModeSelected ? const Dashboard() : SplashScreen()));
   }
 }
 
