@@ -11,8 +11,11 @@ import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
+
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -23,6 +26,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   int currentIndex = 0;
+  String userName = StringExtension.empty();
   List<Widget> bodyWidgets = [
     const HomeScreen(),
     const NotificationScreen(),
@@ -42,6 +46,12 @@ class _DashboardState extends State<Dashboard> {
         basicImage: AssetsConstants.settingsUnSelectedIcon,
         selectedImage: AssetsConstants.settingsSelectedIcon),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    configureData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +93,7 @@ class _DashboardState extends State<Dashboard> {
           ),
           GestureDetector(
             onTap: onProfileChange,
-              child: CommonWidgets().profileComponent('Justin Powell')),
+              child: CommonWidgets().profileComponent(userName)),
         ],
       ),
     );
@@ -144,4 +154,12 @@ class _DashboardState extends State<Dashboard> {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => const MyProfile()));
   }
+
+
+  //Function Other than UI dependency
+   configureData() {
+    setState(() async {
+      userName = await FunctionalUtils.getUserName();
+    });
+   }
 }

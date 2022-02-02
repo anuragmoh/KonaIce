@@ -15,11 +15,13 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/login/login_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/network/exception.dart';
+import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
 import 'package:kona_ice_pos/screens/login/login_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -50,30 +52,6 @@ class _LoginScreenState extends State<LoginScreen>
   bool isApiProcess = false;
   String osVersion = '';
   String deviceName = '';
-
-  login() {
-    setState(() {
-      isApiProcess = true;
-    });
-    loginRequestModel.email = emailController.text.toString();
-    loginRequestModel.password = passwordController.text.toString();
-    loginRequestModel.deviceId = deviceName;
-    loginRequestModel.deviceType = Platform.operatingSystem;
-    loginRequestModel.deviceModel = deviceName;
-    loginRequestModel.os = Platform.operatingSystem;
-    loginRequestModel.osVersion = osVersion;
-    loginRequestModel.appVersion = AssetsConstants.appVersion;
-    loginRequestModel.deviceName = deviceName;
-    loginPresenter.login(loginRequestModel);
-  }
-
-  getDeviceInfo() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-
-    osVersion = iosInfo.systemVersion;
-    deviceName = iosInfo.localizedModel;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -311,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen>
     if (isEmailValid && isPasswordValid) {
       CheckConnection().connectionState().then((value) {
         if (value == true) {
-          login();
+          callLoginApi();
         } else {
           CommonWidgets().showErrorSnackBar(
               errorMessage: StringConstants.noInternetConnection,
@@ -333,6 +311,34 @@ class _LoginScreenState extends State<LoginScreen>
     });
   }
 
+
+  //API Calls
+
+  callLoginApi() {
+    setState(() {
+      isApiProcess = true;
+    });
+    loginRequestModel.email = emailController.text.toString();
+    loginRequestModel.password = passwordController.text.toString();
+    loginRequestModel.deviceId = deviceName;
+    loginRequestModel.deviceType = Platform.operatingSystem;
+    loginRequestModel.deviceModel = deviceName;
+    loginRequestModel.os = Platform.operatingSystem;
+    loginRequestModel.osVersion = osVersion;
+    loginRequestModel.appVersion = AssetsConstants.appVersion;
+    loginRequestModel.deviceName = deviceName;
+    loginPresenter.login(loginRequestModel);
+  }
+
+  getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+    osVersion = iosInfo.systemVersion;
+    deviceName = iosInfo.localizedModel;
+  }
+
+
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
@@ -347,13 +353,16 @@ class _LoginScreenState extends State<LoginScreen>
       isApiProcess = false;
     });
     LoginResponseModel loginResponseModel = response;
-    storeInformation(loginResponseModel.sessionKey);
+    storeInformation(loginResponseModel);
   }
 
-  storeInformation(String? token) async {
+  //DB Operations
+
+  storeInformation(LoginResponseModel loginResponseModel) async {
     await SessionDAO()
-        .insert(Session(key: DatabaseKeys.sessionKey, value: token!));
+        .insert(Session(key: DatabaseKeys.sessionKey, value: loginResponseModel.sessionKey!));
+    await FunctionalUtils.saveUserDetailInDB(userModel: loginResponseModel);
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Dashboard()));
+        MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));
   }
 }

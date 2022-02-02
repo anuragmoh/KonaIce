@@ -20,17 +20,6 @@ class BaseClient {
   //GET
   Future<dynamic> get(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
-    // try {
-    //   var response = await http.get(uri, headers: header).timeout(
-    //       const Duration(seconds: timeOutDuration));
-    //   return _processResponse(response);
-    // } on SocketException {
-    //   throw FetchDataException(
-    //       StringConstants.noInternetConnection, uri.toString());
-    // } on TimeoutException {
-    //   throw ApiNotRespondingException(
-    //       StringConstants.apiNotResponding, uri.toString());
-    // }
 
     try {
         var response = await http.get(uri, headers: header).timeout(
@@ -60,6 +49,7 @@ class BaseClient {
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
+      print(response);
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
@@ -68,6 +58,21 @@ class BaseClient {
     }
   }
 
+  //put
+  Future<dynamic> put(String api, dynamic payloadObj) async {
+    var uri = Uri.parse(UrlConstants.baseUrl + api);
+    var payload = json.encode(payloadObj);
+
+    try {
+      var response = await http.post(uri, headers: header, body: payload)
+          .timeout(const Duration(seconds: timeOutDuration));
+      return _processResponse(response);
+    } on GeneralApiResponseErrorException catch (error) {
+      throw GeneralApiResponseErrorException(error.errorModel);
+    } on Exception {
+      throw GeneralApiResponseErrorException(getDefaultErrorResponse());
+    }
+  }
 
   //DELETE
   //OTHER

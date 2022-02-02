@@ -9,6 +9,15 @@ class StringConstants {
   static const submit = 'Submit';
   static const okay='Okay';
 
+  //DB Insertion default Value
+   static const trueText = 'true';
+   static const falseText = 'false';
+
+  //AccountSwitch Screen TEXT
+  static const selectMode = 'Select Mode';
+  static const staffMode = 'Staff Mode';
+  static const customerMode = 'Customer Mode';
+
 //DASHBOARD TEXT
   static const dashboard = 'DASHBOARD';
   static const createAdhocEvent = 'Create Adhoc Event +';
@@ -105,13 +114,14 @@ class StringConstants {
   static const oldPassword = 'Old Password*';
   static const newPassword = 'New Password*';
   static const confirmPassword = 'Confirm Password*';
-  static const enterFirstName='Enter First Name';
-  static const enterLastName='Enter Last Name';
-  static const enterContactNumber='Enter Contact Number';
-  static const enterEmailId='Enter EmailID';
-  static const enterOldPassword='Enter Old Password';
-  static const enterNewPassword='Enter New Password';
-  static const enterConfirmPassword='Enter Confirm Password';
+  static const enterFirstName ='Enter First Name';
+  static const enterLastName ='Enter Last Name';
+  static const enterContactNumber ='Enter Contact Number';
+  static const enterEmailId ='Enter EmailID';
+  static const enterOldPassword ='Enter Old Password';
+  static const enterNewPassword ='Enter New Password';
+  static const enterConfirmPassword ='Enter Confirm Password';
+  static const confirm = "Confirm";
 
   static const markAllAsRead='Mark all as read';
 
