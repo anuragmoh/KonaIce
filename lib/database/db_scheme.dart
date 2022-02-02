@@ -47,7 +47,6 @@ class DBScheme {
     secondary_contact_phone_num_country_code character varying(5),
     secondary_contact_phone_number character varying(20),
     notes text,
-    
     event_type character varying(20),
     pre_order boolean DEFAULT false NOT NULL,
     radius integer DEFAULT 0,
@@ -57,11 +56,9 @@ class DBScheme {
     order_attribute character varying,
     minimum_delivery_time integer DEFAULT 0,
     start_address character varying(255),
-   
     use_time_slot boolean DEFAULT false NOT NULL,
     max_allowed_orders integer DEFAULT 0,
     delivery_message character varying,
-    
     recipient_name_label character varying(250),
     order_start_date_time bigint,
     order_end_date_time bigint,
