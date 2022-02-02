@@ -157,8 +157,9 @@ class _DashboardState extends State<Dashboard> {
 
 
   //Function Other than UI dependency
-   configureData() async {
-    userName = await FunctionalUtils.getUserName();
+   configureData() {
+    setState(() async {
+      userName = await FunctionalUtils.getUserName();
+    });
    }
-
 }

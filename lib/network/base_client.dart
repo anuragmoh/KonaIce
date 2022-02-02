@@ -49,6 +49,7 @@ class BaseClient {
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
+      print(response);
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
