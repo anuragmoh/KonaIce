@@ -9,6 +9,10 @@ class StringConstants {
   static const submit = 'Submit';
   static const okay='Okay';
 
+  //DB Insertion default Value
+   static const trueText = 'true';
+   static const falseText = 'false';
+
   //AccountSwitch Screen TEXT
   static const selectMode = 'Select Mode';
   static const staffMode = 'Staff Mode';

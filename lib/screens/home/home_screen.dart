@@ -6,6 +6,10 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/repository/clock_in_out/clock_in_out_presenter.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
+import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -21,14 +25,14 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
 
   String currentDate = Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
   late DateTime startDateTime;
   late Timer clockInTimer;
   bool isClockIn = false;
-
+  bool isApiProcess = false;
 
 
   List <PartyEvents> eventList = [
@@ -40,6 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
     PartyEvents(eventName: 'OCKERMAN SCHOOL EVENT', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
 
   ];
+
+  late ClockInOutPresenter clockInOutPresenter;
+  ClockInOutPresenterRequestModel clockInOutRequestModel = ClockInOutPresenterRequestModel();
+
+  _HomeScreenState() {
+    clockInOutPresenter = ClockInOutPresenter(this);
+  }
 
   @override
   void dispose() {
@@ -254,5 +265,23 @@ class _HomeScreenState extends State<HomeScreen> {
       clockInTimer.cancel();
       clockInTime = StringConstants.defaultClockInTime;
     }
+
+
+
+
+    //API Call
+
+
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    // TODO: implement showError
+  }
+
+  @override
+  void showSuccess(response) {
+    // TODO: implement showSuccess
+  }
+
 
 }

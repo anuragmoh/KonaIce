@@ -4,10 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/database/secure_storage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'db_scheme.dart';
 
 class DatabaseHelper {
   final Map<int, List<String>> migrationScripts = {
-    1: ['CREATE TABLE session_data(key TEXT PRIMARY KEY, value TEXT)'],
+    1: [
+      DBScheme.sessionTable,
+      DBScheme.eventsTable,
+      DBScheme.eventItemTable,
+      DBScheme.eventFoodExtraItemMappingTable,
+      DBScheme.foodExtraItemsCategoriesTable,
+      DBScheme.foodExtraItemsTable,
+      DBScheme.itemCategoriesTable,
+      DBScheme.itemFoodExtraMappingMasterTable,
+      DBScheme.itemsTable,
+      // DBScheme.orderFoodExtraItemMappingTable,
+      // DBScheme.orderItemsTable,
+      // DBScheme.ordersTable,
+
+        ],
   };
 
   // Singleton instance
@@ -32,7 +47,8 @@ class DatabaseHelper {
     final documentsDir = await getApplicationDocumentsDirectory();
     debugPrint(documentsDir.toString());
     final dbPath = join(documentsDir.path, "trans_passenger.db");
-    var password = await SecureStorage.getDBPassword();
+   var password = await SecureStorage.getDBPassword();
+   // var password = "";
     if (password == null) {
       password = _randomAlphaNumericString(16);
       await SecureStorage.setDBPassword(password);
