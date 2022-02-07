@@ -97,6 +97,16 @@ class FunctionalUtils {
   }
 
 
+  static Future<String> getSessionKey() async {
+    String sessionKey = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.sessionKey);
+    if (idObj != null) {
+      sessionKey = idObj.value ;
+    }
+
+    return sessionKey;
+  }
+
   static Future<String> getUserName() async {
     String userName = StringExtension.empty();
     var firstName = await SessionDAO().getValueForKey(DatabaseKeys.firstName);
@@ -111,4 +121,15 @@ class FunctionalUtils {
 
     return userName;
   }
+
+  static Future<String> getUserID() async {
+    String userID = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
+    if (idObj != null) {
+      userID = idObj.value ;
+    }
+
+    return userID;
+  }
+
 }

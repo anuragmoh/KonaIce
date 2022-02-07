@@ -14,6 +14,8 @@ import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -46,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
   ];
 
   late ClockInOutPresenter clockInOutPresenter;
-  ClockInOutPresenterRequestModel clockInOutRequestModel = ClockInOutPresenterRequestModel();
+  ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
 
   _HomeScreenState() {
     clockInOutPresenter = ClockInOutPresenter(this);
@@ -60,9 +62,13 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-         color: getMaterialColor(AppColors.textColor3),
+          color: getMaterialColor(AppColors.textColor3),
           child: body()
       ),
     );
@@ -239,10 +245,7 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
 
   onTapClockInOutButton() {
 
-    setState(() {
-      isClockIn = !isClockIn;
-    });
-       isClockIn ? startTimer() : stopTimer();
+    callClockInOutAPI();
   }
 
   onTapEventItem(PartyEvents events) {
@@ -266,22 +269,32 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
       clockInTime = StringConstants.defaultClockInTime;
     }
 
-
-
-
     //API Call
-
+ callClockInOutAPI() async {
+   setState(() {
+     isApiProcess = true;
+   });
+   clockInOutRequestModel.dutyStatus = !isClockIn;
+   String userID =  await FunctionalUtils.getUserID();
+   clockInOutPresenter.clockInOut(clockInOutRequestModel, userID);
+ }
 
 
   @override
   void showError(GeneralErrorResponse exception) {
-    // TODO: implement showError
+    setState(() {
+      isApiProcess = false;
+      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    });
   }
 
   @override
   void showSuccess(response) {
-    // TODO: implement showSuccess
+    setState(() {
+      isApiProcess = false;
+      isClockIn = !isClockIn;
+    });
+    isClockIn ? startTimer() : stopTimer();
   }
-
 
 }

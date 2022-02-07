@@ -6,7 +6,7 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
-import 'package:kona_ice_pos/network/repository/forgot_password/forgot_password_presenter.dart';
+import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/forget_password/forgot_password_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
@@ -31,17 +31,17 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
   bool isEmailValid = true;
   TextEditingController emailController = TextEditingController();
 
-  late ForgotPasswordPresenter forgotPasswordPresenter;
+  late UserPresenter userPresenter;
   ForgotPasswordRequestModel forgotPasswordRequestModel=ForgotPasswordRequestModel();
 
   _ForgetPasswordScreenState() {
-    forgotPasswordPresenter = ForgotPasswordPresenter(this);
+    userPresenter = UserPresenter(this);
   }
     forgotPasswordApiCall(){
 
     widget.forgotPasswordLoader(true);
       forgotPasswordRequestModel.email=emailController.text.toString();
-      forgotPasswordPresenter.forgotPassword(forgotPasswordRequestModel);
+      userPresenter.forgotPassword(forgotPasswordRequestModel);
     }
 
 

@@ -29,7 +29,6 @@ class _DashboardState extends State<Dashboard> {
   String userName = StringExtension.empty();
   List<Widget> bodyWidgets = [
     const HomeScreen(),
-    const NotificationScreen(),
     const SettingScreen()
   ];
   List<BottomItems> bottomItemList = [
@@ -157,9 +156,9 @@ class _DashboardState extends State<Dashboard> {
 
 
   //Function Other than UI dependency
-   configureData() {
-    setState(() async {
+   configureData() async {
       userName = await FunctionalUtils.getUserName();
-    });
+      setState(() {
+      });
    }
 }
