@@ -8,6 +8,7 @@ class StringConstants {
   static const rememberPassword = 'Remember Password ?';
   static const submit = 'Submit';
   static const okay='Okay';
+  static const signOut = 'Sign Out';
 
   //DB Insertion default Value
    static const trueText = 'true';

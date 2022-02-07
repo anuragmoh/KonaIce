@@ -40,6 +40,9 @@ class ForgotPasswordResponseModel {
   };
 }
 
+General generalResponseModelFromJson(String str) => General.fromJson(json.decode(str));
+
+
 class General {
   General({
     this.messageCode,

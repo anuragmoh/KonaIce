@@ -12,11 +12,9 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
-import 'package:kona_ice_pos/network/repository/login/login_presenter.dart';
+import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
-import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
 import 'package:kona_ice_pos/screens/login/login_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
@@ -38,11 +36,11 @@ class _LoginScreenState extends State<LoginScreen>
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  late LoginPresenter loginPresenter;
+  late UserPresenter userPresenter;
   LoginRequestModel loginRequestModel = LoginRequestModel();
 
   _LoginScreenState() {
-    loginPresenter = LoginPresenter(this);
+    userPresenter = UserPresenter(this);
   }
 
   bool isEmailValid = true;
@@ -327,7 +325,7 @@ class _LoginScreenState extends State<LoginScreen>
     loginRequestModel.osVersion = osVersion;
     loginRequestModel.appVersion = AssetsConstants.appVersion;
     loginRequestModel.deviceName = deviceName;
-    loginPresenter.login(loginRequestModel);
+    userPresenter.login(loginRequestModel);
   }
 
   getDeviceInfo() async {
