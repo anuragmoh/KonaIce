@@ -1,4 +1,9 @@
 
+import 'dart:convert';
+
+SyncEventMenu syncEventMenuFromJson(String str) => SyncEventMenu.fromJson(json.decode(str));
+
+String syncEventMenuToJson(SyncEventMenu data) => json.encode(data.toJson());
 
 class SyncEventMenu {
   SyncEventMenu({
@@ -46,38 +51,38 @@ class SyncEventMenu {
 
 class POsSyncEventDataDtoList {
   POsSyncEventDataDtoList({
-    required this.eventId,
-    required this.eventCode,
-    required this.addressLine1,
-    required this.addressLine2,
-    required this.city,
-    required this.state,
-    required this.country,
-    required this.zipCode,
-    required this.startDateTime,
-    required this.endDateTime,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.deleted,
+     this.eventId,
+     this.eventCode,
+     this.addressLine1,
+     this.addressLine2,
+     this.city,
+     this.state,
+     this.country,
+     this.zipCode,
+     this.startDateTime,
+     this.endDateTime,
+     this.createdAt,
+     this.updatedAt,
+     this.createdBy,
+     this.updatedBy,
+     this.deleted,
   });
 
-  String eventId;
-  String eventCode;
-  String addressLine1;
-  String addressLine2;
-  String city;
-  String state;
-  String country;
-  String zipCode;
-  int startDateTime;
-  int endDateTime;
-  int createdAt;
-  int updatedAt;
-  String createdBy;
-  String updatedBy;
-  bool deleted;
+  String? eventId;
+  String? eventCode;
+  String? addressLine1;
+  String? addressLine2;
+  String? city;
+  String? state;
+  String? country;
+  String? zipCode;
+  int? startDateTime;
+  int? endDateTime;
+  int? createdAt;
+  int? updatedAt;
+  String? createdBy;
+  String? updatedBy;
+  bool? deleted;
 
   factory POsSyncEventDataDtoList.fromJson(Map<String, dynamic> json) => POsSyncEventDataDtoList(
     eventId: json["eventId"],
@@ -118,36 +123,36 @@ class POsSyncEventDataDtoList {
 
 class POsSyncEventItemDataDtoList {
   POsSyncEventItemDataDtoList({
-    required this.itemCategoryId,
-    required this.eventId,
-    required this.itemId,
-    required this.itemCode,
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.soldQty,
-    required this.compQty,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.deleted,
+     this.itemCategoryId,
+     this.eventId,
+     this.itemId,
+     this.itemCode,
+     this.name,
+     this.description,
+     this.price,
+     this.soldQty,
+     this.compQty,
+     this.createdAt,
+     this.updatedAt,
+     this.createdBy,
+     this.updatedBy,
+     this.deleted,
   });
 
-  String itemCategoryId;
-  String eventId;
-  String itemId;
-  String itemCode;
-  String name;
-  String description;
-  int price;
-  int soldQty;
-  int compQty;
-  int createdAt;
-  int updatedAt;
-  String createdBy;
-  String updatedBy;
-  bool deleted;
+  String? itemCategoryId;
+  String? eventId;
+  String? itemId;
+  String? itemCode;
+  String? name;
+  String? description;
+  int? price;
+  int? soldQty;
+  int? compQty;
+  int? createdAt;
+  int? updatedAt;
+  String? createdBy;
+  String? updatedBy;
+  bool? deleted;
 
   factory POsSyncEventItemDataDtoList.fromJson(Map<String, dynamic> json) => POsSyncEventItemDataDtoList(
     itemCategoryId: json["itemCategoryId"],
@@ -186,34 +191,34 @@ class POsSyncEventItemDataDtoList {
 
 class POsSyncEventItemExtrasDataDtoList {
   POsSyncEventItemExtrasDataDtoList({
-    required this.eventId,
-    required this.itemId,
-    required this.foodExtraItemId,
-    required this.itemName,
-    required this.sellingPrice,
-    required this.imageFileId,
-    required this.minQtyAllowed,
-    required this.maxQtyAllowed,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.deleted,
+     this.eventId,
+     this.itemId,
+     this.foodExtraItemId,
+     this.itemName,
+     this.sellingPrice,
+     this.imageFileId,
+     this.minQtyAllowed,
+     this.maxQtyAllowed,
+     this.createdAt,
+     this.updatedAt,
+     this.createdBy,
+     this.updatedBy,
+     this.deleted,
   });
 
-  String eventId;
-  String itemId;
-  String foodExtraItemId;
-  String itemName;
-  int sellingPrice;
-  String imageFileId;
-  int minQtyAllowed;
-  int maxQtyAllowed;
-  int createdAt;
-  int updatedAt;
-  String createdBy;
-  String updatedBy;
-  bool deleted;
+  String? eventId;
+  String? itemId;
+  String? foodExtraItemId;
+  String? itemName;
+  int? sellingPrice;
+  String? imageFileId;
+  int? minQtyAllowed;
+  int? maxQtyAllowed;
+  int? createdAt;
+  int? updatedAt;
+  String? createdBy;
+  String? updatedBy;
+  bool? deleted;
 
   factory POsSyncEventItemExtrasDataDtoList.fromJson(Map<String, dynamic> json) => POsSyncEventItemExtrasDataDtoList(
     eventId: json["eventId"],
@@ -250,26 +255,26 @@ class POsSyncEventItemExtrasDataDtoList {
 
 class POsSyncItemCategoryDataDtoList {
   POsSyncItemCategoryDataDtoList({
-    required this.eventId,
-    required this.categoryId,
+     this.eventId,
+     this.categoryId,
     this.categoryCode,
-    required this.categoryName,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.deleted,
+     this.categoryName,
+     this.createdAt,
+     this.updatedAt,
+     this.createdBy,
+     this.updatedBy,
+     this.deleted,
   });
 
-  String eventId;
-  String categoryId;
+  String? eventId;
+  String? categoryId;
   dynamic categoryCode;
-  String categoryName;
-  int createdAt;
-  int updatedAt;
-  String createdBy;
-  String updatedBy;
-  bool deleted;
+  String? categoryName;
+  int? createdAt;
+  int? updatedAt;
+  String? createdBy;
+  String? updatedBy;
+  bool? deleted;
 
   factory POsSyncItemCategoryDataDtoList.fromJson(Map<String, dynamic> json) => POsSyncItemCategoryDataDtoList(
     eventId: json["eventId"],
