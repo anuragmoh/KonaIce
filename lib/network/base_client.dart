@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import 'package:kona_ice_pos/network/app_exception.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 
 
 class BaseClient {
@@ -13,14 +13,13 @@ class BaseClient {
   static const int timeOutDuration = 20;
   Map<String, String> header = {
     "Content-Type": "application/json",
-    "Accept-Language": "en-US",
-     "X-Client-App": "POS-APP"
+    "Accept-Language": "en-US"
   };
-
 
   //GET
   Future<dynamic> get(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
+    await addSessionKeyToHeader();
 
     try {
         var response = await http.get(uri, headers: header).timeout(
@@ -37,9 +36,7 @@ class BaseClient {
   Future<dynamic> post(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
-    print("payload---->$payload");
-    print(uri);
-
+    await addSessionKeyToHeader();
 
     try {
       var response = await http.post(uri, headers: header, body: payload)
@@ -56,10 +53,14 @@ class BaseClient {
   Future<dynamic> put(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
+    await addSessionKeyToHeader();
+    print("payload---->$payload");
+    print(uri);
 
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
+      print(json.decode(response.toString()));
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
@@ -69,11 +70,38 @@ class BaseClient {
   }
 
   //DELETE
+  Future<dynamic> delete(String api) async {
+    var uri = Uri.parse(UrlConstants.baseUrl + api);
+    await addSessionKeyToHeader();
+
+    try {
+      var response = await http.delete(uri, headers: header).timeout(
+          const Duration(seconds: timeOutDuration));
+      return _processResponse(response);
+    } on GeneralApiResponseErrorException catch (error) {
+      throw GeneralApiResponseErrorException(error.errorModel);
+    } on Exception {
+      throw GeneralApiResponseErrorException(getDefaultErrorResponse());
+    }
+  }
+
+
   //OTHER
+  addSessionKeyToHeader() async {
+    String sessionKey = await FunctionalUtils.getSessionKey();
+    if (sessionKey.isNotEmpty) {
+      print("Bearer $sessionKey");
+      header["Authorization"] = "Bearer $sessionKey";
+    } else {
+      header.remove("Authorization");
+    }
+  }
 
   dynamic _processResponse(http.Response response) {
     if (response.isOkResponse()) {
       return response.body.toString();
+    } else if(response.isUnauthorizedUser()) {
+         //To do
     } else {
       getErrorModel(response);
     }
@@ -81,6 +109,7 @@ class BaseClient {
 
   getErrorModel(http.Response response) {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
+    print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
       String value = errorList.general![0].toRawJson().toString();
       throw GeneralApiResponseErrorException(value);
@@ -124,5 +153,9 @@ class BaseClient {
 extension on http.Response {
   bool isOkResponse() {
     return statusCode >= 200 && statusCode <= 299;
+  }
+
+  bool isUnauthorizedUser() {
+    return statusCode == 401;
   }
 }

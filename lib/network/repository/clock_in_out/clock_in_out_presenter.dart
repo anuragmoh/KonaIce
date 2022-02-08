@@ -6,15 +6,15 @@ import 'clock_in_out_repository.dart';
 
 class ClockInOutPresenter {
   late ResponseContractor _view;
-  late ClockInOutPresenterRepository _clockInOutPresenterRepository;
+  late ClockInOutRepository _clockInOutRepository;
 
   ClockInOutPresenter(this._view) {
-    _clockInOutPresenterRepository = ClockInOutPresenterRepository();
+    _clockInOutRepository = ClockInOutRepository();
   }
 
-  void clockInOutPresenter(ClockInOutPresenterRequestModel clockInOutPresenterRequestModel) {
-    _clockInOutPresenterRepository
-        .clockInOutPresenter(clockInOutPresenterRequestModel)
+  void clockInOut(ClockInOutRequestModel clockInOutPresenterRequestModel, String userID) {
+    _clockInOutRepository
+        .clockInOut(clockInOutPresenterRequestModel, userID)
         .then((value){
       _view.showSuccess(value);
     }).onError((error, stackTrace){

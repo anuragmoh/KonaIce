@@ -1,15 +1,14 @@
 
-import 'package:kona_ice_pos/screens/forget_password/forgot_password_model.dart';
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import '../../base_client.dart';
 
-class ClockInOutPresenterRepository{
+class ClockInOutRepository{
   BaseClient baseClient = BaseClient();
 
 
-  Future<General> clockInOutPresenter(clockInOutPresenterRequestModel){
-    return baseClient.post(UrlConstants.forgotPassword, clockInOutPresenterRequestModel).then((value){
-      return General.fromJson(value);
+  Future<bool> clockInOut(clockInOutRequestModel, String userID){
+    return baseClient.put(UrlConstants.getDutyStatus(userID: userID), clockInOutRequestModel).then((value){
+      return true;
     });
   }
 
