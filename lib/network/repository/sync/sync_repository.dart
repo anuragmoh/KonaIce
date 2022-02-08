@@ -6,8 +6,8 @@ class SyncRepository{
   BaseClient baseClient = BaseClient();
 
 
-  Future<SyncEventMenu> syncData(){
-    return baseClient.get(UrlConstants.syncData).then((value){
+  Future<SyncEventMenu> syncData(syncEventRequestModel){
+    return baseClient.post(UrlConstants.syncData,syncEventRequestModel).then((value){
       return syncEventMenuFromJson(value);
     });
   }

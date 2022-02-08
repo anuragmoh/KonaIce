@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/events_dao.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
+import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/data_models/sync_event_menu.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
@@ -12,10 +20,10 @@ import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
-
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -24,13 +32,19 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
+class _DashboardState extends State<Dashboard> implements ResponseContractor {
+  late SyncPresenter _syncPresenter;
+  SyncEventRequestModel _eventRequestModel = SyncEventRequestModel();
+
+  _DashboardState() {
+    _syncPresenter = SyncPresenter(this);
+  }
+  List<SyncEventMenu> _syncEventMenuResponseModel=[];
+
+  bool isApiProcess = false;
   int currentIndex = 0;
   String userName = StringExtension.empty();
-  List<Widget> bodyWidgets = [
-    const HomeScreen(),
-    const SettingScreen()
-  ];
+  List<Widget> bodyWidgets = [const HomeScreen(), const SettingScreen()];
   List<BottomItems> bottomItemList = [
     BottomItems(
         title: StringConstants.home,
@@ -46,14 +60,55 @@ class _DashboardState extends State<Dashboard> {
         selectedImage: AssetsConstants.settingsSelectedIcon),
   ];
 
+  Future<void> checkLocalData() async {
+    var result = await EventsDAO().getValues();
+
+    if (result != null) {
+      setState(() {
+        isApiProcess=false;
+      });
+
+      //===Load local DB data
+
+    } else {
+      var lastEventSync =
+          await SessionDAO().getValueForKey(DatabaseKeys.events);
+      if (lastEventSync != null) {
+      } else {
+        getSyncData();
+      }
+    }
+  }
+
+  void getSyncData() {
+    _eventRequestModel.lastSyncAt = 0;
+    _eventRequestModel.entities = [
+      DatabaseKeys.events,
+      DatabaseKeys.categories,
+      DatabaseKeys.items,
+      DatabaseKeys.itemExtras
+    ];
+    _syncPresenter.syncData(_eventRequestModel);
+  }
+
   @override
   void initState() {
     super.initState();
     configureData();
+    setState(() {
+      isApiProcess=true;
+    });
+    checkLocalData();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       backgroundColor: getMaterialColor(AppColors.textColor3),
       body: Column(
@@ -66,7 +121,11 @@ class _DashboardState extends State<Dashboard> {
             //   child: body(),
           ),
           // CommonWidgets().bottomBar(true, onTapBottomListItem),
-          BottomBarWidget(onTapCallBack: onTapBottomListItem, accountImageVisibility: false,isFromDashboard: true,),
+          BottomBarWidget(
+            onTapCallBack: onTapBottomListItem,
+            accountImageVisibility: false,
+            isFromDashboard: true,
+          ),
         ],
       ),
     );
@@ -91,7 +150,7 @@ class _DashboardState extends State<Dashboard> {
             ),
           ),
           GestureDetector(
-            onTap: onProfileChange,
+              onTap: onProfileChange,
               child: CommonWidgets().profileComponent(userName)),
         ],
       ),
@@ -99,8 +158,10 @@ class _DashboardState extends State<Dashboard> {
   }
 
   Widget konaTopBarIcon() {
-    return CommonWidgets()
-        .image(image: AssetsConstants.topBarAppIcon, width: 4.03*SizeConfig.imageSizeMultiplier, height: 4.03*SizeConfig.imageSizeMultiplier);
+    return CommonWidgets().image(
+        image: AssetsConstants.topBarAppIcon,
+        width: 4.03 * SizeConfig.imageSizeMultiplier,
+        height: 4.03 * SizeConfig.imageSizeMultiplier);
   }
 
   Widget bottomBarComponent() {
@@ -150,15 +211,74 @@ class _DashboardState extends State<Dashboard> {
   }
 
   void onProfileChange() {
-    Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const MyProfile()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
 
-
   //Function Other than UI dependency
-   configureData() async {
-      userName = await FunctionalUtils.getUserName();
-      setState(() {
-      });
-   }
+  configureData() async {
+    userName = await FunctionalUtils.getUserName();
+    setState(() {});
+  }
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    setState(() {
+      isApiProcess=false;
+    });
+    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+  }
+
+  @override
+  void showSuccess(response) {
+    setState(() {
+      isApiProcess=false;
+      _syncEventMenuResponseModel.addAll(response);
+
+    });
+    storeDataIntoDB();
+  }
+
+  void storeDataIntoDB(){
+    List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList=[];
+    List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList=[];
+    List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList=[];
+    List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList=[];
+    List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList=[];
+    List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList=[];
+    List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList=[];
+    List<POsSyncEventItemExtrasDataDtoList> pOsSyncDeletedEventItemExtrasDataDtoList=[];
+
+    setState(() {
+      pOsSyncEventDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
+      pOsSyncItemCategoryDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
+      pOsSyncEventItemDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
+      pOsSyncEventItemExtrasDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemExtrasDataDtoList);
+      pOsSyncDeletedEventDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncDeletedEventDataDtoList);
+      pOsSyncDeletedItemCategoryDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncDeletedItemCategoryDataDtoList);
+      pOsSyncDeletedEventItemDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncDeletedEventItemDataDtoList);
+      pOsSyncDeletedEventItemExtrasDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncDeletedEventItemExtrasDataDtoList);
+
+    });
+
+  }
+
+  Future<void> updateLastEventSync() async {
+    await SessionDAO()
+        .insert(Session(key: DatabaseKeys.events, value: "0"));
+  }
+
+  Future<void> updateLastItemSync() async {
+    await SessionDAO()
+        .insert(Session(key: DatabaseKeys.items, value: "0"));
+  }
+  Future<void> updateLastCategoriesSync() async {
+    await SessionDAO()
+        .insert(Session(key: DatabaseKeys.categories, value: "0"));
+  }
+  Future<void> updateLastItemExtrasSync() async {
+    await SessionDAO()
+        .insert(Session(key: DatabaseKeys.itemExtras, value: "0"));
+  }
+
 }

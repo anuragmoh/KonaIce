@@ -300,3 +300,30 @@ class POsSyncItemCategoryDataDtoList {
     "deleted": deleted,
   };
 }
+
+
+
+SyncEventRequestModel syncEventRequestModelFromJson(String str) => SyncEventRequestModel.fromJson(json.decode(str));
+
+String syncEventRequestModelToJson(SyncEventRequestModel data) => json.encode(data.toJson());
+
+class SyncEventRequestModel {
+  SyncEventRequestModel({
+     this.lastSyncAt,
+     this.entities,
+  });
+
+  int? lastSyncAt;
+  List<String>? entities;
+
+  factory SyncEventRequestModel.fromJson(Map<String, dynamic> json) => SyncEventRequestModel(
+    lastSyncAt: json["lastSyncAt"],
+    entities: List<String>.from(json["entities"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "lastSyncAt": lastSyncAt,
+    "entities": List<dynamic>.from(entities!.map((x) => x)),
+  };
+}
+
