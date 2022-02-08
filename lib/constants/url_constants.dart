@@ -8,9 +8,12 @@ class UrlConstants {
   static const forgotPassword='/api/v1/users/forgot-password';
   static const dutyStatus = '/api/v2/secure/staffs/{userID}/dutystatus';
 
+  static const syncData = '/api/v2/secure/event-menu-sync';
+
 
   static getDutyStatus({required String userID}) {
      return dutyStatus.replaceAll('{userID}', userID);
   }
+
 
 }
