@@ -1,6 +1,8 @@
 class FoodExtraItems {
   final String id;
   final String foodExtraItemCategoryId;
+  final String itemId;
+  final String eventId;
   final String itemName;
   final double sellingPrice;
   final String selection;
@@ -17,6 +19,8 @@ class FoodExtraItems {
   FoodExtraItems(
       {required this.id,
       required this.foodExtraItemCategoryId,
+      required this.itemId,
+      required this.eventId,
       required this.itemName,
       required this.sellingPrice,
       required this.selection,
@@ -34,6 +38,8 @@ class FoodExtraItems {
     return {
       "id": id,
       "food_extra_item_category_id": foodExtraItemCategoryId,
+      "itemId": itemId,
+      "eventId": eventId,
       "item_name": itemName,
       "selling_price": sellingPrice,
       "selection": selection,
@@ -53,6 +59,8 @@ class FoodExtraItems {
     return FoodExtraItems(
         id: map["id"],
         foodExtraItemCategoryId: map["food_extra_item_category_id"],
+        itemId: map["itemId"],
+        eventId: map["eventId"],
         itemName: map["item_name"],
         sellingPrice: map["selling_price"],
         selection: map["selection"],
@@ -73,6 +81,8 @@ class FoodExtraItems {
     ----------------------------------
     id: $id,
     foodExtraItemCategoryId: $foodExtraItemCategoryId,
+    itemId: $itemId,
+    eventId: $eventId,
     itemName: $itemName,
     sellingPrice: $sellingPrice,
     selection: $selection,

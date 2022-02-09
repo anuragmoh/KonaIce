@@ -23,11 +23,11 @@ class FoodExtraItemsDAO {
     }
   }
 
-  Future<FoodExtraItems?> getValues() async {
+  Future<FoodExtraItems?> getFoodExtraByEventIdAndItemId(String eventId,String itemId) async {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName");
+      await db.rawQuery("SELECT * from $tableName where eventId=? AND itemId=?",[eventId,itemId]);
       if (result.isNotEmpty) {
         return FoodExtraItems.fromMap(result.first);
       } else {
