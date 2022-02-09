@@ -60,35 +60,10 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
         selectedImage: AssetsConstants.settingsSelectedIcon),
   ];
 
-  Future<void> checkLocalData() async {
-    var result = await EventsDAO().getValues();
 
-    if (result != null) {
-      setState(() {
-        isApiProcess=false;
-      });
-
-      //===Load local DB data
-
-    } else {
-      var lastEventSync =
-          await SessionDAO().getValueForKey(DatabaseKeys.events);
-      if (lastEventSync != null) {
-      } else {
-        getSyncData();
-      }
-    }
-  }
 
   void getSyncData() {
-    _eventRequestModel.lastSyncAt = 0;
-    _eventRequestModel.entities = [
-      DatabaseKeys.events,
-      DatabaseKeys.categories,
-      DatabaseKeys.items,
-      DatabaseKeys.itemExtras
-    ];
-    _syncPresenter.syncData(_eventRequestModel);
+    _syncPresenter.syncData();
   }
 
   @override
@@ -98,9 +73,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     setState(() {
       isApiProcess=true;
     });
-    checkLocalData();
-
-
+    getSyncData();
   }
 
   @override

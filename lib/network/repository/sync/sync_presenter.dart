@@ -11,8 +11,8 @@ class SyncPresenter {
     _syncRepository = SyncRepository();
   }
 
-  void syncData(SyncEventRequestModel syncEventRequestModel) {
-    _syncRepository.syncData(syncEventRequestModel).then((value) {
+  void syncData() {
+    _syncRepository.syncData().then((value) {
       _view.showSuccess(value);
     }).onError((error, stackTrace) {
       _view.showError(FetchException(error.toString()).fetchErrorModel());
