@@ -10,6 +10,8 @@ class UrlConstants {
 
   static const customerList = '/api/v1/secure/users-list';
 
+  static const syncData = '/api/v2/secure/event-menu-sync';
+
 
   static getDutyStatus({required String userID}) {
      return dutyStatus.replaceAll('{userID}', userID);
@@ -18,5 +20,6 @@ class UrlConstants {
   static getCustomerList({required String searchText}) {
     return '$customerList?role=Staff&searchText=$searchText';
   }
+
 
 }

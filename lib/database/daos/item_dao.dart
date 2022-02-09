@@ -25,11 +25,25 @@ Future insert(Item item) async {
   }
 }
 
-Future<Item?> getValues() async {
+Future<Item?> getAllItemsByEventId(String eventId) async {
   try {
     final db = await _db;
     var result =
-    await db.rawQuery("SELECT * from $tableName");
+    await db.rawQuery("SELECT * from $tableName where eventId=?",[eventId]);
+    if (result.isNotEmpty) {
+      return Item.fromMap(result.first);
+    } else {
+      return null;
+    }
+  } catch (error) {
+    debugPrint(error.toString());
+  }
+}
+Future<Item?> getAllItemsByCategories(String categoryId) async {
+  try {
+    final db = await _db;
+    var result =
+    await db.rawQuery("SELECT * from $tableName where itemCategoryId=?",[categoryId]);
     if (result.isNotEmpty) {
       return Item.fromMap(result.first);
     } else {
