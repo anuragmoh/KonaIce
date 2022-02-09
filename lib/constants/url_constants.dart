@@ -7,6 +7,7 @@ class UrlConstants {
 
   static const forgotPassword='/api/v1/users/forgot-password';
   static const dutyStatus = '/api/v1/secure/staffs/{userID}/dutystatus';
+  static const clockInOutDetails = '/api/v1/secure/staffs/{userID}/check-in-detail';
 
   static const customerList = '/api/v1/secure/users-list';
 
@@ -21,5 +22,8 @@ class UrlConstants {
     return '$customerList?role=Staff&searchText=$searchText';
   }
 
+   static getClockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {
+     return '$clockInOutDetails?fromDate=$startTimestamp&toDate=$endTimestamp'.replaceAll('{userID}', userID);
+   }
 
 }
