@@ -44,7 +44,7 @@ class StringConstants {
       'Add Food Extras ${StringConstants.plusSymbol}';
   static const addNewMenuItem = 'Add New Menu Item';
   static const clear = 'CLEAR';
-  static const addCustomer = 'Add Customer';
+  static const addCustomer = 'Select Customer';
   static const charge = 'CHARGE';
   static const symbolDollar = '\$';
   static const saveOrder = 'Save Order';
@@ -59,7 +59,7 @@ class StringConstants {
   static const enterMenuName = 'Enter Menu Name';
   static const applyCoupon = 'Apply Coupon';
   static const addTip = 'Add Tip';
-  static const searchCustomerName = 'Search Customer Name';
+  static const searchCustomerNameORNum = 'Search Customer Name or Number';
 
   static const orderDetails = 'Order Details';
   static const customerName = 'Customer Name';

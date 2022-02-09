@@ -13,7 +13,8 @@ class BaseClient {
   static const int timeOutDuration = 20;
   Map<String, String> header = {
     "Content-Type": "application/json",
-    "Accept-Language": "en-US"
+    "Accept-Language": "en-US",
+    "X-Client-App": "POS-APP"
   };
 
   //GET
@@ -60,7 +61,6 @@ class BaseClient {
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
-      print(json.decode(response.toString()));
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
@@ -73,6 +73,7 @@ class BaseClient {
   Future<dynamic> delete(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     await addSessionKeyToHeader();
+    print(uri);
 
     try {
       var response = await http.delete(uri, headers: header).timeout(
@@ -101,7 +102,7 @@ class BaseClient {
     if (response.isOkResponse()) {
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
-         //To do
+      FunctionalUtils.clearSessionData();
     } else {
       getErrorModel(response);
     }
@@ -119,6 +120,7 @@ class BaseClient {
   }
 
   String getDefaultErrorResponse() {
+    print("ErrorList--->Default");
     String defaultValue = (GeneralErrorResponse(
         message: StringConstants.somethingWentWrong)).toRawJson();
     return defaultValue.toString();

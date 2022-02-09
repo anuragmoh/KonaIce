@@ -3,9 +3,15 @@ import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/repository/customer/customer_presenter.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+
+import 'customer_model.dart';
 
 class SearchCustomers extends StatefulWidget {
   Function onTapCustomer;
@@ -15,18 +21,27 @@ class SearchCustomers extends StatefulWidget {
   _SearchCustomersState createState() => _SearchCustomersState();
 }
 
-class _SearchCustomersState extends State<SearchCustomers> {
+class _SearchCustomersState extends State<SearchCustomers>
+    implements ResponseContractor{
 
-  List<String> filteredCustomerNames = [];
-  List<String> allCustomerNames = getCustomerNames();
+  late CustomerPresenter customerPresenter;
+
+  _SearchCustomersState() {
+    customerPresenter = CustomerPresenter(this);
+  }
+
+  bool isApiProcess = false;
+
+  List<CustomerDetails> customerList = [];
   TextEditingController searchFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return searchCustomerContainer();
+    return Loader(isCallInProgress: isApiProcess, child: searchCustomerContainer(context));
+    //return searchCustomerContainer(context);
   }
 
-  Widget searchCustomerContainer() {
+  Widget searchCustomerContainer(BuildContext context) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -50,7 +65,7 @@ class _SearchCustomersState extends State<SearchCustomers> {
           style: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1),
               fontFamily: FontConstants.montserratMedium),
           decoration: InputDecoration(
-              hintText: StringConstants.searchCustomerName,
+              hintText: StringConstants.searchCustomerNameORNum,
               hintStyle: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor2),
                   fontFamily: FontConstants.montserratMedium),
               enabledBorder: OutlineInputBorder(
@@ -72,7 +87,7 @@ class _SearchCustomersState extends State<SearchCustomers> {
 
   Widget searchedCustomerList() {
     return ListView.separated(
-        itemCount: filteredCustomerNames.length,
+        itemCount: customerList.length,
         separatorBuilder: (context, index) {
           return Divider(
             height: 1.0,
@@ -95,9 +110,23 @@ class _SearchCustomersState extends State<SearchCustomers> {
       ),
       title: Align(
         alignment: Alignment.centerLeft,
-        child: CommonWidgets().textWidget(filteredCustomerNames[index],
-            StyleConstants.customTextStyle(fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonWidgets().textWidget(customerList[index].getFullName(),
+                StyleConstants.customTextStyle(fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+            Visibility(
+              visible: (customerList[index].phoneNum ?? '').isNotEmpty,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: CommonWidgets().textWidget(customerList[index].phoneNum!,
+                    StyleConstants.customTextStyle(fontSize: 12.0,
+                        color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratRegular)),
+              ),
+            )
+          ],
+        ),
       ),
       onTap: () {
         onTapCustomerName(index);
@@ -119,51 +148,56 @@ class _SearchCustomersState extends State<SearchCustomers> {
 
   //Action events
   onTapCustomerName(int index) {
-      widget.onTapCustomer(filteredCustomerNames[index]);
+      widget.onTapCustomer(customerList[index]);
   }
 
   onChangeSearchText(String? inputText) {
-    if ((inputText ?? '').length > 2 && (inputText ?? '').length % 2 != 0 ) {
-      final searchedCustomers = allCustomerNames.where((customer) {
-        final customerNameLower = customer.toLowerCase();
-        final searchedTextLower = (inputText ?? '').toLowerCase();
-
-        return customerNameLower.contains(searchedTextLower);
-      }).toList();
-
-      setState(() {
-        filteredCustomerNames.clear();
-        filteredCustomerNames.addAll(searchedCustomers);
-      });
-    } else if ((inputText ?? '').length < 3 ) {
-      setState(() {
-        filteredCustomerNames.clear();
-      });
+    if ((inputText ?? '').length > 2 && (inputText ?? '').length % 2 != 0 && (inputText ?? '').isNotEmpty) {
+      customerListAPI(searchText: inputText!);
     }
+    // } else if ((inputText ?? '').length < 3 ) {
+    //   setState(() {
+    //     customerList.clear();
+    //   });
+    // }
   }
 
   onTapClearButton() {
     setState(() {
       searchFieldController.text = '';
-      filteredCustomerNames.clear();
+      customerList.clear();
     });
   }
-}
 
-getCustomerNames() {
-  return [
-    'aValeria Adams',
-    'abValentine Smith',
-    'aVance Miller',
-    'bValeria Adams',
-    'cValentine Smith',
-    'dVance Miller',
-    'eValeria Adams',
-    'gValentine Smith',
-    'hVance Miller',
-    'Valeria Adams',
-    'Valentine Smith',
-    'Vance Miller',
-    'Vance Miller'
-  ];
+
+
+  //API Call
+
+  customerListAPI({required String searchText}) {
+    setState(() {
+      isApiProcess = true;
+    });
+
+    customerPresenter.customerList(searchText);
+  }
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    // TODO: implement showError
+    setState(() {
+      isApiProcess = false;
+      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    });
+  }
+
+  @override
+  void showSuccess(response) {
+    // TODO: implement showSuccess
+    List<CustomerDetails> list = response;
+    setState(() {
+      isApiProcess = false;
+      customerList.clear();
+      customerList.addAll(list);
+    });
+  }
 }
