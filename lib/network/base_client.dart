@@ -21,7 +21,7 @@ class BaseClient {
   Future<dynamic> get(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     await addSessionKeyToHeader();
-
+    print(uri);
     try {
         var response = await http.get(uri, headers: header).timeout(
             const Duration(seconds: timeOutDuration));
@@ -59,7 +59,7 @@ class BaseClient {
     print(uri);
 
     try {
-      var response = await http.post(uri, headers: header, body: payload)
+      var response = await http.put(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
@@ -99,11 +99,14 @@ class BaseClient {
   }
 
   dynamic _processResponse(http.Response response) {
+    print("response code ${response.statusCode}");
     if (response.isOkResponse()) {
+      print("Ok");
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
       FunctionalUtils.clearSessionData();
     } else {
+      print("Not Ok");
       getErrorModel(response);
     }
   }

@@ -27,7 +27,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
+class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseContractor {
 
   String currentDate = Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
@@ -52,6 +52,11 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
 
   _HomeScreenState() {
     clockInOutPresenter = ClockInOutPresenter(this);
+  }
+
+  @override
+  void initState() {
+    callClockInOutDetailsAPI();
   }
 
   @override
@@ -256,7 +261,6 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
   }
 
     startTimer() {
-      startDateTime = DateTime.now();
     clockInTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         clockInTime = Date.getDateInHrMinSec(date: startDateTime);
@@ -276,7 +280,19 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
    });
    clockInOutRequestModel.dutyStatus = !isClockIn;
    String userID =  await FunctionalUtils.getUserID();
-   clockInOutPresenter.clockInOut(clockInOutRequestModel, userID);
+   clockInOutPresenter.clockInOutUpdate(clockInOutRequestModel, userID);
+ }
+
+ callClockInOutDetailsAPI() async {
+   setState(() {
+     isApiProcess = true;
+   });
+
+   String startTimestamp = Date.getStartOfDateTimeStamp(date: DateTime.now());
+   String endTimestamp = Date.getEndOfDateTimeStamp(date: DateTime.now());
+   String userID =  await FunctionalUtils.getUserID();
+   print("StartTimeStamp---->$startTimestamp ----> End Time ---> $endTimestamp");
+   clockInOutPresenter.clockInOutDetails(userID: userID, startTimestamp: startTimestamp, endTimestamp: endTimestamp);
  }
 
 
@@ -290,11 +306,47 @@ class _HomeScreenState extends State<HomeScreen> implements ResponseContractor {
 
   @override
   void showSuccess(response) {
+
+    List<ClockInOutDetailsResponseModel> clockInOutList = response;
+    ClockInOutDetailsResponseModel? clockInOutDetailsModel = clockInOutList.firstWhere((element) => element.clockOutAt == 0);
+    if (clockInOutDetailsModel != null) {
+      setState(() {
+        isApiProcess = false;
+        isClockIn = true;
+        startDateTime = Date.getDateFromTimeStamp(timestamp: clockInOutDetailsModel.clockInAt ?? DateTime.now().millisecondsSinceEpoch);
+      });
+    } else {
+      setState(() {
+        isApiProcess = false;
+        isClockIn = false;
+      });
+    }
+
+    isClockIn ? startTimer() : stopTimer();
+  }
+
+  @override
+  void showErrorForUpdateClockIN(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
-      isClockIn = !isClockIn;
+      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
     });
-    isClockIn ? startTimer() : stopTimer();
+  }
+
+  @override
+  void showSuccessForUpdateClockIN(response) {
+    if (!isClockIn) {
+      setState(() {
+        isApiProcess = false;
+        isClockIn = !isClockIn;
+      });
+      callClockInOutDetailsAPI();
+    } else {
+      setState(() {
+        isApiProcess = false;
+        isClockIn = !isClockIn;
+      });
+    }
   }
 
 }

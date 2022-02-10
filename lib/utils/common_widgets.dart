@@ -48,8 +48,11 @@ class CommonWidgets {
                   color: getMaterialColor(AppColors.whiteColor),
                   fontFamily: FontConstants.montserratSemiBold)),
         ),
-        CommonWidgets().image(
+        Visibility(
+            visible: false,
+            child: CommonWidgets().image(
             image: AssetsConstants.dropDownArrowIcon, width: 1.30*SizeConfig.imageSizeMultiplier, height: 1.04*SizeConfig.imageSizeMultiplier)
+        )
       ],
     );
   }

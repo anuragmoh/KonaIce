@@ -16,4 +16,23 @@ class Date {
     var sec = (diffDate.inSeconds % 60).toString().padLeft(2, '0');
     return '$hrs:$min:$sec';
   }
+
+  static DateTime getDateFromTimeStamp({required int timestamp}) {
+    return DateTime.fromMillisecondsSinceEpoch(timestamp);
+  }
+
+  static DateTime getStartOfDay({required DateTime date}) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  static String getStartOfDateTimeStamp({required DateTime date}) {
+      return getStartOfDay(date: date).millisecondsSinceEpoch.toString();
+  }
+
+  static String getEndOfDateTimeStamp({required DateTime date}) {
+     int dayComponent = 1;
+     int secComponent = -1;
+     DateTime endDate = getStartOfDay(date: date).add(Duration(days: dayComponent, seconds: secComponent));
+    return endDate.millisecondsSinceEpoch.toString();
+  }
 }

@@ -55,7 +55,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             Expanded(child: bodyWidget()),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
-              accountImageVisibility: true,
+              accountImageVisibility: false,
               isFromDashboard: false,
             )
             // CommonWidgets().bottomBar(false),
