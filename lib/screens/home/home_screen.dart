@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   String currentDate = Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
   late DateTime startDateTime;
-  late Timer clockInTimer;
+   Timer? clockInTimer;
   bool isClockIn = false;
   bool isApiProcess = false;
 
@@ -56,7 +56,15 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
 
   @override
   void initState() {
-    callClockInOutDetailsAPI();
+    if (FunctionalUtils.clockInTimestamp == 0) {
+      callClockInOutDetailsAPI();
+    } else {
+      isApiProcess = false;
+      isClockIn = true;
+      var timeStamp = FunctionalUtils.clockInTimestamp;
+      startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
+      isClockIn ? startTimer() : stopTimer();
+    }
   }
 
   @override
@@ -269,8 +277,10 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   }
 
     stopTimer() {
-      clockInTimer.cancel();
-      clockInTime = StringConstants.defaultClockInTime;
+    if (clockInTimer != null) {
+    clockInTimer!.cancel();
+    clockInTime = StringConstants.defaultClockInTime;
+    }
     }
 
     //API Call
@@ -308,20 +318,22 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   void showSuccess(response) {
 
     List<ClockInOutDetailsResponseModel> clockInOutList = response;
-    ClockInOutDetailsResponseModel? clockInOutDetailsModel = clockInOutList.firstWhere((element) => element.clockOutAt == 0);
-    if (clockInOutDetailsModel != null) {
+    ClockInOutDetailsResponseModel? clockInOutDetailsModel = clockInOutList.isNotEmpty ? clockInOutList.firstWhere((element) => element.clockOutAt == 0, orElse: () => ClockInOutDetailsResponseModel()) : null;
+    if (clockInOutDetailsModel != null && clockInOutDetailsModel.clockInAt != null) {
       setState(() {
         isApiProcess = false;
         isClockIn = true;
-        startDateTime = Date.getDateFromTimeStamp(timestamp: clockInOutDetailsModel.clockInAt ?? DateTime.now().millisecondsSinceEpoch);
+        var timeStamp = clockInOutDetailsModel.clockInAt ?? DateTime.now().millisecondsSinceEpoch;
+        startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
+        FunctionalUtils.clockInTimestamp = timeStamp;
       });
     } else {
       setState(() {
         isApiProcess = false;
         isClockIn = false;
+        FunctionalUtils.clockInTimestamp = 0;
       });
     }
-
     isClockIn ? startTimer() : stopTimer();
   }
 
@@ -345,8 +357,8 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
       setState(() {
         isApiProcess = false;
         isClockIn = !isClockIn;
+        FunctionalUtils.clockInTimestamp = 0;
       });
     }
   }
-
 }
