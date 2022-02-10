@@ -8,7 +8,7 @@ import 'package:kona_ice_pos/screens/login/login_model.dart';
 import '../../general_error_model.dart';
 
 class UserPresenter {
-  late ResponseContractor _view;
+  late final ResponseContractor _view;
   late UserRepository _userRepository;
 
   UserPresenter(this._view) {
