@@ -8,8 +8,9 @@ import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
+import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
 import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
-import 'package:kona_ice_pos/screens/event_menu/search_customers_widget.dart';
+import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
@@ -44,6 +45,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   List<MenuItems> menuItems = getMenuItems();
   List<MenuItems> selectedMenuItems = [];
   String customerName = StringConstants.addCustomer;
+  CustomerDetails? customer;
   double get totalAmountOfSelectedItems {
     if (selectedMenuItems.isEmpty) {
       return 0.0;
@@ -86,7 +88,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
 
   Widget body() {
-  //  customerName = selectedMenuItems.isEmpty ? StringConstants.addCustomer : 'Nicholas Gibson';
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -440,7 +441,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
               color: getMaterialColor(AppColors.textColor1).withOpacity(0.2),
             ),
           ),
-          commonTextFieldContainer(hintText: StringConstants.applyCoupon, imageName: AssetsConstants.couponIcon),
+          Visibility(
+            visible: false,
+              child: commonTextFieldContainer(hintText: StringConstants.applyCoupon, imageName: AssetsConstants.couponIcon)),
           commonTextFieldContainer(hintText: StringConstants.addTip, imageName: AssetsConstants.dollarIcon),
         ],
       ),
@@ -718,11 +721,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     showAddFoodExtrasPopUp(menuItems[index]);
   }
 
-  onTapCustomerName(String name) {
-    setState(() {
-      customerName = name;
-      isSearchCustomer = false;
-    });
+  onTapCustomerName(CustomerDetails customerObj) {
+      setState(() {
+        customerName = customerObj.getFullName();
+        customer = customerObj;
+        isSearchCustomer = false;
+      });
   }
 
   //Navigation

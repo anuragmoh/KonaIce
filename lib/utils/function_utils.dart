@@ -1,10 +1,12 @@
 
+import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/login/login_model.dart';
+import 'package:kona_ice_pos/screens/login/login_screen.dart';
 
 class FunctionalUtils {
 
@@ -119,7 +121,7 @@ class FunctionalUtils {
       userName = (userName + lastName.value) ;
     }
 
-    return userName;
+    return userName.toTitleCase();
   }
 
   static Future<String> getUserID() async {
@@ -130,6 +132,15 @@ class FunctionalUtils {
     }
 
     return userID;
+  }
+
+  static GlobalKey<NavigatorState> navigatorKey =
+  GlobalKey<NavigatorState>();
+
+  static clearSessionData() {
+    print("getting 401 in base client");
+    Navigator.of(navigatorKey.currentContext!).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
 }

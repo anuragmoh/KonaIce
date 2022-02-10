@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -5,8 +6,14 @@ import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/event_food_extra_item_mapping_dao.dart';
 import 'package:kona_ice_pos/database/daos/events_dao.dart';
+import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
+import 'package:kona_ice_pos/models/data_models/events.dart';
+import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
+import 'package:kona_ice_pos/models/data_models/item_categories.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/models/data_models/sync_event_menu.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
@@ -24,6 +31,7 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
+import 'package:kona_ice_pos/models/data_models/event_food_extra_item_mapping.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -40,6 +48,14 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     _syncPresenter = SyncPresenter(this);
   }
   List<SyncEventMenu> _syncEventMenuResponseModel=[];
+  List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList=[];
+  List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList=[];
+  List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList=[];
+  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList=[];
+  List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList=[];
+  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList=[];
+  List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList=[];
+  List<POsSyncEventItemExtrasDataDtoList> pOsSyncDeletedEventItemExtrasDataDtoList=[];
 
   bool isApiProcess = false;
   int currentIndex = 0;
@@ -62,8 +78,10 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
 
 
 
-  void getSyncData() {
-    _syncPresenter.syncData();
+  Future<void> getSyncData() async {
+    var result=await EventsDAO().getValues();
+    print("Database$result");
+    // _syncPresenter.syncData();
   }
 
   @override
@@ -199,6 +217,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     setState(() {
       isApiProcess=false;
     });
+    print(exception.message);
     CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
   }
 
@@ -206,23 +225,15 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   void showSuccess(response) {
     setState(() {
       isApiProcess=false;
-      _syncEventMenuResponseModel.addAll(response);
-
+      _syncEventMenuResponseModel.add(response);
+print('Success====>');
     });
     storeDataIntoDB();
   }
 
   void storeDataIntoDB(){
-    List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList=[];
-    List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList=[];
-    List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList=[];
-    List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList=[];
-    List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList=[];
-    List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList=[];
-    List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList=[];
-    List<POsSyncEventItemExtrasDataDtoList> pOsSyncDeletedEventItemExtrasDataDtoList=[];
-
     setState(() {
+
       pOsSyncEventDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
       pOsSyncItemCategoryDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
       pOsSyncEventItemDataDtoList.addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
@@ -234,7 +245,31 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
 
     });
 
+    insertEventSync();
+    print("Length${pOsSyncEventDataDtoList[0].eventId}");
   }
+
+  Future<void> insertEventSync() async {
+    for(int i=0; i< pOsSyncEventDataDtoList.length;i++){
+      await EventsDAO()
+          .insert(Events(id: pOsSyncEventDataDtoList[i].eventId!,eventCode: pOsSyncEventDataDtoList[i].eventCode!,name:"empty",startDateTime: pOsSyncEventDataDtoList[i].startDateTime!,endDateTime:pOsSyncEventDataDtoList[i].endDateTime!,delivery: "empty",link: "empty",addressLine1: pOsSyncEventDataDtoList[i].addressLine1!,addressLine2: pOsSyncEventDataDtoList[i].addressLine2!,country: pOsSyncEventDataDtoList[i].country!,state: pOsSyncEventDataDtoList[i].state!,city: pOsSyncEventDataDtoList[i].city!,zipCode: pOsSyncEventDataDtoList[i].zipCode!,contactName: "empty",contactEmail: "empty",contactPhoneNumCountryCode: "empty",contactPhoneNumber: "empty",key:"empty",values: "empty",displayAdditionalPaymentField: false,additionalPaymentFieldLabel: "empty",activated: false,createdBy: pOsSyncEventDataDtoList[i].createdBy!,createdAt: pOsSyncEventDataDtoList[i].createdAt!,updatedBy: pOsSyncEventDataDtoList[i].updatedBy!,updatedAt: pOsSyncEventDataDtoList[i].updatedAt!,deleted: pOsSyncEventDataDtoList[i].deleted!,franchiseId: "empty",minimumOrderAmount: 0.0,eventStatus: "empty",specialInstructionLabel: "empty",displayGratuityField: false,gratuityFieldLabel: "empty",campaignId: "empty",enableDonation: false,donationFieldLabel: "empty",assetId: "empty",weatherType: "empty",paymentTerm: "empty",secondaryContactName: "empty",secondaryContactEmail: "empty",secondaryContactPhoneNumCountryCode: "empty",secondaryContactPhoneNumber: "empty",notes: "empty",eventType: "empty",preOrder: false,radius: 0,timeSlot: 0,maxOrderInSlot: 0,locationNotes: "empty",orderAttribute: "empty",minimumDeliveryTime: 0,startAddress: "empty",useTimeSlot: false,maxAllowedOrders: 0,deliveryMessage: "empty",recipientNameLabel: "empty",orderStartDateTime: 0,orderEndDateTime: 0,smsNotification: false,emailNotification: false,clientId: "empty",recurringType: "empty",days:"empty",monthlyDateTime: 0,expiryDate: 0,lastDayOfMonth:false,seriesId: "empty",manualStatus: "empty", entryFee: 0,cashAmount: 0,checkAmount: 0,ccAmount: 0,eventSalesCollected: 0,salesTax: 0,giveback: 0,tipAmount: 0,netEventSales: 0,eventSales: 0,collected: 0,balance: 0,givebackPaid: false,clientInvoice: false,givebackSettledDate: 0,invoiceSettledDate: 0,givebackCheck: "empty",thankYouEmail: false,eventSalesTypeId: "empty",minimumFee: 0,keepCupCount: false,cupCountTotal: 0,packageFee: 0,prePay: false,contactTitle: "empty",clientIndustriesTypeId: "empty",invoiceCheck: "string",oldDbEventId: "string",confirmedEmailSent: false,givebackSubtotal: 0));
+    }
+
+
+/*
+
+  for(int i=0;i<pOsSyncItemCategoryDataDtoList.length;i++){
+    await ItemCategoriesDAO().insert(ItemCategories(id: pOsSyncItemCategoryDataDtoList[i].eventId!,eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode!=null?pOsSyncItemCategoryDataDtoList[i].categoryCode!:"empty",categoryName:pOsSyncItemCategoryDataDtoList[i].categoryName!,description:pOsSyncItemCategoryDataDtoList[i].categoryName!,activated: false,createdBy: pOsSyncItemCategoryDataDtoList[i].createdBy!,createdAt: pOsSyncItemCategoryDataDtoList[i].createdAt!,updatedBy: pOsSyncItemCategoryDataDtoList[i].updatedBy!,updatedAt: pOsSyncItemCategoryDataDtoList[i].updatedAt!,deleted: pOsSyncItemCategoryDataDtoList[i].deleted!,franchiseId: "empty" ));
+  }
+
+    for(int i=0;i<pOsSyncEventItemExtrasDataDtoList.length;i++){
+      await FoodExtraItemsDAO().insert(FoodExtraItems(id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,foodExtraItemCategoryId: pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,sellingPrice: pOsSyncEventItemExtrasDataDtoList[i].sellingPrice!,selection: "empty",imageFileId: pOsSyncEventItemExtrasDataDtoList[i].imageFileId!,minQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].minQtyAllowed!,maxQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].maxQtyAllowed!,activated: false,createdBy: pOsSyncEventItemExtrasDataDtoList[i].createdBy!,createdAt: pOsSyncEventItemExtrasDataDtoList[i].createdAt!,updatedBy: pOsSyncEventItemExtrasDataDtoList[i].updatedBy!,updatedAt: pOsSyncEventItemExtrasDataDtoList[i].updatedAt!,deleted: pOsSyncEventItemExtrasDataDtoList[i].deleted!));
+*/
+}
+
+
+  }
+
 
   Future<void> updateLastEventSync() async {
     await SessionDAO()
@@ -254,4 +289,4 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
         .insert(Session(key: DatabaseKeys.itemExtras, value: "0"));
   }
 
-}
+

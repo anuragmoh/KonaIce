@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import 'package:kona_ice_pos/database/daos/events_dao.dart';
@@ -28,6 +30,7 @@ class SyncRepository{
 
   }
 
+
    getSyncData(int lastSync) {
     SyncEventRequestModel _eventRequestModel = SyncEventRequestModel();
     _eventRequestModel.lastSyncAt = lastSync;
@@ -38,9 +41,9 @@ class SyncRepository{
       DatabaseKeys.itemExtras
     ];
     return _eventRequestModel;
+
   }
 
 
-
-
 }
+

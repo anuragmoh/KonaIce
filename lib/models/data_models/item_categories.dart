@@ -1,5 +1,6 @@
 class ItemCategories {
   final String id;
+  final String eventId;
   final String categoryCode;
   final String categoryName;
   final String description;
@@ -13,6 +14,7 @@ class ItemCategories {
 
   ItemCategories(
       {required this.id,
+        required this.eventId,
       required this.categoryCode,
       required this.categoryName,
       required this.description,
@@ -29,6 +31,7 @@ class ItemCategories {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
+      "event_id":eventId,
       "category_code": categoryCode,
       "category_name": categoryName,
       "description": description,
@@ -45,15 +48,16 @@ class ItemCategories {
   factory ItemCategories.fromMap(Map<String, dynamic> map) {
     return ItemCategories(
         id: map["id"],
+        eventId:map["event_id"],
         categoryCode: map["category_code"],
         categoryName:map["category_name"],
         description: map["description"],
-        activated: map["activated"],
+        activated: map["activated"]==1,
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"],
+        deleted: map["deleted"]==1,
         franchiseId: map["franchise_id"]
     );
   }
@@ -63,6 +67,7 @@ class ItemCategories {
     return """
     ----------------------------------
     id: $id,
+    eventId:$eventId,
     categoryCode: $categoryCode,
     categoryName: $categoryName,
     description: $description,

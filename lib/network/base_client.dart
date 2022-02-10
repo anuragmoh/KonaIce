@@ -13,7 +13,8 @@ class BaseClient {
   static const int timeOutDuration = 20;
   Map<String, String> header = {
     "Content-Type": "application/json",
-    "Accept-Language": "en-US"
+    "Accept-Language": "en-US",
+    "X-Client-App": "POS-APP"
   };
 
   //GET
@@ -54,13 +55,9 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     await addSessionKeyToHeader();
-    print("payload---->$payload");
-    print(uri);
-
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
-      print(json.decode(response.toString()));
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
@@ -73,7 +70,6 @@ class BaseClient {
   Future<dynamic> delete(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     await addSessionKeyToHeader();
-
     try {
       var response = await http.delete(uri, headers: header).timeout(
           const Duration(seconds: timeOutDuration));
@@ -90,7 +86,6 @@ class BaseClient {
   addSessionKeyToHeader() async {
     String sessionKey = await FunctionalUtils.getSessionKey();
     if (sessionKey.isNotEmpty) {
-      print("Bearer $sessionKey");
       header["Authorization"] = "Bearer $sessionKey";
     } else {
       header.remove("Authorization");
@@ -101,7 +96,7 @@ class BaseClient {
     if (response.isOkResponse()) {
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
-         //To do
+      FunctionalUtils.clearSessionData();
     } else {
       getErrorModel(response);
     }
@@ -109,7 +104,7 @@ class BaseClient {
 
   getErrorModel(http.Response response) {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
-    print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
+    // print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
       String value = errorList.general![0].toRawJson().toString();
       throw GeneralApiResponseErrorException(value);

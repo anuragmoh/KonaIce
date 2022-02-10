@@ -17,7 +17,7 @@ class Events {
   final String contactPhoneNumCountryCode;
   final String contactPhoneNumber;
   final String key;
-  final String value;
+  final String values;
   final bool displayAdditionalPaymentField;
   final String additionalPaymentFieldLabel;
   final bool activated;
@@ -27,7 +27,7 @@ class Events {
   final int updatedAt;
   final bool deleted;
   final String franchiseId;
-  final double minimumOrderAmount;
+  final num minimumOrderAmount;
   final String eventStatus;
   final String specialInstructionLabel;
   final bool displayGratuityField;
@@ -68,19 +68,19 @@ class Events {
   final bool lastDayOfMonth;
   final String seriesId;
   final String manualStatus;
-  final double entryFee;
-  final double cashAmount;
-  final double checkAmount;
-  final double ccAmount;
-  final double eventSalesCollected;
-  final double givebackSubtotal;
-  final double salesTax;
-  final double giveback;
-  final double tipAmount;
-  final double netEventSales;
-  final double eventSales;
-  final double collected;
-  final double balance;
+  final num entryFee;
+  final num cashAmount;
+  final num checkAmount;
+  final num ccAmount;
+  final num eventSalesCollected;
+  final num givebackSubtotal;
+  final num salesTax;
+  final num giveback;
+  final num tipAmount;
+  final num netEventSales;
+  final num eventSales;
+  final num collected;
+  final num balance;
   final bool givebackPaid;
   final bool clientInvoice;
   final int givebackSettledDate;
@@ -88,10 +88,10 @@ class Events {
   final String givebackCheck;
   final bool thankYouEmail;
   final String eventSalesTypeId;
-  final double minimumFee;
+  final num minimumFee;
   final bool keepCupCount;
-  final double cupCountTotal;
-  final double packageFee;
+  final num cupCountTotal;
+  final num packageFee;
   final bool prePay;
   final String contactTitle;
   final String clientIndustriesTypeId;
@@ -118,7 +118,7 @@ class Events {
       required this.contactPhoneNumCountryCode,
       required this.contactPhoneNumber,
       required this.key,
-      required this.value,
+      required this.values,
       required this.displayAdditionalPaymentField,
       required this.additionalPaymentFieldLabel,
       required this.activated,
@@ -220,7 +220,7 @@ class Events {
       "contact_phone_num_country_code": contactPhoneNumCountryCode,
       "contact_phone_number": contactPhoneNumber,
       "key": key,
-      "values": value,
+      "values": values,
       "display_additional_payment_field": displayAdditionalPaymentField,
       "additional_payment_field_label": additionalPaymentFieldLabel,
       "activated": activated,
@@ -324,23 +324,23 @@ class Events {
         contactPhoneNumCountryCode: map["contact_phone_num_country_code"],
         contactPhoneNumber: map["contact_phone_number"],
         key: map["key"],
-        value: map["values"],
-        displayAdditionalPaymentField: map["display_additional_payment_field"],
+        values: map["values"],
+        displayAdditionalPaymentField: map["display_additional_payment_field"]==1,
         additionalPaymentFieldLabel: map["additional_payment_field_label"],
-        activated: map["activated"],
+        activated: map["activated"]==1,
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"],
+        deleted: map["deleted"]==1,
         franchiseId: map["franchise_id"],
         minimumOrderAmount: map["minimum_order_amount"],
         eventStatus: map["event_status"],
         specialInstructionLabel: map["special_instruction_label"],
-        displayGratuityField: map["display_gratuity_field"],
+        displayGratuityField: map["display_gratuity_field"]==1,
         gratuityFieldLabel: map["gratuity_field_label"],
         campaignId: map["campaign_id"],
-        enableDonation: map["enable_donation"],
+        enableDonation: map["enable_donation"]==1,
         donationFieldLabel: map["donation_field_label"],
         assetId: map["asset_id"],
         weatherType: map["weather_type"],
@@ -351,7 +351,7 @@ class Events {
         secondaryContactPhoneNumber: map["secondary_contact_phone_number"],
         notes: map["notes"],
         eventType: map["event_type"],
-        preOrder: map["pre_order"],
+        preOrder: map["pre_order"]==1,
         radius: map["radius"],
         timeSlot: map["time_slot"],
         maxOrderInSlot: map["max_order_in_slot"],
@@ -359,20 +359,20 @@ class Events {
         orderAttribute: map["order_attribute"],
         minimumDeliveryTime: map["minimum_delivery_time"],
         startAddress: map["start_address"],
-        useTimeSlot: map["use_time_slot"],
+        useTimeSlot: map["use_time_slot"]==1,
         maxAllowedOrders: map["max_allowed_orders"],
         deliveryMessage: map["delivery_message"],
         recipientNameLabel: map["recipient_name_label"],
         orderStartDateTime: map["order_start_date_time"],
         orderEndDateTime: map["order_end_date_time"],
-        smsNotification: map["sms_notification"],
-        emailNotification: map["email_notification"],
+        smsNotification: map["sms_notification"]==1,
+        emailNotification: map["email_notification"]==1,
         clientId: map["client_id"],
         recurringType: map["recurring_type"],
         days: map["days"],
         monthlyDateTime: map["monthly_date_time"],
         expiryDate: map["expiry_date"],
-        lastDayOfMonth: map["last_day_of_month"],
+        lastDayOfMonth: map["last_day_of_month"]==1,
         seriesId: map["series_id"],
         manualStatus: map["manual_status"],
         entryFee: map["entry_fee"],
@@ -388,23 +388,23 @@ class Events {
         eventSales: map["event_sales"],
         collected: map["collected"],
         balance: map["balance"],
-        givebackPaid: map["giveback_paid"],
-        clientInvoice: map["client_invoice"],
+        givebackPaid: map["giveback_paid"]==1,
+        clientInvoice: map["client_invoice"]==1,
         givebackSettledDate: map["giveback_settled_date"],
         invoiceSettledDate: map["invoice_settled_date"],
         givebackCheck: map["giveback_check"],
-        thankYouEmail: map["thank_you_email"],
+        thankYouEmail: map["thank_you_email"]==1,
         eventSalesTypeId: map["event_sales_type_id"],
         minimumFee: map["minimum_fee"],
-        keepCupCount: map["keep_cup_count"],
+        keepCupCount: map["keep_cup_count"]==1,
         cupCountTotal: map["cup_count_total"],
         packageFee: map["package_fee"],
-        prePay: map["pre_pay"],
+        prePay: map["pre_pay"]==1,
         contactTitle: map["contact_title"],
         clientIndustriesTypeId: map["client_industries_type_id"],
         invoiceCheck: map["invoice_check"],
         oldDbEventId: map["old_db_event_id"],
-        confirmedEmailSent: map["confirmed_email_sent"]);
+        confirmedEmailSent: map["confirmed_email_sent"]==1);
   }
 
   @override
@@ -429,7 +429,7 @@ class Events {
     contactPhoneNumCountryCode: $contactPhoneNumCountryCode,
     contactPhoneNumber: $contactPhoneNumber,
     key: $key, 
-    value: $value,
+    values: $values,
     displayAdditionalPaymentField: $displayAdditionalPaymentField,
     additionalPaymentFieldLabel: $additionalPaymentFieldLabel,
     activated: $activated,

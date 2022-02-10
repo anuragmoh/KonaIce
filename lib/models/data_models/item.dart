@@ -1,5 +1,6 @@
 class Item {
   final String id;
+  final String eventId;
   final String itemCategoryId;
   final String imageFileId;
   final String itemCode;
@@ -16,6 +17,7 @@ class Item {
 
   Item(
       {required this.id,
+        required this.eventId,
       required this.itemCategoryId,
       required this.imageFileId,
       required this.itemCode,
@@ -33,6 +35,7 @@ class Item {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
+      "eventId":eventId,
       "item_category_id": itemCategoryId,
       "image_file_id": imageFileId,
       "item_code": itemCode,
@@ -52,6 +55,7 @@ class Item {
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
         id: map["id"],
+        eventId:map["eventId"],
         itemCategoryId: map["item_category_id"],
         imageFileId: map["image_file_id"],
         itemCode: map["item_code"],
@@ -72,6 +76,7 @@ class Item {
     return """
     ----------------------------------
     id: $id,
+    eventId:$eventId,
     itemCategoryId: $itemCategoryId,
     imageFileId: $imageFileId,
     itemCode: $itemCode,
