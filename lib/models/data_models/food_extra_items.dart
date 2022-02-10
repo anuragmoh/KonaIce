@@ -4,7 +4,7 @@ class FoodExtraItems {
   final String itemId;
   final String eventId;
   final String itemName;
-  final double sellingPrice;
+  final num sellingPrice;
   final String selection;
   final String imageFileId;
   final int minQtyAllowed;
@@ -38,8 +38,8 @@ class FoodExtraItems {
     return {
       "id": id,
       "food_extra_item_category_id": foodExtraItemCategoryId,
-      "itemId": itemId,
-      "eventId": eventId,
+      "item_id": itemId,
+      "event_id": eventId,
       "item_name": itemName,
       "selling_price": sellingPrice,
       "selection": selection,
@@ -59,20 +59,20 @@ class FoodExtraItems {
     return FoodExtraItems(
         id: map["id"],
         foodExtraItemCategoryId: map["food_extra_item_category_id"],
-        itemId: map["itemId"],
-        eventId: map["eventId"],
+        itemId: map["item_id"],
+        eventId: map["event_id"],
         itemName: map["item_name"],
         sellingPrice: map["selling_price"],
         selection: map["selection"],
         imageFileId: map["image_file_id"],
         minQtyAllowed: map["min_qty_allowed"],
         maxQtyAllowed: map["max_qty_allowed"],
-        activated: map["activated"],
+        activated: map["activated"]==1,
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"]);
+        deleted: map["deleted"]==1);
   }
 
   @override

@@ -51,21 +51,21 @@ class SyncEventMenu {
 
 class POsSyncEventDataDtoList {
   POsSyncEventDataDtoList({
-     this.eventId,
-     this.eventCode,
-     this.addressLine1,
-     this.addressLine2,
-     this.city,
-     this.state,
-     this.country,
-     this.zipCode,
-     this.startDateTime,
-     this.endDateTime,
-     this.createdAt,
-     this.updatedAt,
-     this.createdBy,
-     this.updatedBy,
-     this.deleted,
+    required this.eventId,
+    required  this.eventCode,
+    required this.addressLine1,
+    required this.addressLine2,
+    required this.city,
+    required this.state,
+    required this.country,
+    required this.zipCode,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.createdBy,
+    required  this.updatedBy,
+    required this.deleted,
   });
 
   String? eventId;
@@ -145,7 +145,7 @@ class POsSyncEventItemDataDtoList {
   String? itemCode;
   String? name;
   String? description;
-  int? price;
+  double? price;
   int? soldQty;
   int? compQty;
   int? createdAt;
@@ -210,7 +210,7 @@ class POsSyncEventItemExtrasDataDtoList {
   String? itemId;
   String? foodExtraItemId;
   String? itemName;
-  int? sellingPrice;
+  double? sellingPrice;
   String? imageFileId;
   int? minQtyAllowed;
   int? maxQtyAllowed;
@@ -268,7 +268,7 @@ class POsSyncItemCategoryDataDtoList {
 
   String? eventId;
   String? categoryId;
-  dynamic categoryCode;
+  String? categoryCode;
   String? categoryName;
   int? createdAt;
   int? updatedAt;
@@ -300,3 +300,30 @@ class POsSyncItemCategoryDataDtoList {
     "deleted": deleted,
   };
 }
+
+
+
+SyncEventRequestModel syncEventRequestModelFromJson(String str) => SyncEventRequestModel.fromJson(json.decode(str));
+
+String syncEventRequestModelToJson(SyncEventRequestModel data) => json.encode(data.toJson());
+
+class SyncEventRequestModel {
+  SyncEventRequestModel({
+     this.lastSyncAt,
+     this.entities,
+  });
+
+  int? lastSyncAt;
+  List<String>? entities;
+
+  factory SyncEventRequestModel.fromJson(Map<String, dynamic> json) => SyncEventRequestModel(
+    lastSyncAt: json["lastSyncAt"],
+    entities: List<String>.from(json["entities"].map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "lastSyncAt": lastSyncAt,
+    "entities": List<dynamic>.from(entities!.map((x) => x)),
+  };
+}
+

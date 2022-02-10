@@ -55,9 +55,6 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     await addSessionKeyToHeader();
-    print("payload---->$payload");
-    print(uri);
-
     try {
       var response = await http.put(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
@@ -73,8 +70,6 @@ class BaseClient {
   Future<dynamic> delete(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     await addSessionKeyToHeader();
-    print(uri);
-
     try {
       var response = await http.delete(uri, headers: header).timeout(
           const Duration(seconds: timeOutDuration));
@@ -91,7 +86,6 @@ class BaseClient {
   addSessionKeyToHeader() async {
     String sessionKey = await FunctionalUtils.getSessionKey();
     if (sessionKey.isNotEmpty) {
-      print("Bearer $sessionKey");
       header["Authorization"] = "Bearer $sessionKey";
     } else {
       header.remove("Authorization");
@@ -113,7 +107,7 @@ class BaseClient {
 
   getErrorModel(http.Response response) {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
-    print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
+    // print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
       String value = errorList.general![0].toRawJson().toString();
       throw GeneralApiResponseErrorException(value);
@@ -123,7 +117,6 @@ class BaseClient {
   }
 
   String getDefaultErrorResponse() {
-    print("ErrorList--->Default");
     String defaultValue = (GeneralErrorResponse(
         message: StringConstants.somethingWentWrong)).toRawJson();
     return defaultValue.toString();

@@ -21,7 +21,7 @@ class DBScheme {
     contact_phone_num_country_code character varying(5),
     contact_phone_number character varying(20),
     key character varying(50),
-    "values" character varying(500),
+    "values" character varying(500) DEFAULT empty,
     display_additional_payment_field boolean DEFAULT false,
     additional_payment_field_label character varying(50),
     activated boolean DEFAULT true,
@@ -157,6 +157,8 @@ class DBScheme {
   static const foodExtraItemsTable = '''CREATE TABLE food_extra_items (
     id character varying(32) NOT NULL,
     food_extra_item_category_id character varying(32) NOT NULL,
+    event_id character varying(32) NOT NULL,
+    item_id character varying(32) NOT NULL,
     item_name character varying(50) NOT NULL,
     selling_price numeric(12,2) DEFAULT 0 NOT NULL,
     selection character varying(50) NOT NULL,
@@ -173,6 +175,7 @@ class DBScheme {
 
   static const itemCategoriesTable = '''CREATE TABLE item_categories (
     id character varying(32) NOT NULL,
+    event_id character varying(32) NOT NULL,
     category_code character varying(20),
     category_name character varying(50),
     description character varying(250),

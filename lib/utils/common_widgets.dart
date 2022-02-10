@@ -19,7 +19,7 @@ class CommonWidgets {
   }
 
   Widget dashboardTopBar(Widget child) {
-    print('check for height in orientation ${8.30*SizeConfig.heightSizeMultiplier}');
+    // print('check for height in orientation ${8.30*SizeConfig.heightSizeMultiplier}');
     return Container(
       height: 8.30*SizeConfig.heightSizeMultiplier,
       decoration: BoxDecoration(
