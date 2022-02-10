@@ -99,7 +99,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
     var result = await ItemCategoriesDAO().getAllCategories();
     if(result !=null){
      setState(() {
-       itemCategoriesList.add(result);
+       // itemCategoriesList.add(result);
      });
     }else{
       print("Data not present in the db");
@@ -145,7 +145,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
     var result = await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
     if(result !=null){
       setState(() {
-        foodExtraItemList.add(result);
+        // foodExtraItemList.add(result);
       });
     }else{
       print("Result is null");

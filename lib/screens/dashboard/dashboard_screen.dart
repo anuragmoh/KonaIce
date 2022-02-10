@@ -88,9 +88,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   void initState() {
     super.initState();
     configureData();
-    setState(() {
-      isApiProcess=true;
-    });
     getSyncData();
   }
 
