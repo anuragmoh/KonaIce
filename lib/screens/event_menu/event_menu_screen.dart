@@ -4,6 +4,14 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_dao.dart';
+import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
+import 'package:kona_ice_pos/models/data_models/item.dart';
+import 'package:kona_ice_pos/models/data_models/item_categories.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
@@ -15,6 +23,7 @@ import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -27,7 +36,24 @@ class EventMenuScreen extends StatefulWidget {
   _EventMenuScreenState createState() => _EventMenuScreenState();
 }
 
-class _EventMenuScreenState extends State<EventMenuScreen> {
+class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseContractor {
+
+  // late ItemPresenter _itemPresenter;
+  // late ExtraFoodItemPresenter _extraFoodItemPresenter;
+  // late ItemCategoriesPresenter _itemCategoriesPresenter;
+  bool isApiProcess = false;
+
+  List<Item> itemList = [];
+  List<ItemCategories> itemCategoriesList = [];
+  List<FoodExtraItems> foodExtraItemList = [];
+
+  // _EventMenuScreenState(){
+  //   _itemPresenter = ItemPresenter(this);
+  //   _extraFoodItemPresenter = ExtraFoodItemPresenter(this);
+  //   _itemCategoriesPresenter = ItemCategoriesPresenter(this);
+  // }
+
+
 
   bool isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -67,12 +93,83 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
   }
 
+
+  // LocalDB call start from here.
+  getAllItemCategories()async{
+    var result = await ItemCategoriesDAO().getAllCategories();
+    if(result !=null){
+     setState(() {
+       itemCategoriesList.add(result);
+     });
+    }else{
+      print("Data not present in the db");
+    }
+
+  }
+  getItemCategoriesByEventId()async{
+    // Event Id need to pass
+    var result = await ItemCategoriesDAO().getCategoriesByEventId("eventId");
+    if(result !=null){
+      setState(() {
+        itemCategoriesList.add(result);
+      });
+    }else{
+      print("Result is null");
+    }
+  }
+  getAllItems()async{
+    // Event Id need to pass
+   var result = await ItemDAO().getAllItemsByEventId("eventId");
+   if(result !=null){
+     setState(() {
+       itemList.add(result);
+     });
+   }else{
+     print("Result is null");
+   }
+  }
+
+  getItemsByCategory()async{
+    // Category Id need to pass
+    var result = await ItemDAO().getAllItemsByCategories("categoryId");
+    if(result !=null){
+      setState(() {
+        itemList.add(result);
+      });
+    }else{
+      print("Result is null");
+    }
+  }
+  getExtraFoodItem()async{
+    // EventId and itemId need to pass
+    var result = await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
+    if(result !=null){
+      setState(() {
+        foodExtraItemList.add(result);
+      });
+    }else{
+      print("Result is null");
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getAllItemCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: getMaterialColor(AppColors.textColor3),
-      endDrawer: NotificationDrawer(),
+      endDrawer: const NotificationDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -85,7 +182,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
       ),
     );
   }
-
 
   Widget body() {
     return Padding(
@@ -736,9 +832,26 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
 
   onDrawerTap() {
-    print('nopendrwawer');
     _scaffoldKey.currentState!.openEndDrawer();
     // Scaffold.of(context).openDrawer();
+  }
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    setState(() {
+      isApiProcess = false;
+    });
+    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+
+  }
+
+  @override
+  void showSuccess(response) {
+    setState(() {
+      isApiProcess = false;
+    });
+
+    // response is ItemCategories ? print("true") : print("false");
   }
 }
   

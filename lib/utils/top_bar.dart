@@ -135,10 +135,13 @@ class _TopBarState extends State<TopBar> {
                             color: getMaterialColor(AppColors.whiteColor),
                             fontFamily: FontConstants.montserratBold)),
                   ),
-                  CommonWidgets().image(
+                  Visibility(
+                     visible: false,
+                      child: CommonWidgets().image(
                       image: AssetsConstants.dropDownArrowIcon,
                       width: 1.30 * SizeConfig.imageSizeMultiplier,
-                      height: 1.04 * SizeConfig.imageSizeMultiplier)
+                      height: 1.04 * SizeConfig.imageSizeMultiplier))
+
                 ],
               ),
               CommonWidgets().textWidget(

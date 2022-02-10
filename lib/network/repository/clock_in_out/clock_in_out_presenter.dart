@@ -5,16 +5,26 @@ import '../../response_contractor.dart';
 import 'clock_in_out_repository.dart';
 
 class ClockInOutPresenter {
-  late ResponseContractor _view;
+  late ClockInOutResponseContractor _view;
   late ClockInOutRepository _clockInOutRepository;
 
   ClockInOutPresenter(this._view) {
     _clockInOutRepository = ClockInOutRepository();
   }
 
-  void clockInOut(ClockInOutRequestModel clockInOutPresenterRequestModel, String userID) {
+  void clockInOutUpdate(ClockInOutRequestModel clockInOutPresenterRequestModel, String userID) {
     _clockInOutRepository
-        .clockInOut(clockInOutPresenterRequestModel, userID)
+        .clockInOutUpdate(clockInOutPresenterRequestModel, userID)
+        .then((value){
+      _view.showSuccessForUpdateClockIN(value);
+    }).onError((error, stackTrace){
+      _view.showErrorForUpdateClockIN(FetchException(error.toString()).fetchErrorModel());
+    });
+  }
+
+  void clockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {
+    _clockInOutRepository
+        .clockInOutDetails(userID: userID, startTimestamp: startTimestamp, endTimestamp: endTimestamp)
         .then((value){
       _view.showSuccess(value);
     }).onError((error, stackTrace){
