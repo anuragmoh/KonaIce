@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -58,6 +60,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
   bool isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isSearchCustomer = false;
+  TextEditingController addTipTextFieldController = TextEditingController();
+  TextEditingController addDiscountTextFieldController = TextEditingController();
+  TextEditingController applyCouponTextFieldController = TextEditingController();
 
   List<String> categoriesList = [
     StringConstants.customMenu,
@@ -72,6 +77,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
   List<MenuItems> selectedMenuItems = [];
   String customerName = StringConstants.addCustomer;
   CustomerDetails? customer;
+  double tip = 0.0;
+  double salesTax = 0.0;
+  double discount = 0.0;
+  double totalAmount = 0.0;
   double get totalAmountOfSelectedItems {
     if (selectedMenuItems.isEmpty) {
       return 0.0;
@@ -99,7 +108,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
     var result = await ItemCategoriesDAO().getAllCategories();
     if(result !=null){
      setState(() {
-       itemCategoriesList.add(result);
+       // itemCategoriesList.add(result);
      });
     }else{
       print("Data not present in the db");
@@ -145,7 +154,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
     var result = await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
     if(result !=null){
       setState(() {
-        foodExtraItemList.add(result);
+        // foodExtraItemList.add(result);
       });
     }else{
       print("Result is null");
@@ -161,6 +170,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
 
   @override
   Widget build(BuildContext context) {
+    updateCustomerName();
+    calculateTotal();
+
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
 
@@ -430,7 +442,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
               ),
             ),
             Visibility(
-              visible: customerName == StringConstants.addCustomer,
+              visible: invalidCustomerName(),
               child: CommonWidgets().textWidget(StringConstants.plusSymbol, StyleConstants.customTextStyle(
                   fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
             )
@@ -539,14 +551,51 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
           ),
           Visibility(
             visible: false,
-              child: commonTextFieldContainer(hintText: StringConstants.applyCoupon, imageName: AssetsConstants.couponIcon)),
-          commonTextFieldContainer(hintText: StringConstants.addTip, imageName: AssetsConstants.dollarIcon),
+              child: commonTextFieldContainer(hintText: StringConstants.applyCoupon, imageName: AssetsConstants.couponIcon, controller: applyCouponTextFieldController)),
+          commonTextFieldContainer(hintText: StringConstants.addTip, imageName: AssetsConstants.dollarIcon, controller: addTipTextFieldController),
+          commonTextFieldContainer(hintText: StringConstants.addDiscount, imageName: AssetsConstants.dollarIcon, controller: addDiscountTextFieldController),
+          orderBillDetailContainer(),
+
         ],
       ),
     );
   }
 
-  Widget commonTextFieldContainer({required String hintText, required String imageName}) {
+  Widget orderBillDetailContainer() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          commonOrderBillComponents(text: StringConstants.foodCost, price: totalAmountOfSelectedItems),
+          commonOrderBillComponents(text: StringConstants.salesTax, price: salesTax),
+          commonOrderBillComponents(text: StringConstants.tip, price: tip),
+          commonOrderBillComponents(text: StringConstants.discount, price: discount),
+        ],
+      ),
+    );
+  }
+
+  Widget commonOrderBillComponents({required String text, required double price}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CommonWidgets().textWidget(text, StyleConstants.customTextStyle(fontSize: 12,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratMedium)),
+          CommonWidgets().textWidget(StringConstants.symbolDollar + price.toString(), StyleConstants.customTextStyle(fontSize: 12,
+              color: getMaterialColor(AppColors.textColor2),
+              fontFamily: FontConstants.montserratRegular)),
+
+        ],
+      ),
+    );
+  }
+
+  Widget commonTextFieldContainer({required String hintText, required String imageName, required TextEditingController controller}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
@@ -564,8 +613,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
       ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(4.0),
+                padding: const EdgeInsets.all(1.0),
                 child: TextField(
+                  controller: controller,
+                  keyboardType: TextInputType.number,
                   style: StyleConstants.customTextStyle(fontSize: 12.0,
                       color: getMaterialColor(AppColors.textColor1),
                       fontFamily: FontConstants.montserratMedium),
@@ -577,7 +628,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
                         color: getMaterialColor(AppColors.textColor2),
                         fontFamily: FontConstants.montserratMedium),
                   ),
-
+                  onEditingComplete: () {
+                    onCompleteTextFieldEditing();
+                  },
                 ),
               ),
             )
@@ -674,7 +727,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
-                  child: CommonWidgets().textWidget('${StringConstants.symbolDollar}$totalAmountOfSelectedItems', StyleConstants.customTextStyle(
+                  child: CommonWidgets().textWidget('${StringConstants.symbolDollar}$totalAmount', StyleConstants.customTextStyle(
                       fontSize: 23.3, color: getMaterialColor(selectedMenuItems.isEmpty ? AppColors.textColor4 : AppColors.textColor1), fontFamily: FontConstants.montserratBold), textAlign: TextAlign.center),
                 )
               ],
@@ -729,6 +782,23 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
         builder: (context) {
            return const CustomMenuPopup();
         });
+  }
+
+  //Other functions
+  updateCustomerName() {
+    if (customerName == StringConstants.addCustomer && selectedMenuItems.isNotEmpty) {
+      customerName = StringConstants.guestCustomer;
+    } else if (customerName == StringConstants.guestCustomer && selectedMenuItems.isEmpty) {
+      customerName = StringConstants.addCustomer;
+    }
+  }
+
+  bool invalidCustomerName() {
+    return (customerName == StringConstants.addCustomer || customerName == StringConstants.guestCustomer);
+  }
+
+  calculateTotal() {
+    totalAmount = totalAmountOfSelectedItems + tip + salesTax - discount ;
   }
 
   //Action Event
@@ -817,12 +887,26 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
     showAddFoodExtrasPopUp(menuItems[index]);
   }
 
-  onTapCustomerName(CustomerDetails customerObj) {
+  onTapCustomerName(CustomerDetails? customerObj) {
+
       setState(() {
-        customerName = customerObj.getFullName();
+        if (customerObj != null) {
+          customerName = customerObj.getFullName();
+        }
         customer = customerObj;
         isSearchCustomer = false;
       });
+  }
+
+  onCompleteTextFieldEditing() {
+       String tipText = addTipTextFieldController.text;
+       String discountText =  addDiscountTextFieldController.text;
+       setState(() {
+         tip = double.parse(tipText.isEmpty ? '0.0' : tipText);
+         discount = double.parse(discountText.isEmpty ? '0.0' : discountText);
+       });
+
+       FocusScope.of(context).unfocus();
   }
 
   //Navigation

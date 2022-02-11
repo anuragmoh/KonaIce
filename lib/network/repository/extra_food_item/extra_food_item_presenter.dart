@@ -10,7 +10,7 @@ class ExtraFoodItemPresenter {
     _extraFoodItemRepository = ExtraFoodItemRepository();
   }
 
-  void getExtraFoodItemByItemId({required String eventId, required String itemId}) {
+/*  void getExtraFoodItemByItemId({required String eventId, required String itemId}) {
     _extraFoodItemRepository
         .getExtraFoodItemByItemId(eventId,itemId)
         .then((value){
@@ -18,5 +18,5 @@ class ExtraFoodItemPresenter {
     }).onError((error, stackTrace){
       _view.showError(FetchException(error).fetchErrorModel());
     });
-  }
+  }*/
 }

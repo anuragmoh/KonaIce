@@ -45,9 +45,12 @@ class _SearchCustomersState extends State<SearchCustomers>
     return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Align(
-              alignment: Alignment.topRight,
-              child: clearButton()
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              cancelButton(),
+              clearButton(),
+            ],
           ),
           searchTextField(),
           Expanded(child: searchedCustomerList())
@@ -146,6 +149,18 @@ class _SearchCustomersState extends State<SearchCustomers>
     );
   }
 
+  Widget cancelButton() {
+    return GestureDetector(
+      onTap: onTapCancelButton,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
+        child: CommonWidgets().textWidget(StringConstants.cancel, StyleConstants.customTextStyle(
+            fontSize: 9.0, color: getMaterialColor(AppColors.textColor5), fontFamily: FontConstants.montserratSemiBold)
+        ),
+      ),
+    );
+  }
+
   //Action events
   onTapCustomerName(int index) {
       widget.onTapCustomer(customerList[index]);
@@ -160,6 +175,10 @@ class _SearchCustomersState extends State<SearchCustomers>
     //     customerList.clear();
     //   });
     // }
+  }
+
+  onTapCancelButton() {
+    widget.onTapCustomer(null);
   }
 
   onTapClearButton() {

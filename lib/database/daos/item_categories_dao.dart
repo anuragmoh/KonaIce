@@ -13,10 +13,11 @@ class ItemCategoriesDAO {
     try {
       final db = await _db;
       var result = await db.rawInsert(
-          "INSERT OR REPLACE INTO $tableName (id, category_code, category_name, description, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id)"
-          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          "INSERT OR REPLACE INTO $tableName (id,event_id, category_code, category_name, description, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id)"
+          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
           [
             itemCategories.id,
+            itemCategories.eventId,
             itemCategories.categoryCode,
             itemCategories.categoryName,
             itemCategories.description,
@@ -34,12 +35,13 @@ class ItemCategoriesDAO {
     }
   }
 
-  Future<ItemCategories?> getAllCategories() async {
+  Future<List<ItemCategories>?> getAllCategories() async {
     try {
       final db = await _db;
       var result = await db.rawQuery("SELECT * from $tableName");
+      print("DBResult$result");
       if (result.isNotEmpty) {
-        return ItemCategories.fromMap(result.first);
+        return List.generate(result.length, (index) => ItemCategories.fromMap(result[index]));
       } else {
         return null;
       }

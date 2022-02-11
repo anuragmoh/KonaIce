@@ -10,6 +10,9 @@ import 'package:kona_ice_pos/screens/login/login_screen.dart';
 
 class FunctionalUtils {
 
+  static int clockInTimestamp = 0;
+
+
   static saveUserDetailInDB({required LoginResponseModel userModel}) {
 
     if (userModel.id != null) {
