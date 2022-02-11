@@ -60,7 +60,9 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   @override
   void initState() {
     super.initState();
-    getEventData();
+    Timer(const Duration(seconds: 3), () {
+      getEventData();
+    });
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
