@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -9,6 +7,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_dao.dart';
+import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/models/data_models/item_categories.dart';
@@ -21,7 +20,6 @@ import 'package:kona_ice_pos/screens/event_menu/menu_items.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
 import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
-import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -31,7 +29,7 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class EventMenuScreen extends StatefulWidget {
-  final PartyEvents events;
+  final Events events;
   const EventMenuScreen({Key? key, required this.events}) : super(key: key);
 
   @override
@@ -40,22 +38,11 @@ class EventMenuScreen extends StatefulWidget {
 
 class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseContractor {
 
-  // late ItemPresenter _itemPresenter;
-  // late ExtraFoodItemPresenter _extraFoodItemPresenter;
-  // late ItemCategoriesPresenter _itemCategoriesPresenter;
   bool isApiProcess = false;
 
   List<Item> itemList = [];
   List<ItemCategories> itemCategoriesList = [];
   List<FoodExtraItems> foodExtraItemList = [];
-
-  // _EventMenuScreenState(){
-  //   _itemPresenter = ItemPresenter(this);
-  //   _extraFoodItemPresenter = ExtraFoodItemPresenter(this);
-  //   _itemCategoriesPresenter = ItemCategoriesPresenter(this);
-  // }
-
-
 
   bool isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -108,56 +95,66 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
     var result = await ItemCategoriesDAO().getAllCategories();
     if(result !=null){
      setState(() {
-       // itemCategoriesList.add(result);
+       itemCategoriesList.addAll(result);
      });
     }else{
-      print("Data not present in the db");
+      setState(() {
+        itemCategoriesList.clear();
+      });
     }
 
   }
-  getItemCategoriesByEventId()async{
+  getItemCategoriesByEventId(String eventId)async{
     // Event Id need to pass
-    var result = await ItemCategoriesDAO().getCategoriesByEventId("eventId");
+    var result = await ItemCategoriesDAO().getCategoriesByEventId(eventId);
     if(result !=null){
       setState(() {
-        itemCategoriesList.add(result);
+        itemCategoriesList.addAll(result);
       });
     }else{
-      print("Result is null");
+      setState(() {
+        itemCategoriesList.clear();
+      });
+
     }
   }
-  getAllItems()async{
+  getAllItems(String eventId)async{
     // Event Id need to pass
-   var result = await ItemDAO().getAllItemsByEventId("eventId");
+   var result = await ItemDAO().getAllItemsByEventId(eventId);
    if(result !=null){
      setState(() {
-       itemList.add(result);
+       itemList.addAll(result);
      });
    }else{
-     print("Result is null");
+     setState(() {
+       itemList.clear();
+     });
    }
   }
 
-  getItemsByCategory()async{
+  getItemsByCategory(String categoryId)async{
     // Category Id need to pass
-    var result = await ItemDAO().getAllItemsByCategories("categoryId");
+    var result = await ItemDAO().getAllItemsByCategories(categoryId);
     if(result !=null){
       setState(() {
-        itemList.add(result);
+        itemList.addAll(result);
       });
     }else{
-      print("Result is null");
+      setState(() {
+        itemList.clear();
+      });
     }
   }
   getExtraFoodItem()async{
-    // EventId and itemId need to pass
     var result = await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
     if(result !=null){
       setState(() {
-        // foodExtraItemList.add(result);
+         foodExtraItemList.addAll(result);
       });
     }else{
-      print("Result is null");
+      setState(() {
+        foodExtraItemList.clear();
+      });
     }
   }
 
@@ -185,7 +182,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: true, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
+          TopBar(userName: 'Justin', eventName: widget.events.name, eventAddress: widget.events.addressLine1, showCenterWidget: true, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
           Expanded(
             child: isProduct ? body() :  AllOrdersScreen(onBackTap: onTapCallBack),
           ),
@@ -761,7 +758,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
 
   //FoodExtra popup
   showAddFoodExtrasPopUp(MenuItems item) async {
-   var result = await showDialog(
+  await showDialog(
         barrierDismissible: false,
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
         context: context,

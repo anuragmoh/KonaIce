@@ -6,6 +6,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -15,7 +16,7 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class PaymentScreen extends StatefulWidget {
-  final PartyEvents events;
+  final Events events;
   const PaymentScreen({Key? key, required this.events}) : super(key: key);
 
   @override
@@ -51,7 +52,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: Column(
           children: [
-            TopBar(userName: 'Justin', eventName: widget.events.eventName, eventAddress: widget.events.location, showCenterWidget: false, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
+            TopBar(userName: 'Justin', eventName: widget.events.name, eventAddress: widget.events.addressLine1, showCenterWidget: false, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
             Expanded(child: bodyWidget()),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,

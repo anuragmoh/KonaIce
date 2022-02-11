@@ -78,7 +78,6 @@ class FoodExtraItems {
   @override
   String toString() {
     return """
-    ----------------------------------
     id: $id,
     foodExtraItemCategoryId: $foodExtraItemCategoryId,
     itemId: $itemId,
@@ -95,9 +94,6 @@ class FoodExtraItems {
     updatedBy: $updatedBy,
     updatedAt: $updatedAt,
     deleted: $deleted,
-
-    
-    ----------------------------------
     """;
   }
 }

@@ -49,13 +49,13 @@ class ItemCategoriesDAO {
     }
   }
 
-  Future<ItemCategories?> getCategoriesByEventId(String eventId) async {
+  Future<List<ItemCategories>?> getCategoriesByEventId(String eventId) async {
     try {
       final db = await _db;
       var result = await db
           .rawQuery("SELECT * from $tableName where eventId= ?", [eventId]);
       if (result.isNotEmpty) {
-        return ItemCategories.fromMap(result.first);
+        return List.generate(result.length, (index) => ItemCategories.fromMap(result[index]));
       } else {
         return null;
       }

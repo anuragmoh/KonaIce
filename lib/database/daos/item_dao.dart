@@ -25,13 +25,13 @@ Future insert(Item item) async {
   }
 }
 
-Future<Item?> getAllItemsByEventId(String eventId) async {
+Future<List<Item>?> getAllItemsByEventId(String eventId) async {
   try {
     final db = await _db;
     var result =
     await db.rawQuery("SELECT * from $tableName where event_id=?",[eventId]);
     if (result.isNotEmpty) {
-      return Item.fromMap(result.first);
+      return List.generate(result.length, (index) => Item.fromMap(result[index]));
     } else {
       return null;
     }
@@ -39,13 +39,13 @@ Future<Item?> getAllItemsByEventId(String eventId) async {
     debugPrint(error.toString());
   }
 }
-Future<Item?> getAllItemsByCategories(String categoryId) async {
+Future<List<Item>?>getAllItemsByCategories(String categoryId) async {
   try {
     final db = await _db;
     var result =
     await db.rawQuery("SELECT * from $tableName where item_category_id=?",[categoryId]);
     if (result.isNotEmpty) {
-      return Item.fromMap(result.first);
+      return List.generate(result.length, (index) => Item.fromMap(result[index]));
     } else {
       return null;
     }

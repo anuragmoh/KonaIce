@@ -410,7 +410,6 @@ class Events {
   @override
   String toString() {
     return """
-    ----------------------------------
     id: $id,
     eventCode: $eventCode,
     name: $name,
@@ -509,10 +508,7 @@ class Events {
     clientIndustriesTypeId: $clientIndustriesTypeId,
     invoiceCheck: $invoiceCheck,
     oldDbEventId: $oldDbEventId,
-    confirmedEmailSent:$confirmedEmailSent      
-    
-    
-    ----------------------------------
+    confirmedEmailSent:$confirmedEmailSent
     """;
   }
 }

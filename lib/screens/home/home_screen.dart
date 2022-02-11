@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -6,12 +5,13 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/events_dao.dart';
+import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/clock_in_out/clock_in_out_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
-import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
@@ -36,16 +36,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   bool isClockIn = false;
   bool isApiProcess = false;
 
-
-  List <PartyEvents> eventList = [
-    PartyEvents(eventName: 'NEW YEAR EVE EVENT', location: 'Houston, Texas, 77001', date: '31 Dec 2021 - 01 Jan 2022', time: '04:30 PM - 10:30 PM'),
-    PartyEvents(eventName: 'OCKERMAN SCHOOL EVENT', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
-    PartyEvents(eventName: 'KONA DAYS', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
-    PartyEvents(eventName: 'OCKERMAN SCHOOL EVENT', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
-    PartyEvents(eventName: 'OCKERMAN SCHOOL EVENT', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
-    PartyEvents(eventName: 'OCKERMAN SCHOOL EVENT', location: 'Houston, Texas, 77001', date: '03 Jan 2022 - 09 Jan 2022 ', time: '04:30 PM - 8:50 PM'),
-
-  ];
+  List<Events> eventList = [];
 
   late ClockInOutPresenter clockInOutPresenter;
   ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
@@ -53,9 +44,23 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   _HomeScreenState() {
     clockInOutPresenter = ClockInOutPresenter(this);
   }
+  getEventData()async{
+    var result = await EventsDAO().getValues();
+    if (result != null) {
+     setState(() {
+       eventList.addAll(result);
+     });
+    }else{
+     setState(() {
+       eventList.clear();
+     });
+    }
+  }
 
   @override
   void initState() {
+    super.initState();
+    getEventData();
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
@@ -65,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
       startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
       isClockIn ? startTimer() : stopTimer();
     }
-    super.initState();
     callClockInOutDetailsAPI();
   }
 
@@ -135,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   Widget listViewContainer() {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      child: ListView.builder(
+      child: eventList.isNotEmpty ? ListView.builder(
             itemCount: eventList.length,
               itemBuilder: (BuildContext context, int index) {
               var eventDetails = eventList[index];
@@ -155,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
-                          child: CommonWidgets().textWidget(eventDetails.eventName,
+                          child: CommonWidgets().textWidget(eventDetails.name,
                               StyleConstants.customTextStyle(fontSize:
                               16.0, color: getMaterialColor(AppColors.textColor1),
                                   fontFamily: FontConstants.montserratBold)
@@ -168,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                               CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: CommonWidgets().textWidget(eventDetails.location,
+                                child: CommonWidgets().textWidget(eventDetails.addressLine1,
                                     StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)
                                 ),
                               ),
@@ -180,13 +184,13 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                             CommonWidgets().image(image: AssetsConstants.dateIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: CommonWidgets().textWidget(eventDetails.date,
+                              child: CommonWidgets().textWidget("${Date.getDateFromTimeStamp(timestamp:eventDetails.startDateTime)}",
                                   StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 40),
-                              child: CommonWidgets().textWidget(eventDetails.time,
+                              child: CommonWidgets().textWidget("${eventDetails.startDateTime}",
                                 StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
                               ),
                             ),
@@ -199,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
               ),
             );
           }
-          ),
+          ) : const Text(''),
     );
   }
 
@@ -263,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
     callClockInOutAPI();
   }
 
-  onTapEventItem(PartyEvents events) {
+  onTapEventItem(Events events) {
     // setState(() {
     //   tempEventHomeNavigation = true;
     // });

@@ -53,6 +53,7 @@ class POsSyncEventDataDtoList {
   POsSyncEventDataDtoList({
     required this.eventId,
     required  this.eventCode,
+    required this.name,
     required this.addressLine1,
     required this.addressLine2,
     required this.city,
@@ -70,6 +71,7 @@ class POsSyncEventDataDtoList {
 
   String? eventId;
   String? eventCode;
+  String? name;
   String? addressLine1;
   String? addressLine2;
   String? city;
@@ -87,6 +89,7 @@ class POsSyncEventDataDtoList {
   factory POsSyncEventDataDtoList.fromJson(Map<String, dynamic> json) => POsSyncEventDataDtoList(
     eventId: json["eventId"],
     eventCode: json["eventCode"],
+    name: json["name"],
     addressLine1: json["addressLine1"],
     addressLine2: json["addressLine2"],
     city: json["city"],
@@ -105,6 +108,7 @@ class POsSyncEventDataDtoList {
   Map<String, dynamic> toJson() => {
     "eventId": eventId,
     "eventCode": eventCode,
+    "name": name,
     "addressLine1": addressLine1,
     "addressLine2": addressLine2,
     "city": city,

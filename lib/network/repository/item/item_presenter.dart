@@ -12,18 +12,18 @@ class ItemPresenter {
   }
 
 
-  getAllItemsByEvent(String eventId){
-    _itemRepository.getAllItemsByEvent(eventId).then((value){
-      _view.showSuccess(value);
-    }).onError((error, stackTrace){
-      _view.showError(FetchException(error).fetchErrorModel());
-    });
-  }
-  getItemsByCategories(String categoryId){
-    _itemRepository.getItemsByCategories(categoryId).then((value){
-      _view.showSuccess(value);
-    }).onError((error, stackTrace){
-      _view.showError(FetchException(error).fetchErrorModel());
-    });
-  }
+  // getAllItemsByEvent(String eventId){
+  //   _itemRepository.getAllItemsByEvent(eventId).then((value){
+  //     _view.showSuccess(value);
+  //   }).onError((error, stackTrace){
+  //     _view.showError(FetchException(error).fetchErrorModel());
+  //   });
+  // }
+  // getItemsByCategories(String categoryId){
+  //   _itemRepository.getItemsByCategories(categoryId).then((value){
+  //     _view.showSuccess(value);
+  //   }).onError((error, stackTrace){
+  //     _view.showError(FetchException(error).fetchErrorModel());
+  //   });
+  // }
 }

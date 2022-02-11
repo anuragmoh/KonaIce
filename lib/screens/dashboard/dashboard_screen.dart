@@ -45,19 +45,20 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     _syncPresenter = SyncPresenter(this);
   }
 
+  List<Events> eventList = [];
+
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
   List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
   List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
-  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList = [
-  ];
+  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
+      [];
   List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
-  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList = [
-  ];
+  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
+      [];
   List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
-  List<
-      POsSyncEventItemExtrasDataDtoList> pOsSyncDeletedEventItemExtrasDataDtoList = [
-  ];
+  List<POsSyncEventItemExtrasDataDtoList>
+      pOsSyncDeletedEventItemExtrasDataDtoList = [];
 
   bool isApiProcess = false;
   int currentIndex = 0;
@@ -78,19 +79,16 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
         selectedImage: AssetsConstants.settingsSelectedIcon),
   ];
 
-
   Future<void> getSyncData() async {
-     var result = await EventsDAO().getValues();
-     if (result!=null){
-        print("Load db data ${result[0]}");
-     }else{
-       setState(() {
-         isApiProcess = true;
-       });
-       _syncPresenter.syncData();
-
-       print("API calling");
-  }
+    var result = await EventsDAO().getValues();
+      if (result != null) {
+        eventList.addAll(result);
+    } else {
+      setState(() {
+        isApiProcess = true;
+      });
+      _syncPresenter.syncData();
+    }
   }
 
   @override
@@ -223,7 +221,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     setState(() {
       isApiProcess = false;
     });
-    print(exception.message);
     CommonWidgets().showErrorSnackBar(
         errorMessage: exception.message ?? StringConstants.somethingWentWrong,
         context: context);
@@ -240,12 +237,12 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
 
   void storeDataIntoDB() {
     setState(() {
-      pOsSyncEventDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
+      pOsSyncEventDataDtoList
+          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
       pOsSyncItemCategoryDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
-      pOsSyncEventItemDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
+      pOsSyncEventItemDataDtoList
+          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
       pOsSyncEventItemExtrasDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncEventItemExtrasDataDtoList);
       pOsSyncDeletedEventDataDtoList.addAll(
@@ -264,10 +261,10 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
 
   Future<void> insertEventSync() async {
     for (int i = 0; i < pOsSyncEventDataDtoList.length; i++) {
-      await EventsDAO()
-          .insert(Events(id: pOsSyncEventDataDtoList[i].eventId!,
+      await EventsDAO().insert(Events(
+          id: pOsSyncEventDataDtoList[i].eventId!,
           eventCode: pOsSyncEventDataDtoList[i].eventCode!,
-          name: "empty",
+          name: pOsSyncEventDataDtoList[i].name!,
           startDateTime: pOsSyncEventDataDtoList[i].startDateTime!,
           endDateTime: pOsSyncEventDataDtoList[i].endDateTime!,
           delivery: "empty",
@@ -387,8 +384,8 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
       await FoodExtraItemsDAO().insert(FoodExtraItems(
           id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
-          foodExtraItemCategoryId: pOsSyncEventItemExtrasDataDtoList[i]
-              .foodExtraItemId!,
+          foodExtraItemCategoryId:
+              pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
           itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
           eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
           itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
@@ -405,22 +402,33 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
           deleted: pOsSyncEventItemExtrasDataDtoList[i].deleted!));
     }
     updateLastItemExtrasSync();
-    for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++){
-      await ItemDAO().insert(Item(id: pOsSyncEventItemDataDtoList[0].itemId!,eventId:pOsSyncEventItemDataDtoList[0].eventId! ,itemCategoryId: pOsSyncEventItemDataDtoList[0].itemCategoryId!,itemCode:pOsSyncEventItemDataDtoList[0].itemCode! ,imageFileId: "empty",name: pOsSyncEventItemDataDtoList[0].name!,description: pOsSyncEventItemDataDtoList[0].description!,price: pOsSyncEventItemDataDtoList[0].price!,activated: false,createdBy: pOsSyncEventItemDataDtoList[0].createdBy!,createdAt: pOsSyncEventItemDataDtoList[0].createdAt!,updatedBy: pOsSyncEventItemDataDtoList[0].updatedBy!,updatedAt: pOsSyncEventItemDataDtoList[0].updatedAt!,deleted: pOsSyncEventItemDataDtoList[0].deleted!,franchiseId:"empty"));
+    for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
+      await ItemDAO().insert(Item(
+          id: pOsSyncEventItemDataDtoList[i].itemId!,
+          eventId: pOsSyncEventItemDataDtoList[i].eventId!,
+          itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
+          itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
+          imageFileId: "empty",
+          name: pOsSyncEventItemDataDtoList[i].name!,
+          description: pOsSyncEventItemDataDtoList[i].description!,
+          price: pOsSyncEventItemDataDtoList[i].price!,
+          activated: false,
+          createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
+          createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
+          updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
+          updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
+          deleted: pOsSyncEventItemDataDtoList[i].deleted!,
+          franchiseId: "empty"));
     }
     updateLastItemSync();
-
-
   }
 
   Future<void> updateLastEventSync() async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.events, value: "0"));
+    await SessionDAO().insert(Session(key: DatabaseKeys.events, value: "0"));
   }
 
   Future<void> updateLastItemSync() async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.items, value: "0"));
+    await SessionDAO().insert(Session(key: DatabaseKeys.items, value: "0"));
   }
 
   Future<void> updateLastCategoriesSync() async {
@@ -433,5 +441,3 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
         .insert(Session(key: DatabaseKeys.itemExtras, value: "0"));
   }
 }
-
-
