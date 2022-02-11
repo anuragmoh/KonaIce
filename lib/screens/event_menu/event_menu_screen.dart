@@ -131,7 +131,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements ResponseCo
      });
    }
   }
-
   getItemsByCategory(String categoryId)async{
     // Category Id need to pass
     var result = await ItemDAO().getAllItemsByCategories(categoryId);
