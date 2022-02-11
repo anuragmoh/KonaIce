@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         return OrientationBuilder(builder: (context,orientation){
           SizeConfig().init(constraints, orientation);
           return MaterialApp(
-            key: FunctionalUtils.navigatorKey,
+            navigatorKey: FunctionalUtils.navigatorKey,
             title: StringConstants.title,
             theme: ThemeData(
               primarySwatch: getMaterialColor(AppColors.primaryColor2),
@@ -32,5 +32,10 @@ class MyApp extends StatelessWidget {
       }
     );
   }
+}
+
+class App {
+  static GlobalKey<NavigatorState> navigatorKey =
+  GlobalKey<NavigatorState>();
 }
 

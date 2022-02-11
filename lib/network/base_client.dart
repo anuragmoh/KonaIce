@@ -69,6 +69,7 @@ class BaseClient {
   //DELETE
   Future<dynamic> delete(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
+    print(uri);
     await addSessionKeyToHeader();
     try {
       var response = await http.delete(uri, headers: header).timeout(
@@ -85,6 +86,7 @@ class BaseClient {
   //OTHER
   addSessionKeyToHeader() async {
     String sessionKey = await FunctionalUtils.getSessionKey();
+    print("Bearer $sessionKey");
     if (sessionKey.isNotEmpty) {
       header["Authorization"] = "Bearer $sessionKey";
     } else {
