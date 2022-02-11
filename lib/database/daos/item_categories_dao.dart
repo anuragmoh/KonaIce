@@ -39,7 +39,6 @@ class ItemCategoriesDAO {
     try {
       final db = await _db;
       var result = await db.rawQuery("SELECT * from $tableName");
-      print("DBResult$result");
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => ItemCategories.fromMap(result[index]));
       } else {

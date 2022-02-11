@@ -28,7 +28,6 @@ class FoodExtraItemsDAO {
       final db = await _db;
       var result =
       await db.rawQuery("SELECT * from $tableName where event_id=? AND item_id=?",[eventId,itemId]);
-      print(result);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => FoodExtraItems.fromMap(result[index]));
       } else {

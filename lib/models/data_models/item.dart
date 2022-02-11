@@ -6,7 +6,7 @@ class Item {
   final String itemCode;
   final String name;
   final String description;
-  final double price;
+  final num price;
   final bool activated;
   final String createdBy;
   final int createdAt;
@@ -62,19 +62,18 @@ class Item {
         name: map["name"],
         description: map["description"],
         price: map["price"],
-        activated: map["activated"],
+        activated: map["activated"]==1,
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"],
+        deleted: map["deleted"]==1,
         franchiseId: map["franchise_id"]);
   }
 
   @override
   String toString() {
     return """
-    ----------------------------------
     id: $id,
     eventId:$eventId,
     itemCategoryId: $itemCategoryId,
@@ -90,8 +89,6 @@ class Item {
     updatedAt: $updatedAt,
     deleted: $deleted,
     franchiseId: $franchiseId
-    
-    ----------------------------------
     """;
   }
 }

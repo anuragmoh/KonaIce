@@ -17,8 +17,8 @@ Future insert(Item item) async {
     final db = await _db;
     var result = await db.rawInsert(
         "INSERT OR REPLACE INTO $tableName (id, event_id ,item_category_id, image_file_id, item_code, name, description, price, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        [item.id, item.itemCategoryId, item.imageFileId, item.itemCode, item.name, item.description, item.price, item.activated, item.createdBy, item.createdAt, item.updatedBy, item.updatedAt, item.deleted, item.franchiseId]);
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
+        [item.id, item.eventId,item.itemCategoryId, item.imageFileId, item.itemCode, item.name, item.description, item.price, item.activated, item.createdBy, item.createdAt, item.updatedBy, item.updatedAt, item.deleted, item.franchiseId]);
     return result;
   } catch (error) {
     debugPrint(error.toString());
