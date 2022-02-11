@@ -35,7 +35,7 @@ class Item {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "eventId":eventId,
+      "event_id":eventId,
       "item_category_id": itemCategoryId,
       "image_file_id": imageFileId,
       "item_code": itemCode,
@@ -55,7 +55,7 @@ class Item {
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
         id: map["id"],
-        eventId:map["eventId"],
+        eventId:map["event_id"],
         itemCategoryId: map["item_category_id"],
         imageFileId: map["image_file_id"],
         itemCode: map["item_code"],

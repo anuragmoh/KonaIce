@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
 
   @override
   void initState() {
+    super.initState();
     callClockInOutDetailsAPI();
   }
 
