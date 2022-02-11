@@ -15,6 +15,8 @@ class FoodExtraItems {
   final String updatedBy;
   final int updatedAt;
   final bool deleted;
+  int selectedItemQuantity = 0;
+  bool isItemSelected = false;
 
   FoodExtraItems(
       {required this.id,
@@ -95,5 +97,9 @@ class FoodExtraItems {
     updatedAt: $updatedAt,
     deleted: $deleted,
     """;
+  }
+
+  double getTotalPrice() {
+    return selectedItemQuantity * sellingPrice.toDouble();
   }
 }

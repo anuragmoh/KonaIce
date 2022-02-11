@@ -1,3 +1,6 @@
+import 'package:kona_ice_pos/constants/string_constants.dart';
+import 'package:kona_ice_pos/utils/date_formats.dart';
+
 class Events {
   final String id;
   final String eventCode;
@@ -510,5 +513,36 @@ class Events {
     oldDbEventId: $oldDbEventId,
     confirmedEmailSent:$confirmedEmailSent
     """;
+  }
+
+   String getEventName() {
+    return name.toUpperCase();
+  }
+
+  String getEventAddress() {
+    return '$addressLine1, $state, $zipCode';
+  }
+
+  String getEventDate() {
+    DateTime start = Date.getDateFromTimeStamp(timestamp: startDateTime);
+    DateTime end = Date.getDateFromTimeStamp(timestamp: endDateTime);
+    String format = DateFormatsConstant.ddMMMYYY;
+
+    String startDateStr = Date.getDateFrom(date: start, formatValue: format);
+    String endDateStr = Date.getDateFrom(date: end, formatValue: format);
+
+    return '$startDateStr - $endDateStr';
+
+  }
+
+  String getEventTime() {
+    DateTime start = Date.getDateFromTimeStamp(timestamp: startDateTime);
+    DateTime end = Date.getDateFromTimeStamp(timestamp: endDateTime);
+    String format = DateFormatsConstant.hhmmaa;
+
+    String startTimeStr = Date.getDateFrom(date: start, formatValue: format);
+    String endTimeStr = Date.getDateFrom(date: end, formatValue: format);
+
+    return '$startTimeStr - $endTimeStr';
   }
 }

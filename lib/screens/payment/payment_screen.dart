@@ -7,6 +7,8 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
+import 'package:kona_ice_pos/models/data_models/item.dart';
+import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -17,7 +19,10 @@ import 'package:kona_ice_pos/utils/utils.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Events events;
-  const PaymentScreen({Key? key, required this.events}) : super(key: key);
+  final List<Item> selectedMenuItems;
+  final PlaceOrderRequestModel placeOrderRequestModel;
+
+  const PaymentScreen({Key? key, required this.events, required this.selectedMenuItems, required this.placeOrderRequestModel}) : super(key: key);
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();

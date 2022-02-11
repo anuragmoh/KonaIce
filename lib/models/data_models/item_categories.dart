@@ -1,3 +1,5 @@
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
+
 class ItemCategories {
   final String id;
   final String eventId;
@@ -78,6 +80,10 @@ class ItemCategories {
     deleted: $deleted,
     franchiseId: $franchiseId
     """;
+  }
+  
+  static ItemCategories getCustomMenuCategory({required String eventId, required String name}) {
+    return ItemCategories(id: "1", eventId: eventId, categoryCode: "0", categoryName: name, description: StringExtension.empty(), activated: false, createdBy: StringExtension.empty(), createdAt: 0, updatedBy: StringExtension.empty(), updatedAt: 0, deleted: false, franchiseId: StringExtension.empty());
   }
 
 

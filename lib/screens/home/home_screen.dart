@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
-                          child: CommonWidgets().textWidget(eventDetails.name,
+                          child: CommonWidgets().textWidget(eventDetails.getEventName(),
                               StyleConstants.customTextStyle(fontSize:
                               16.0, color: getMaterialColor(AppColors.textColor1),
                                   fontFamily: FontConstants.montserratBold)
@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                               CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
                               Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
-                                child: CommonWidgets().textWidget(eventDetails.addressLine1,
+                                child: CommonWidgets().textWidget(eventDetails.getEventAddress(),
                                     StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)
                                 ),
                               ),
@@ -186,13 +186,13 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                             CommonWidgets().image(image: AssetsConstants.dateIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
                             Padding(
                               padding: const EdgeInsets.only(left: 8.0),
-                              child: CommonWidgets().textWidget("${Date.getDateFromTimeStamp(timestamp:eventDetails.startDateTime)}",
+                              child: CommonWidgets().textWidget(eventDetails.getEventDate(),
                                   StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 40),
-                              child: CommonWidgets().textWidget("${eventDetails.startDateTime}",
+                              child: CommonWidgets().textWidget(eventDetails.getEventTime(),
                                 StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
                               ),
                             ),

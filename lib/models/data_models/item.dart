@@ -1,3 +1,5 @@
+import 'food_extra_items.dart';
+
 class Item {
   final String id;
   final String eventId;
@@ -14,6 +16,10 @@ class Item {
   final int updatedAt;
   final bool deleted;
   final String franchiseId;
+  List<FoodExtraItems> foodExtraItemList = [];
+  List<FoodExtraItems> selectedExtras = [];
+  bool isItemSelected = false;
+  int selectedItemQuantity = 0;
 
   Item(
       {required this.id,
@@ -90,5 +96,29 @@ class Item {
     deleted: $deleted,
     franchiseId: $franchiseId
     """;
+  }
+
+  bool isItemHasExtras() => foodExtraItemList.isNotEmpty;
+  double getTotalPrice() {
+    double totalExtraItemPrice = 0;
+    if (selectedExtras.isNotEmpty) {
+      for (var element in selectedExtras) {
+        totalExtraItemPrice += element.getTotalPrice();
+      }}
+    return selectedItemQuantity * price.toDouble() + totalExtraItemPrice;
+  }
+
+  double getOnlyMenuItemTotalPrice() {
+    return selectedItemQuantity * price.toDouble();
+  }
+
+  String getExtraItemsName() {
+    String extraNames = '';
+    if (selectedExtras.isNotEmpty) {
+      List<String> extrasNameList = List.generate(
+          selectedExtras.length, (index) => selectedExtras[index].itemName);
+       extraNames = extrasNameList.join('\n');
+    }
+     return extraNames;
   }
 }

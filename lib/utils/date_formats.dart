@@ -2,12 +2,19 @@ import 'package:intl/intl.dart';
 
 class DateFormatsConstant {
   static const ddMMMYYYYDay = 'dd MMM yyyy, EEEE';
+  static const ddMMMYYY = 'dd MMM yyyy';
+  static const hhmmaa = 'hh mm aa';
 }
 
 class Date {
   static String getTodaysDate({required String formatValue}) {
     return DateFormat(formatValue).format(DateTime.now());
   }
+
+  static String getDateFrom({required DateTime date, required String formatValue}) {
+    return DateFormat(formatValue).format(date);
+  }
+
 
   static String getDateInHrMinSec({required DateTime date}) {
     var diffDate = DateTime.now().difference(date);

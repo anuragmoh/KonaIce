@@ -38,6 +38,8 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     await addSessionKeyToHeader();
+    print(uri);
+    print("payload--->$payload");
 
     try {
       var response = await http.post(uri, headers: header, body: payload)
@@ -85,6 +87,7 @@ class BaseClient {
   //OTHER
   addSessionKeyToHeader() async {
     String sessionKey = await FunctionalUtils.getSessionKey();
+    print("Bearer $sessionKey");
     if (sessionKey.isNotEmpty) {
       header["Authorization"] = "Bearer $sessionKey";
     } else {
