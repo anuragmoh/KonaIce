@@ -71,6 +71,7 @@ class BaseClient {
   //DELETE
   Future<dynamic> delete(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
+    print(uri);
     await addSessionKeyToHeader();
     try {
       var response = await http.delete(uri, headers: header).timeout(
