@@ -38,6 +38,20 @@ class EventsDAO {
       debugPrint(error.toString());
     }
   }
+  Future<List<Events>?> getTodayEvent(String startDateTimeStamp, String endDateTimeStamp) async {
+    try {
+      final db = await _db;
+      var result =
+      await db.rawQuery("SELECT * from $tableName where start_date_time >= $startDateTimeStamp AND end_date_time <= $endDateTimeStamp");
+      if (result.isNotEmpty) {
+        return List.generate(result.length, (index) => Events.fromMap(result[index]));
+      } else {
+        return null;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 
   Future clearEventsData() async {
     try {
