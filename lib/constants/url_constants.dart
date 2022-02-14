@@ -19,7 +19,7 @@ class UrlConstants {
   }
 
   static getCustomerList({required String searchText}) {
-    return '$customerList?role=Staff&searchText=$searchText';
+    return '$customerList?role=Customer&searchText=$searchText';
   }
 
    static getClockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {

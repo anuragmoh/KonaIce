@@ -105,7 +105,7 @@ class Item {
       for (var element in selectedExtras) {
         totalExtraItemPrice += element.getTotalPrice();
       }}
-    return selectedItemQuantity * price.toDouble() + totalExtraItemPrice;
+    return selectedItemQuantity * price.toDouble() + totalExtraItemPrice * selectedItemQuantity;
   }
 
   double getOnlyMenuItemTotalPrice() {

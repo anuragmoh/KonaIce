@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
+import 'package:kona_ice_pos/constants/string_constants.dart';
+import 'package:kona_ice_pos/utils/date_formats.dart';
+
 PlaceOrderRequestModel placeOrderRequestModelFromJson(String str) => PlaceOrderRequestModel.fromJson(json.decode(str));
 
 String? placeOrderRequestModelToJson(PlaceOrderRequestModel data) => json.encode(data.toJson());
@@ -126,6 +130,14 @@ class PlaceOrderRequestModel {
     "allowPromoNotifications": allowPromoNotifications,
     "orderItemsList": List<dynamic>.from((orderItemsList?? []).map((x) => x.toJson())),
   };
+
+  String getCustomerName() {
+    return (anonymous ?? true) ? StringConstants.guestCustomer : '$firstName $lastName'.toTitleCase();
+  }
+
+  // String getOrderDate() {
+  //   Date.getDateFromTimeStamp(timestamp: orderDate ?? DateTime.now().millisecondsSinceEpoch);
+  // }
 }
 
 class OrderItemsList {
