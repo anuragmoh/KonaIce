@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';

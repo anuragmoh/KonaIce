@@ -308,4 +308,50 @@ class DBScheme {
     user_address_id character varying(32)
 )''';
 
+  static const savedOrders = '''CREATE TABLE saved_orders (
+   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   event_id character varying(50),
+   card_id character varying(50),
+   order_id character varying(50),
+   customer_name character varying(100),
+   phone_number character varying(15),
+   phone_country_code character varying(10),
+   address1 character varying(255),
+   address2 character varying(255),
+   country character varying(100),
+   state character varying(100),
+   city character varying(100),
+   zip_code character varying(50),
+   order_date bigint,
+   total_amount numeric(12,2),
+   payment character varying(50),
+   order_status character varying(50),
+   deleted boolean DEFAULT false
+)''';
+  static const savedOrdersItem = '''CREATE TABLE saved_orders_item (
+   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   order_id character varying(50),
+   item_id character varying(100),
+   item_name character varying(100),
+   quantity INTEGER,
+   unit_price numeric(12,2),
+   total_price numeric(12,2),
+   item_category_id character varying(50),
+   deleted boolean DEFAULT false
+)''';
+
+  static const savedOrdersExtraItems = '''CREATE TABLE saved_orders_extra_items (
+   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+   order_id character varying(50),
+   item_id character varying(100),
+   extra_food_item_id character varying(15),
+   extra_food_item_name character varying(15),
+   extra_food_item_category_id character varying(15),
+   quantity INTEGER,
+   unit_price numeric(12,2),
+   total_price numeric(12,2),
+   deleted boolean DEFAULT false
+)''';
+
+
 }
