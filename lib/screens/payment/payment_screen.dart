@@ -26,6 +26,7 @@ class PaymentScreen extends StatefulWidget {
 
   const PaymentScreen({Key? key, required this.events, required this.selectedMenuItems, required this.placeOrderRequestModel, required this.billDetails, required this.userName}) : super(key: key);
 
+
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
@@ -65,6 +66,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Column(
           children: [
             TopBar(userName: widget.userName, eventName: widget.events.getEventName(), eventAddress: widget.events.getEventAddress(), showCenterWidget: false, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
+
             Expanded(child: bodyWidget()),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
@@ -77,6 +79,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
+
   onDrawerTap() {
     Scaffold.of(context).openDrawer();
   }
@@ -94,9 +97,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget leftSideWidget() => Expanded(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        const SizedBox(
+          height: 14.0,
+        ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 14.0),
-          child:  leftSideTopComponent(totalAmount),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
+          child: leftSideTopComponent(totalAmount),
         ),
         // leftSideTopComponent(totalAmount),
         Padding(
@@ -114,20 +120,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: SizedBox(
           height: 80.0,
           child: Row(
-               //crossAxisAlignment: CrossAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                   InkWell(
-                     onTap: (){
-                       Navigator.of(context).pop();
-                     },
-                     child:  CommonWidgets().image(
-                         image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
-                   ),
-                    const SizedBox(width: 20.0,),
+
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: CommonWidgets().image(
+                          image: AssetsConstants.backArrow,
+                          width: 25.0,
+                          height: 25.0),
+                    ),
+                    const SizedBox(
+                      width: 22.0,
+                    ),
                     Column(
                       children: [
                         CommonWidgets().textWidget(
@@ -177,8 +188,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   '\$',
                                   StyleConstants.customTextStyle(
                                       fontSize: 22.0,
-                                      color:
-                                          getMaterialColor(AppColors.textColor1),
+                                      color: getMaterialColor(
+                                          AppColors.textColor1),
                                       fontFamily:
                                           FontConstants.montserratMedium)),
                               const SizedBox(
@@ -188,8 +199,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   decoration: BoxDecoration(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(8.0)),
-                                      color:
-                                          getMaterialColor(AppColors.whiteColor),
+                                      color: getMaterialColor(
+                                          AppColors.whiteColor),
                                       border: Border.all(
                                           color: getMaterialColor(
                                               AppColors.primaryColor2))),
@@ -228,7 +239,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   ),
                 ),
                 // Return Amount
-                const SizedBox(width: 15.0,),
+                const SizedBox(
+                  width: 15.0,
+                ),
                 Visibility(
                   visible: isPaymentDone == false && paymentModeType == 0
                       ? true
@@ -251,16 +264,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                   '\$',
                                   StyleConstants.customTextStyle(
                                       fontSize: 22.0,
-                                      color:
-                                          getMaterialColor(AppColors.textColor1),
+                                      color: getMaterialColor(
+                                          AppColors.textColor1),
                                       fontFamily:
                                           FontConstants.montserratMedium)),
                               CommonWidgets().textWidget(
                                   '$returnAmount',
                                   StyleConstants.customTextStyle(
                                       fontSize: 22.0,
-                                      color:
-                                          getMaterialColor(AppColors.textColor1),
+                                      color: getMaterialColor(
+                                          AppColors.textColor1),
                                       fontFamily:
                                           FontConstants.montserratMedium)),
                             ],
@@ -299,15 +312,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget leftBodyComponent() => SingleChildScrollView(
         child: Column(children: [
-          paymentModeWidget(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Divider(
-              color:
-                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-              thickness: 1,
-            ),
-          ),
+          Visibility(
+            visible: !isPaymentDone,
+              child: Column(
+                children: [
+                  paymentModeWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Divider(
+                      color:
+                      getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+                      thickness: 1,
+                    ),
+                  ),
+                ],
+              )),
           SingleChildScrollView(child: isPaymentDone ? paymentSuccess('35891456') : const Text('')),
         ]),
       );
@@ -345,8 +364,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
-                child: CommonWidgets()
-                    .image(image: icon, width:3.25*SizeConfig.imageSizeMultiplier , height: 3.25*SizeConfig.imageSizeMultiplier),
+                child: CommonWidgets().image(
+                    image: icon,
+                    width: 3.25 * SizeConfig.imageSizeMultiplier,
+                    height: 3.25 * SizeConfig.imageSizeMultiplier),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -362,9 +383,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget paymentSuccess(String transactionId) => Column(
         children: [
-          const SizedBox(height: 30.0),
-          CommonWidgets()
-              .image(image: AssetsConstants.success, width: 9.3 * SizeConfig.imageSizeMultiplier, height: 9.3 * SizeConfig.imageSizeMultiplier),
+
+          const SizedBox(height: 68.0),
+          CommonWidgets().image(
+              image: AssetsConstants.success,
+              width: 9.3 * SizeConfig.imageSizeMultiplier,
+              height: 9.3 * SizeConfig.imageSizeMultiplier),
           const SizedBox(height: 21.0),
           CommonWidgets().textWidget(
               StringConstants.paymentSuccessful,
@@ -468,6 +492,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           ),
           const SizedBox(height: 19.0),
           receiptMode == 1 ? emailReceiptWidget() : textMessageReceiptWidget(),
+          const SizedBox(height: 20.0),
         ],
       );
 
@@ -610,8 +635,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   // Right side panel design
 
   Widget rightSideWidget() => Padding(
-    padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
-    child: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
+        child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.307,
             height: MediaQuery.of(context).size.height,
@@ -635,7 +660,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     customerNameWidget(customerName: getCustomerName()),
                     const SizedBox(height: 7.0),
                     orderDetailsWidget(
-                        orderId: 'F001587', orderDate: '03/09/2021 at 06:45 PM'),
+                        orderId: 'F001587',
+                        orderDate: '03/09/2021 at 06:45 PM'),
                     const SizedBox(height: 8.0),
                     customerDetailsComponent(
                         street: '34 View City: Dublin, NH Zip: 43766',
@@ -657,7 +683,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
             ),
           ),
         ),
-  );
+      );
 
   // customer Name
   Widget customerNameWidget({required String customerName}) =>

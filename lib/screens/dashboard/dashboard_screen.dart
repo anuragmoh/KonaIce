@@ -25,6 +25,7 @@ import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -90,7 +91,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
       _syncPresenter.syncData();
     }
   }
-
   @override
   void initState() {
     super.initState();
