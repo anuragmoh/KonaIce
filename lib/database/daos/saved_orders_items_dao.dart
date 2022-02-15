@@ -24,7 +24,7 @@ class SavedOrdersItemsDAO {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName where order_id=$orderId");
+      await db.rawQuery("SELECT * from $tableName where order_id= ?", [orderId]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => SavedOrdersItem.fromMap(result[index]));
       } else {
