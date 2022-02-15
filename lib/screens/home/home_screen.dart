@@ -20,19 +20,19 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseContractor {
-
-  String currentDate = Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
+class _HomeScreenState extends State<HomeScreen>
+    implements ClockInOutResponseContractor {
+  String currentDate =
+      Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
   late DateTime startDateTime;
-   Timer? clockInTimer;
+  Timer? clockInTimer;
   bool isClockIn = false;
   bool isApiProcess = false;
 
@@ -44,16 +44,17 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   _HomeScreenState() {
     clockInOutPresenter = ClockInOutPresenter(this);
   }
-  getEventData()async{
+
+  getEventData() async {
     var result = await EventsDAO().getValues();
     if (result != null) {
-     setState(() {
-       eventList.addAll(result);
-     });
-    }else{
-     setState(() {
-       eventList.clear();
-     });
+      setState(() {
+        eventList.addAll(result);
+      });
+    } else {
+      setState(() {
+        eventList.clear();
+      });
     }
   }
 
@@ -89,9 +90,7 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-          color: getMaterialColor(AppColors.textColor3),
-          child: body()
-      ),
+          color: getMaterialColor(AppColors.textColor3), child: body()),
     );
   }
 
@@ -104,108 +103,152 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              createEventButton(StringConstants.createAdhocEvent,
+              createEventButton(
+                  StringConstants.createAdhocEvent,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
                       color: getMaterialColor(AppColors.textColor1),
                       fontFamily: FontConstants.montserratBold)),
               CommonWidgets().textWidget(
-                  currentDate, StyleConstants.customTextStyle(
-                  fontSize: 16.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratBold)),
+                  currentDate,
+                  StyleConstants.customTextStyle(
+                      fontSize: 16.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratBold)),
               clockInOutButton(
-                  isClockIn ? StringConstants.clockOut : StringConstants
-                      .clockIn,
-                  StyleConstants.customTextStyle(fontSize: 12.0,
+                  isClockIn
+                      ? StringConstants.clockOut
+                      : StringConstants.clockIn,
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
                       color: getMaterialColor(AppColors.whiteColor),
                       fontFamily: isClockIn
                           ? FontConstants.montserratBold
                           : FontConstants.montserratMedium),
-                  StyleConstants.customTextStyle(fontSize: 12.0,
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
                       color: getMaterialColor(AppColors.whiteColor),
                       fontFamily: FontConstants.montserratMedium))
             ],
           ),
-          Expanded(child:
-          FractionallySizedBox(
-            widthFactor: 0.68,
-              alignment: Alignment.topLeft,
-              child: listViewContainer())
-          )
+          Expanded(
+              child: FractionallySizedBox(
+                  widthFactor: 0.68,
+                  alignment: Alignment.topLeft,
+                  child: listViewContainer()))
         ],
       ),
     );
   }
 
   Widget listViewContainer() {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: eventList.isNotEmpty ? ListView.builder(
-            itemCount: eventList.length,
-              itemBuilder: (BuildContext context, int index) {
-              var eventDetails = eventList[index];
-            return  Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  onTapEventItem(eventDetails);
-                },
-                child: Card(
-                  elevation: 0.0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 18.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: CommonWidgets().textWidget(eventDetails.name,
-                              StyleConstants.customTextStyle(fontSize:
-                              16.0, color: getMaterialColor(AppColors.textColor1),
-                                  fontFamily: FontConstants.montserratBold)
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5.0),
-                          child: Row(
-                            children: [
-                              CommonWidgets().image(image: AssetsConstants.locationPinIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: CommonWidgets().textWidget(eventDetails.addressLine1,
-                                    StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium)
+    return RefreshIndicator(
+      onRefresh: () async {
+
+        print('onRefresh');
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8.0),
+        child: eventList.isNotEmpty
+            ? ListView.builder(
+                itemCount: eventList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var eventDetails = eventList[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        onTapEventItem(eventDetails);
+                      },
+                      child: Card(
+                          elevation: 0.0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0)),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                16.0, 12.0, 16.0, 18.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  child: CommonWidgets().textWidget(
+                                      eventDetails.name,
+                                      StyleConstants.customTextStyle(
+                                          fontSize: 16.0,
+                                          color: getMaterialColor(
+                                              AppColors.textColor1),
+                                          fontFamily:
+                                              FontConstants.montserratBold)),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            CommonWidgets().image(image: AssetsConstants.dateIcon, width: 2*SizeConfig.imageSizeMultiplier, height: 2.47*SizeConfig.imageSizeMultiplier),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: CommonWidgets().textWidget("${Date.getDateFromTimeStamp(timestamp:eventDetails.startDateTime)}",
-                                  StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
-                              ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 5.0),
+                                  child: Row(
+                                    children: [
+                                      CommonWidgets().image(
+                                          image:
+                                              AssetsConstants.locationPinIcon,
+                                          width: 2 *
+                                              SizeConfig.imageSizeMultiplier,
+                                          height: 2.47 *
+                                              SizeConfig.imageSizeMultiplier),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: CommonWidgets().textWidget(
+                                            eventDetails.addressLine1,
+                                            StyleConstants.customTextStyle(
+                                                fontSize: 12.0,
+                                                color: getMaterialColor(
+                                                    AppColors.textColor4),
+                                                fontFamily: FontConstants
+                                                    .montserratMedium)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    CommonWidgets().image(
+                                        image: AssetsConstants.dateIcon,
+                                        width:
+                                            2 * SizeConfig.imageSizeMultiplier,
+                                        height: 2.47 *
+                                            SizeConfig.imageSizeMultiplier),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: CommonWidgets().textWidget(
+                                        "${Date.getDateFromTimeStamp(timestamp: eventDetails.startDateTime)}",
+                                        StyleConstants.customTextStyle(
+                                            fontSize: 12.0,
+                                            color: getMaterialColor(
+                                                AppColors.textColor4),
+                                            fontFamily:
+                                                FontConstants.montserratMedium),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 40),
+                                      child: CommonWidgets().textWidget(
+                                        "${eventDetails.startDateTime}",
+                                        StyleConstants.customTextStyle(
+                                            fontSize: 12.0,
+                                            color: getMaterialColor(
+                                                AppColors.textColor4),
+                                            fontFamily:
+                                                FontConstants.montserratMedium),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 40),
-                              child: CommonWidgets().textWidget("${eventDetails.startDateTime}",
-                                StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor4), fontFamily: FontConstants.montserratMedium),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                          )),
                     ),
-                  )
-                ),
-              ),
-            );
-          }
-          ) : const Text(''),
+                  );
+                })
+            : const Text(''),
+      ),
     );
   }
 
@@ -215,30 +258,36 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
       child: Container(
         decoration: BoxDecoration(
             color: getMaterialColor(AppColors.primaryColor2),
-            borderRadius: BorderRadius.circular(30.0)
-        ),
+            borderRadius: BorderRadius.circular(30.0)),
         child: Padding(
-          padding:  EdgeInsets.symmetric(vertical: 1.17*SizeConfig.heightSizeMultiplier, horizontal: 15.0),
+          padding: EdgeInsets.symmetric(
+              vertical: 1.17 * SizeConfig.heightSizeMultiplier,
+              horizontal: 15.0),
           child: CommonWidgets().textWidget(buttonText, textStyle),
         ),
       ),
     );
   }
 
-  Widget clockInOutButton(String buttonText, TextStyle textStyle, TextStyle timeTextStyle) {
+  Widget clockInOutButton(
+      String buttonText, TextStyle textStyle, TextStyle timeTextStyle) {
     return GestureDetector(
       onTap: onTapClockInOutButton,
       child: Container(
-        height: 4.19*SizeConfig.heightSizeMultiplier,
+        height: 4.19 * SizeConfig.heightSizeMultiplier,
         decoration: BoxDecoration(
-          color: getMaterialColor(isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2),
+          color: getMaterialColor(
+              isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2),
           borderRadius: BorderRadius.circular(21.5),
         ),
         child: Padding(
           padding: const EdgeInsets.only(left: 20.0, right: 40.0),
           child: Row(
             children: [
-              CommonWidgets().image(image: AssetsConstants.clockInOutIcon, width: 3.38*SizeConfig.imageSizeMultiplier, height: 3.38*SizeConfig.imageSizeMultiplier),
+              CommonWidgets().image(
+                  image: AssetsConstants.clockInOutIcon,
+                  width: 3.38 * SizeConfig.imageSizeMultiplier,
+                  height: 3.38 * SizeConfig.imageSizeMultiplier),
               Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Column(
@@ -248,7 +297,8 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
                     CommonWidgets().textWidget(buttonText, textStyle),
                     Visibility(
                         visible: isClockIn,
-                        child: CommonWidgets().textWidget(clockInTime, timeTextStyle))
+                        child: CommonWidgets()
+                            .textWidget(clockInTime, timeTextStyle))
                   ],
                 ),
               )
@@ -260,12 +310,9 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   }
 
   //Action Events
-  onTapCreateEventButton() {
-
-  }
+  onTapCreateEventButton() {}
 
   onTapClockInOutButton() {
-
     callClockInOutAPI();
   }
 
@@ -273,10 +320,11 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
     // setState(() {
     //   tempEventHomeNavigation = true;
     // });
-    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> EventMenuScreen(events: events)));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => EventMenuScreen(events: events)));
   }
 
-    startTimer() {
+  startTimer() {
     clockInTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         clockInTime = Date.getDateInHrMinSec(date: startDateTime);
@@ -284,54 +332,64 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
     });
   }
 
-    stopTimer() {
+  stopTimer() {
     if (clockInTimer != null) {
-    clockInTimer!.cancel();
-    clockInTime = StringConstants.defaultClockInTime;
+      clockInTimer!.cancel();
+      clockInTime = StringConstants.defaultClockInTime;
     }
-    }
+  }
 
-    //API Call
- callClockInOutAPI() async {
-   setState(() {
-     isApiProcess = true;
-   });
-   clockInOutRequestModel.dutyStatus = !isClockIn;
-   String userID =  await FunctionalUtils.getUserID();
-   clockInOutPresenter.clockInOutUpdate(clockInOutRequestModel, userID);
- }
+  //API Call
+  callClockInOutAPI() async {
+    setState(() {
+      isApiProcess = true;
+    });
+    clockInOutRequestModel.dutyStatus = !isClockIn;
+    String userID = await FunctionalUtils.getUserID();
+    clockInOutPresenter.clockInOutUpdate(clockInOutRequestModel, userID);
+  }
 
- callClockInOutDetailsAPI() async {
-   setState(() {
-     isApiProcess = true;
-   });
+  callClockInOutDetailsAPI() async {
+    setState(() {
+      isApiProcess = true;
+    });
 
-   String startTimestamp = Date.getStartOfDateTimeStamp(date: DateTime.now());
-   String endTimestamp = Date.getEndOfDateTimeStamp(date: DateTime.now());
-   String userID =  await FunctionalUtils.getUserID();
-   print("StartTimeStamp---->$startTimestamp ----> End Time ---> $endTimestamp");
-   clockInOutPresenter.clockInOutDetails(userID: userID, startTimestamp: startTimestamp, endTimestamp: endTimestamp);
- }
-
+    String startTimestamp = Date.getStartOfDateTimeStamp(date: DateTime.now());
+    String endTimestamp = Date.getEndOfDateTimeStamp(date: DateTime.now());
+    String userID = await FunctionalUtils.getUserID();
+    print(
+        "StartTimeStamp---->$startTimestamp ----> End Time ---> $endTimestamp");
+    clockInOutPresenter.clockInOutDetails(
+        userID: userID,
+        startTimestamp: startTimestamp,
+        endTimestamp: endTimestamp);
+  }
 
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+          context: context);
     });
   }
 
   @override
   void showSuccess(response) {
-
     List<ClockInOutDetailsResponseModel> clockInOutList = response;
-    ClockInOutDetailsResponseModel? clockInOutDetailsModel = clockInOutList.isNotEmpty ? clockInOutList.firstWhere((element) => element.clockOutAt == 0, orElse: () => ClockInOutDetailsResponseModel()) : null;
-    if (clockInOutDetailsModel != null && clockInOutDetailsModel.clockInAt != null) {
+    ClockInOutDetailsResponseModel? clockInOutDetailsModel =
+        clockInOutList.isNotEmpty
+            ? clockInOutList.firstWhere((element) => element.clockOutAt == 0,
+                orElse: () => ClockInOutDetailsResponseModel())
+            : null;
+    if (clockInOutDetailsModel != null &&
+        clockInOutDetailsModel.clockInAt != null) {
       setState(() {
         isApiProcess = false;
         isClockIn = true;
-        var timeStamp = clockInOutDetailsModel.clockInAt ?? DateTime.now().millisecondsSinceEpoch;
+        var timeStamp = clockInOutDetailsModel.clockInAt ??
+            DateTime.now().millisecondsSinceEpoch;
         startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
         FunctionalUtils.clockInTimestamp = timeStamp;
       });
@@ -349,7 +407,9 @@ class _HomeScreenState extends State<HomeScreen> implements ClockInOutResponseCo
   void showErrorForUpdateClockIN(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+          context: context);
     });
   }
 
