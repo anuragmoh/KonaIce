@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
+import 'package:kona_ice_pos/database/daos/event_item_dao.dart';
+import 'package:kona_ice_pos/database/daos/events_dao.dart';
+import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/login/login_model.dart';
@@ -148,7 +156,14 @@ class FunctionalUtils {
   }
 
   static clearAllDBData() {
-
+     EventItemDAO().clearEventItemData;
+     EventsDAO().clearEventsData();
+     FoodExtraItemsDAO().clearFoodExtraItemsData();
+     ItemDAO().clearItemData();
+     ItemCategoriesDAO().clearItemData();
+     SavedOrdersDAO().clearEventsData();
+     SavedOrdersExtraItemsDAO().clearEventsData();
+     SavedOrdersItemsDAO().clearEventsData();
   }
 
 }

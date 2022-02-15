@@ -351,7 +351,7 @@ class _LoginScreenState extends State<LoginScreen>
       isApiProcess = false;
     });
     LoginResponseModel loginResponseModel = response;
-
+    checkUserDataAvailableINDB(loginResponseModel);
   }
 
   //DB Operations
@@ -360,7 +360,7 @@ class _LoginScreenState extends State<LoginScreen>
    if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
          print("old user");
    } else {
-
+     await FunctionalUtils.clearAllDBData();
    }
    storeInformation(loginResponseModel);
   }
