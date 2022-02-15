@@ -53,6 +53,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   late OrderPresenter orderPresenter;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
 
+  _EventMenuScreenState() {
+    orderPresenter = OrderPresenter(this);
+  }
+
   bool isApiProcess = false;
   List<ItemCategories> itemCategoriesList = [];
   List<FoodExtraItems> foodExtraItemList = [];
@@ -139,9 +143,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     if (result != null) {
       setState(() {
         itemList.addAll(result);
-        if (itemList.isNotEmpty) {
-         // dbItemList = itemList.genrate;
-        }
       });
     } else {
       setState(() {
@@ -212,7 +213,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             onDrawerTap: onDrawerTap,),
           Expanded(
             child: isProduct ? body() : AllOrdersScreen(
-                onBackTap: onTapCallBack,eventId:widget.events.eventCode),
+                onBackTap: onTapCallBack,eventId:widget.events.id),
           ),
           BottomBarWidget(onTapCallBack: onTapBottomListItem,
             accountImageVisibility: false,
@@ -965,9 +966,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     setState(() {
       selectedMenuItems.clear();
       itemList.clear();
-    //  itemList = [...dbItemList];
       customerName = StringConstants.addCustomer;
-      itemList = getAllItems(widget.events.id);
+     getAllItems(widget.events.id);
     });
   }
 
@@ -995,7 +995,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapSaveButton() {
-   clearCart();
+    callPlaceOrderAPI();
   }
 
 
@@ -1173,7 +1173,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   //API Call
 
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
-    orderPresenter.placeOrder(getOrderRequestModel());
+    PlaceOrderRequestModel requestModel = getOrderRequestModel();
+    orderPresenter.placeOrder(requestModel);
+    setState(() {
+      isApiProcess = true;
+    });
   }
 
   @override
@@ -1189,7 +1193,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
     // TODO: implement showErrorForPay
-    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    setState(() {
+      isApiProcess = false;
+      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+
+    });
   }
 
   @override
@@ -1198,6 +1206,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     placeOrderResponseModel = response;
     if (placeOrderResponseModel.id != null) {
       setState(() {
+        isApiProcess = false;
         orderID = placeOrderResponseModel.id!;
         saveOrderIntoLocalDB(orderID);
       });
@@ -1226,11 +1235,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         }
       }
     }
-    setState(() {
-      selectedMenuItems.clear();
-      itemList.clear();
-      itemList = getAllItems(widget.events.id);
-    });
+    clearCart();
   }
 
 }

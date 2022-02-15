@@ -841,6 +841,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
 
   // Get data from local db function start from here
   getAllSavedOrders(String eventId)async{
+    print('EventID------>$eventId');
     var result = await SavedOrdersDAO().getOrdersList(eventId);
     if(result !=null){
       setState(() {
