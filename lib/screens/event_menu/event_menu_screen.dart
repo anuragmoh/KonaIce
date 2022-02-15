@@ -613,7 +613,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
             ),
           ),
           CommonWidgets().textWidget(
-              '${StringConstants.symbolDollar}${menuObjet.getTotalPrice()}',
+              '${StringConstants.symbolDollar}${menuObjet.getTotalPrice().toStringAsFixed(2)}',
               StyleConstants.customTextStyle(
                   fontSize: 16.0,
                   color: getMaterialColor(AppColors.textColor1),
@@ -685,7 +685,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
               color: getMaterialColor(AppColors.textColor1),
               fontFamily: FontConstants.montserratMedium)),
           CommonWidgets().textWidget(
-              StringConstants.symbolDollar + price.toString(),
+              StringConstants.symbolDollar + price.toStringAsFixed(2),
               StyleConstants.customTextStyle(fontSize: 12,
                   color: getMaterialColor(AppColors.textColor2),
                   fontFamily: FontConstants.montserratRegular)),
@@ -1060,7 +1060,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     // Scaffold.of(context).openDrawer();
   }
 
-  //Other UI independent methods
+  //data required for next screen
   PlaceOrderRequestModel getOrderRequestModel() {
     PlaceOrderRequestModel orderRequestModel = PlaceOrderRequestModel();
      orderRequestModel.eventId = widget.events.eventCode;
@@ -1145,7 +1145,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   //Navigation
   showPaymentScreen() {
     PlaceOrderRequestModel requestModel = getOrderRequestModel();
+    Map billDetails = {'tip': tip, "discount": discount, 'totalAmount': totalAmount, 'foodCost': totalAmountOfSelectedItems};
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems,)));
+        builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,)));
   }
 }

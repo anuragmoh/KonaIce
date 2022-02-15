@@ -56,6 +56,7 @@ class BaseClient {
   Future<dynamic> put(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
+    print(uri);
     await addSessionKeyToHeader();
     try {
       var response = await http.put(uri, headers: header, body: payload)

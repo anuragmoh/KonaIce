@@ -21,13 +21,11 @@ class PaymentScreen extends StatefulWidget {
   final Events events;
   final List<Item> selectedMenuItems;
   final PlaceOrderRequestModel placeOrderRequestModel;
+  final Map billDetails;
+  final String userName;
 
-  const PaymentScreen(
-      {Key? key,
-      required this.events,
-      required this.selectedMenuItems,
-      required this.placeOrderRequestModel})
-      : super(key: key);
+  const PaymentScreen({Key? key, required this.events, required this.selectedMenuItems, required this.placeOrderRequestModel, required this.billDetails, required this.userName}) : super(key: key);
+
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -36,7 +34,11 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   int paymentModeType = -1;
   double returnAmount = 0.0;
-  double totalAmount = 35.0;
+  double totalAmount = 0.0;
+  double tip = 0.0;
+  double salesTax = 0.0;
+  double discount = 0.0;
+  double foodCost = 0.0;
   bool isPaymentDone = false;
   int receiptMode = 1;
 
@@ -45,13 +47,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
   TextEditingController phoneNumberController = TextEditingController();
   int currentIndex = 0;
 
-  onTapBottomListItem(int index) {
-    setState(() {
-      currentIndex = index;
-    });
+  @override
+  void initState() {
+    super.initState();
+    totalAmount = widget.billDetails['totalAmount'];
+    tip = widget.billDetails['tip'];
+    discount = widget.billDetails['discount'];
+    foodCost = widget.billDetails['foodCost'];
+    salesTax = widget.events.salesTax.toDouble();
   }
 
-  onTapCallBack(bool callBack) {}
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +65,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: Column(
           children: [
-            TopBar(
-              userName: 'Justin',
-              eventName: widget.events.name,
-              eventAddress: widget.events.addressLine1,
-              showCenterWidget: false,
-              onTapCallBack: onTapCallBack,
-              onDrawerTap: onDrawerTap,
-            ),
+            TopBar(userName: widget.userName, eventName: widget.events.getEventName(), eventAddress: widget.events.getEventAddress(), showCenterWidget: false, onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,),
+
             Expanded(child: bodyWidget()),
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
@@ -127,6 +126,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     InkWell(
                       onTap: () {
                         Navigator.of(context).pop();
@@ -312,16 +312,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget leftBodyComponent() => SingleChildScrollView(
         child: Column(children: [
-          paymentModeWidget(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Divider(
-              color:
-                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-              thickness: 1,
-            ),
-          ),
-          SingleChildScrollView(child: paymentSuccess('35891456')),
+          Visibility(
+            visible: !isPaymentDone,
+              child: Column(
+                children: [
+                  paymentModeWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Divider(
+                      color:
+                      getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+                      thickness: 1,
+                    ),
+                  ),
+                ],
+              )),
+          SingleChildScrollView(child: isPaymentDone ? paymentSuccess('35891456') : const Text('')),
         ]),
       );
 
@@ -377,6 +383,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Widget paymentSuccess(String transactionId) => Column(
         children: [
+
           const SizedBox(height: 68.0),
           CommonWidgets().image(
               image: AssetsConstants.success,
@@ -650,7 +657,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 fontSize: 22.0,
                                 color: getMaterialColor(AppColors.textColor1),
                                 fontFamily: FontConstants.montserratBold))),
-                    customerNameWidget(customerName: 'Nicholas Gibson'),
+                    customerNameWidget(customerName: getCustomerName()),
                     const SizedBox(height: 7.0),
                     orderDetailsWidget(
                         orderId: 'F001587',
@@ -902,6 +909,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 fontFamily: FontConstants.montserratBold)),
       ]);
 
+  //Action Event
+
   onTapNewOrder() {}
 
   onTapProceed() {
@@ -913,4 +922,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
   onTapBackButton() {
     Navigator.of(context).pop();
   }
+
+  onTapBottomListItem(int index) {
+    setState(() {
+      currentIndex = index;
+    });
+  }
+
+  onTapCallBack(bool callBack){
+
+  }
+
+//Other functions
+
+String getCustomerName() {
+    return widget.placeOrderRequestModel.getCustomerName();
+}
+
 }
