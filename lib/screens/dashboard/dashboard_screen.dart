@@ -31,6 +31,8 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -45,6 +47,8 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   _DashboardState() {
     _syncPresenter = SyncPresenter(this);
   }
+  RefreshController _refreshController =
+  RefreshController(initialRefresh: false);
 
   List<Events> eventList = [];
 
@@ -91,6 +95,27 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
       _syncPresenter.syncData();
     }
   }
+
+  void _onRefresh() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use refreshFailed()
+    _refreshController.refreshCompleted();
+  }
+
+  void _onLoading() async{
+    // monitor network fetch
+    await Future.delayed(Duration(milliseconds: 1000));
+    // if failed,use loadFailed(),if no data return,use LoadNodata()
+/*    items.add((items.length+1).toString());
+    if(mounted)
+      setState(() {
+
+      });*/
+    _refreshController.loadComplete();
+  }
+
+
   @override
   void initState() {
     super.initState();
@@ -424,20 +449,20 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   }
 
   Future<void> updateLastEventSync() async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.events, value: "0"));
+    await SessionDAO().insert(Session(key: DatabaseKeys.events, value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemSync() async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.items, value: "0"));
+    await SessionDAO().insert(Session(key: DatabaseKeys.items, value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastCategoriesSync() async {
     await SessionDAO()
-        .insert(Session(key: DatabaseKeys.categories, value: "0"));
+        .insert(Session(key: DatabaseKeys.categories, value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemExtrasSync() async {
     await SessionDAO()
-        .insert(Session(key: DatabaseKeys.itemExtras, value: "0"));
+        .insert(Session(key: DatabaseKeys.itemExtras, value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 }
