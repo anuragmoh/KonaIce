@@ -23,6 +23,7 @@ import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
+import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
@@ -88,14 +89,33 @@ class _HomeScreenState extends State<HomeScreen>
       await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
         if(value !=null){
           int lastSyncTime = int.parse(value.value);
-          _syncPresenter.syncData(lastSyncTime);
+
+          CheckConnection().connectionState().then((value) {
+            if (value == true) {
+              _syncPresenter.syncData(lastSyncTime);
+            } else {
+              CommonWidgets().showErrorSnackBar(
+                  errorMessage: StringConstants.noInternetConnection,
+                  context: context);
+            }
+          });
         }else{
-          _syncPresenter.syncData(0);
+          CheckConnection().connectionState().then((value) {
+            if (value == true) {
+              _syncPresenter.syncData(0);
+            } else {
+              CommonWidgets().showErrorSnackBar(
+                  errorMessage: StringConstants.noInternetConnection,
+                  context: context);
+            }
+          });
+
         }
       });
 
     }
   }
+
 
   // getLastSyncTime() async {
   //   var eventsLastSync = ;
@@ -193,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget listViewContainer() {
     return RefreshIndicator(
       onRefresh: () async {
-        eventList.clear();
+
         refreshDataOnRequest();
       },
       child: Container(
@@ -416,9 +436,29 @@ class _HomeScreenState extends State<HomeScreen>
     await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
       if(value !=null){
         int lastSyncTime = int.parse(value.value);
-        _syncPresenter.syncData(lastSyncTime);
+        CheckConnection().connectionState().then((value) {
+          if (value == true) {
+            eventList.clear();
+            _syncPresenter.syncData(lastSyncTime);
+          } else {
+            CommonWidgets().showErrorSnackBar(
+                errorMessage: StringConstants.noInternetConnection,
+                context: context);
+          }
+        });
+
+
       }else{
-        _syncPresenter.syncData(0);
+        CheckConnection().connectionState().then((value) {
+          if (value == true) {
+            _syncPresenter.syncData(0);
+          } else {
+            CommonWidgets().showErrorSnackBar(
+                errorMessage: StringConstants.noInternetConnection,
+                context: context);
+          }
+        });
+
       }
     });
 
