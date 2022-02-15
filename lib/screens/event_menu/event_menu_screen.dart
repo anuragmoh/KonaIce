@@ -978,7 +978,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
       selectedMenuItems.clear();
       itemList.clear();
       itemList = getAllItems(widget.events.id);
-      ;
     });
   }
 
