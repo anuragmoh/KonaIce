@@ -140,10 +140,15 @@ class FunctionalUtils {
   static GlobalKey<NavigatorState> navigatorKey =
   GlobalKey<NavigatorState>();
 
-  static clearSessionData() {
+  static clearSessionData() async {
     print("getting 401 in base client");
+    await SessionDAO().delete(DatabaseKeys.sessionKey);
     Navigator.of(navigatorKey.currentContext!).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+
+  static clearAllDBData() {
+
   }
 
 }

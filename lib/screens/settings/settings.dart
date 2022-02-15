@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
@@ -84,8 +85,7 @@ class _SettingScreenState extends State<SettingScreen>
   //DB Operations
 
   deleteUserInformation() async {
-    await SessionDAO()
-        .clearSessionData();
+    await SessionDAO().delete(DatabaseKeys.sessionKey);
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));
   }

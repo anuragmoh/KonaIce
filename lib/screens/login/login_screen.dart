@@ -351,10 +351,19 @@ class _LoginScreenState extends State<LoginScreen>
       isApiProcess = false;
     });
     LoginResponseModel loginResponseModel = response;
-    storeInformation(loginResponseModel);
+
   }
 
   //DB Operations
+  checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
+   var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
+   if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
+         print("old user");
+   } else {
+
+   }
+   storeInformation(loginResponseModel);
+  }
 
   storeInformation(LoginResponseModel loginResponseModel) async {
     await SessionDAO()
