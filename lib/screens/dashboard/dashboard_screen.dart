@@ -43,9 +43,9 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> implements ResponseContractor {
   late SyncPresenter _syncPresenter;
 
-  _DashboardState() {
+/*  _DashboardState() {
     _syncPresenter = SyncPresenter(this);
-  }
+  }*/
 
   List<Events> eventList = [];
 
@@ -89,7 +89,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
       setState(() {
         isApiProcess = true;
       });
-      _syncPresenter.syncData();
+      // _syncPresenter.syncData();
     }
   }
 
@@ -97,8 +97,8 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   @override
   void initState() {
     super.initState();
-    configureData();
-    getSyncData();
+    // configureData();
+    // getSyncData();
   }
 
   @override
