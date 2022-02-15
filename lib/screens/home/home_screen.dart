@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 10.0),
                                   child: CommonWidgets().textWidget(
-                                      eventDetails.name,
+                                      eventDetails.getEventName(),
                                       StyleConstants.customTextStyle(
                                           fontSize: 16.0,
                                           color: getMaterialColor(
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen>
                                         padding:
                                             const EdgeInsets.only(left: 8.0),
                                         child: CommonWidgets().textWidget(
-                                            eventDetails.addressLine1,
+                                            eventDetails.getEventAddress(),
                                             StyleConstants.customTextStyle(
                                                 fontSize: 12.0,
                                                 color: getMaterialColor(
@@ -267,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: CommonWidgets().textWidget(
-                                        "${Date.getDateFromTimeStamp(timestamp: eventDetails.startDateTime)}",
+                                        eventDetails.getEventDate(),
                                         StyleConstants.customTextStyle(
                                             fontSize: 12.0,
                                             color: getMaterialColor(
@@ -279,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 40),
                                       child: CommonWidgets().textWidget(
-                                        "${eventDetails.startDateTime}",
+                                       eventDetails.getEventTime(),
                                         StyleConstants.customTextStyle(
                                             fontSize: 12.0,
                                             color: getMaterialColor(
