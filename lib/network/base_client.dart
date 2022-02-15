@@ -57,6 +57,7 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     print(uri);
+    print("payload--->$payload");
     await addSessionKeyToHeader();
     try {
       var response = await http.put(uri, headers: header, body: payload)

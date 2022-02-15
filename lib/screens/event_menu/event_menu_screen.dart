@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -14,6 +16,7 @@ import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/models/data_models/item_categories.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
@@ -32,6 +35,7 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 import 'order_model/order_request_model.dart';
+import 'order_model/order_response_model.dart';
 
 class EventMenuScreen extends StatefulWidget {
   final Events events;
@@ -41,7 +45,11 @@ class EventMenuScreen extends StatefulWidget {
   _EventMenuScreenState createState() => _EventMenuScreenState();
 }
 
-class _EventMenuScreenState extends State<EventMenuScreen> {
+class _EventMenuScreenState extends State<EventMenuScreen> implements
+    OrderResponseContractor{
+
+  late OrderPresenter orderPresenter;
+  PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
 
   bool isApiProcess = false;
   List<ItemCategories> itemCategoriesList = [];
@@ -57,6 +65,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
 
   int selectedCategoryIndex = -1;
 
+ // List<Item> dbItemList = [];
   List<Item> itemList = [];
   List<Item> selectedMenuItems = [];
   String customerName = StringConstants.addCustomer;
@@ -65,6 +74,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   double salesTax = 0.0;
   double discount = 0.0;
   double totalAmount = 0.0;
+  String orderID = '';
 
   double get totalAmountOfSelectedItems {
     if (selectedMenuItems.isEmpty) {
@@ -127,6 +137,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     if (result != null) {
       setState(() {
         itemList.addAll(result);
+        if (itemList.isNotEmpty) {
+         // dbItemList = itemList.genrate;
+        }
       });
     } else {
       setState(() {
@@ -946,6 +959,16 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     totalAmount = totalAmountOfSelectedItems + tip + salesTax - discount;
   }
 
+  clearCart() {
+    setState(() {
+      selectedMenuItems.clear();
+      itemList.clear();
+    //  itemList = [...dbItemList];
+      customerName = StringConstants.addCustomer;
+      itemList = getAllItems(widget.events.id);
+    });
+  }
+
   //Action Event
   onTapAddCategoryButton() {
   }
@@ -962,11 +985,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   onTapClearButton() {
-    setState(() {
-      selectedMenuItems.clear();
-      itemList.clear();
-      itemList = getAllItems(widget.events.id);
-    });
+    clearCart();
   }
 
   onTapChargeButton() {
@@ -974,20 +993,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   }
 
   onTapSaveButton() {
-    setState(() {
-      selectedMenuItems.clear();
-      itemList.clear();
-      itemList = getAllItems(widget.events.id);
-      ;
-    });
+   clearCart();
   }
 
   onTapNewOrderButton() {
-    setState(() {
-      selectedMenuItems.clear();
-      itemList.clear();
-      itemList = getAllItems(widget.events.id);
-    });
+    clearCart();
   }
 
   onTapIncrementCountButton(index) {
@@ -1064,7 +1074,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
   //data required for next screen
   PlaceOrderRequestModel getOrderRequestModel() {
     PlaceOrderRequestModel orderRequestModel = PlaceOrderRequestModel();
-     orderRequestModel.eventId = widget.events.eventCode;
+     orderRequestModel.eventId = widget.events.id;
      orderRequestModel.cardId = "9db195092bc44d9db117f03a5a541025";
      orderRequestModel.campaignId = "";
 
@@ -1089,6 +1099,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
      } else {
        orderRequestModel.anonymous = true;
      }
+
+     orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
 
      orderRequestModel.allowPromoNotifications = false;
      orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
@@ -1148,6 +1160,44 @@ class _EventMenuScreenState extends State<EventMenuScreen> {
     PlaceOrderRequestModel requestModel = getOrderRequestModel();
     Map billDetails = {'tip': tip, "discount": discount, 'totalAmount': totalAmount, 'foodCost': totalAmountOfSelectedItems};
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,)));
+        builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,))
+    ).then((value) => {
+      if (value != null && value) {
+        clearCart()
+      }
+    });
+  }
+
+  //API Call
+
+  callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+    orderPresenter.placeOrder(getOrderRequestModel());
+  }
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    // TODO: implement showError
+  }
+
+  @override
+  void showSuccess(response) {
+    // TODO: implement showSuccess
+  }
+
+  @override
+  void showErrorForPlaceOrder(GeneralErrorResponse exception) {
+    // TODO: implement showErrorForPay
+    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+  }
+
+  @override
+  void showSuccessForPlaceOrder(response) {
+    // TODO: implement showSuccessForPay
+    placeOrderResponseModel = response;
+    if (placeOrderResponseModel.id != null) {
+      setState(() {
+        orderID = placeOrderResponseModel.id!;
+      });
+    }
   }
 }

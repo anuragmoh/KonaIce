@@ -10,3 +10,8 @@ abstract class ClockInOutResponseContractor extends ResponseContractor{
   void showSuccessForUpdateClockIN(dynamic response);
   void showErrorForUpdateClockIN(GeneralErrorResponse exception);
 }
+
+abstract class OrderResponseContractor extends ResponseContractor {
+  void showSuccessForPlaceOrder(dynamic response);
+  void showErrorForPlaceOrder(GeneralErrorResponse exception);
+}

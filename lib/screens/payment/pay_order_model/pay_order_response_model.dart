@@ -1,12 +1,35 @@
-
 import 'dart:convert';
 
-PlaceOrderResponseModel placeOrderResponseModelFromJson(String str) => PlaceOrderResponseModel.fromJson(json.decode(str));
+PayOrderResponseModel payOrderResponseModelFromJson(String str) => PayOrderResponseModel.fromJson(json.decode(str));
 
-String? placeOrderResponseModelToJson(PlaceOrderResponseModel data) => json.encode(data.toJson());
+String? payOrderResponseModelToJson(PayOrderResponseModel data) => json.encode(data.toJson());
 
-class PlaceOrderResponseModel {
-  PlaceOrderResponseModel({
+class PayOrderResponseModel {
+  PayOrderResponseModel({
+    this.status,
+    this.messageKey,
+  //  this.orderItemsInvoiceDto,
+  });
+
+  String? status;
+  String? messageKey;
+ // OrderItemsInvoiceDto? orderItemsInvoiceDto;
+
+  factory PayOrderResponseModel.fromJson(Map<String?, dynamic> json) => PayOrderResponseModel(
+    status: json["Status"],
+    messageKey: json["messageKey"],
+  //  orderItemsInvoiceDto: OrderItemsInvoiceDto.fromJson(json["orderItemsInvoiceDto"]),
+  );
+
+  Map<String?, dynamic> toJson() => {
+    "Status": status,
+    "messageKey": messageKey,
+   // "orderItemsInvoiceDto": orderItemsInvoiceDto!.toJson(),
+  };
+}
+
+class OrderItemsInvoiceDto {
+  OrderItemsInvoiceDto({
     this.id,
     this.createdAt,
     this.updatedAt,
@@ -114,7 +137,7 @@ class PlaceOrderResponseModel {
   dynamic campaignId;
   String? firstName;
   String? lastName;
-  dynamic email;
+  String? email;
   String? phoneNumCountryCode;
   String? phoneNumber;
   String? addressLine1;
@@ -136,8 +159,8 @@ class PlaceOrderResponseModel {
   bool? orderAmountRefund;
   bool? totalRefund;
   dynamic addressLocation;
-  double? addressLatitude;
-  double? addressLongitude;
+  int? addressLatitude;
+  int? addressLongitude;
   String? paymentTerm;
   int? slotInterval1;
   int? slotInterval2;
@@ -152,13 +175,13 @@ class PlaceOrderResponseModel {
   String? createdByRoleCode;
   dynamic subAccountId;
   dynamic userAddressId;
-  List<OrderItemsDetailList>? orderItemsList;
+  List<OrderItemList>? orderItemsList;
   String? franchisePhoneNumber;
   OrderInvoice? orderInvoice;
   String? franchiseAddressLine2;
-  dynamic stripePublishableKey;
+  String? stripePublishableKey;
   dynamic franchiseState;
-  dynamic connectedStripeAccountId;
+  String? connectedStripeAccountId;
   String? franchiseAddressLine1;
   dynamic clientSecret;
   String? franchiseName;
@@ -180,7 +203,7 @@ class PlaceOrderResponseModel {
   String? eventZipCode;
   String? gratuityFieldLabel;
   String? additionalPaymentFieldLabel;
-  double? minimumOrderAmount;
+  int? minimumOrderAmount;
   bool? displayAdditionalPaymentField;
   dynamic campaign;
   bool? displayGratuityField;
@@ -194,7 +217,7 @@ class PlaceOrderResponseModel {
   bool? smsNotification;
   bool? emailNotification;
 
-  factory PlaceOrderResponseModel.fromJson(Map<String?, dynamic> json) => PlaceOrderResponseModel(
+  factory OrderItemsInvoiceDto.fromJson(Map<String?, dynamic> json) => OrderItemsInvoiceDto(
     id: json["id"],
     createdAt: json["createdAt"],
     updatedAt: json["updatedAt"],
@@ -246,7 +269,7 @@ class PlaceOrderResponseModel {
     createdByRoleCode: json["createdByRoleCode"],
     subAccountId: json["subAccountId"],
     userAddressId: json["userAddressId"],
-    orderItemsList: List<OrderItemsDetailList>.from(json["orderItemsList"].map((x) => OrderItemsDetailList.fromJson(x))),
+    orderItemsList: List<OrderItemList>.from(json["orderItemsList"].map((x) => OrderItemList.fromJson(x))),
     franchisePhoneNumber: json["franchisePhoneNumber"],
     orderInvoice: OrderInvoice.fromJson(json["orderInvoice"]),
     franchiseAddressLine2: json["franchiseAddressLine2"],
@@ -343,7 +366,7 @@ class PlaceOrderResponseModel {
     "userAddressId": userAddressId,
     "orderItemsList": List<dynamic>.from((orderItemsList ?? []).map((x) => x.toJson())),
     "franchisePhoneNumber": franchisePhoneNumber,
-    "orderInvoice": (orderInvoice ?? OrderInvoice()).toJson(),
+    "orderInvoice": orderInvoice!.toJson(),
     "franchiseAddressLine2": franchiseAddressLine2,
     "stripePublishableKey": stripePublishableKey,
     "franchiseState": franchiseState,
@@ -439,44 +462,44 @@ class OrderInvoice {
   String? createdBy;
   String? updatedBy;
   bool? deleted;
-  double? taxPercent;
-  double? corporateDonation;
+  int? taxPercent;
+  int? corporateDonation;
   String? orderId;
   dynamic donationAdminSharePercent;
   dynamic campaignId;
   String? eventId;
-  double? donationAdminShareAmount;
+  int? donationAdminShareAmount;
   double? franchiseShare;
-  double? adminSharePercent;
+  int? adminSharePercent;
   double? grandTotal;
   double? franchiseShareBeforeFinalCal;
-  double? donation;
+  int? donation;
   double? total;
-  double? totalCampaignShare;
-  double? taxAmount;
-  double? convenienceFee;
+  int? totalCampaignShare;
+  int? taxAmount;
+  int? convenienceFee;
   double? adminShare;
-  double? deliveryFee;
+  int? deliveryFee;
   double? subTotal;
   double? foodTotal;
-  double? givebackAmount;
-  double? gratuity;
+  int? givebackAmount;
+  int? gratuity;
   String? billingZipCode;
-  double? givebackPercent;
+  int? givebackPercent;
   String? billingState;
-  double? campaignShare;
-  double? franchiseDonation;
+  int? campaignShare;
+  int? franchiseDonation;
   double? adminShareBeforeFinalCal;
   String? billingAddressLine2;
   bool? ccChargesIncluded;
-  double? ccChargesAmount;
+  int? ccChargesAmount;
   String? billingAddressLine1;
   String? billingCity;
-  double? corporateDonationBeforeCcCharges;
+  int? corporateDonationBeforeCcCharges;
   String? billingCountry;
-  double? donationFranchiseSharePercent;
+  int? donationFranchiseSharePercent;
   double? creditCardFees;
-  double? creditCardFeesPercent;
+  int? creditCardFeesPercent;
 
   factory OrderInvoice.fromJson(Map<String?, dynamic> json) => OrderInvoice(
     id: json["id"],
@@ -497,14 +520,14 @@ class OrderInvoice {
     grandTotal: json["grandTotal"].toDouble(),
     franchiseShareBeforeFinalCal: json["franchiseShareBeforeFinalCal"].toDouble(),
     donation: json["donation"],
-    total: json["total"],
+    total: json["total"].toDouble(),
     totalCampaignShare: json["totalCampaignShare"],
     taxAmount: json["taxAmount"],
     convenienceFee: json["convenienceFee"],
     adminShare: json["adminShare"].toDouble(),
     deliveryFee: json["deliveryFee"],
-    subTotal: json["subTotal"],
-    foodTotal: json["foodTotal"],
+    subTotal: json["subTotal"].toDouble(),
+    foodTotal: json["foodTotal"].toDouble(),
     givebackAmount: json["givebackAmount"],
     gratuity: json["gratuity"],
     billingZipCode: json["billingZipCode"],
@@ -573,8 +596,8 @@ class OrderInvoice {
   };
 }
 
-class OrderItemsDetailList {
-  OrderItemsDetailList({
+class OrderItemList {
+  OrderItemList({
     this.id,
     this.createdAt,
     this.updatedAt,
@@ -612,7 +635,7 @@ class OrderItemsDetailList {
   String? values;
   String? recipientName;
 
-  factory OrderItemsDetailList.fromJson(Map<String?, dynamic> json) => OrderItemsDetailList(
+  factory OrderItemList.fromJson(Map<String?, dynamic> json) => OrderItemList(
     id: json["id"],
     createdAt: json["createdAt"],
     updatedAt: json["updatedAt"],
@@ -624,9 +647,9 @@ class OrderItemsDetailList {
     itemId: json["itemId"],
     itemCategoryId: json["itemCategoryId"],
     name: json["name"],
-    totalAmount: json["totalAmount"],
+    totalAmount: json["totalAmount"].toDouble(),
     foodExtraItemMappingList: List<dynamic>.from(json["foodExtraItemMappingList"].map((x) => x)),
-    unitPrice: json["unitPrice"],
+    unitPrice: json["unitPrice"].toDouble(),
     key: json["key"],
     values: json["values"],
     recipientName: json["recipientName"],

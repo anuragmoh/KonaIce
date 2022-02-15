@@ -59,7 +59,7 @@ class PlaceOrderRequestModel {
   int? gratuity;
   int? ccChargesIncluded;
   int? corporateDonation;
-  int? corporateDonationBeforeCcCharges;
+  num? corporateDonationBeforeCcCharges;
   int? ccChargesAmount;
  double? addressLatitude;
  double? addressLongitude;
@@ -135,9 +135,17 @@ class PlaceOrderRequestModel {
     return (anonymous ?? true) ? StringConstants.guestCustomer : '$firstName $lastName'.toTitleCase();
   }
 
-  // String getOrderDate() {
-  //   Date.getDateFromTimeStamp(timestamp: orderDate ?? DateTime.now().millisecondsSinceEpoch);
-  // }
+  String getOrderDate() {
+   DateTime date = Date.getDateFromTimeStamp(timestamp: orderDate ?? DateTime.now().millisecondsSinceEpoch);
+   String dateStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
+   String timeStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.hhmmaa);
+
+   return '$dateStr at $timeStr';
+  }
+
+  String getPhoneNumber() {
+    return '$phoneNumCountryCode $phoneNumber';
+  }
 }
 
 class OrderItemsList {
@@ -190,6 +198,15 @@ class OrderItemsList {
     "recipientName": recipientName,
     "foodExtraItemMappingList": List<dynamic>.from((foodExtraItemMappingList ?? []).map((x) => x.toJson())),
   };
+
+  double getTotalPrice() {
+    double totalExtraItemPrice = 0;
+    if ((foodExtraItemMappingList ?? []).isNotEmpty && (foodExtraItemMappingList![0].orderFoodExtraItemDetailDto ?? []).isNotEmpty) {
+      for (var element in foodExtraItemMappingList![0].orderFoodExtraItemDetailDto!) {
+        totalExtraItemPrice += element.totalAmount ?? 0;
+      }}
+    return (totalAmount ?? 0) + totalExtraItemPrice;
+  }
 }
 
 class FoodExtraItemMappingList {

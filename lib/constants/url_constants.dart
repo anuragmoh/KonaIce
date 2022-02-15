@@ -13,6 +13,9 @@ class UrlConstants {
 
   static const syncData = '/api/v2/secure/event-menu-sync';
 
+  static const placeOrder = '/api/v2/secure/orders-stripe/staff-user';
+  static const payOrder = '/api/v2/secure/orders-payment/staff-user';
+
 
   static getDutyStatus({required String userID}) {
      return dutyStatus.replaceAll('{userID}', userID);
