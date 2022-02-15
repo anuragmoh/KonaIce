@@ -47,7 +47,7 @@ class SavedOrdersExtraItems {
         extraFoodItemCategoryId: map["extra_food_item_category_id"],
         quantity: map["quantity"],
         unitPrice: map["unit_price"],
-        totalPrice: map["totalPrice"],
+        totalPrice: map["total_price"],
         deleted: map["deleted"] == 1);
   }
 

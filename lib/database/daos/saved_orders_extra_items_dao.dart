@@ -3,7 +3,7 @@ import 'package:kona_ice_pos/database/database_helper.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
-class SavedOrdersItemsDAO {
+class SavedOrdersExtraItemsDAO {
   static const String tableName = "saved_orders_extra_items";
 
   Future<Database> get _db async => await DatabaseHelper.shared.database;
@@ -25,7 +25,7 @@ class SavedOrdersItemsDAO {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName where item_id=$itemId AND order_id=$orderId");
+      await db.rawQuery("SELECT * from $tableName where item_id=? AND order_id=?",[itemId,orderId]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => SavedOrdersExtraItems.fromMap(result[index]));
       } else {

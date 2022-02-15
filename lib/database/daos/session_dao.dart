@@ -25,6 +25,7 @@ class SessionDAO {
       final db = await _db;
       var result =
           await db.rawQuery("SELECT * from $tableName where key = ?", [key]);
+
       if (result.isNotEmpty) {
         return Session.fromMap(result.first);
       } else {
