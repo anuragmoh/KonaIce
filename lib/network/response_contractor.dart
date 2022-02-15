@@ -15,3 +15,8 @@ abstract class OrderResponseContractor extends ResponseContractor {
   void showSuccessForPlaceOrder(dynamic response);
   void showErrorForPlaceOrder(GeneralErrorResponse exception);
 }
+
+abstract class SyncResponseContractor extends ResponseContractor{
+  void showSyncSuccess(dynamic response);
+  void showSyncError(GeneralErrorResponse exception);
+}

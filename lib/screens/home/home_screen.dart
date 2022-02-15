@@ -2,13 +2,24 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/events_dao.dart';
+import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
+import 'package:kona_ice_pos/database/daos/item_dao.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
+import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
+import 'package:kona_ice_pos/models/data_models/item.dart';
+import 'package:kona_ice_pos/models/data_models/item_categories.dart';
+import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/data_models/sync_event_menu.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/clock_in_out/clock_in_out_presenter.dart';
+import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
@@ -27,7 +38,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen>
-    implements ClockInOutResponseContractor {
+    implements ClockInOutResponseContractor, SyncResponseContractor {
+
+  late SyncPresenter _syncPresenter;
+
+  _HomeScreenState() {
+    clockInOutPresenter = ClockInOutPresenter(this);
+    _syncPresenter = SyncPresenter(this);
+  }
+
   String currentDate =
       Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
@@ -37,15 +56,26 @@ class _HomeScreenState extends State<HomeScreen>
   bool isApiProcess = false;
 
   List<Events> eventList = [];
+  final List<SyncEventMenu> _syncEventMenuResponseModel = [];
+  List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList = [];
+  List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
+  List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
+  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
+      [];
+  List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
+  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
+      [];
+  List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
+  List<POsSyncEventItemExtrasDataDtoList>
+      pOsSyncDeletedEventItemExtrasDataDtoList = [];
 
   late ClockInOutPresenter clockInOutPresenter;
   ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
 
-  _HomeScreenState() {
-    clockInOutPresenter = ClockInOutPresenter(this);
-  }
 
-  getEventData() async {
+
+  Future<void> getSyncData() async {
+    eventList.clear();
     var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
@@ -53,17 +83,36 @@ class _HomeScreenState extends State<HomeScreen>
       });
     } else {
       setState(() {
-        eventList.clear();
+        isApiProcess = true;
       });
+      await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
+        if(value !=null){
+          int lastSyncTime = int.parse(value.value);
+          _syncPresenter.syncData(lastSyncTime);
+        }else{
+          _syncPresenter.syncData(0);
+        }
+      });
+
     }
   }
+
+  // getLastSyncTime() async {
+  //   var eventsLastSync = ;
+  //   if (eventsLastSync != null) {
+  //     return ;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    getSyncData();
+/*    Timer(const Duration(seconds: 3), () {
       getEventData();
-    });
+    });*/
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
@@ -144,8 +193,8 @@ class _HomeScreenState extends State<HomeScreen>
   Widget listViewContainer() {
     return RefreshIndicator(
       onRefresh: () async {
-
-        print('onRefresh');
+        eventList.clear();
+        refreshDataOnRequest();
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
@@ -357,14 +406,23 @@ class _HomeScreenState extends State<HomeScreen>
     String startTimestamp = Date.getStartOfDateTimeStamp(date: DateTime.now());
     String endTimestamp = Date.getEndOfDateTimeStamp(date: DateTime.now());
     String userID = await FunctionalUtils.getUserID();
-    print(
-        "StartTimeStamp---->$startTimestamp ----> End Time ---> $endTimestamp");
     clockInOutPresenter.clockInOutDetails(
         userID: userID,
         startTimestamp: startTimestamp,
         endTimestamp: endTimestamp);
   }
 
+  refreshDataOnRequest()async{
+    await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
+      if(value !=null){
+        int lastSyncTime = int.parse(value.value);
+        _syncPresenter.syncData(lastSyncTime);
+      }else{
+        _syncPresenter.syncData(0);
+      }
+    });
+
+  }
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
@@ -428,5 +486,256 @@ class _HomeScreenState extends State<HomeScreen>
         FunctionalUtils.clockInTimestamp = 0;
       });
     }
+  }
+
+
+
+  Future<void> insertEventSync() async {
+    if(pOsSyncEventDataDtoList.isNotEmpty){
+      for (int i = 0; i < pOsSyncEventDataDtoList.length; i++) {
+        await EventsDAO().insert(Events(
+            id: pOsSyncEventDataDtoList[i].eventId!,
+            eventCode: pOsSyncEventDataDtoList[i].eventCode!,
+            name: pOsSyncEventDataDtoList[i].name!,
+            startDateTime: pOsSyncEventDataDtoList[i].startDateTime!,
+            endDateTime: pOsSyncEventDataDtoList[i].endDateTime!,
+            delivery: "empty",
+            link: "empty",
+            addressLine1: pOsSyncEventDataDtoList[i].addressLine1!,
+            addressLine2: pOsSyncEventDataDtoList[i].addressLine2!,
+            country: pOsSyncEventDataDtoList[i].country!,
+            state: pOsSyncEventDataDtoList[i].state!,
+            city: pOsSyncEventDataDtoList[i].city!,
+            zipCode: pOsSyncEventDataDtoList[i].zipCode!,
+            contactName: "empty",
+            contactEmail: "empty",
+            contactPhoneNumCountryCode: "empty",
+            contactPhoneNumber: "empty",
+            key: "empty",
+            values: "empty",
+            displayAdditionalPaymentField: false,
+            additionalPaymentFieldLabel: "empty",
+            activated: false,
+            createdBy: pOsSyncEventDataDtoList[i].createdBy!,
+            createdAt: pOsSyncEventDataDtoList[i].createdAt!,
+            updatedBy: pOsSyncEventDataDtoList[i].updatedBy!,
+            updatedAt: pOsSyncEventDataDtoList[i].updatedAt!,
+            deleted: pOsSyncEventDataDtoList[i].deleted!,
+            franchiseId: "empty",
+            minimumOrderAmount: 0.0,
+            eventStatus: "empty",
+            specialInstructionLabel: "empty",
+            displayGratuityField: false,
+            gratuityFieldLabel: "empty",
+            campaignId: "empty",
+            enableDonation: false,
+            donationFieldLabel: "empty",
+            assetId: "empty",
+            weatherType: "empty",
+            paymentTerm: "empty",
+            secondaryContactName: "empty",
+            secondaryContactEmail: "empty",
+            secondaryContactPhoneNumCountryCode: "empty",
+            secondaryContactPhoneNumber: "empty",
+            notes: "empty",
+            eventType: "empty",
+            preOrder: false,
+            radius: 0,
+            timeSlot: 0,
+            maxOrderInSlot: 0,
+            locationNotes: "empty",
+            orderAttribute: "empty",
+            minimumDeliveryTime: 0,
+            startAddress: "empty",
+            useTimeSlot: false,
+            maxAllowedOrders: 0,
+            deliveryMessage: "empty",
+            recipientNameLabel: "empty",
+            orderStartDateTime: 0,
+            orderEndDateTime: 0,
+            smsNotification: false,
+            emailNotification: false,
+            clientId: "empty",
+            recurringType: "empty",
+            days: "empty",
+            monthlyDateTime: 0,
+            expiryDate: 0,
+            lastDayOfMonth: false,
+            seriesId: "empty",
+            manualStatus: "empty",
+            entryFee: 0,
+            cashAmount: 0,
+            checkAmount: 0,
+            ccAmount: 0,
+            eventSalesCollected: 0,
+            salesTax: 0,
+            giveback: 0,
+            tipAmount: 0,
+            netEventSales: 0,
+            eventSales: 0,
+            collected: 0,
+            balance: 0,
+            givebackPaid: false,
+            clientInvoice: false,
+            givebackSettledDate: 0,
+            invoiceSettledDate: 0,
+            givebackCheck: "empty",
+            thankYouEmail: false,
+            eventSalesTypeId: "empty",
+            minimumFee: 0,
+            keepCupCount: false,
+            cupCountTotal: 0,
+            packageFee: 0,
+            prePay: false,
+            contactTitle: "empty",
+            clientIndustriesTypeId: "empty",
+            invoiceCheck: "string",
+            oldDbEventId: "string",
+            confirmedEmailSent: false,
+            givebackSubtotal: 0));
+      }
+    }
+    updateLastEventSync();
+    getSyncData();
+    if(pOsSyncItemCategoryDataDtoList.isNotEmpty){
+      for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
+        await ItemCategoriesDAO().insert(ItemCategories(
+            id: pOsSyncItemCategoryDataDtoList[i].eventId!,
+            eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
+            categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode != null
+                ? pOsSyncItemCategoryDataDtoList[i].categoryCode!
+                : "empty",
+            categoryName: pOsSyncItemCategoryDataDtoList[i].categoryName!,
+            description: pOsSyncItemCategoryDataDtoList[i].categoryName!,
+            activated: false,
+            createdBy: pOsSyncItemCategoryDataDtoList[i].createdBy!,
+            createdAt: pOsSyncItemCategoryDataDtoList[i].createdAt!,
+            updatedBy: pOsSyncItemCategoryDataDtoList[i].updatedBy!,
+            updatedAt: pOsSyncItemCategoryDataDtoList[i].updatedAt!,
+            deleted: pOsSyncItemCategoryDataDtoList[i].deleted!,
+            franchiseId: "empty"));
+      }
+    }
+    updateLastCategoriesSync();
+    if(pOsSyncEventItemExtrasDataDtoList.isNotEmpty){
+      for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
+        await FoodExtraItemsDAO().insert(FoodExtraItems(
+            id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
+            foodExtraItemCategoryId:
+            pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+            itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
+            eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
+            itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
+            sellingPrice: pOsSyncEventItemExtrasDataDtoList[i].sellingPrice!,
+            selection: "empty",
+            imageFileId: pOsSyncEventItemExtrasDataDtoList[i].imageFileId!,
+            minQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].minQtyAllowed!,
+            maxQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].maxQtyAllowed!,
+            activated: false,
+            createdBy: pOsSyncEventItemExtrasDataDtoList[i].createdBy!,
+            createdAt: pOsSyncEventItemExtrasDataDtoList[i].createdAt!,
+            updatedBy: pOsSyncEventItemExtrasDataDtoList[i].updatedBy!,
+            updatedAt: pOsSyncEventItemExtrasDataDtoList[i].updatedAt!,
+            deleted: pOsSyncEventItemExtrasDataDtoList[i].deleted!));
+      }
+    }
+    updateLastItemExtrasSync();
+   if(pOsSyncEventItemDataDtoList.isNotEmpty){
+     for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
+       await ItemDAO().insert(Item(
+           id: pOsSyncEventItemDataDtoList[i].itemId!,
+           eventId: pOsSyncEventItemDataDtoList[i].eventId!,
+           itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
+           itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
+           imageFileId: "empty",
+           name: pOsSyncEventItemDataDtoList[i].name!,
+           description: pOsSyncEventItemDataDtoList[i].description!,
+           price: pOsSyncEventItemDataDtoList[i].price!,
+           activated: false,
+           createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
+           createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
+           updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
+           updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
+           deleted: pOsSyncEventItemDataDtoList[i].deleted!,
+           franchiseId: "empty"));
+     }
+   }
+    updateLastItemSync();
+  }
+
+  Future<void> updateLastEventSync() async {
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.events,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
+  }
+
+  Future<void> updateLastItemSync() async {
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.items,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
+  }
+
+  Future<void> updateLastCategoriesSync() async {
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.categories,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
+  }
+
+  Future<void> updateLastItemExtrasSync() async {
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.itemExtras,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
+  }
+
+  @override
+  void showSyncError(GeneralErrorResponse exception) {
+    setState(() {
+      isApiProcess = false;
+    });
+    CommonWidgets().showErrorSnackBar(
+        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+        context: context);
+  }
+
+  @override
+  void showSyncSuccess(response) {
+    _syncEventMenuResponseModel.clear();
+    pOsSyncEventDataDtoList.clear();
+    pOsSyncItemCategoryDataDtoList.clear();
+    pOsSyncEventItemDataDtoList.clear();
+    pOsSyncEventItemExtrasDataDtoList.clear();
+    pOsSyncDeletedEventDataDtoList.clear();
+    pOsSyncDeletedItemCategoryDataDtoList.clear();
+    pOsSyncDeletedEventItemDataDtoList.clear();
+    pOsSyncDeletedEventItemExtrasDataDtoList.clear();
+
+    setState(() {
+      isApiProcess = false;
+      _syncEventMenuResponseModel.add(response);
+    });
+      storeDataIntoDB();
+  }
+  void storeDataIntoDB() {
+    setState(() {
+      pOsSyncEventDataDtoList
+          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
+      pOsSyncItemCategoryDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
+      pOsSyncEventItemDataDtoList
+          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
+      pOsSyncEventItemExtrasDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncEventItemExtrasDataDtoList);
+      pOsSyncDeletedEventDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncDeletedEventDataDtoList);
+      pOsSyncDeletedItemCategoryDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncDeletedItemCategoryDataDtoList);
+      pOsSyncDeletedEventItemDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncDeletedEventItemDataDtoList);
+      pOsSyncDeletedEventItemExtrasDataDtoList.addAll(
+          _syncEventMenuResponseModel[0]
+              .pOsSyncDeletedEventItemExtrasDataDtoList);
+    });
+
+    insertEventSync();
   }
 }

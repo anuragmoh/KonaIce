@@ -31,7 +31,6 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -44,11 +43,9 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> implements ResponseContractor {
   late SyncPresenter _syncPresenter;
 
-  _DashboardState() {
+/*  _DashboardState() {
     _syncPresenter = SyncPresenter(this);
-  }
-  RefreshController _refreshController =
-  RefreshController(initialRefresh: false);
+  }*/
 
   List<Events> eventList = [];
 
@@ -92,35 +89,16 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
       setState(() {
         isApiProcess = true;
       });
-      _syncPresenter.syncData();
+      // _syncPresenter.syncData();
     }
-  }
-
-  void _onRefresh() async{
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    _refreshController.refreshCompleted();
-  }
-
-  void _onLoading() async{
-    // monitor network fetch
-    await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-/*    items.add((items.length+1).toString());
-    if(mounted)
-      setState(() {
-
-      });*/
-    _refreshController.loadComplete();
   }
 
 
   @override
   void initState() {
     super.initState();
-    configureData();
-    getSyncData();
+    // configureData();
+    // getSyncData();
   }
 
   @override

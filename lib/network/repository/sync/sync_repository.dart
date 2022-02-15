@@ -10,15 +10,15 @@ import 'package:kona_ice_pos/network/base_client.dart';
 class SyncRepository {
   BaseClient baseClient = BaseClient();
 
-  Future<dynamic> syncData() async {
-    return baseClient.post(UrlConstants.syncData, getSyncData(0)).then((value){
+  Future<dynamic> syncData(int lastSyncTime) async {
+    return baseClient.post(UrlConstants.syncData, getSyncData(lastSyncTime)).then((value) {
       return syncEventMenuFromJson(value);
     });
   }
 
-  getSyncData(int lastSync) {
+  getSyncData(int lastSyncTime) {
     SyncEventRequestModel _eventRequestModel = SyncEventRequestModel();
-    _eventRequestModel.lastSyncAt = lastSync;
+    _eventRequestModel.lastSyncAt = lastSyncTime;
     _eventRequestModel.entities = [
       DatabaseKeys.events,
       DatabaseKeys.categories,
@@ -27,4 +27,6 @@ class SyncRepository {
     ];
     return _eventRequestModel;
   }
+
+
 }
