@@ -11,10 +11,16 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/models/data_models/item_categories.dart';
+import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
+import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
+import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -210,7 +216,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             onDrawerTap: onDrawerTap,),
           Expanded(
             child: isProduct ? body() : AllOrdersScreen(
-                onBackTap: onTapCallBack),
+                onBackTap: onTapCallBack,eventId:widget.events.eventCode),
           ),
           BottomBarWidget(onTapCallBack: onTapBottomListItem,
             accountImageVisibility: false,
@@ -996,6 +1002,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
    clearCart();
   }
 
+
   onTapNewOrderButton() {
     clearCart();
   }
@@ -1154,7 +1161,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     return extrasList;
   }
 
-
   //Navigation
   showPaymentScreen() {
     PlaceOrderRequestModel requestModel = getOrderRequestModel();
@@ -1197,7 +1203,38 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     if (placeOrderResponseModel.id != null) {
       setState(() {
         orderID = placeOrderResponseModel.id!;
+        saveOrderIntoLocalDB(orderID);
       });
     }
   }
+
+
+  saveOrderIntoLocalDB(String orderId)async{
+    PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
+    String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName}" + orderRequestModel.lastName! : "Guest";
+
+    // Insert Order into DB
+     await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+
+    // Insert Items into DB
+    List<OrderItemsList> orderItem = getOrderItemList();
+    for(var items in orderItem) {
+      await SavedOrdersItemsDAO().insert(SavedOrdersItem(orderId:orderId,itemId:items.itemId.toString(),itemName:items.name.toString(),quantity:items.quantity!,unitPrice:items.unitPrice!,totalPrice:items.totalAmount!,itemCategoryId:items.itemCategoryId.toString(),deleted:false));
+    }
+
+    // Insert extra item into DB
+    for(var items in selectedMenuItems) {
+      if(items.selectedExtras.isNotEmpty){
+        for(var extra in items.selectedExtras){
+          await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(orderId:orderId,itemId:items.id,extraFoodItemId:extra.id,extraFoodItemName:extra.itemName,extraFoodItemCategoryId:extra.foodExtraItemCategoryId,quantity:extra.selectedItemQuantity,unitPrice:extra.sellingPrice,totalPrice:extra.getTotalPrice(),deleted:false));
+        }
+      }
+    }
+    setState(() {
+      selectedMenuItems.clear();
+      itemList.clear();
+      itemList = getAllItems(widget.events.id);
+    });
+  }
+
 }

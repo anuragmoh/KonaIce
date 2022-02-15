@@ -42,7 +42,7 @@ class SavedOrdersItem {
         itemName:map["item_name"],
         quantity:map["quantity"],
         unitPrice:map["unit_price"],
-        totalPrice:map["totalPrice"],
+        totalPrice:map["total_price"],
         itemCategoryId:map["item_category_id"],
         deleted:map["deleted"]==1
     );}

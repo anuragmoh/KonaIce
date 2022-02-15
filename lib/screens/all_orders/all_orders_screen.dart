@@ -4,14 +4,16 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
+import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class AllOrdersScreen extends StatefulWidget {
   final Function onBackTap;
-
-  const AllOrdersScreen({Key? key, required this.onBackTap}) : super(key: key);
+  final String eventId;
+  const AllOrdersScreen({Key? key, required this.onBackTap, required this.eventId}) : super(key: key);
 
   @override
   _AllOrdersScreenState createState() => _AllOrdersScreenState();
@@ -19,6 +21,21 @@ class AllOrdersScreen extends StatefulWidget {
 
 class _AllOrdersScreenState extends State<AllOrdersScreen> {
   bool isItemClick = true;
+  List<SavedOrders> savedOrdersList= [];
+
+
+  getAllSavedOrders(String eventId)async{
+    var result = await SavedOrdersDAO().getOrdersList(eventId);
+    setState(() {
+      savedOrdersList.addAll(result!);
+    });
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    getAllSavedOrders(widget.eventId);
+  }
 
   @override
   Widget build(BuildContext context) {

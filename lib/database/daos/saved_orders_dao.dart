@@ -12,8 +12,8 @@ class SavedOrdersDAO {
     try {
       final db = await _db;
       var result = await db.rawInsert(
-          "INSERT OR REPLACE INTO $tableName (event_id,card_id,order_id,customer_name,phone_number,phone_country_code,address1,address2,country,state,city,zip_code,order_date,total_amount,payment,order_status,deleted)"
-          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "INSERT OR REPLACE INTO $tableName (event_id,card_id,order_id,customer_name,phone_number,phone_country_code,address1,address2,country,state,city,zip_code,order_date,tip,discount,food_cost,total_amount,payment,order_status,deleted)"
+          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
           [
             savedOrders.eventId,
             savedOrders.cardId,
@@ -28,6 +28,9 @@ class SavedOrdersDAO {
             savedOrders.city,
             savedOrders.zipCode,
             savedOrders.orderDate,
+            savedOrders.tip,
+            savedOrders.discount,
+            savedOrders.foodCost,
             savedOrders.totalAmount,
             savedOrders.payment,
             savedOrders.orderStatus,
@@ -42,7 +45,7 @@ class SavedOrdersDAO {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName where event_id=$eventId");
+      await db.rawQuery("SELECT * from $tableName where event_id=?", [eventId]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => SavedOrders.fromMap(result[index]));
       } else {
