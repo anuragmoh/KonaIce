@@ -38,9 +38,6 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     await addSessionKeyToHeader();
-    print(uri);
-    print("payload--->$payload");
-
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
@@ -56,8 +53,6 @@ class BaseClient {
   Future<dynamic> put(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
-    print(uri);
-    print("payload--->$payload");
     await addSessionKeyToHeader();
     try {
       var response = await http.put(uri, headers: header, body: payload)
@@ -73,7 +68,6 @@ class BaseClient {
   //DELETE
   Future<dynamic> delete(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
-    print(uri);
     await addSessionKeyToHeader();
     try {
       var response = await http.delete(uri, headers: header).timeout(
