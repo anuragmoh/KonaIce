@@ -97,7 +97,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   @override
   void initState() {
     super.initState();
-    // configureData();
+     configureData();
     // getSyncData();
   }
 
