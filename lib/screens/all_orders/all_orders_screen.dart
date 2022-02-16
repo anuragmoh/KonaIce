@@ -508,7 +508,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
           const SizedBox(height: 8.0),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             CommonWidgets().textView(
-                '${StringConstants.storeAddress}: ',
+                '${StringConstants.eventAddress}: ',
                 StyleConstants.customTextStyle(
                     fontSize: 9.0,
                     color: getMaterialColor(AppColors.textColor1),

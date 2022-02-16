@@ -11,6 +11,7 @@ import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/forget_password/forgot_password_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -29,6 +30,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements ResponseContractor{
   bool isApiProcess = false;
   bool isEmailValid = true;
+  String emailValidationMessage = "";
   TextEditingController emailController = TextEditingController();
 
   late UserPresenter userPresenter;
@@ -76,26 +78,39 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
             ),
           ),
           Padding(
-            padding:  EdgeInsets.only(
-                top:0.65*SizeConfig.imageSizeMultiplier,bottom: 2.60*SizeConfig.imageSizeMultiplier, left: 22.0, right: 22.0),
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'abc@gmail.com',
-                      hintStyle: StyleConstants.customTextStyle(
-                          fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratRegular)),
+            padding: EdgeInsets.only(
+                top: 0.65 * SizeConfig.imageSizeMultiplier,
+                bottom: 2.60 * SizeConfig.imageSizeMultiplier,
+                left: 22.0,
+                right: 22.0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 4.0),
+              child: TextField(
+                onChanged: (value){
+                  emailValidation();
+                },
+                maxLength: 100,
+                controller: emailController,
+                decoration: InputDecoration(
+                  counterText: "",
+                  border: const OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: AppColors.textColor2, width: 1.0),
+                  ),
+                  hintText: 'abc@gmail.com',
+                  errorText: emailValidationMessage,
+                  hintStyle: StyleConstants.customTextStyle(
+                      fontSize: 15.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: AppColors.textColor2, width: 1.0),
+                  ),
+                  errorBorder: const OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: AppColors.primaryColor1, width: 1.0),
+                  ),
                 ),
               ),
             ),
@@ -143,13 +158,35 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
       ),
     );
   }
+  emailValidation() {
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailValidationMessage = StringConstants.emptyValidEmail;
+      });
+      return false;
+    }
+    if (!emailController.text.isValidEmail()) {
+      setState(() {
+        emailValidationMessage = StringConstants.enterValidEmail;
+      });
+      return false;
+    }
+    if (emailController.text.isValidEmail()) {
+      setState(() {
+        emailValidationMessage = "";
+      });
+      return true;
+    }
+  }
 
   //Actions
  onTapSubmit() {
+   FunctionalUtils.hideKeyboard();
    setState(() {
-     isEmailValid = emailController.text.isValidEmail();
+     emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
    });
 
+   emailValidation();
    if (isEmailValid) {
      CheckConnection().connectionState().then((value){
        if(value == true){

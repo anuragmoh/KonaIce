@@ -166,4 +166,8 @@ class FunctionalUtils {
      SavedOrdersItemsDAO().clearEventsData();
   }
 
+
+  static hideKeyboard(){
+    return  FocusScope.of(navigatorKey.currentContext!).requestFocus(FocusNode());
+  }
 }
