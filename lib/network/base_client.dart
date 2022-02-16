@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/url_constants.dart';
@@ -21,7 +22,7 @@ class BaseClient {
   Future<dynamic> get(String api) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     await addSessionKeyToHeader();
-    print(uri);
+    debugPrint(uri.toString());
     try {
         var response = await http.get(uri, headers: header).timeout(
             const Duration(seconds: timeOutDuration));
@@ -37,12 +38,13 @@ class BaseClient {
   Future<dynamic> post(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
-    print("paylaod-----$payload");
-    print(uri);
+    debugPrint("paylaod-----$payload");
+    debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {
       var response = await http.post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
+      debugPrint(response.body.toString());
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
@@ -86,7 +88,7 @@ class BaseClient {
   //OTHER
   addSessionKeyToHeader() async {
     String sessionKey = await FunctionalUtils.getSessionKey();
-    print("Bearer $sessionKey");
+    debugPrint("Bearer $sessionKey");
     if (sessionKey.isNotEmpty) {
       header["Authorization"] = "Bearer $sessionKey";
     } else {
@@ -95,14 +97,14 @@ class BaseClient {
   }
 
   dynamic _processResponse(http.Response response) {
-    print("response code ${response.statusCode}");
+    debugPrint("response code ${response.statusCode}");
     if (response.isOkResponse()) {
-      print("Ok");
+      debugPrint("Ok");
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
       FunctionalUtils.clearSessionData();
     } else {
-      print("Not Ok");
+      debugPrint("Not Ok");
       getErrorModel(response);
     }
   }

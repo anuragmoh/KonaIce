@@ -77,21 +77,20 @@ class _HomeScreenState extends State<HomeScreen>
 
   Future<void> getSyncData() async {
     eventList.clear();
-    var result = await EventsDAO().getValues();
+    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
     if (result != null) {
       setState(() {
         eventList.addAll(result);
       });
     } else {
-      setState(() {
-        isApiProcess = true;
-      });
       await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
         if(value !=null){
           int lastSyncTime = int.parse(value.value);
-
           CheckConnection().connectionState().then((value) {
             if (value == true) {
+              setState(() {
+                isApiProcess = true;
+              });
               _syncPresenter.syncData(lastSyncTime);
             } else {
               CommonWidgets().showErrorSnackBar(
@@ -102,6 +101,9 @@ class _HomeScreenState extends State<HomeScreen>
         }else{
           CheckConnection().connectionState().then((value) {
             if (value == true) {
+              setState(() {
+                isApiProcess = true;
+              });
               _syncPresenter.syncData(0);
             } else {
               CommonWidgets().showErrorSnackBar(
@@ -115,24 +117,22 @@ class _HomeScreenState extends State<HomeScreen>
 
     }
   }
-
-
-  // getLastSyncTime() async {
-  //   var eventsLastSync = ;
-  //   if (eventsLastSync != null) {
-  //     return ;
-  //   } else {
-  //     return 0;
-  //   }
-  // }
+  loadDataFromDb()async{
+    eventList.clear();
+    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
+    if (result != null) {
+      setState(() {
+        eventList.addAll(result);
+      });
+    }else{
+      eventList.clear();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     getSyncData();
-/*    Timer(const Duration(seconds: 3), () {
-      getEventData();
-    });*/
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
@@ -213,7 +213,6 @@ class _HomeScreenState extends State<HomeScreen>
   Widget listViewContainer() {
     return RefreshIndicator(
       onRefresh: () async {
-
         refreshDataOnRequest();
       },
       child: Container(
@@ -316,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   );
                 })
-            : const Text(''),
+            : const Center(child: Text('Events not available',style: TextStyle(fontSize: 20.0))),
       ),
     );
   }
@@ -439,6 +438,9 @@ class _HomeScreenState extends State<HomeScreen>
         CheckConnection().connectionState().then((value) {
           if (value == true) {
             eventList.clear();
+            setState(() {
+              isApiProcess = true;
+            });
             _syncPresenter.syncData(lastSyncTime);
           } else {
             CommonWidgets().showErrorSnackBar(
@@ -446,11 +448,12 @@ class _HomeScreenState extends State<HomeScreen>
                 context: context);
           }
         });
-
-
       }else{
         CheckConnection().connectionState().then((value) {
           if (value == true) {
+            setState(() {
+              isApiProcess = true;
+            });
             _syncPresenter.syncData(0);
           } else {
             CommonWidgets().showErrorSnackBar(
@@ -636,9 +639,9 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
     updateLastEventSync();
-    getSyncData();
     if(pOsSyncItemCategoryDataDtoList.isNotEmpty){
       for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
+        print("Categories inserting");
         await ItemCategoriesDAO().insert(ItemCategories(
             id: pOsSyncItemCategoryDataDtoList[i].eventId!,
             eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
@@ -701,6 +704,7 @@ class _HomeScreenState extends State<HomeScreen>
      }
    }
     updateLastItemSync();
+    loadDataFromDb();
   }
 
   Future<void> updateLastEventSync() async {

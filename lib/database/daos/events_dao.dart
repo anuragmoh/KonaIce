@@ -40,7 +40,7 @@ class EventsDAO {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName where start_date_time >= $startDateTimeStamp AND end_date_time <= $endDateTimeStamp");
+      await db.rawQuery("SELECT * from $tableName where start_date_time >= ? AND end_date_time <= ?", [startDateTimeStamp,endDateTimeStamp]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => Events.fromMap(result[index]));
       } else {
