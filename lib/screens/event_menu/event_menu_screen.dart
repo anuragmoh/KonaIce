@@ -69,9 +69,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   TextEditingController applyCouponTextFieldController = TextEditingController();
 
 
-  int selectedCategoryIndex = -1;
+  int selectedCategoryIndex = 1;
 
- // List<Item> dbItemList = [];
+  List<Item> dbItemList = [];
   List<Item> itemList = [];
   List<Item> selectedMenuItems = [];
   String customerName = StringConstants.addCustomer;
@@ -108,28 +108,17 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
 
   // LocalDB call start from here.
-  getAllItemCategories(String id) async {
-    var result = await ItemCategoriesDAO().getAllCategories();
-    print(result);
-    if (result != null) {
-      setState(() {
-        itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
-            eventId: id, name: StringConstants.customMenu));
-        itemCategoriesList.addAll(result);
-      });
-    } else {
-      setState(() {
-        itemCategoriesList.clear();
-      });
-    }
-  }
 
   getItemCategoriesByEventId(String eventId) async {
     // Event Id need to pass
     var result = await ItemCategoriesDAO().getCategoriesByEventId(eventId);
     if (result != null) {
-      setState(() {
-        itemCategoriesList.addAll(result);
+        setState(() {
+          itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
+              eventId: eventId, name: StringConstants.customMenu));
+          itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
+              eventId: eventId, name: StringConstants.allCategories));
+          itemCategoriesList.addAll(result);
       });
     } else {
       setState(() {
@@ -144,6 +133,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     if (result != null) {
       setState(() {
         itemList.addAll(result);
+        dbItemList.addAll(itemList);
       });
     } else {
       setState(() {
@@ -184,7 +174,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   @override
   void initState() {
     super.initState();
-    getAllItemCategories(widget.events.id);
+    getItemCategoriesByEventId(widget.events.id);
     getAllItems(widget.events.id);
     getUserName();
   }
@@ -211,10 +201,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             eventAddress: widget.events.getEventAddress(),
             showCenterWidget: true,
             onTapCallBack: onTapCallBack,
-            onDrawerTap: onDrawerTap,),
+            onDrawerTap: onDrawerTap,
+             isProduct: isProduct),
           Expanded(
-            child: isProduct ? body() : AllOrdersScreen(
-                onBackTap: onTapCallBack,eventId:widget.events.id),
+            child: isProduct ? body() : AllOrdersScreen(onBackTap: (saveOrders, orderItemList, extraItemList ) {
+              onBackFromAllOrder(savedOrder: saveOrders, savedOrderItemList: orderItemList, savedOrderExtraItemList: extraItemList);
+            }, events: widget.events),
           ),
           BottomBarWidget(onTapCallBack: onTapBottomListItem,
             accountImageVisibility: false,
@@ -967,6 +959,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     setState(() {
       selectedMenuItems.clear();
       itemList.clear();
+      tip = 0;
+      discount = 0;
+      addTipTextFieldController.clear();
+      addDiscountTextFieldController.clear();
       customerName = StringConstants.addCustomer;
      getAllItems(widget.events.id);
     });
@@ -982,6 +978,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         selectedCategoryIndex = index;
         if (index == 0) {
           showCustomMenuPopup();
+        } else if (index == 1) {
+          itemList.clear();
+          itemList.addAll(dbItemList);
+        } else {
+          itemList.clear();
+          var list = dbItemList.where((element) => element.itemCategoryId == itemCategoriesList[index].id).toList();
+          itemList.addAll(list);
         }
       });
     }
@@ -1073,6 +1076,50 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   onDrawerTap() {
     _scaffoldKey.currentState!.openEndDrawer();
     // Scaffold.of(context).openDrawer();
+  }
+
+  onBackFromAllOrder({required SavedOrders savedOrder, required List<SavedOrdersItem> savedOrderItemList, required List<SavedOrdersExtraItems> savedOrderExtraItemList}) {
+
+     setState(() {
+       clearCart();
+       isProduct = true;
+     });
+
+    tip = savedOrder.tip.toDouble();
+    addTipTextFieldController.text = savedOrder.tip.toString();
+    discount = savedOrder.discount.toDouble();
+    addDiscountTextFieldController.text = savedOrder.discount.toString();
+    customerName = savedOrder.customerName;
+    if (savedOrder.customerName != StringConstants.guestCustomer) {
+      customer = CustomerDetails();
+      List<String> names = customerName.split(' ');
+      if (names.length > 1) {
+        customer!.firstName = names[0];
+        customer!.lastName = names[1];
+      }
+      customer!.email = savedOrder.email;
+      customer!.phoneNum = savedOrder.phoneNumber;
+      customer!.numCountryCode = savedOrder.phoneCountryCode;
+    }
+    for (var itemSaveOrder in savedOrderItemList) {
+      for (var item in itemList) {
+        if (item.id == itemSaveOrder.itemId) {
+          item.selectedItemQuantity = itemSaveOrder.quantity;
+          item.isItemSelected = true;
+          for (var extraSaveOrder in savedOrderExtraItemList) {
+            for (var extraItem in item.foodExtraItemList) {
+              if (extraItem.id == extraSaveOrder.extraFoodItemId && item.id == extraSaveOrder.itemId) {
+                extraItem.selectedItemQuantity = extraSaveOrder.quantity;
+                extraItem.isItemSelected = true;
+                item.selectedExtras.add(extraItem);
+              }
+            }
+            selectedMenuItems.add(item);
+            break;
+          }
+        }
+      }
+    }
   }
 
   //data required for next screen
@@ -1217,7 +1264,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   saveOrderIntoLocalDB(String orderId)async{
     PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
-    String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName}" + orderRequestModel.lastName! : "Guest";
+    String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName} " + orderRequestModel.lastName! : StringConstants.guestCustomer;
 
     // Insert Order into DB
      await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));

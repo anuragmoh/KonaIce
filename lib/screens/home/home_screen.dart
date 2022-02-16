@@ -119,7 +119,8 @@ class _HomeScreenState extends State<HomeScreen>
   }
   loadDataFromDb()async{
     eventList.clear();
-    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
+    //var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
+    var result =  await EventsDAO().getValues();
     if (result != null) {
       setState(() {
         eventList.addAll(result);
@@ -643,7 +644,7 @@ class _HomeScreenState extends State<HomeScreen>
       for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
         print("Categories inserting");
         await ItemCategoriesDAO().insert(ItemCategories(
-            id: pOsSyncItemCategoryDataDtoList[i].eventId!,
+            id: pOsSyncItemCategoryDataDtoList[i].categoryId!,
             eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
             categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode != null
                 ? pOsSyncItemCategoryDataDtoList[i].categoryCode!

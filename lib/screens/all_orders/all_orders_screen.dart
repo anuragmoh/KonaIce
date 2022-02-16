@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
@@ -7,6 +8,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
+import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
@@ -15,13 +17,16 @@ import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
-class AllOrdersScreen extends StatefulWidget {
-  final Function onBackTap;
-  final String eventId;
-  const AllOrdersScreen({Key? key, required this.onBackTap, required this.eventId}) : super(key: key);
+ class AllOrdersScreen extends StatefulWidget {
+   final Function(SavedOrders, List<SavedOrdersItem>, List<SavedOrdersExtraItems>) onBackTap;
+  final Events events;
+   const AllOrdersScreen({Key? key, required this.onBackTap, required this.events}) : super(key: key);
 
   @override
   _AllOrdersScreenState createState() => _AllOrdersScreenState();
+
+  @override
+  noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class _AllOrdersScreenState extends State<AllOrdersScreen> {
@@ -36,7 +41,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   @override
   void initState() {
     super.initState();
-    getAllSavedOrders(widget.eventId);
+    getAllSavedOrders(widget.events.id);
   }
 
   @override
@@ -44,13 +49,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
-        child: Column(
+        child: savedOrdersList.isNotEmpty ? Column(
           children: [
             // topWidget(),
             Expanded(child: bodyWidget()),
             // bottomWidget(),
           ],
-        ),
+        ) :
+        const Align(
+          alignment: Alignment.center,
+            child: Text(StringConstants.noOrdersToDisplay)),
       ),
     );
   }
@@ -71,7 +79,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
 
   Widget bodyWidgetComponent() => Row(children: [
         leftSideWidget(),
-        rightSideWidget(),
+        Visibility(
+          visible: selectedRow != -1,
+            child: rightSideWidget()),
       ]);
 
   Widget bottomWidget() => Container(
@@ -308,20 +318,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   Visibility(
                     visible: selectedRow !=-1 ? true : false,
                     child: orderDetailsWidget(
-                        orderId: selectedRow !=-1 ? savedOrdersList[selectedRow].orderId : 'NA', orderDate: selectedRow !=-1 ? "${Date.getDateFromTimeStamp(timestamp: savedOrdersList[selectedRow].orderDate)}": "NA"),
+                        orderId: selectedRow !=-1 ? savedOrdersList[selectedRow].orderId : 'NA', orderDate: selectedRow !=-1 ? savedOrdersList[selectedRow].getOrderDateTime() : "NA"),
                   ),
                   const SizedBox(height: 8.0),
                   Visibility(
-                    visible: selectedRow !=-1 ? true : false,
+                    visible: selectedRow !=-1,
                     child: customerDetailsComponent(
-                        street: selectedRow !=-1 ? savedOrdersList[selectedRow].address1  : "NA",
-                        email: selectedRow !=-1 ? savedOrdersList[selectedRow].email : "NA",
-                        storeAddress: 'NA',
-                        phone: selectedRow !=-1 ? savedOrdersList[selectedRow].phoneCountryCode + savedOrdersList[selectedRow].phoneNumber : "NA"),
+                        eventName: widget.events.getEventName(),
+                        email: selectedRow !=-1 ? savedOrdersList[selectedRow].email : StringExtension.empty(),
+                        storeAddress: widget.events.getEventAddress(),
+                        phone: selectedRow !=-1 ? savedOrdersList[selectedRow].phoneCountryCode + savedOrdersList[selectedRow].phoneNumber : StringExtension.empty()),
                   ),
                   const SizedBox(height: 35.0),
                   Visibility(
-                    visible: selectedRow !=-1 ? true : false,
+                    visible: selectedRow !=-1,
                     child: Stack(
                       children: [
                         Row(
@@ -411,7 +421,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   ),
                   const SizedBox(height: 10.0),
                   Visibility(
-                    visible: selectedRow !=-1 ? true : false,
+                    visible: selectedRow !=-1,
                     child: Expanded(
                         child: SingleChildScrollView(
                       child: Container(
@@ -421,7 +431,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                     )),
                   ),
                   Visibility(
-                    visible: selectedRow !=-1 ? true : false,
+                    visible: selectedRow !=-1,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
                       child: getRightOrderStatusView(selectedRow !=-1 ? savedOrdersList[selectedRow].orderStatus :"NA"),
@@ -452,75 +462,93 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
 
   // customer Details
   Widget customerDetailsComponent(
-          {required String street,
+          {required String eventName,
           required String email,
           required String storeAddress,
           required String phone}) =>
       Column(
         children: [
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            CommonWidgets().textView(
-                '${StringConstants.street}: ',
-                StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
-            Expanded(
-                child: CommonWidgets().textView(
-                    street,
+          Visibility(
+            visible: email.isNotEmpty && !email.contains('null'),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                CommonWidgets().textView(
+                    '${StringConstants.email}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor2),
-                        fontFamily: FontConstants.montserratMedium))),
-          ]),
-          const SizedBox(height: 8.0),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            CommonWidgets().textView(
-                '${StringConstants.email}: ',
-                StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
-            Expanded(
-                child: CommonWidgets().textView(
-                    email,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratRegular)),
+                Expanded(
+                    child: CommonWidgets().textView(
+                        email,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium))),
+              ]),
+            ),
+          ),
+          Visibility(
+            visible: phone.isNotEmpty && !phone.contains('null'),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                CommonWidgets().textView(
+                    '${StringConstants.phone}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor2),
-                        fontFamily: FontConstants.montserratMedium))),
-          ]),
-          const SizedBox(height: 8.0),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            CommonWidgets().textView(
-                '${StringConstants.phone}: ',
-                StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
-            Expanded(
-                child: CommonWidgets().textView(
-                    phone,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratRegular)),
+                Expanded(
+                    child: CommonWidgets().textView(
+                        phone,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium))),
+              ]),
+            ),
+          ),
+          Visibility(
+            visible: eventName.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                CommonWidgets().textView(
+                    '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor2),
-                        fontFamily: FontConstants.montserratMedium))),
-          ]),
-          const SizedBox(height: 8.0),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            CommonWidgets().textView(
-                '${StringConstants.eventAddress}: ',
-                StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
-            Expanded(
-                child: CommonWidgets().textView(
-                    storeAddress,
-                    StyleConstants.customTextStyle(
-                        fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor2),
-                        fontFamily: FontConstants.montserratMedium))),
-          ]),
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratRegular)),
+                Expanded(
+                    child: CommonWidgets().textView(
+                        eventName,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium))),
+              ]),
+            ),
+          ),
+          Visibility(
+            visible: eventName.isNotEmpty,
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              CommonWidgets().textView(
+                  '${StringConstants.eventAddress}: ',
+                  StyleConstants.customTextStyle(
+                      fontSize: 9.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular)),
+              Expanded(
+                  child: CommonWidgets().textView(
+                      storeAddress,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: getMaterialColor(AppColors.textColor2),
+                          fontFamily: FontConstants.montserratMedium))),
+            ]),
+          ),
         ],
       );
 
@@ -817,27 +845,35 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(12.5)),
         color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
-    child: Padding(
-      padding: const EdgeInsets.only(
-          top: 11.0, bottom: 11.0, right: 19.0, left: 20.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CommonWidgets().textView(
-              StringConstants.saved,
-              StyleConstants.customTextStyle(
-                  fontSize: 16.0,
-                  color: getMaterialColor(AppColors.primaryColor1),
-                  fontFamily: FontConstants.montserratMedium)),
-          CommonWidgets().image(
-              image: AssetsConstants.greenTriangle,
-              width: 12.0,
-              height: 9.0)
-        ],
+    child: GestureDetector(
+      onTap: onTapResumeButton,
+      child: Padding(
+        padding: const EdgeInsets.only(
+            top: 11.0, bottom: 11.0, right: 19.0, left: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CommonWidgets().textView(
+                StringConstants.resume,
+                StyleConstants.customTextStyle(
+                    fontSize: 16.0,
+                    color: getMaterialColor(AppColors.primaryColor1),
+                    fontFamily: FontConstants.montserratBold)),
+            // CommonWidgets().image(
+            //     image: AssetsConstants.greenTriangle,
+            //     width: 12.0,
+            //     height: 9.0)
+          ],
+        ),
       ),
     ),
   );
 
+
+  //Action Events
+  onTapResumeButton() {
+    widget.onBackTap(savedOrdersList[selectedRow], savedOrderItemList, savedOrderExtraItemList);
+  }
 
   // Get data from local db function start from here
   getAllSavedOrders(String eventId)async{
@@ -887,7 +923,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   FontConstants.montserratMedium)),
         ),
         DataCell(CommonWidgets().textView(
-            "${Date.getDateFromTimeStamp(timestamp: savedOrders.orderDate)}",
+            savedOrders.getOrderDate(),
             StyleConstants.customTextStyle(
                 fontSize: 12.0,
                 color:

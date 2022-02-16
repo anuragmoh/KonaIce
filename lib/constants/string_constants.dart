@@ -39,6 +39,7 @@ class StringConstants {
   static const minusSymbol = '-';
 
   static const customMenu = 'Custom Menu';
+  static const allCategories = 'All Categories';
   static const addFoodItems = 'Add food items ${StringConstants.plusSymbol}';
   static const addFoodItemsExtras =
       'Add Food Extras ${StringConstants.plusSymbol}';
@@ -87,8 +88,10 @@ class StringConstants {
   static const orderDate = 'Order Date';
   static const street = 'Street';
   static const storeAddress = 'Store Address';
+  static const eventName = 'Event Name';
   static const eventAddress='Event Address';
   static const completed = 'Completed';
+  static const resume = 'Resume';
   static const pending = 'Pending';
   static const preparing = 'Preparing';
   static const saved = 'Saved';
@@ -134,6 +137,8 @@ class StringConstants {
   static const apiNotResponding = 'API not responded in time';
   static const errorOccurredWithCode = 'Error occurred with code ';
 
+  static const noOrdersToDisplay = 'We dont have any previous order for this event.';
+
   // Error Messages
   static const emptyValidEmail = 'Empty Email Address';
   static const enterValidEmail = 'Enter Email Address';
@@ -141,6 +146,7 @@ class StringConstants {
   static const enterValidPassword = 'Enter Valid Password';
   static const noInternetConnection = 'Please check your internet connection.';
   static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
+
 
 
 }

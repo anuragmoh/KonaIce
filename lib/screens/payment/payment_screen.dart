@@ -711,7 +711,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                             .getOrderDate()),
                     const SizedBox(height: 8.0),
                     customerDetailsComponent(
-                        street: StringExtension.empty(),
+                        eventName: widget.events.getEventName(),
                         email: widget.placeOrderRequestModel.email ??
                             StringExtension.empty(),
                         storeAddress: widget.events.getEventAddress(),
@@ -752,27 +752,27 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       ]);
 
   // customer Details
-  Widget customerDetailsComponent({required String street,
+  Widget customerDetailsComponent({required String eventName,
     required String email,
     required String storeAddress,
     required String phone}) =>
       Column(
         children: [
           Visibility(
-            visible: street.isNotEmpty,
+            visible: eventName.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
-                    '${StringConstants.street}: ',
+                    '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
-                        street,
+                        eventName,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
                             color: getMaterialColor(AppColors.textColor2),

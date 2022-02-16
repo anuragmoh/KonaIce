@@ -368,7 +368,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
     updateLastEventSync();
     for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
       await ItemCategoriesDAO().insert(ItemCategories(
-          id: pOsSyncItemCategoryDataDtoList[i].eventId!,
+          id: pOsSyncItemCategoryDataDtoList[i].categoryId!,
           eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
           categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode != null
               ? pOsSyncItemCategoryDataDtoList[i].categoryCode!

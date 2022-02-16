@@ -1,3 +1,5 @@
+import 'package:kona_ice_pos/utils/date_formats.dart';
+
 class SavedOrders {
   int id;
   String eventId;
@@ -126,5 +128,19 @@ class SavedOrders {
     orderStatus:$orderStatus,
     deleted:$deleted
     """;
+  }
+
+  String getOrderDateTime() {
+    DateTime date = Date.getDateFromTimeStamp(timestamp: orderDate);
+    String dateStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
+    String timeStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.hhmmaa);
+
+    return '$dateStr at $timeStr';
+  }
+
+  String getOrderDate() {
+    DateTime date = Date.getDateFromTimeStamp(timestamp: orderDate);
+    String dateStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
+    return dateStr;
   }
 }

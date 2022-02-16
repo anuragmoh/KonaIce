@@ -13,7 +13,7 @@ class ItemCategoriesDAO {
     try {
       final db = await _db;
       var result = await db.rawInsert(
-          "INSERT OR REPLACE INTO $tableName (id,event_id, category_code, category_name, description, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id)"
+          "INSERT OR REPLACE INTO $tableName (id, event_id, category_code, category_name, description, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id)"
           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
           [
             itemCategories.id,
@@ -53,7 +53,7 @@ class ItemCategoriesDAO {
     try {
       final db = await _db;
       var result = await db
-          .rawQuery("SELECT * from $tableName where eventId= ?", [eventId]);
+          .rawQuery("SELECT * from $tableName where event_id= ?", [eventId]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => ItemCategories.fromMap(result[index]));
       } else {
