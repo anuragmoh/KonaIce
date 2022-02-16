@@ -37,7 +37,7 @@ class BaseClient {
   Future<dynamic> post(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
-    print("paylaod-----payload");
+    print("paylaod-----$payload");
     print(uri);
     await addSessionKeyToHeader();
     try {
