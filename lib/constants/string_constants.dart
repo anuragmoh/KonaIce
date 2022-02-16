@@ -87,6 +87,7 @@ class StringConstants {
   static const orderDate = 'Order Date';
   static const street = 'Street';
   static const storeAddress = 'Store Address';
+  static const eventAddress='Event Address';
   static const completed = 'Completed';
   static const pending = 'Pending';
   static const preparing = 'Preparing';
@@ -134,8 +135,10 @@ class StringConstants {
   static const errorOccurredWithCode = 'Error occurred with code ';
 
   // Error Messages
-  static const enterValidEmail = 'Enter valid email';
-  static const enterValidPassword = 'Enter valid password';
+  static const emptyValidEmail = 'Empty Email Address';
+  static const enterValidEmail = 'Enter Email Address';
+  static const emptyValidPassword = 'Empty Password';
+  static const enterValidPassword = 'Enter Valid Password';
   static const noInternetConnection = 'Please check your internet connection.';
   static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
 

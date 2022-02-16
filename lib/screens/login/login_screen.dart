@@ -50,6 +50,8 @@ class _LoginScreenState extends State<LoginScreen>
   bool isApiProcess = false;
   String osVersion = '';
   String deviceName = '';
+  String emailValidationMessage = "";
+  String passwordValidationMessage = "";
 
   @override
   Widget build(BuildContext context) {
@@ -138,16 +140,20 @@ class _LoginScreenState extends State<LoginScreen>
                 right: 22.0),
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
-              child: TextField(
+              child: TextFormField(
+                onChanged: (value) {
+                  emailValidation();
+                },
+                maxLength: 100,
                 controller: emailController,
                 decoration: InputDecoration(
+                  counterText: "",
                   border: const OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
                   hintText: 'abc@gmail.com',
-                  errorText:
-                      isEmailValid ? null : StringConstants.enterValidEmail,
+                  errorText: emailValidationMessage,
                   hintStyle: StyleConstants.customTextStyle(
                       fontSize: 15.0,
                       color: getMaterialColor(AppColors.textColor1),
@@ -185,10 +191,12 @@ class _LoginScreenState extends State<LoginScreen>
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
               child: TextField(
+                onChanged: (value) {
+                  passwordValidation();
+                },
                 controller: passwordController,
                 obscureText: isPasswordVisible,
                 decoration: InputDecoration(
-
                   suffixIcon: GestureDetector(
                       onTap: () {
                         setState(() {
@@ -200,12 +208,15 @@ class _LoginScreenState extends State<LoginScreen>
                           : const Icon(Icons.visibility)),
                   border: const OutlineInputBorder(
                     borderSide:
-                    BorderSide(color: AppColors.textColor2, width: 1.0),
+                        BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
                   hintText: 'Password',
-                  errorText: isPasswordValid
+                  errorText: passwordValidationMessage,
+/*                  errorText: (isPasswordValid = true)
                       ? null
-                      : StringConstants.enterValidPassword,
+                      : (isPasswordValid = false)
+                          ? StringConstants.emptyValidPassword
+                          : StringConstants.enterValidPassword,*/
                   hintStyle: StyleConstants.customTextStyle(
                       fontSize: 15.0,
                       color: getMaterialColor(AppColors.textColor1),
@@ -278,11 +289,82 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
+  emailValidation() {
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailValidationMessage = StringConstants.emptyValidEmail;
+      });
+      return false;
+    }
+    if (!emailController.text.isValidEmail()) {
+      setState(() {
+        emailValidationMessage = StringConstants.enterValidEmail;
+      });
+      return false;
+    }
+    if (emailController.text.isValidEmail()) {
+      setState(() {
+        emailValidationMessage = "";
+      });
+      return true;
+    }
+  }
+
+  passwordValidation() {
+    if (passwordController.text.isEmpty) {
+      setState(() {
+        passwordValidationMessage = StringConstants.emptyValidPassword;
+      });
+      return false;
+    }
+    if (!passwordController.text.isValidPassword()) {
+      setState(() {
+        passwordValidationMessage = StringConstants.enterValidPassword;
+      });
+      return false;
+    }
+    if (passwordController.text.isValidPassword()) {
+      setState(() {
+        passwordValidationMessage = "";
+      });
+      return true;
+    }
+  }
+
   onTapSingIn() {
+    FunctionalUtils.hideKeyboard();
     setState(() {
-      isEmailValid = emailController.text.isValidEmail();
-      isPasswordValid = passwordController.text.isValidPassword();
+      emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
+      passwordController.text.isEmpty
+          ? isPasswordValid = false
+          : isPasswordValid = true;
     });
+    emailValidation();
+    passwordValidation();
+    /* if(emailController.text.isEmpty){
+      setState(() {
+        emailValidationMessage = StringConstants.emptyValidEmail;
+      });
+      return false;
+    }
+    if(!emailController.text.isValidEmail()){
+      setState(() {
+        emailValidationMessage = StringConstants.enterValidEmail;
+      });
+      return false;
+    }*/
+  /*  if (passwordController.text.isEmpty) {
+      setState(() {
+        passwordValidationMessage = StringConstants.emptyValidPassword;
+      });
+      return false;
+    }
+    if (!passwordController.text.isValidPassword()) {
+      setState(() {
+        passwordValidationMessage = StringConstants.emptyValidPassword;
+      });
+      return false;
+    }*/
 
     if (isEmailValid && isPasswordValid) {
       CheckConnection().connectionState().then((value) {
@@ -308,7 +390,6 @@ class _LoginScreenState extends State<LoginScreen>
       isLoginView = true;
     });
   }
-
 
   //API Calls
 
@@ -336,12 +417,13 @@ class _LoginScreenState extends State<LoginScreen>
     deviceName = iosInfo.localizedModel;
   }
 
-
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+          context: context);
     });
   }
 
@@ -356,18 +438,18 @@ class _LoginScreenState extends State<LoginScreen>
 
   //DB Operations
   checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
-   var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
-   if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
-         print("old user");
-   } else {
-     await FunctionalUtils.clearAllDBData();
-   }
-   storeInformation(loginResponseModel);
+    var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
+    if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
+      print("old user");
+    } else {
+      await FunctionalUtils.clearAllDBData();
+    }
+    storeInformation(loginResponseModel);
   }
 
   storeInformation(LoginResponseModel loginResponseModel) async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.sessionKey, value: loginResponseModel.sessionKey!));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.sessionKey, value: loginResponseModel.sessionKey!));
     await FunctionalUtils.saveUserDetailInDB(userModel: loginResponseModel);
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));

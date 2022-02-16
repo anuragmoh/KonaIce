@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class CustomMenuPopup extends StatefulWidget {
@@ -222,6 +223,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
   }
 
   onTapSaveButton() {
+    FunctionalUtils.hideKeyboard();
     setState(() {
       if (menuNameTextFieldController.text.isNotEmpty) {
         menuName = menuNameTextFieldController.text;
