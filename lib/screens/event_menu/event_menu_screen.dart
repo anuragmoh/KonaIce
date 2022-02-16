@@ -110,6 +110,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   // LocalDB call start from here.
   getAllItemCategories(String id) async {
     var result = await ItemCategoriesDAO().getAllCategories();
+    print(result);
     if (result != null) {
       setState(() {
         itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
