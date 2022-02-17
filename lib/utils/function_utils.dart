@@ -144,12 +144,29 @@ class FunctionalUtils {
 
     return userID;
   }
+  static Future<String> getUserEmailId() async{
+    String emailId = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.email);
+    if (idObj != null) {
+      emailId = idObj.value ;
+    }
+    return emailId;
+  }
+  static Future<String> getUserPhoneNumber() async{
+    String phoneNumber = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.phoneNum);
+    if (idObj != null) {
+      phoneNumber = idObj.value ;
+    }
+    return phoneNumber;
+  }
+
 
   static GlobalKey<NavigatorState> navigatorKey =
   GlobalKey<NavigatorState>();
 
   static clearSessionData() async {
-    print("getting 401 in base client");
+    debugPrint("getting 401 in base client");
     await SessionDAO().delete(DatabaseKeys.sessionKey);
     Navigator.of(navigatorKey.currentContext!).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));

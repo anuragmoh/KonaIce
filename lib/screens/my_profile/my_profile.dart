@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -18,6 +21,36 @@ class MyProfile extends StatefulWidget {
 
 class _MyProfileState extends State<MyProfile> {
   int currentIndex = 0;
+
+  var userName = 'Guest';
+
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController contactNumberController = TextEditingController();
+  TextEditingController emailIdController = TextEditingController();
+
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
+  getUserDetails()async{
+    userName = await FunctionalUtils.getUserName();
+    var emailId = await FunctionalUtils.getUserEmailId();
+    var phoneNumber = await FunctionalUtils.getUserPhoneNumber();
+    setState(() {
+      firstNameController.text = userName.split(" ")[0];
+      lastNameController.text = userName.split(" ")[1];
+      contactNumberController.text = phoneNumber;
+      emailIdController.value = TextEditingValue(text: emailId);
+      //emailIdController.text = "gajanan.garkar@mobisoftinfotech.com";
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +114,7 @@ class _MyProfileState extends State<MyProfile> {
                       fontFamily: FontConstants.montserratBold)),
             ),
           ),
-          CommonWidgets().profileComponent('Justin Powell'),
+          CommonWidgets().profileComponent(userName),
         ],
       ),
     );
@@ -115,15 +148,15 @@ class _MyProfileState extends State<MyProfile> {
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 23.0, vertical: 29.0),
-              child: CommonWidgets().profileImage('Justin Powell'),
+              child: CommonWidgets().profileImage(userName),
             ),
             Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 25.0, horizontal: 24.0),
               child: Row(
                 children: [
-                  profileDetailsComponent(StringConstants.firstName, "",StringConstants.enterFirstName),
-                  profileDetailsComponent(StringConstants.lastName, "",StringConstants.enterLastName),
+                  profileDetailsComponent(StringConstants.firstName, "",StringConstants.enterFirstName,firstNameController),
+                  profileDetailsComponent(StringConstants.lastName, "",StringConstants.enterLastName,lastNameController),
                 ],
               ),
             ),
@@ -132,14 +165,14 @@ class _MyProfileState extends State<MyProfile> {
                   const EdgeInsets.symmetric(vertical: 0.0, horizontal: 24.0),
               child: Row(
                 children: [
-                  profileDetailsComponent(StringConstants.contactNumber, "",StringConstants.enterContactNumber),
-                  profileDetailsComponent(StringConstants.emailId, "",StringConstants.enterEmailId),
+                  profileDetailsComponent(StringConstants.contactNumber, "",StringConstants.enterContactNumber,contactNumberController),
+                  profileDetailsComponent(StringConstants.emailId, "",StringConstants.enterEmailId,emailIdController),
                 ],
               ),
             )
           ]);
 
-  Widget profileDetailsComponent(String txtName, String txtValue,String txtHint) => Column(
+  Widget profileDetailsComponent(String txtName, String txtValue,String txtHint,TextEditingController textEditingController) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonWidgets().textWidget(
@@ -164,6 +197,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
+                  controller: textEditingController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: AppColors.whiteColor,
@@ -200,17 +234,17 @@ class _MyProfileState extends State<MyProfile> {
             Padding(
               padding: const EdgeInsets.only(
                   top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(StringConstants.oldPassword, "",StringConstants.oldPassword),
+              child: profileDetailsComponent(StringConstants.oldPassword, "",StringConstants.oldPassword,oldPasswordController),
             ),
             Padding(
               padding: const EdgeInsets.only(
                   top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(StringConstants.newPassword, "",StringConstants.newPassword),
+              child: profileDetailsComponent(StringConstants.newPassword, "",StringConstants.newPassword,newPasswordController),
             ),
             Padding(
               padding: const EdgeInsets.only(
                   top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(StringConstants.confirmPassword, "",StringConstants.confirmPassword),
+              child: profileDetailsComponent(StringConstants.confirmPassword, "",StringConstants.confirmPassword,confirmPasswordController),
             ),
             Container(
               alignment: Alignment.center,
