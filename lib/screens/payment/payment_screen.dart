@@ -48,7 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   double foodCost = 0.0;
   bool isPaymentDone = false;
   int receiptMode = 1;
-  String orderID = 'F001587';
+  String orderID = 'NA';
 
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();

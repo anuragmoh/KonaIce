@@ -10,6 +10,7 @@ String? placeOrderRequestModelToJson(PlaceOrderRequestModel data) => json.encode
 
 class PlaceOrderRequestModel {
   PlaceOrderRequestModel({
+    this.id,
     this.eventId,
     this.cardId,
     this.campaignId,
@@ -40,6 +41,7 @@ class PlaceOrderRequestModel {
     this.orderItemsList,
   });
 
+  String? id;
   String? eventId;
   String? cardId;
   String? campaignId;
@@ -70,6 +72,7 @@ class PlaceOrderRequestModel {
   List<OrderItemsList>? orderItemsList;
 
   factory PlaceOrderRequestModel.fromJson(Map<String?, dynamic> json) => PlaceOrderRequestModel(
+    id: json["id"],
     eventId: json["eventId"],
     cardId: json["cardId"],
     campaignId: json["campaignId"],
@@ -101,6 +104,7 @@ class PlaceOrderRequestModel {
   );
 
   Map<String?, dynamic> toJson() => {
+    "id": id,
     "eventId": eventId,
     "cardId": cardId,
     "campaignId": campaignId,

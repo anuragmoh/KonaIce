@@ -1004,7 +1004,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapSaveButton() {
-    callPlaceOrderAPI();
+    if (orderID.isEmpty) {
+      callPlaceOrderAPI();
+    } else {
+      saveOrderIntoLocalDB(orderID);
+    }
   }
 
 
@@ -1143,6 +1147,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
      orderRequestModel.eventId = widget.events.id;
      orderRequestModel.cardId = "9db195092bc44d9db117f03a5a541025";
      orderRequestModel.campaignId = "";
+
+     if (orderID.isNotEmpty) {
+       orderRequestModel.id = orderID;
+     }
 
      //addCustomer Details
      if (customer != null) {
