@@ -62,6 +62,7 @@ class POsSyncEventDataDtoList {
     required this.zipCode,
     required this.startDateTime,
     required this.endDateTime,
+    required this.salesTax,
     required this.createdAt,
     required this.updatedAt,
     required this.createdBy,
@@ -80,6 +81,7 @@ class POsSyncEventDataDtoList {
   String? zipCode;
   int? startDateTime;
   int? endDateTime;
+  num? salesTax;
   int? createdAt;
   int? updatedAt;
   String? createdBy;
@@ -98,6 +100,7 @@ class POsSyncEventDataDtoList {
     zipCode: json["zipCode"],
     startDateTime: json["startDateTime"],
     endDateTime: json["endDateTime"],
+    salesTax: json["salesTax"],
     createdAt: json["createdAt"],
     updatedAt: json["updatedAt"],
     createdBy: json["createdBy"],
@@ -117,6 +120,7 @@ class POsSyncEventDataDtoList {
     "zipCode": zipCode,
     "startDateTime": startDateTime,
     "endDateTime": endDateTime,
+    "salesTax": salesTax,
     "createdAt": createdAt,
     "updatedAt": updatedAt,
     "createdBy": createdBy,

@@ -339,7 +339,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
           checkAmount: 0,
           ccAmount: 0,
           eventSalesCollected: 0,
-          salesTax: 0,
+          salesTax: pOsSyncEventDataDtoList[i].salesTax ?? 0,
           giveback: 0,
           tipAmount: 0,
           netEventSales: 0,

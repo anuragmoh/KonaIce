@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -132,6 +133,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     var result = await ItemDAO().getAllItemsByEventId(eventId);
     if (result != null) {
       setState(() {
+        itemList.clear();
+        dbItemList.clear();
         itemList.addAll(result);
         dbItemList.addAll(itemList);
       });
@@ -177,6 +180,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     getItemCategoriesByEventId(widget.events.id);
     getAllItems(widget.events.id);
     getUserName();
+    setSalesTax();
   }
 
   @override
@@ -287,6 +291,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   //Add to cart Container
   Widget rightCartViewContainer() {
+    debugPrint('onRight cartView ${selectedMenuItems.length}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -1078,13 +1083,18 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     // Scaffold.of(context).openDrawer();
   }
 
-  onBackFromAllOrder({required SavedOrders savedOrder, required List<SavedOrdersItem> savedOrderItemList, required List<SavedOrdersExtraItems> savedOrderExtraItemList}) {
+  onBackFromAllOrder({required SavedOrders savedOrder, required List<SavedOrdersItem> savedOrderItemList, required List<SavedOrdersExtraItems> savedOrderExtraItemList}) async {
 
-     setState(() {
-       clearCart();
-       isProduct = true;
-     });
+    await clearCart();
+    setState(() {
+      isProduct = true;
+    });
+    Future.delayed(
+        const Duration(milliseconds: 100),
+            () {
 
+
+    setState(() {
     tip = savedOrder.tip.toDouble();
     addTipTextFieldController.text = savedOrder.tip.toString();
     discount = savedOrder.discount.toDouble();
@@ -1114,12 +1124,17 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 item.selectedExtras.add(extraItem);
               }
             }
-            selectedMenuItems.add(item);
-            break;
           }
+          selectedMenuItems.add(item);
+          break;
         }
       }
     }
+
+    });
+    debugPrint('inside onback ${savedOrderItemList.length} ------ ${selectedMenuItems.length}');
+            }
+    );
   }
 
   //data required for next screen

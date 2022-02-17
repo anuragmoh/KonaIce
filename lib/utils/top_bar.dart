@@ -39,7 +39,6 @@ class _TopBarState extends State<TopBar> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('my tab bar0 ${widget.isProduct}');
     isProduct = widget.isProduct;
     return
        Container(
@@ -98,7 +97,6 @@ class _TopBarState extends State<TopBar> {
 
         // Scaffold.of(context).openDrawer();
 
-        print('ondrawerformtopbar');
         widget.onDrawerTap();
 
       },
@@ -160,7 +158,6 @@ class _TopBarState extends State<TopBar> {
       );
 
   Widget centerWidget() {
-    debugPrint('my tab bar $isProduct');
    return Container(
       width: 244.0,
       decoration: BoxDecoration(
