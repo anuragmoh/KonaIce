@@ -40,7 +40,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     implements ClockInOutResponseContractor, SyncResponseContractor {
-
   late SyncPresenter _syncPresenter;
 
   _HomeScreenState() {
@@ -73,18 +72,18 @@ class _HomeScreenState extends State<HomeScreen>
   late ClockInOutPresenter clockInOutPresenter;
   ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
 
-
-
   Future<void> getSyncData() async {
     eventList.clear();
-    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
+    var result = await EventsDAO().getTodayEvent(
+        Date.getStartOfDateTimeStamp(date: DateTime.now()),
+        Date.getStartOfDateTimeStamp(date: DateTime.now()));
     if (result != null) {
       setState(() {
         eventList.addAll(result);
       });
     } else {
-      await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
-        if(value !=null){
+      await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+        if (value != null) {
           int lastSyncTime = int.parse(value.value);
           CheckConnection().connectionState().then((value) {
             if (value == true) {
@@ -98,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen>
                   context: context);
             }
           });
-        }else{
+        } else {
           CheckConnection().connectionState().then((value) {
             if (value == true) {
               setState(() {
@@ -111,21 +110,20 @@ class _HomeScreenState extends State<HomeScreen>
                   context: context);
             }
           });
-
         }
       });
-
     }
   }
-  loadDataFromDb()async{
+
+  loadDataFromDb() async {
     eventList.clear();
     //var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
-    var result =  await EventsDAO().getValues();
+    var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
         eventList.addAll(result);
       });
-    }else{
+    } else {
       eventList.clear();
     }
   }
@@ -203,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           Expanded(
               child: FractionallySizedBox(
-                  widthFactor: 0.68,
+                  widthFactor: eventList.isNotEmpty ? 0.68 : 1.0,
                   alignment: Alignment.topLeft,
                   child: listViewContainer()))
         ],
@@ -299,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen>
                                     Padding(
                                       padding: const EdgeInsets.only(left: 40),
                                       child: CommonWidgets().textWidget(
-                                       eventDetails.getEventTime(),
+                                        eventDetails.getEventTime(),
                                         StyleConstants.customTextStyle(
                                             fontSize: 12.0,
                                             color: getMaterialColor(
@@ -316,7 +314,16 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                   );
                 })
-            : const Center(child: Text('Events not available',style: TextStyle(fontSize: 20.0))),
+            : Center(
+                child: ListView(
+                  children: const [
+                    Center(
+                      child: Text('Events not available',
+                          style: TextStyle(fontSize: 20.0)),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -432,9 +439,9 @@ class _HomeScreenState extends State<HomeScreen>
         endTimestamp: endTimestamp);
   }
 
-  refreshDataOnRequest()async{
-    await SessionDAO().getValueForKey(DatabaseKeys.events).then((value){
-      if(value !=null){
+  refreshDataOnRequest() async {
+    await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+      if (value != null) {
         int lastSyncTime = int.parse(value.value);
         CheckConnection().connectionState().then((value) {
           if (value == true) {
@@ -449,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen>
                 context: context);
           }
         });
-      }else{
+      } else {
         CheckConnection().connectionState().then((value) {
           if (value == true) {
             setState(() {
@@ -462,11 +469,10 @@ class _HomeScreenState extends State<HomeScreen>
                 context: context);
           }
         });
-
       }
     });
-
   }
+
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
@@ -532,10 +538,8 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-
-
   Future<void> insertEventSync() async {
-    if(pOsSyncEventDataDtoList.isNotEmpty){
+    if (pOsSyncEventDataDtoList.isNotEmpty) {
       for (int i = 0; i < pOsSyncEventDataDtoList.length; i++) {
         await EventsDAO().insert(Events(
             id: pOsSyncEventDataDtoList[i].eventId!,
@@ -640,7 +644,7 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
     updateLastEventSync();
-    if(pOsSyncItemCategoryDataDtoList.isNotEmpty){
+    if (pOsSyncItemCategoryDataDtoList.isNotEmpty) {
       for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
         print("Categories inserting");
         await ItemCategoriesDAO().insert(ItemCategories(
@@ -661,12 +665,12 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
     updateLastCategoriesSync();
-    if(pOsSyncEventItemExtrasDataDtoList.isNotEmpty){
+    if (pOsSyncEventItemExtrasDataDtoList.isNotEmpty) {
       for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
         await FoodExtraItemsDAO().insert(FoodExtraItems(
             id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
             foodExtraItemCategoryId:
-            pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+                pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
             itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
             eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
             itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
@@ -684,26 +688,26 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
     updateLastItemExtrasSync();
-   if(pOsSyncEventItemDataDtoList.isNotEmpty){
-     for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
-       await ItemDAO().insert(Item(
-           id: pOsSyncEventItemDataDtoList[i].itemId!,
-           eventId: pOsSyncEventItemDataDtoList[i].eventId!,
-           itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
-           itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
-           imageFileId: "empty",
-           name: pOsSyncEventItemDataDtoList[i].name!,
-           description: pOsSyncEventItemDataDtoList[i].description!,
-           price: pOsSyncEventItemDataDtoList[i].price!,
-           activated: false,
-           createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
-           createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
-           updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
-           updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
-           deleted: pOsSyncEventItemDataDtoList[i].deleted!,
-           franchiseId: "empty"));
-     }
-   }
+    if (pOsSyncEventItemDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
+        await ItemDAO().insert(Item(
+            id: pOsSyncEventItemDataDtoList[i].itemId!,
+            eventId: pOsSyncEventItemDataDtoList[i].eventId!,
+            itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
+            itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
+            imageFileId: "empty",
+            name: pOsSyncEventItemDataDtoList[i].name!,
+            description: pOsSyncEventItemDataDtoList[i].description!,
+            price: pOsSyncEventItemDataDtoList[i].price!,
+            activated: false,
+            createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
+            createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
+            updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
+            updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
+            deleted: pOsSyncEventItemDataDtoList[i].deleted!,
+            franchiseId: "empty"));
+      }
+    }
     updateLastItemSync();
     loadDataFromDb();
   }
@@ -758,8 +762,9 @@ class _HomeScreenState extends State<HomeScreen>
       isApiProcess = false;
       _syncEventMenuResponseModel.add(response);
     });
-      storeDataIntoDB();
+    storeDataIntoDB();
   }
+
   void storeDataIntoDB() {
     setState(() {
       pOsSyncEventDataDtoList
