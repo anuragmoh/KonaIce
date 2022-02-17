@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
@@ -71,6 +72,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     discount = widget.billDetails['discount'];
     foodCost = widget.billDetails['foodCost'];
     salesTax = widget.events.salesTax.toDouble();
+    if (widget.placeOrderRequestModel.id != null && widget.placeOrderRequestModel.id!.isNotEmpty) {
+      orderID = widget.placeOrderRequestModel.id!;
+    }
     callPlaceOrderAPI();
   }
 
@@ -157,7 +161,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
                     InkWell(
                       onTap: () {
-                        Navigator.of(context).pop();
+                        onTapBackButton();
                       },
                       child: CommonWidgets().image(
                           image: AssetsConstants.backArrow,
@@ -995,7 +999,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   onTapNewOrder() {
     if (isPaymentDone) {
-      Navigator.of(context).pop(true);
+      Navigator.of(context).pop(getMapToSendBack(true));
     }
   }
 
@@ -1004,7 +1008,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   }
 
   onTapBackButton() {
-    Navigator.of(context).pop(false);
+    Navigator.of(context).pop(getMapToSendBack(isPaymentDone));
   }
 
   onTapBottomListItem(int index) {
@@ -1018,6 +1022,15 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   }
 
   //Other functions
+
+  Map getMapToSendBack(bool isOrderComplete) {
+    String orderComplete = isOrderComplete ? "True" : "False";
+    Map orderInfo = {"isOrderComplete": orderComplete, "orderID": orderID};
+    debugPrint("insideGetMap $orderInfo");
+    return orderInfo;
+  }
+
+
   PayOrderRequestModel getPayOrderRequestModel() {
     PayOrderRequestModel payOrderRequestModel = PayOrderRequestModel();
     payOrderRequestModel.orderId = orderID;
@@ -1049,6 +1062,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     setState(() {
       isPaymentDone = true;
     });
+    clearOderData();
   }
 
   @override
@@ -1068,4 +1082,10 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       });
     }
   }
+
+  //DB Calls
+  clearOderData() async {
+    await SavedOrdersDAO().clearEventDataByOrderID(orderID);
+  }
+
 }

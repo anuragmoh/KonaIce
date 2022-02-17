@@ -895,7 +895,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
         setState(() {
           selectedRow = index;
         });
-        getItemByOrderId(savedOrders.orderId);
+      //  if (selectedRow != index) {
+          getItemByOrderId(savedOrders.orderId);
+     //   }
       },
         color: selectedRow==index ? MaterialStateProperty.all(Colors.white): null,
       cells: <DataCell>[

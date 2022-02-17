@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
 import 'package:kona_ice_pos/database/database_helper.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
@@ -55,6 +57,18 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
+
+  Future clearEventDataByOrderID(String orderID) async {
+    try {
+      final db = await _db;
+      await db.rawDelete("DELETE from $tableName where order_id = ?", [orderID]);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+   await SavedOrdersItemsDAO().clearEventDataByOrderID(orderID);
+    await SavedOrdersExtraItemsDAO().clearEventDataByOrderID(orderID);
+  }
+
   Future clearEventsData() async {
     try {
       final db = await _db;

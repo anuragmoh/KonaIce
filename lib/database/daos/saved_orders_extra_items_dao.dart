@@ -35,6 +35,16 @@ class SavedOrdersExtraItemsDAO {
       debugPrint(error.toString());
     }
   }
+
+  Future clearEventDataByOrderID(String orderID) async {
+    try {
+      final db = await _db;
+      await db.rawDelete("DELETE from $tableName where order_id = ?", [orderID]);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   Future clearEventsData() async {
     try {
       final db = await _db;

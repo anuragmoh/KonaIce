@@ -957,18 +957,23 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   calculateTotal() {
-    totalAmount = totalAmountOfSelectedItems + tip + salesTax - discount;
+    if (selectedMenuItems.isNotEmpty) {
+      totalAmount = totalAmountOfSelectedItems + tip + salesTax - discount;
+    } else {
+      totalAmount = 0.0;
+    }
   }
 
   clearCart() {
     setState(() {
       selectedMenuItems.clear();
       itemList.clear();
-      tip = 0;
-      discount = 0;
+      tip = 0.0;
+      discount = 0.0;
       addTipTextFieldController.clear();
       addDiscountTextFieldController.clear();
       customerName = StringConstants.addCustomer;
+      orderID = '';
      getAllItems(widget.events.id);
     });
   }
@@ -1104,6 +1109,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     discount = savedOrder.discount.toDouble();
     addDiscountTextFieldController.text = savedOrder.discount.toString();
     customerName = savedOrder.customerName;
+    orderID = savedOrder.orderId;
+  //  salesTax = setSalesTax();
     if (savedOrder.customerName != StringConstants.guestCustomer) {
       customer = CustomerDetails();
       List<String> names = customerName.split(' ');
@@ -1136,7 +1143,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     }
 
     });
-    debugPrint('inside onback ${savedOrderItemList.length} ------ ${selectedMenuItems.length}');
             }
     );
   }
@@ -1235,8 +1241,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,))
     ).then((value) => {
-      if (value != null && value) {
-        clearCart()
+      if (value != null) {
+         if (value["isOrderComplete"] == "True"){
+           clearCart()
+         } else if (value["orderID"] != "NA") {
+           orderID = value["orderID"]
+         }
       }
     });
   }
