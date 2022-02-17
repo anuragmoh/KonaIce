@@ -33,15 +33,18 @@ class _MyProfileState extends State<MyProfile> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+
   getUserDetails()async{
     userName = await FunctionalUtils.getUserName();
-    var emailId = await FunctionalUtils.getUserEmailId();
+    String emailId = await FunctionalUtils.getUserEmailId();
+    print('Email$emailId');
     var phoneNumber = await FunctionalUtils.getUserPhoneNumber();
     setState(() {
       firstNameController.text = userName.split(" ")[0];
       lastNameController.text = userName.split(" ")[1];
       contactNumberController.text = phoneNumber;
-      emailIdController.value = TextEditingValue(text: emailId);
+      // emailIdController.value = TextEditingValue(text: emailId);
+      emailIdController.text = 'Email$emailId' ;
       //emailIdController.text = "gajanan.garkar@mobisoftinfotech.com";
     });
   }
@@ -166,7 +169,7 @@ class _MyProfileState extends State<MyProfile> {
               child: Row(
                 children: [
                   profileDetailsComponent(StringConstants.contactNumber, "",StringConstants.enterContactNumber,contactNumberController),
-                  profileDetailsComponent(StringConstants.emailId, "",StringConstants.enterEmailId,emailIdController),
+                  profileEmailTextFiledComponent(StringConstants.emailId, "",StringConstants.enterEmailId,emailIdController),
                 ],
               ),
             )
@@ -214,6 +217,54 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ],
       );
+  Widget profileEmailTextFiledComponent(String txtName, String txtValue,String txtHint,TextEditingController textEditingController) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      CommonWidgets().textWidget(
+          txtName,
+          StyleConstants.customTextStyle(
+              fontSize: 14.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratRegular),
+          textAlign: TextAlign.left),
+      Padding(
+        padding: const EdgeInsets.only(
+            top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
+        child: Container(
+          height: 40.0,
+          width: 300.0,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6.0),
+              border: Border.all(
+                  color: getMaterialColor(AppColors.textColor1)
+                      .withOpacity(0.2),
+                  width: 2)),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 2.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: IntrinsicWidth(
+                stepWidth: 10,
+                child: TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                      filled: true,
+                      fillColor: AppColors.whiteColor,
+                      hintText: txtHint,
+                      border: InputBorder.none,
+                      labelText: txtValue,
+                      hintStyle: StyleConstants.customTextStyle(
+                          fontSize: 15.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratRegular)),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
+  );
 
   Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
