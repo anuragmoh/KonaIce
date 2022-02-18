@@ -173,6 +173,7 @@ class FunctionalUtils {
   }
 
   static clearAllDBData() {
+     SessionDAO().clearSessionData();
      EventItemDAO().clearEventItemData;
      EventsDAO().clearEventsData();
      FoodExtraItemsDAO().clearFoodExtraItemsData();
