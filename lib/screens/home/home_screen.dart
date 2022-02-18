@@ -76,7 +76,8 @@ class _HomeScreenState extends State<HomeScreen>
     eventList.clear();
     var result = await EventsDAO().getTodayEvent(
         Date.getStartOfDateTimeStamp(date: DateTime.now()),
-        Date.getStartOfDateTimeStamp(date: DateTime.now()));
+       Date.getEndOfDateTimeStamp(date: DateTime.now()));
+    //var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
         eventList.addAll(result);
@@ -116,8 +117,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   loadDataFromDb() async {
-    eventList.clear();
-    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getStartOfDateTimeStamp(date: DateTime.now()));
+    setState(() {
+      eventList.clear();
+    });
+    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getEndOfDateTimeStamp(date: DateTime.now()));
     //var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
@@ -445,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen>
         int lastSyncTime = int.parse(value.value);
         CheckConnection().connectionState().then((value) {
           if (value == true) {
-            eventList.clear();
+            //eventList.clear();
             setState(() {
               isApiProcess = true;
             });
@@ -644,9 +647,9 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
     updateLastEventSync();
+    loadDataFromDb();
     if (pOsSyncItemCategoryDataDtoList.isNotEmpty) {
       for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
-        print("Categories inserting");
         await ItemCategoriesDAO().insert(ItemCategories(
             id: pOsSyncItemCategoryDataDtoList[i].categoryId!,
             eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
@@ -709,7 +712,6 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
     updateLastItemSync();
-    loadDataFromDb();
   }
 
   Future<void> updateLastEventSync() async {
@@ -760,6 +762,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     setState(() {
       isApiProcess = false;
+      eventList.clear();
       _syncEventMenuResponseModel.add(response);
     });
     storeDataIntoDB();
