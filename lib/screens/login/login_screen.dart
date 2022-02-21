@@ -141,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
               child: TextFormField(
+                keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
                   emailValidation();
                 },
@@ -331,7 +332,7 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   onTapSingIn() {
-    FunctionalUtils.hideKeyboard();
+    FocusScope.of(context).unfocus();
     setState(() {
       emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
       passwordController.text.isEmpty

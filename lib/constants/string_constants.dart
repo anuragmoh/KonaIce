@@ -137,7 +137,7 @@ class StringConstants {
   static const apiNotResponding = 'API not responded in time';
   static const errorOccurredWithCode = 'Error occurred with code ';
 
-  static const noOrdersToDisplay = 'We dont have any previous order for this event.';
+  static const noOrdersToDisplay = "We don't have any previous order for this event.";
 
   // Error Messages
   static const emptyValidEmail = 'Empty Email Address';
@@ -146,6 +146,15 @@ class StringConstants {
   static const enterValidPassword = 'Enter Valid Password';
   static const noInternetConnection = 'Please check your internet connection.';
   static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
+
+  static const eventNotAvailable = 'No Events items available';
+
+
+  // Dialog String
+
+  static const confirmMessage = "Do you really want to clear the cart ?";
+  static const yes = "Yes";
+  static const no = "No";
 
 
 

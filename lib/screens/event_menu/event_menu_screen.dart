@@ -31,6 +31,7 @@ import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/dialog/dialog_helper.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -1004,7 +1005,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapClearButton() {
-    clearCart();
+    DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo);
+  }
+  onConfirmTapYes(){
+  clearCart();
+  onConfirmTapNo();
+  }
+  onConfirmTapNo(){
+    Navigator.of(context).pop();
   }
 
   onTapChargeButton() {
