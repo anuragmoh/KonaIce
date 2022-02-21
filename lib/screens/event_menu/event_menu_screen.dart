@@ -198,6 +198,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: getMaterialColor(AppColors.textColor3),
       endDrawer: const NotificationDrawer(),

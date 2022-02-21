@@ -98,7 +98,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               onTap: () {
                 setState(() {
                   // onTapBottomListItem(index);
-                  bottomBarMenuClass.changeIndex(index);
+                  // bottomBarMenuClass.changeIndex(index);
                   currentIndex = index;
                   widget.onTapCallBack(index);
                 });

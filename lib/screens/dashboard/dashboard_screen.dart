@@ -109,6 +109,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
+
       backgroundColor: getMaterialColor(AppColors.textColor3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
