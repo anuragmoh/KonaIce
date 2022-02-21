@@ -37,15 +37,12 @@ class _MyProfileState extends State<MyProfile> {
   getUserDetails()async{
     userName = await FunctionalUtils.getUserName();
     String emailId = await FunctionalUtils.getUserEmailId();
-    print('Email$emailId');
     var phoneNumber = await FunctionalUtils.getUserPhoneNumber();
     setState(() {
       firstNameController.text = userName.split(" ")[0];
       lastNameController.text = userName.split(" ")[1];
       contactNumberController.text = phoneNumber;
-      // emailIdController.value = TextEditingValue(text: emailId);
-      emailIdController.text = 'Email$emailId' ;
-      //emailIdController.text = "gajanan.garkar@mobisoftinfotech.com";
+      emailIdController.text = emailId;
     });
   }
 
@@ -234,6 +231,7 @@ class _MyProfileState extends State<MyProfile> {
           height: 40.0,
           width: 300.0,
           decoration: BoxDecoration(
+            color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(6.0),
               border: Border.all(
                   color: getMaterialColor(AppColors.textColor1)
@@ -244,7 +242,7 @@ class _MyProfileState extends State<MyProfile> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: IntrinsicWidth(
-                stepWidth: 10,
+                stepWidth: 0,
                 child: TextField(
                   controller: textEditingController,
                   decoration: InputDecoration(

@@ -76,7 +76,7 @@ class _TopBarState extends State<TopBar> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    notificationWithCount(),
+                    // notificationWithCount(),
                     const SizedBox(
                       width: 20.0,
                     ),

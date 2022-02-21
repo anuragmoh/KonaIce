@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen>
                 right: 22.0),
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
-              child: TextFormField(
+              child: TextField(
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) {
                   emailValidation();
@@ -192,7 +192,6 @@ class _LoginScreenState extends State<LoginScreen>
           Padding(
             padding: EdgeInsets.only(
                 top: 0.65 * SizeConfig.imageSizeMultiplier,
-                bottom: 2.60 * SizeConfig.imageSizeMultiplier,
                 left: 22.0,
                 right: 22.0),
             child: Padding(
@@ -244,7 +243,6 @@ class _LoginScreenState extends State<LoginScreen>
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.only(
-                  top: 3.25 * SizeConfig.imageSizeMultiplier,
                   right: 21.0,
                   bottom: 2.60 * SizeConfig.imageSizeMultiplier),
               child: InkWell(

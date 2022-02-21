@@ -72,48 +72,116 @@ class _HomeScreenState extends State<HomeScreen>
   late ClockInOutPresenter clockInOutPresenter;
   ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
 
-  Future<void> getSyncData() async {
-    eventList.clear();
-    var result = await EventsDAO().getTodayEvent(
-        Date.getStartOfDateTimeStamp(date: DateTime.now()),
-       Date.getEndOfDateTimeStamp(date: DateTime.now()));
-    //var result = await EventsDAO().getValues();
-    if (result != null) {
-      setState(() {
-        eventList.addAll(result);
-      });
-    } else {
-      await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
-        if (value != null) {
-          int lastSyncTime = int.parse(value.value);
-          CheckConnection().connectionState().then((value) {
-            if (value == true) {
-              setState(() {
-                isApiProcess = true;
-              });
-              _syncPresenter.syncData(lastSyncTime);
-            } else {
-              CommonWidgets().showErrorSnackBar(
-                  errorMessage: StringConstants.noInternetConnection,
-                  context: context);
-            }
-          });
-        } else {
-          CheckConnection().connectionState().then((value) {
-            if (value == true) {
-              setState(() {
-                isApiProcess = true;
-              });
-              _syncPresenter.syncData(0);
-            } else {
-              CommonWidgets().showErrorSnackBar(
-                  errorMessage: StringConstants.noInternetConnection,
-                  context: context);
-            }
-          });
-        }
-      });
-    }
+  // Future<void> getSyncData() async {
+  //   eventList.clear();
+  //   await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+  //     if (value != null) {
+  //       int lastSyncTime = int.parse(value.value);
+  //       CheckConnection().connectionState().then((value) {
+  //         if (value == true) {
+  //           setState(() {
+  //             isApiProcess = true;
+  //           });
+  //           _syncPresenter.syncData(lastSyncTime);
+  //         } else {
+  //           CommonWidgets().showErrorSnackBar(
+  //               errorMessage: StringConstants.noInternetConnection,
+  //               context: context);
+  //         }
+  //       });
+  //     } else {
+  //       CheckConnection().connectionState().then((value) {
+  //         if (value == true) {
+  //           setState(() {
+  //             isApiProcess = true;
+  //           });
+  //           _syncPresenter.syncData(0);
+  //         } else {
+  //           CommonWidgets().showErrorSnackBar(
+  //               errorMessage: StringConstants.noInternetConnection,
+  //               context: context);
+  //         }
+  //       });
+  //     }
+  //   });
+  //
+  //  // Old Code
+  //
+  //   // var result = await EventsDAO().getTodayEvent(
+  //   //     Date.getStartOfDateTimeStamp(date: DateTime.now()),
+  //   //    Date.getEndOfDateTimeStamp(date: DateTime.now()));
+  //   // //var result = await EventsDAO().getValues();
+  //   // if (result != null) {
+  //   //   setState(() {
+  //   //     eventList.addAll(result);
+  //   //   });
+  //   // } else {
+  //   //   await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+  //   //     if (value != null) {
+  //   //       int lastSyncTime = int.parse(value.value);
+  //   //       CheckConnection().connectionState().then((value) {
+  //   //         if (value == true) {
+  //   //           setState(() {
+  //   //             isApiProcess = true;
+  //   //           });
+  //   //           _syncPresenter.syncData(lastSyncTime);
+  //   //         } else {
+  //   //           CommonWidgets().showErrorSnackBar(
+  //   //               errorMessage: StringConstants.noInternetConnection,
+  //   //               context: context);
+  //   //         }
+  //   //       });
+  //   //     } else {
+  //   //       CheckConnection().connectionState().then((value) {
+  //   //         if (value == true) {
+  //   //           setState(() {
+  //   //             isApiProcess = true;
+  //   //           });
+  //   //           _syncPresenter.syncData(0);
+  //   //         } else {
+  //   //           CommonWidgets().showErrorSnackBar(
+  //   //               errorMessage: StringConstants.noInternetConnection,
+  //   //               context: context);
+  //   //         }
+  //   //       });
+  //   //     }
+  //   //   });
+  //   // }
+  // }
+  refreshDataOnRequest() async {
+    await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+      if (value != null) {
+        int lastSyncTime = int.parse(value.value);
+        CheckConnection().connectionState().then((value) {
+          if (value == true) {
+            //eventList.clear();
+            setState(() {
+              isApiProcess = true;
+            });
+            _syncPresenter.syncData(lastSyncTime);
+          } else {
+            loadDataFromDb();
+            CommonWidgets().showErrorSnackBar(
+                errorMessage: StringConstants.noInternetConnection,
+                context: context);
+          }
+        });
+      } else {
+        CheckConnection().connectionState().then((value) {
+          if (value == true) {
+            setState(() {
+              isApiProcess = true;
+            });
+            _syncPresenter.syncData(0);
+          } else {
+            loadDataFromDb();
+            CommonWidgets().showErrorSnackBar(
+                errorMessage: StringConstants.noInternetConnection,
+                context: context);
+          }
+        });
+      }
+    });
   }
 
   loadDataFromDb() async {
@@ -127,14 +195,16 @@ class _HomeScreenState extends State<HomeScreen>
         eventList.addAll(result);
       });
     } else {
-      eventList.clear();
+      setState(() {
+        eventList.clear();
+      });
     }
   }
 
   @override
   void initState() {
     super.initState();
-    getSyncData();
+    refreshDataOnRequest();
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
@@ -319,10 +389,10 @@ class _HomeScreenState extends State<HomeScreen>
                 })
             : Center(
                 child: ListView(
-                  children: const [
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.27),
                     Center(
-                      child: Text('Events not available',
-                          style: TextStyle(fontSize: 20.0)),
+                      child: Text(StringConstants.eventNotAvailable,style: StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold)),
                     ),
                   ],
                 ),
@@ -389,7 +459,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   //Action Events
-  onTapCreateEventButton() {}
+  onTapCreateEventButton() {
+
+  }
+
 
   onTapClockInOutButton() {
     callClockInOutAPI();
@@ -442,39 +515,7 @@ class _HomeScreenState extends State<HomeScreen>
         endTimestamp: endTimestamp);
   }
 
-  refreshDataOnRequest() async {
-    await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
-      if (value != null) {
-        int lastSyncTime = int.parse(value.value);
-        CheckConnection().connectionState().then((value) {
-          if (value == true) {
-            //eventList.clear();
-            setState(() {
-              isApiProcess = true;
-            });
-            _syncPresenter.syncData(lastSyncTime);
-          } else {
-            CommonWidgets().showErrorSnackBar(
-                errorMessage: StringConstants.noInternetConnection,
-                context: context);
-          }
-        });
-      } else {
-        CheckConnection().connectionState().then((value) {
-          if (value == true) {
-            setState(() {
-              isApiProcess = true;
-            });
-            _syncPresenter.syncData(0);
-          } else {
-            CommonWidgets().showErrorSnackBar(
-                errorMessage: StringConstants.noInternetConnection,
-                context: context);
-          }
-        });
-      }
-    });
-  }
+
 
   @override
   void showError(GeneralErrorResponse exception) {
@@ -541,6 +582,61 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+
+
+  @override
+  void showSyncError(GeneralErrorResponse exception) {
+    setState(() {
+      isApiProcess = false;
+    });
+    CommonWidgets().showErrorSnackBar(
+        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+        context: context);
+  }
+
+  @override
+  void showSyncSuccess(response) {
+    _syncEventMenuResponseModel.clear();
+    pOsSyncEventDataDtoList.clear();
+    pOsSyncItemCategoryDataDtoList.clear();
+    pOsSyncEventItemDataDtoList.clear();
+    pOsSyncEventItemExtrasDataDtoList.clear();
+    pOsSyncDeletedEventDataDtoList.clear();
+    pOsSyncDeletedItemCategoryDataDtoList.clear();
+    pOsSyncDeletedEventItemDataDtoList.clear();
+    pOsSyncDeletedEventItemExtrasDataDtoList.clear();
+
+    setState(() {
+      isApiProcess = false;
+      eventList.clear();
+      _syncEventMenuResponseModel.add(response);
+    });
+    storeDataIntoDB();
+  }
+
+  void storeDataIntoDB() {
+    setState(() {
+      pOsSyncEventDataDtoList
+          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
+      pOsSyncItemCategoryDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
+      pOsSyncEventItemDataDtoList
+          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
+      pOsSyncEventItemExtrasDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncEventItemExtrasDataDtoList);
+      pOsSyncDeletedEventDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncDeletedEventDataDtoList);
+      pOsSyncDeletedItemCategoryDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncDeletedItemCategoryDataDtoList);
+      pOsSyncDeletedEventItemDataDtoList.addAll(
+          _syncEventMenuResponseModel[0].pOsSyncDeletedEventItemDataDtoList);
+      pOsSyncDeletedEventItemExtrasDataDtoList.addAll(
+          _syncEventMenuResponseModel[0]
+              .pOsSyncDeletedEventItemExtrasDataDtoList);
+    });
+
+    insertEventSync();
+  }
   Future<void> insertEventSync() async {
     if (pOsSyncEventDataDtoList.isNotEmpty) {
       for (int i = 0; i < pOsSyncEventDataDtoList.length; i++) {
@@ -673,7 +769,7 @@ class _HomeScreenState extends State<HomeScreen>
         await FoodExtraItemsDAO().insert(FoodExtraItems(
             id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
             foodExtraItemCategoryId:
-                pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+            pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
             itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
             eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
             itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
@@ -736,59 +832,5 @@ class _HomeScreenState extends State<HomeScreen>
     await SessionDAO().insert(Session(
         key: DatabaseKeys.itemExtras,
         value: DateTime.now().microsecondsSinceEpoch.toString()));
-  }
-
-  @override
-  void showSyncError(GeneralErrorResponse exception) {
-    setState(() {
-      isApiProcess = false;
-    });
-    CommonWidgets().showErrorSnackBar(
-        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
-        context: context);
-  }
-
-  @override
-  void showSyncSuccess(response) {
-    _syncEventMenuResponseModel.clear();
-    pOsSyncEventDataDtoList.clear();
-    pOsSyncItemCategoryDataDtoList.clear();
-    pOsSyncEventItemDataDtoList.clear();
-    pOsSyncEventItemExtrasDataDtoList.clear();
-    pOsSyncDeletedEventDataDtoList.clear();
-    pOsSyncDeletedItemCategoryDataDtoList.clear();
-    pOsSyncDeletedEventItemDataDtoList.clear();
-    pOsSyncDeletedEventItemExtrasDataDtoList.clear();
-
-    setState(() {
-      isApiProcess = false;
-      eventList.clear();
-      _syncEventMenuResponseModel.add(response);
-    });
-    storeDataIntoDB();
-  }
-
-  void storeDataIntoDB() {
-    setState(() {
-      pOsSyncEventDataDtoList
-          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
-      pOsSyncItemCategoryDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
-      pOsSyncEventItemDataDtoList
-          .addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
-      pOsSyncEventItemExtrasDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncEventItemExtrasDataDtoList);
-      pOsSyncDeletedEventDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncDeletedEventDataDtoList);
-      pOsSyncDeletedItemCategoryDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncDeletedItemCategoryDataDtoList);
-      pOsSyncDeletedEventItemDataDtoList.addAll(
-          _syncEventMenuResponseModel[0].pOsSyncDeletedEventItemDataDtoList);
-      pOsSyncDeletedEventItemExtrasDataDtoList.addAll(
-          _syncEventMenuResponseModel[0]
-              .pOsSyncDeletedEventItemExtrasDataDtoList);
-    });
-
-    insertEventSync();
   }
 }
