@@ -186,6 +186,7 @@ class FunctionalUtils {
 
 
   static hideKeyboard(){
-    return  FocusScope.of(navigatorKey.currentContext!).requestFocus(FocusNode());
+    return FocusScope.of(navigatorKey.currentContext!).unfocus();
+    //return  FocusScope.of(navigatorKey.currentContext!).requestFocus(FocusNode());
   }
 }
