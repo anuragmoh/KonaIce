@@ -319,10 +319,10 @@ class _HomeScreenState extends State<HomeScreen>
                 })
             : Center(
                 child: ListView(
-                  children: const [
+                  children: [
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.27),
                     Center(
-                      child: Text('Events not available',
-                          style: TextStyle(fontSize: 20.0)),
+                      child: Text(StringConstants.eventNotAvailable,style: StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold)),
                     ),
                   ],
                 ),
@@ -389,7 +389,10 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   //Action Events
-  onTapCreateEventButton() {}
+  onTapCreateEventButton() {
+
+  }
+
 
   onTapClockInOutButton() {
     callClockInOutAPI();
