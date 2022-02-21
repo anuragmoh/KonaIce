@@ -106,7 +106,7 @@ class CommonWidgets {
             },
             child: incrementDecrementButton(StringConstants.minusSymbol)),
         Padding(
-          padding: const EdgeInsets.only(left: 3.0, right: 3.0),
+          padding: const EdgeInsets.only(left: 2.0, right: 2.0),
           child: SizedBox(
             width: 3 * SizeConfig.imageSizeMultiplier,
             height: 3 * SizeConfig.imageSizeMultiplier,

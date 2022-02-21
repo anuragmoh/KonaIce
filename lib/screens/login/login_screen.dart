@@ -54,6 +54,12 @@ class _LoginScreenState extends State<LoginScreen>
   String passwordValidationMessage = "";
 
   @override
+  void initState() {
+    super.initState();
+    removeModeSelectionScreen();
+  }
+
+  @override
   Widget build(BuildContext context) {
     getDeviceInfo();
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
@@ -454,5 +460,9 @@ class _LoginScreenState extends State<LoginScreen>
     await FunctionalUtils.saveUserDetailInDB(userModel: loginResponseModel);
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));
+  }
+
+  removeModeSelectionScreen() async {
+    await SessionDAO().delete(DatabaseKeys.selectedMode);
   }
 }

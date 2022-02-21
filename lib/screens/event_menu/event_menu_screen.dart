@@ -291,7 +291,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   //Add to cart Container
   Widget rightCartViewContainer() {
-    debugPrint('onRight cartView ${selectedMenuItems.length}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -554,7 +553,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget selectedItemList() {
     return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 20.0),
+      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -563,18 +562,26 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             return Padding(
               padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  selectedItemDetailsComponent(index),
-                  CommonWidgets().quantityIncrementDecrementContainer(
-                      quantity: selectedMenuItems[index].selectedItemQuantity,
-                      onTapPlus: () {
-                        onTapIncrementCountButton(index);
-                      },
-                      onTapMinus: () {
-                        onTapDecrementCountButton(index);
-                      }
+                  Expanded(
+                    flex: 5,
+                      child: selectedItemDetailsComponent(index)),
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: CommonWidgets().quantityIncrementDecrementContainer(
+                          quantity: selectedMenuItems[index].selectedItemQuantity,
+                          onTapPlus: () {
+                            onTapIncrementCountButton(index);
+                          },
+                          onTapMinus: () {
+                            onTapDecrementCountButton(index);
+                          }
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -812,7 +819,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget clearButton() {
     return GestureDetector(
-      onTap: onTapClearButton,
+      onTap: () {
+      if (selectedMenuItems.isNotEmpty) {
+        onTapClearButton();
+      }
+      },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
         child: CommonWidgets().textWidget(
@@ -827,7 +838,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget chargeButton() {
     return GestureDetector(
-      onTap: onTapChargeButton,
+      onTap: () {
+        if (selectedMenuItems.isNotEmpty) {
+          onTapChargeButton();
+        }
+      } ,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0),
         child: Container(
@@ -882,7 +897,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InkWell(
-            onTap: onTapSaveButton,
+            onTap: () {
+              if (selectedMenuItems.isNotEmpty) {
+                onTapSaveButton();
+              }
+            } ,
             child: CommonWidgets().textWidget(
                 StringConstants.saveOrder, StyleConstants.customTextStyle(
                 fontSize: 12.0,
@@ -892,7 +911,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 fontFamily: FontConstants.montserratSemiBold)),
           ),
           InkWell(
-            onTap: onTapNewOrderButton,
+            onTap: () {
+              if (selectedMenuItems.isNotEmpty) {
+                onTapNewOrderButton();
+              }
+            },
             child: CommonWidgets().textWidget(
                 StringConstants.newOrder, StyleConstants.customTextStyle(
                 fontSize: 12.0,
@@ -907,13 +930,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   //FoodExtra popup
-  showAddFoodExtrasPopUp(int index) async {
+  showAddFoodExtrasPopUp(int index, bool selectedFromMenu) async {
     await showDialog(
         barrierDismissible: false,
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
         context: context,
         builder: (context) {
-          return FoodExtraPopup(item: itemList[index]);
+          return FoodExtraPopup(item: selectedFromMenu ? itemList[index] : selectedMenuItems[index]);
         });
     setState(() {
 
@@ -1054,16 +1077,19 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           ? selectedMenuItems.remove(itemList[index])
           : selectedMenuItems.add(itemList[index]);
       itemList[index].isItemSelected = !itemList[index].isItemSelected;
+      if (itemList[index].isItemSelected) {
+        itemList[index].selectedExtras = [];
+      }
     });
     // }
   }
 
   onTapFoodExtras(int index) {
-    showAddFoodExtrasPopUp(index);
+    showAddFoodExtrasPopUp(index, true);
   }
 
   onTapAddFoodExtras(int index) {
-    showAddFoodExtrasPopUp(index);
+    showAddFoodExtrasPopUp(index, false);
   }
 
   onTapCustomerName(CustomerDetails? customerObj) {
