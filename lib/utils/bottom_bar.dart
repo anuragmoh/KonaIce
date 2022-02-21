@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -11,6 +10,7 @@ import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
 import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
+import 'package:kona_ice_pos/utils/bottombar_menu_abstract_class.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -21,18 +21,25 @@ class BottomBarWidget extends StatefulWidget {
   final bool accountImageVisibility;
   final bool isFromDashboard;
 
-  const BottomBarWidget(
-      {Key? key,
-        required this.onTapCallBack,
-        required this.accountImageVisibility,
-      required this.isFromDashboard,})
-      : super(key: key);
+  const BottomBarWidget({
+    Key? key,
+    required this.onTapCallBack,
+    required this.accountImageVisibility,
+    required this.isFromDashboard,
+  }) : super(key: key);
 
   @override
   _BottomBarWidgetState createState() => _BottomBarWidgetState();
 }
 
 class _BottomBarWidgetState extends State<BottomBarWidget> {
+  // late BottomBarMenu bottomBarMenu=Bottombarme;
+  BottomBarMenuClass bottomBarMenuClass=BottomBarMenuClass();
+
+/*  _BottomBarWidgetState() {
+    bottomBarMenu = BottomBarMenu();
+  }*/
+
   int currentIndex = 0;
   List<Widget> bodyWidgets = [
     const HomeScreen(),
@@ -91,27 +98,28 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               onTap: () {
                 setState(() {
                   // onTapBottomListItem(index);
+                  bottomBarMenuClass.changeIndex(index);
                   currentIndex = index;
                   widget.onTapCallBack(index);
                 });
-                if(!widget.isFromDashboard){
+                if (!widget.isFromDashboard) {
                   Navigator.popUntil(context, (route) => route.isFirst);
                 }
               },
               child: Row(
                 children: [
-                 Container(
-                   color: getMaterialColor(AppColors.primaryColor1),
-                   child: Padding(
-                     padding: const EdgeInsets.all(4.0),
-                   child: CommonWidgets().image(
-                       image: currentIndex == index
-                           ? bottomItemList[index].selectedImage
-                           : bottomItemList[index].basicImage,
-                       width: 3.38 * SizeConfig.imageSizeMultiplier,
-                       height: 3.38 * SizeConfig.imageSizeMultiplier
-                   ),),
-                 ),
+                  Container(
+                    color: getMaterialColor(AppColors.primaryColor1),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: CommonWidgets().image(
+                          image: currentIndex == index
+                              ? bottomItemList[index].selectedImage
+                              : bottomItemList[index].basicImage,
+                          width: 3.38 * SizeConfig.imageSizeMultiplier,
+                          height: 3.38 * SizeConfig.imageSizeMultiplier),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 35.0),
                     child: CommonWidgets().textWidget(
@@ -138,7 +146,10 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
       child: Padding(
         padding: const EdgeInsets.only(right: 21.0),
         child: InkWell(
-          onTap:(){ Navigator.of(context).push(MaterialPageRoute(builder: (context) => const CustomerViewScreen()));},
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const CustomerViewScreen()));
+          },
           child: Row(
             children: [
               CommonWidgets().image(
@@ -152,4 +163,3 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
     );
   }
 }
-

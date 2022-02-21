@@ -185,7 +185,6 @@ class _LoginScreenState extends State<LoginScreen>
           Padding(
             padding: EdgeInsets.only(
                 top: 0.65 * SizeConfig.imageSizeMultiplier,
-                bottom: 2.60 * SizeConfig.imageSizeMultiplier,
                 left: 22.0,
                 right: 22.0),
             child: Padding(

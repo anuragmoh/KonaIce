@@ -234,6 +234,7 @@ class _MyProfileState extends State<MyProfile> {
           height: 40.0,
           width: 300.0,
           decoration: BoxDecoration(
+            color: AppColors.whiteColor,
               borderRadius: BorderRadius.circular(6.0),
               border: Border.all(
                   color: getMaterialColor(AppColors.textColor1)
@@ -244,7 +245,7 @@ class _MyProfileState extends State<MyProfile> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: IntrinsicWidth(
-                stepWidth: 10,
+                stepWidth: 0,
                 child: TextField(
                   controller: textEditingController,
                   decoration: InputDecoration(

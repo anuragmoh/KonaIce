@@ -24,6 +24,7 @@ import 'package:kona_ice_pos/screens/home/home_screen.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
+import 'package:kona_ice_pos/utils/bottombar_menu_abstract_class.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
@@ -40,7 +41,7 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> implements ResponseContractor {
+class _DashboardState extends State<Dashboard> implements ResponseContractor,BottomBarMenu {
   late SyncPresenter _syncPresenter;
 
 /*  _DashboardState() {
@@ -442,5 +443,13 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor {
   Future<void> updateLastItemExtrasSync() async {
     await SessionDAO()
         .insert(Session(key: DatabaseKeys.itemExtras, value: DateTime.now().microsecondsSinceEpoch.toString()));
+  }
+
+  @override
+  void changeIndex(index) {
+    setState(() {
+      currentIndex = index;
+      print('Dashboard$index');
+    });
   }
 }

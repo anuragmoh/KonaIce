@@ -318,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen>
                 child: ListView(
                   children: const [
                     Center(
-                      child: Text('Events not available',
+                      child: Text('No Events items available',
                           style: TextStyle(fontSize: 20.0)),
                     ),
                   ],

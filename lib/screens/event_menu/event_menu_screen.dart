@@ -71,6 +71,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
 
   int selectedCategoryIndex = 1;
+  int currentIndex = 0;
 
   List<Item> dbItemList = [];
   List<Item> itemList = [];
@@ -104,7 +105,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapBottomListItem(int index) {
-
+    setState(() {
+      currentIndex = index;
+    });
   }
 
 
