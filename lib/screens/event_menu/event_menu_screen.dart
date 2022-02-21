@@ -1006,6 +1006,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
   onConfirmTapYes(){
   clearCart();
+  onConfirmTapNo();
   }
   onConfirmTapNo(){
     Navigator.of(context).pop();
