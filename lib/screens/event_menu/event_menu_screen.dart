@@ -883,7 +883,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InkWell(
-            onTap: onTapSaveButton,
+            onTap: selectedMenuItems.isEmpty ? null : onTapSaveButton,
             child: CommonWidgets().textWidget(
                 StringConstants.saveOrder, StyleConstants.customTextStyle(
                 fontSize: 12.0,
