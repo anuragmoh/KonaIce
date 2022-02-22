@@ -16,6 +16,7 @@ import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
+import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -91,7 +92,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
               eventAddress: widget.events.getEventAddress(),
               showCenterWidget: false,
               onTapCallBack: onTapCallBack,
-              onDrawerTap: onDrawerTap,),
+              onDrawerTap: onDrawerTap,onProfileTap: onProfileChange,),
 
             Expanded(child: bodyWidget()),
             BottomBarWidget(
@@ -109,7 +110,11 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   onDrawerTap() {
     Scaffold.of(context).openDrawer();
   }
-
+  onProfileChange() {
+    print('profileTap');
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const MyProfile()));
+  }
   Widget bodyWidget() =>
       Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),

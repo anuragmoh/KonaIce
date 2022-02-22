@@ -28,6 +28,7 @@ import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
 import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
+import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -211,6 +212,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             showCenterWidget: true,
             onTapCallBack: onTapCallBack,
             onDrawerTap: onDrawerTap,
+             onProfileTap: onProfileChange,
              isProduct: isProduct),
           Expanded(
             child: isProduct ? body() : AllOrdersScreen(onBackTap: (saveOrders, orderItemList, extraItemList ) {
@@ -663,9 +665,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           commonTextFieldContainer(hintText: StringConstants.addTip,
               imageName: AssetsConstants.dollarIcon,
               controller: addTipTextFieldController),
-          commonTextFieldContainer(hintText: StringConstants.addDiscount,
+     /*     commonTextFieldContainer(hintText: StringConstants.addDiscount,
               imageName: AssetsConstants.dollarIcon,
-              controller: addDiscountTextFieldController),
+              controller: addDiscountTextFieldController),*/
           orderBillDetailContainer(),
 
         ],
@@ -1102,6 +1104,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   onDrawerTap() {
     _scaffoldKey.currentState!.openEndDrawer();
     // Scaffold.of(context).openDrawer();
+  }
+  onProfileChange() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
 
   onBackFromAllOrder({required SavedOrders savedOrder, required List<SavedOrdersItem> savedOrderItemList, required List<SavedOrdersExtraItems> savedOrderExtraItemList}) async {

@@ -4,6 +4,7 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
@@ -31,7 +32,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 eventName: "Waugh",
                 eventAddress: "Wachington",
                 showCenterWidget: false,
-                onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap),
+                onTapCallBack: onTapCallBack,onDrawerTap: onDrawerTap,onProfileTap: onProfileChange),
             Expanded(child: bodyWidget()),
             bottomWidget(),
           ],
@@ -97,6 +98,11 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   onDrawerTap() {
     Scaffold.of(context).openDrawer();
   }
+   onProfileChange() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const MyProfile()));
+  }
+
   Widget componentHead(String orderDate) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Row(
