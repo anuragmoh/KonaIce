@@ -17,6 +17,7 @@ class TopBar extends StatefulWidget {
   final bool showCenterWidget;
   final Function onTapCallBack;
   final Function onDrawerTap;
+  final Function onProfileTap;
   final bool isProduct;
 
   const TopBar(
@@ -27,6 +28,7 @@ class TopBar extends StatefulWidget {
       required this.showCenterWidget,
       required this.onTapCallBack,
       required this.onDrawerTap,
+      required this.onProfileTap,
       this.isProduct = true})
       : super(key: key);
 
@@ -40,71 +42,75 @@ class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
     isProduct = widget.isProduct;
-    return
-       Container(
-        height: 85.0,
-        decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(8.0),
-                bottomRight: Radius.circular(8.0))),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Flexible(
+    return Container(
+      height: 85.0,
+      decoration: BoxDecoration(
+          color: getMaterialColor(AppColors.primaryColor1),
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0))),
+      child: Padding(
+        padding: const EdgeInsets.only(
+            left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Container(
+                child:
+                    eventNameAndAddress(widget.eventName, widget.eventAddress),
+              ),
+            ),
+            Visibility(
+              visible: widget.showCenterWidget,
+              child: Flexible(
                 flex: 1,
                 child: Container(
-                  child:
-                      eventNameAndAddress(widget.eventName, widget.eventAddress),
+                  child: centerWidget(),
                 ),
               ),
-              Visibility(
-                visible: widget.showCenterWidget,
-                child: Flexible(
-                  flex: 1,
-                  child: Container(
-                    child: centerWidget(),
+            ),
+            Flexible(
+              flex: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  // notificationWithCount(),
+                  const SizedBox(
+                    width: 20.0,
                   ),
-                ),
+                  GestureDetector(
+                      onTap: () {
+                        widget.onProfileTap();
+                      },
+                      child: CommonWidgets().profileComponent(widget.userName)),
+                ],
               ),
-              Flexible(
-                flex: 1,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // notificationWithCount(),
-                    const SizedBox(
-                      width: 20.0,
-                    ),
-                    CommonWidgets().profileComponent(widget.userName),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-      // drawer: NotificationDrawer(),
+      ),
+    );
+    // drawer: NotificationDrawer(),
   }
 
   Widget notificationWithCount() {
     return GestureDetector(
       onTap: () {
-
         // Scaffold.of(context).openDrawer();
 
         widget.onDrawerTap();
-
       },
       child: Badge(
-        badgeContent: Text('3',style: StyleConstants.customTextStyle(
-            fontSize: 12.0,
-            color: getMaterialColor(AppColors.whiteColor),
-            fontFamily: FontConstants.montserratSemiBold),),
+        badgeContent: Text(
+          '3',
+          style: StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.whiteColor),
+              fontFamily: FontConstants.montserratSemiBold),
+        ),
         child: CommonWidgets().image(
             image: AssetsConstants.notificationUnSelectedIcon,
             width: 3.38 * SizeConfig.imageSizeMultiplier,
@@ -138,12 +144,11 @@ class _TopBarState extends State<TopBar> {
                             fontFamily: FontConstants.montserratBold)),
                   ),
                   Visibility(
-                     visible: false,
+                      visible: false,
                       child: CommonWidgets().image(
-                      image: AssetsConstants.dropDownArrowIcon,
-                      width: 1.30 * SizeConfig.imageSizeMultiplier,
-                      height: 1.04 * SizeConfig.imageSizeMultiplier))
-
+                          image: AssetsConstants.dropDownArrowIcon,
+                          width: 1.30 * SizeConfig.imageSizeMultiplier,
+                          height: 1.04 * SizeConfig.imageSizeMultiplier))
                 ],
               ),
               CommonWidgets().textWidget(
@@ -158,12 +163,11 @@ class _TopBarState extends State<TopBar> {
       );
 
   Widget centerWidget() {
-   return Container(
+    return Container(
       width: 244.0,
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          border:
-          Border.all(color: getMaterialColor(AppColors.primaryColor2))),
+          border: Border.all(color: getMaterialColor(AppColors.primaryColor2))),
       child: Row(
         children: [
           GestureDetector(
@@ -182,19 +186,19 @@ class _TopBarState extends State<TopBar> {
                     : null,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 38.0, vertical: 9.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 38.0, vertical: 9.0),
                 child: CommonWidgets().textWidget(
                     StringConstants.product,
                     isProduct
                         ? StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.textColor1),
+                            fontFamily: FontConstants.montserratBold)
                         : StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.whiteColor),
-                        fontFamily: FontConstants.montserratMedium)),
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.whiteColor),
+                            fontFamily: FontConstants.montserratMedium)),
               ),
             ),
           ),
@@ -213,19 +217,19 @@ class _TopBarState extends State<TopBar> {
                     : null,
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 36.5, vertical: 9.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 36.5, vertical: 9.0),
                 child: CommonWidgets().textWidget(
                     StringConstants.orders,
                     !isProduct
                         ? StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.textColor1),
+                            fontFamily: FontConstants.montserratBold)
                         : StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.whiteColor),
-                        fontFamily: FontConstants.montserratMedium)),
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.whiteColor),
+                            fontFamily: FontConstants.montserratMedium)),
               ),
             ),
           ),
@@ -233,5 +237,4 @@ class _TopBarState extends State<TopBar> {
       ),
     );
   }
-
 }
