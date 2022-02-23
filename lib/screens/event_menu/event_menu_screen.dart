@@ -1340,11 +1340,21 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
 
   saveOrderIntoLocalDB(String orderId)async{
+    var result = await SavedOrdersDAO().getOrder(orderId);
+    if(result != null){
+      await SavedOrdersDAO().clearEventDataByOrderID(orderID);
+      insertSavedOrderData(orderId);
+    }else{
+      insertSavedOrderData(orderId);
+    }
+
+  }
+  insertSavedOrderData(String orderId)async{
     PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
     String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName} " + orderRequestModel.lastName! : StringConstants.guestCustomer;
 
     // Insert Order into DB
-     await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
 
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();
