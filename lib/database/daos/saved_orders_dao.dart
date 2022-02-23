@@ -57,6 +57,20 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
+  Future<List<SavedOrders>?> getOrder(String orderId) async {
+    try {
+      final db = await _db;
+      var result =
+      await db.rawQuery("SELECT * from $tableName where order_id=?", [orderId]);
+      if (result.isNotEmpty) {
+        return List.generate(result.length, (index) => SavedOrders.fromMap(result[index]));
+      } else {
+        return null;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
 
   Future clearEventDataByOrderID(String orderID) async {
     try {

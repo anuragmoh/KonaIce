@@ -328,7 +328,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
     return GestureDetector(
-      onTap: isPaymentDone == false ? onTapProceed : onTapNewOrder,
+      onTap: isPaymentDone == false ? paymentModeType == 0 && amountReceivedController.text.isNotEmpty ? onTapProceed : null : onTapNewOrder,
       child: Container(
         decoration: BoxDecoration(
           color: getMaterialColor(AppColors.primaryColor2),
