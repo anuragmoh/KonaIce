@@ -298,6 +298,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   //Add to cart Container
   Widget rightCartViewContainer() {
+    debugPrint('onRight cartView ${selectedMenuItems.length}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -560,7 +561,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget selectedItemList() {
     return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+      padding: const EdgeInsets.only(left: 15.0, right: 20.0),
       child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -569,26 +570,18 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             return Padding(
               padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
               child: Row(
-              //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    flex: 5,
-                      child: selectedItemDetailsComponent(index)),
-                  Expanded(
-                    flex: 3,
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: CommonWidgets().quantityIncrementDecrementContainer(
-                          quantity: selectedMenuItems[index].selectedItemQuantity,
-                          onTapPlus: () {
-                            onTapIncrementCountButton(index);
-                          },
-                          onTapMinus: () {
-                            onTapDecrementCountButton(index);
-                          }
-                      ),
-                    ),
+                  selectedItemDetailsComponent(index),
+                  CommonWidgets().quantityIncrementDecrementContainer(
+                      quantity: selectedMenuItems[index].selectedItemQuantity,
+                      onTapPlus: () {
+                        onTapIncrementCountButton(index);
+                      },
+                      onTapMinus: () {
+                        onTapDecrementCountButton(index);
+                      }
                   ),
                 ],
               ),
@@ -826,11 +819,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget clearButton() {
     return GestureDetector(
-      onTap: () {
-      if (selectedMenuItems.isNotEmpty) {
-        onTapClearButton();
-      }
-      },
+      onTap: onTapClearButton,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
         child: CommonWidgets().textWidget(
@@ -845,11 +834,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget chargeButton() {
     return GestureDetector(
-      onTap: () {
-        if (selectedMenuItems.isNotEmpty) {
-          onTapChargeButton();
-        }
-      } ,
+      onTap: onTapChargeButton,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0),
         child: Container(
@@ -904,11 +889,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           InkWell(
-            onTap: () {
-              if (selectedMenuItems.isNotEmpty) {
-                onTapSaveButton();
-              }
-            } ,
+            onTap: onTapSaveButton,
             child: CommonWidgets().textWidget(
                 StringConstants.saveOrder, StyleConstants.customTextStyle(
                 fontSize: 12.0,
@@ -918,11 +899,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 fontFamily: FontConstants.montserratSemiBold)),
           ),
           InkWell(
-            onTap: () {
-              if (selectedMenuItems.isNotEmpty) {
-                onTapNewOrderButton();
-              }
-            },
+            onTap: onTapNewOrderButton,
             child: CommonWidgets().textWidget(
                 StringConstants.newOrder, StyleConstants.customTextStyle(
                 fontSize: 12.0,
@@ -937,13 +914,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   //FoodExtra popup
-  showAddFoodExtrasPopUp(int index, bool selectedFromMenu) async {
+  showAddFoodExtrasPopUp(int index) async {
     await showDialog(
         barrierDismissible: false,
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
         context: context,
         builder: (context) {
-          return FoodExtraPopup(item: selectedFromMenu ? itemList[index] : selectedMenuItems[index]);
+          return FoodExtraPopup(item: itemList[index]);
         });
     setState(() {
 
@@ -1091,19 +1068,16 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           ? selectedMenuItems.remove(itemList[index])
           : selectedMenuItems.add(itemList[index]);
       itemList[index].isItemSelected = !itemList[index].isItemSelected;
-      if (itemList[index].isItemSelected) {
-        itemList[index].selectedExtras = [];
-      }
     });
     // }
   }
 
   onTapFoodExtras(int index) {
-    showAddFoodExtrasPopUp(index, true);
+    showAddFoodExtrasPopUp(index);
   }
 
   onTapAddFoodExtras(int index) {
-    showAddFoodExtrasPopUp(index, false);
+    showAddFoodExtrasPopUp(index);
   }
 
   onTapCustomerName(CustomerDetails? customerObj) {
@@ -1340,22 +1314,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
 
   saveOrderIntoLocalDB(String orderId)async{
-    var result = await SavedOrdersDAO().getOrder(orderId);
-    if(result != null){
-      await SavedOrdersDAO().clearEventDataByOrderID(orderID);
-      insertSavedOrderData(orderId);
-    }else{
-      insertSavedOrderData(orderId);
-    }
-
-  }
-  insertSavedOrderData(String orderId)async{
     PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
     String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName} " + orderRequestModel.lastName! : StringConstants.guestCustomer;
 
     // Insert Order into DB
-    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
-
+     await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+print("PhoneNumber"+orderRequestModel.phoneNumber.toString());
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();
     for(var items in orderItem) {

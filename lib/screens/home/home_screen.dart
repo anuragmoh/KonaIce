@@ -193,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (result != null) {
       setState(() {
         eventList.addAll(result);
+        debugPrint('====>$result');
       });
     } else {
       setState(() {
