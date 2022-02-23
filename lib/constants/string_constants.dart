@@ -140,10 +140,10 @@ class StringConstants {
   static const noOrdersToDisplay = "We don't have any previous order for this event.";
 
   // Error Messages
-  static const emptyValidEmail = 'Empty Email Address';
-  static const enterValidEmail = 'Enter Email Address';
-  static const emptyValidPassword = 'Empty Password';
-  static const enterValidPassword = 'Enter Valid Password';
+  static const emptyValidEmail = 'Please Enter Email Address';
+  static const enterValidEmail = 'Please Enter Valid Email Address';
+  static const emptyValidPassword = 'Please Enter Password';
+  static const enterValidPassword = 'Please Enter Valid Password';
   static const noInternetConnection = 'Please check your internet connection.';
   static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
 

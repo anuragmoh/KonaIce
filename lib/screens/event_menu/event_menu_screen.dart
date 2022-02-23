@@ -1319,7 +1319,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
     // Insert Order into DB
      await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
-
+print("PhoneNumber"+orderRequestModel.phoneNumber.toString());
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();
     for(var items in orderItem) {
