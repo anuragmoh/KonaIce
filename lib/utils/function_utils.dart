@@ -167,9 +167,14 @@ class FunctionalUtils {
 
   static clearSessionData() async {
     debugPrint("getting 401 in base client");
-    await SessionDAO().delete(DatabaseKeys.sessionKey);
-    Navigator.of(navigatorKey.currentContext!).pushReplacement(
-        MaterialPageRoute(builder: (context) => const LoginScreen()));
+    Future.delayed(
+        const Duration(seconds: 3),
+            () async
+    {
+      await SessionDAO().delete(DatabaseKeys.sessionKey);
+      Navigator.of(navigatorKey.currentContext!).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
+    });
   }
 
   static clearAllDBData() {

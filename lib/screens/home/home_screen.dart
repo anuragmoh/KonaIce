@@ -209,11 +209,14 @@ class _HomeScreenState extends State<HomeScreen>
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
-      isApiProcess = false;
-      isClockIn = true;
-      var timeStamp = FunctionalUtils.clockInTimestamp;
-      startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
-      isClockIn ? startTimer() : stopTimer();
+      setState(() {
+        isApiProcess = false;
+        isClockIn = true;
+        var timeStamp = FunctionalUtils.clockInTimestamp;
+        startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
+        isClockIn ? startTimer() : stopTimer();
+      });
+
     }
     callClockInOutDetailsAPI();
   }
@@ -486,10 +489,12 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   stopTimer() {
-    if (clockInTimer != null) {
-      clockInTimer!.cancel();
-      clockInTime = StringConstants.defaultClockInTime;
-    }
+    setState(() {
+      if (clockInTimer != null) {
+        clockInTimer!.cancel();
+        clockInTime = StringConstants.defaultClockInTime;
+      }
+    });
   }
 
   //API Call
