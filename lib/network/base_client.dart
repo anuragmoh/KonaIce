@@ -125,31 +125,6 @@ class BaseClient {
         message: StringConstants.somethingWentWrong)).toRawJson();
     return defaultValue.toString();
   }
-
-  // dynamic _processResponse(http.Response response) {
-  //   switch (response.statusCode) {
-  //     case 200:
-  //       return response.body.toString();
-  //     case 201:
-  //       return response.body.toString();
-  //     case 400:
-  //       throw Exception("Bad request");
-  //   //   throw BadRequestException(utf8.decode(response.bodyBytes), response.request!.url.toString());
-  //     case 401:
-  //
-  //     case 403:
-  //       throw UnAuthorizedException(
-  //           utf8.decode(response.bodyBytes), response.request!.url.toString());
-  //     case 422:
-  //       throw BadRequestException(
-  //           utf8.decode(response.bodyBytes), response.request!.url.toString());
-  //     case 500:
-  //     default:
-  //       throw FetchDataException(
-  //           '${StringConstants.errorOccurredWithCode}: ${response.statusCode}',
-  //           response.request!.url.toString());
-  //   }
-  // }
 }
 
 extension on http.Response {

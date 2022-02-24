@@ -228,7 +228,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   Widget body() {
-    return Padding(
+    return itemList.isNotEmpty ? Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
         children: [
@@ -239,7 +239,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           ),
         ],
       ),
-    );
+    ) :
+    const Align(
+        alignment: Alignment.center,
+        child: Text(StringConstants.noMenuItemsAvailable));
   }
 
   Widget leftContainer() {
@@ -958,7 +961,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         context: context,
         builder: (context) {
           return const CustomMenuPopup();
-        });
+        }).then((value) {
+      onTapCategoriesButton(index: 1);
+    });
   }
 
   //Other functions
@@ -1052,7 +1057,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       saveOrderIntoLocalDB(orderID);
     }
   }
-
 
   onTapNewOrderButton() {
     clearCart();
@@ -1361,6 +1365,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       }
     }
     clearCart();
+    CommonWidgets().showSuccessSnackBar(message: StringConstants.savedOrderSuccess, context: context);
   }
 
 }

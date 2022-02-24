@@ -188,8 +188,8 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       eventList.clear();
     });
-    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getEndOfDateTimeStamp(date: DateTime.now()));
-    //var result = await EventsDAO().getValues();
+   // var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getEndOfDateTimeStamp(date: DateTime.now()));
+    var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
         eventList.addAll(result);

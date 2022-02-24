@@ -148,7 +148,13 @@ class PlaceOrderRequestModel {
   }
 
   String getPhoneNumber() {
-    return '$phoneNumCountryCode $phoneNumber';
+    String phoneNum = phoneNumber ?? '';
+    String countryCode = phoneNumCountryCode ?? '';
+    if (phoneNum == '' &&  countryCode == '') {
+      return '';
+    } else {
+      return '$countryCode $phoneNum';
+    }
   }
 }
 

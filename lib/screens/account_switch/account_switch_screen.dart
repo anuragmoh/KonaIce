@@ -157,7 +157,6 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
   }
   
   //Action Event
-
   onTapProceedButton() {
     storeInformation();
   }

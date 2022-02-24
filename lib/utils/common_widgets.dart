@@ -209,6 +209,14 @@ class CommonWidgets {
      ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
+  showSuccessSnackBar({required String message, required BuildContext context}) {
+    final snackBar = SnackBar(
+      content: textWidget(message, StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratMedium)),
+      backgroundColor: getMaterialColor(AppColors.denotiveColor2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   Widget topEmptyBar() {
     return Container(
       alignment: Alignment.topCenter,

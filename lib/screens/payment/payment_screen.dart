@@ -43,6 +43,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     OrderResponseContractor{
   int paymentModeType = -1;
   double returnAmount = 0.0;
+  double receivedAmount = 0.0;
   double totalAmount = 0.0;
   double tip = 0.0;
   double salesTax = 0.0;
@@ -332,11 +333,14 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       );
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
+    bool showDisabledButton = !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;
     return GestureDetector(
-      onTap: isPaymentDone == false ? onTapProceed : onTapNewOrder,
+      onTap: isPaymentDone == false ? () {
+        onTapProceed(showDisabledButton) ;
+      } : onTapNewOrder,
       child: Container(
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: getMaterialColor(showDisabledButton ? AppColors.denotiveColor4 : AppColors.primaryColor2),
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -667,6 +671,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       );
 
   onAmountEnter(double value) {
+    receivedAmount = value;
     if (value > totalAmount) {
       setState(() {
         returnAmount = value - totalAmount;
@@ -904,7 +909,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
             Expanded(
-              flex: 5,
+              flex: 6,
               child: CommonWidgets().textView(
                   orderItem.name!,
                   StyleConstants.customTextStyle(
@@ -1008,8 +1013,10 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     }
   }
 
-  onTapProceed() {
-    callPayOrderAPI();
+  onTapProceed(bool isDisabled) {
+    if (!isDisabled) {
+      callPayOrderAPI();
+    }
   }
 
   onTapBackButton() {
