@@ -103,6 +103,7 @@ class BaseClient {
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
       FunctionalUtils.clearSessionData();
+    //   getErrorModel(response);
     } else {
       debugPrint("Not Ok");
       getErrorModel(response);
@@ -111,7 +112,7 @@ class BaseClient {
 
   getErrorModel(http.Response response) {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
-    // print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
+     print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
       String value = errorList.general![0].toRawJson().toString();
       throw GeneralApiResponseErrorException(value);

@@ -185,7 +185,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     getItemCategoriesByEventId(widget.events.id);
     getAllItems(widget.events.id);
     getUserName();
-    setSalesTax();
+   // setSalesTax();
   }
 
   @override
@@ -696,10 +696,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           commonOrderBillComponents(text: StringConstants.foodCost,
               price: totalAmountOfSelectedItems),
           commonOrderBillComponents(
-              text: StringConstants.salesTax, price: salesTax),
+              text: StringConstants.salesTax, price: getSalesTax()),
           commonOrderBillComponents(text: StringConstants.tip, price: tip),
-          commonOrderBillComponents(
-              text: StringConstants.discount, price: discount),
+          Visibility(
+            visible: false,
+            child: commonOrderBillComponents(
+                text: StringConstants.discount, price: discount),
+          ),
         ],
       ),
     );
@@ -973,8 +976,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     setState(() {});
   }
 
-  setSalesTax() {
-    salesTax = widget.events.salesTax.toDouble();
+  double getSalesTax() {
+    salesTax = (widget.events.salesTax.toDouble()/100) * totalAmountOfSelectedItems;
+    return salesTax;
   }
 
   updateCustomerName() {
