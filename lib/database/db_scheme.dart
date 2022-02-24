@@ -205,7 +205,7 @@ class DBScheme {
 )''';
 
   static const itemsTable = '''CREATE TABLE items (
-    id character varying(32) NOT NULL,
+    id character varying(32) PRIMARY KEY NOT NULL,
     event_id character varying(50),
     item_category_id character varying(32),
     image_file_id character varying(50),
