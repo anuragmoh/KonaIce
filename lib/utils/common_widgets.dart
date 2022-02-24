@@ -200,6 +200,29 @@ class CommonWidgets {
         ),
       );
 
+  Widget buttonWidgetUnFilled(String buttonTitle, VoidCallback onTap) =>
+      GestureDetector(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            // color: getMaterialColor(AppColors.primaryColor2),
+            border:Border.all(color:AppColors.primaryColor2),
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          child: Padding(
+            padding:
+            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 84.0),
+            child: Text(
+              buttonTitle,
+              style: StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratBold),
+            ),
+          ),
+        ),
+      );
+
 
    showErrorSnackBar({required String errorMessage, required BuildContext context}) {
      final snackBar = SnackBar(

@@ -27,6 +27,7 @@ class BaseClient {
         var response = await http.get(uri, headers: header).timeout(
             const Duration(seconds: timeOutDuration));
         return _processResponse(response);
+
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
     } on Exception {

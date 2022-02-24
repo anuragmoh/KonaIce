@@ -4,6 +4,7 @@ class UrlConstants {
 
   static const login = '/api/v1/sessions';
   static const logout = '/api/v1/secure/sessions';
+  static const getProfile='/api/v1/secure/users/{userId}';
 
   static const forgotPassword='/api/v1/users/forgot-password';
   static const dutyStatus = '/api/v1/secure/staffs/{userID}/dutystatus';
@@ -28,5 +29,13 @@ class UrlConstants {
    static getClockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {
      return '$clockInOutDetails?fromDate=$startTimestamp&toDate=$endTimestamp'.replaceAll('{userID}', userID);
    }
+
+   static getMyProfile({required String userID}){
+    return getProfile.replaceAll('{userId}', userID);
+   }
+
+  static updateMyProfile({required String userID}){
+    return getProfile.replaceAll('{userId}', userID);
+  }
 
 }
