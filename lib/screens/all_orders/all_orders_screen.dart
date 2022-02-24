@@ -120,28 +120,31 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratBold)),
           ]),
-          Container(
-              decoration: BoxDecoration(
-                color: getMaterialColor(AppColors.whiteColor),
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    right: 10.0, bottom: 10.0, top: 9.0, left: 9.0),
-                child: Row(children: [
-                  CommonWidgets().image(
-                      image: AssetsConstants.filter,
-                      width: 3.38 * SizeConfig.imageSizeMultiplier,
-                      height: 3.25 * SizeConfig.imageSizeMultiplier),
-                  const SizedBox(width: 6.0),
-                  CommonWidgets().textView(
-                      StringConstants.filterOrders,
-                      StyleConstants.customTextStyle(
-                          fontSize: 9.0,
-                          color: getMaterialColor(AppColors.primaryColor1),
-                          fontFamily: FontConstants.montserratMedium)),
-                ]),
-              )),
+          Visibility(
+            visible: false,
+            child: Container(
+                decoration: BoxDecoration(
+                  color: getMaterialColor(AppColors.whiteColor),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      right: 10.0, bottom: 10.0, top: 9.0, left: 9.0),
+                  child: Row(children: [
+                    CommonWidgets().image(
+                        image: AssetsConstants.filter,
+                        width: 3.38 * SizeConfig.imageSizeMultiplier,
+                        height: 3.25 * SizeConfig.imageSizeMultiplier),
+                    const SizedBox(width: 6.0),
+                    CommonWidgets().textView(
+                        StringConstants.filterOrders,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: getMaterialColor(AppColors.primaryColor1),
+                            fontFamily: FontConstants.montserratMedium)),
+                  ]),
+                )),
+          ),
         ]),
       );
 
@@ -371,37 +374,40 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                             const SizedBox(
                               width: 53.0,
                             ),
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isItemClick = false;
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: CommonWidgets().textView(
-                                          StringConstants.inProcess,
-                                          StyleConstants.customTextStyle(
-                                              fontSize: 12.0,
-                                              color: getMaterialColor(
-                                                  AppColors.textColor1),
-                                              fontFamily:
-                                                  FontConstants.montserratBold)),
-                                    )),
-                                const SizedBox(
-                                  height: 11.0,
-                                ),
-                                Container(
-                                  color: getMaterialColor(isItemClick
-                                      ? AppColors.whiteColor
-                                      : AppColors.primaryColor2),
-                                  width: 90.0,
-                                  height: 3.0,
-                                ),
-                              ],
+                            Visibility(
+                              visible: false,
+                              child: Column(
+                                children: [
+                                  InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isItemClick = false;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 5.0, right: 5.0),
+                                        child: CommonWidgets().textView(
+                                            StringConstants.inProcess,
+                                            StyleConstants.customTextStyle(
+                                                fontSize: 12.0,
+                                                color: getMaterialColor(
+                                                    AppColors.textColor1),
+                                                fontFamily:
+                                                    FontConstants.montserratBold)),
+                                      )),
+                                  const SizedBox(
+                                    height: 11.0,
+                                  ),
+                                  Container(
+                                    color: getMaterialColor(isItemClick
+                                        ? AppColors.whiteColor
+                                        : AppColors.primaryColor2),
+                                    width: 90.0,
+                                    height: 3.0,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
