@@ -338,6 +338,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       onTap: isPaymentDone == false ? () {
         onTapProceed(showDisabledButton) ;
       } : onTapNewOrder,
+
       child: Container(
         decoration: BoxDecoration(
           color: getMaterialColor(showDisabledButton ? AppColors.denotiveColor4 : AppColors.primaryColor2),
