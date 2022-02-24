@@ -650,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen>
             delivery: "empty",
             link: "empty",
             addressLine1: pOsSyncEventDataDtoList[i].addressLine1!,
-            addressLine2: pOsSyncEventDataDtoList[i].addressLine2!,
+            addressLine2: pOsSyncEventDataDtoList[i].addressLine2 ?? "",
             country: pOsSyncEventDataDtoList[i].country!,
             state: pOsSyncEventDataDtoList[i].state!,
             city: pOsSyncEventDataDtoList[i].city!,

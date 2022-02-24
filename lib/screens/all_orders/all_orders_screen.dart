@@ -36,12 +36,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   List<SavedOrdersExtraItems> savedOrderExtraItemList = [];
 
   int selectedRow = -1;
+ // late ScrollController _scrollController;
 
 
   @override
   void initState() {
     super.initState();
     getAllSavedOrders(widget.events.id);
+    // _scrollController = ScrollController();
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    //     print("At the end of the screen");
+    //   }
+    // });
   }
 
   @override
@@ -152,6 +159,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
         padding: const EdgeInsets.only(left: 21.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
+          //controller: _scrollController,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Column(
