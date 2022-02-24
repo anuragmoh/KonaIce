@@ -814,24 +814,24 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> updateLastEventSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.events,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.items,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastCategoriesSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.categories,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemExtrasSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.itemExtras,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 }
