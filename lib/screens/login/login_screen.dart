@@ -148,6 +148,7 @@ class _LoginScreenState extends State<LoginScreen>
               padding: const EdgeInsets.only(left: 4.0),
               child: TextField(
                 keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
                 onChanged: (value) {
                   emailValidation();
                 },
@@ -197,6 +198,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
               child: TextField(
+                textInputAction: TextInputAction.done,
                 onChanged: (value) {
                   passwordValidation();
                 },

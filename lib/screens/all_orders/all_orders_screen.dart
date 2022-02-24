@@ -841,12 +841,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   //       ),
   //     );
 
-  Widget rightSavedView() => Container(
-    decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-        color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
-    child: GestureDetector(
-      onTap: onTapResumeButton,
+  Widget rightSavedView() => GestureDetector(
+    onTap: onTapResumeButton,
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+          color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
       child: Padding(
         padding: const EdgeInsets.only(
             top: 11.0, bottom: 11.0, right: 19.0, left: 20.0),
