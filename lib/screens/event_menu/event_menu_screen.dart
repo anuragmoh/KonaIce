@@ -698,8 +698,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           commonOrderBillComponents(
               text: StringConstants.salesTax, price: salesTax),
           commonOrderBillComponents(text: StringConstants.tip, price: tip),
-          commonOrderBillComponents(
-              text: StringConstants.discount, price: discount),
+          Visibility(
+            visible: false,
+            child: commonOrderBillComponents(
+                text: StringConstants.discount, price: discount),
+          ),
         ],
       ),
     );
