@@ -63,9 +63,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
             // bottomWidget(),
           ],
         ) :
-        const Align(
+         Align(
           alignment: Alignment.center,
-            child: Text(StringConstants.noOrdersToDisplay)),
+            child: CommonWidgets().textWidget(StringConstants.noOrdersToDisplay, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
+        ),
       ),
     );
   }
@@ -108,7 +109,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       );
 
   Widget leftSideWidget() => Expanded(
-          child: Column(children: [
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
         topComponent(),
         Expanded(child: tableHeadRow()),
       ]));
@@ -257,9 +260,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                     StyleConstants.customTextStyle(
                         fontSize: 12.0,
                         color: getMaterialColor(
-                            AppColors.textColor1),
+                            AppColors.textColor4),
                         fontFamily:
-                        FontConstants.montserratMedium)),
+                        FontConstants.montserratBold)),
                 CommonWidgets().textView(
                     savedOrders.orderId,
                     StyleConstants.customTextStyle(
@@ -632,25 +635,40 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
             itemCount: savedOrderItemList.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return itemViewListItem(savedOrderItemList[index].itemName, savedOrderItemList[index].quantity);
+              return itemViewListItem(savedOrderItemList[index].itemName, savedOrderItemList[index].quantity,  savedOrderItemList[index].totalPrice.toDouble());
             }),
       ]);
 
-  Widget itemViewListItem(String itemName, int quantity) => Column(
+  Widget itemViewListItem(String itemName, int quantity, double price) => Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            CommonWidgets().textView(
-                itemName,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
-            CommonWidgets().textView(
-                "${StringConstants.qty} - $quantity",
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular))
+            Expanded(
+              flex: 6,
+              child: CommonWidgets().textView(
+                  itemName,
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular)),
+            ),
+            Expanded(
+              flex: 2,
+              child: CommonWidgets().textView(
+                  "${StringConstants.qty} - $quantity",
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular)),
+            ),
+            Expanded(
+              flex: 2,
+              child: CommonWidgets().textView(
+                  "\$${price.toStringAsFixed(2)}",
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular)),
+            )
           ]),
           const SizedBox(height: 20.0),
         ],
@@ -663,7 +681,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
               itemCount: 10,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return itemViewListItem('Kiddie', 7);
+                return itemViewListItem('Kiddie', 7, 20);
               }),
         ],
       );

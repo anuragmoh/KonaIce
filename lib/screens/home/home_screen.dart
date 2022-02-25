@@ -772,9 +772,8 @@ class _HomeScreenState extends State<HomeScreen>
     if (pOsSyncEventItemExtrasDataDtoList.isNotEmpty) {
       for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
         await FoodExtraItemsDAO().insert(FoodExtraItems(
-            id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
-            foodExtraItemCategoryId:
-            pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+            id: pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+            foodExtraItemCategoryId: '0',
             itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
             eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
             itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,

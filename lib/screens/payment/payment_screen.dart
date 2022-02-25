@@ -73,7 +73,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     tip = widget.billDetails['tip'];
     discount = widget.billDetails['discount'];
     foodCost = widget.billDetails['foodCost'];
-    salesTax = widget.events.salesTax.toDouble();
+    salesTax = widget.billDetails['salesTax'];
     if (widget.placeOrderRequestModel.id != null && widget.placeOrderRequestModel.id!.isNotEmpty) {
       orderID = widget.placeOrderRequestModel.id!;
     }
@@ -949,8 +949,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
         children: [
           const SizedBox(height: 14.0),
           billTextView(StringConstants.foodCost, foodCost),
-          billTextView(StringConstants.salesTax, widget.events.salesTax.toDouble()),
-          billTextView(StringConstants.subTotal, foodCost + widget.events.salesTax.toDouble()),
+          billTextView(StringConstants.salesTax, salesTax),
+          billTextView(StringConstants.subTotal, foodCost + salesTax),
          // billTextView(StringConstants.discount, discount),
           billTextView(StringConstants.tip, tip),
           //const SizedBox(height: 23.0),
