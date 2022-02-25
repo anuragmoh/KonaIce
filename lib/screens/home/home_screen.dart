@@ -189,11 +189,10 @@ class _HomeScreenState extends State<HomeScreen>
       eventList.clear();
     });
     var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getEndOfDateTimeStamp(date: DateTime.now()));
-    //var result = await EventsDAO().getValues();
+   // var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
         eventList.addAll(result);
-        debugPrint('====>$result');
       });
     } else {
       setState(() {
@@ -209,11 +208,14 @@ class _HomeScreenState extends State<HomeScreen>
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
-      isApiProcess = false;
-      isClockIn = true;
-      var timeStamp = FunctionalUtils.clockInTimestamp;
-      startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
-      isClockIn ? startTimer() : stopTimer();
+      setState(() {
+        isApiProcess = false;
+        isClockIn = true;
+        var timeStamp = FunctionalUtils.clockInTimestamp;
+        startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
+        isClockIn ? startTimer() : stopTimer();
+      });
+
     }
     callClockInOutDetailsAPI();
   }
@@ -486,10 +488,12 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   stopTimer() {
-    if (clockInTimer != null) {
-      clockInTimer!.cancel();
-      clockInTime = StringConstants.defaultClockInTime;
-    }
+    setState(() {
+      if (clockInTimer != null) {
+        clockInTimer!.cancel();
+        clockInTime = StringConstants.defaultClockInTime;
+      }
+    });
   }
 
   //API Call
@@ -650,7 +654,7 @@ class _HomeScreenState extends State<HomeScreen>
             delivery: "empty",
             link: "empty",
             addressLine1: pOsSyncEventDataDtoList[i].addressLine1!,
-            addressLine2: pOsSyncEventDataDtoList[i].addressLine2!,
+            addressLine2: pOsSyncEventDataDtoList[i].addressLine2 ?? "",
             country: pOsSyncEventDataDtoList[i].country!,
             state: pOsSyncEventDataDtoList[i].state!,
             city: pOsSyncEventDataDtoList[i].city!,
@@ -814,24 +818,24 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> updateLastEventSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.events,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.items,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastCategoriesSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.categories,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemExtrasSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.itemExtras,
-        value: DateTime.now().microsecondsSinceEpoch.toString()));
+        value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 }

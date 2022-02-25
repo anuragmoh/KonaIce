@@ -104,6 +104,7 @@ class BaseClient {
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
       FunctionalUtils.clearSessionData();
+    //   getErrorModel(response);
     } else {
       debugPrint("Not Ok");
       getErrorModel(response);
@@ -112,7 +113,7 @@ class BaseClient {
 
   getErrorModel(http.Response response) {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
-    // print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
+     print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
       String value = errorList.general![0].toRawJson().toString();
       throw GeneralApiResponseErrorException(value);
@@ -126,31 +127,6 @@ class BaseClient {
         message: StringConstants.somethingWentWrong)).toRawJson();
     return defaultValue.toString();
   }
-
-  // dynamic _processResponse(http.Response response) {
-  //   switch (response.statusCode) {
-  //     case 200:
-  //       return response.body.toString();
-  //     case 201:
-  //       return response.body.toString();
-  //     case 400:
-  //       throw Exception("Bad request");
-  //   //   throw BadRequestException(utf8.decode(response.bodyBytes), response.request!.url.toString());
-  //     case 401:
-  //
-  //     case 403:
-  //       throw UnAuthorizedException(
-  //           utf8.decode(response.bodyBytes), response.request!.url.toString());
-  //     case 422:
-  //       throw BadRequestException(
-  //           utf8.decode(response.bodyBytes), response.request!.url.toString());
-  //     case 500:
-  //     default:
-  //       throw FetchDataException(
-  //           '${StringConstants.errorOccurredWithCode}: ${response.statusCode}',
-  //           response.request!.url.toString());
-  //   }
-  // }
 }
 
 extension on http.Response {

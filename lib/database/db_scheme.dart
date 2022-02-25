@@ -3,7 +3,7 @@ class DBScheme {
   static const sessionTable = 'CREATE TABLE session_data(key TEXT PRIMARY KEY, value TEXT)';
 
   static const eventsTable = ''' CREATE TABLE events (
-    id character varying(32) NOT NULL,
+    id character varying(32) PRIMARY KEY NOT NULL,
     event_code character varying(50),
     name character varying(250),
     start_date_time bigint,
@@ -105,7 +105,7 @@ class DBScheme {
 )''';
 
   static const eventItemTable = '''CREATE TABLE event_items (
-  id character varying(32) NOT NULL,
+  id character varying(32) PRIMARY KEY NOT NULL,
   item_id character varying(32),
   event_id character varying(32),
   price numeric(12,2),
@@ -158,7 +158,7 @@ class DBScheme {
     id character varying(32) NOT NULL,
     food_extra_item_category_id character varying(32) NOT NULL,
     event_id character varying(32) NOT NULL,
-    item_id character varying(32) NOT NULL,
+    item_id character varying(32)  PRIMARY KEY NOT NULL,
     item_name character varying(50) NOT NULL,
     selling_price numeric(12,2) DEFAULT 0 NOT NULL,
     selection character varying(50) NOT NULL,
@@ -174,7 +174,7 @@ class DBScheme {
 )''';
 
   static const itemCategoriesTable = '''CREATE TABLE item_categories (
-    id character varying(32) NOT NULL,
+    id character varying(32)  PRIMARY KEY NOT NULL,
     event_id character varying(32) NOT NULL,
     category_code character varying(20),
     category_name character varying(50),
@@ -205,7 +205,7 @@ class DBScheme {
 )''';
 
   static const itemsTable = '''CREATE TABLE items (
-    id character varying(32) NOT NULL,
+    id character varying(32) PRIMARY KEY NOT NULL,
     event_id character varying(50),
     item_category_id character varying(32),
     image_file_id character varying(50),

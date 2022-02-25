@@ -10,20 +10,19 @@ class UrlConstants {
   static const dutyStatus = '/api/v1/secure/staffs/{userID}/dutystatus';
   static const clockInOutDetails = '/api/v1/secure/staffs/{userID}/check-in-detail';
 
-  static const customerList = '/api/v1/secure/users-list';
+  static const customerList = '/api/v2/secure/customer-list';
 
   static const syncData = '/api/v2/secure/event-menu-sync';
 
   static const placeOrder = '/api/v2/secure/orders-stripe/staff-user';
   static const payOrder = '/api/v2/secure/orders-payment/staff-user';
 
-
   static getDutyStatus({required String userID}) {
      return dutyStatus.replaceAll('{userID}', userID);
   }
 
   static getCustomerList({required String searchText}) {
-    return '$customerList?role=Customer&searchText=$searchText';
+    return '$customerList?searchText=$searchText';
   }
 
    static getClockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {

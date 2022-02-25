@@ -43,6 +43,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     OrderResponseContractor{
   int paymentModeType = -1;
   double returnAmount = 0.0;
+  double receivedAmount = 0.0;
   double totalAmount = 0.0;
   double tip = 0.0;
   double salesTax = 0.0;
@@ -332,11 +333,15 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       );
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
+    bool showDisabledButton = !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;
     return GestureDetector(
-      onTap: isPaymentDone == false ? paymentModeType == 0 && amountReceivedController.text.isNotEmpty ? onTapProceed : null : onTapNewOrder,
+      onTap: isPaymentDone == false ? () {
+        onTapProceed(showDisabledButton) ;
+      } : onTapNewOrder,
+
       child: Container(
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: getMaterialColor(showDisabledButton ? AppColors.denotiveColor4 : AppColors.primaryColor2),
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -378,9 +383,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
             paymentModeView(
                 StringConstants.creditCard, 1, AssetsConstants.creditCard),
+            paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
             paymentModeView(StringConstants.qrCode, 2, AssetsConstants.qrCode),
           ],
         ),
@@ -408,8 +413,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                 const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
                 child: CommonWidgets().image(
                     image: icon,
-                    width: 3.25 * SizeConfig.imageSizeMultiplier,
-                    height: 3.25 * SizeConfig.imageSizeMultiplier),
+                    width: 4.25 * SizeConfig.imageSizeMultiplier,
+                    height: 4.25 * SizeConfig.imageSizeMultiplier),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -667,6 +672,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       );
 
   onAmountEnter(double value) {
+    receivedAmount = value;
     if (value > totalAmount) {
       setState(() {
         returnAmount = value - totalAmount;
@@ -726,12 +732,12 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                         storeAddress: widget.events.getEventAddress(),
                         phone: widget.placeOrderRequestModel.getPhoneNumber()),
                     const SizedBox(height: 10.0),
-                    Expanded(
-                        child: SingleChildScrollView(
-                          child: Container(
-                              color: getMaterialColor(AppColors.whiteColor),
-                              child: itemView()),
-                        )),
+                    // Expanded removed from here.
+                    SingleChildScrollView(
+                      child: Container(
+                          color: getMaterialColor(AppColors.whiteColor),
+                          child: itemView()),
+                    ),
                     DottedLine(
                         height: 2.0,
                         color: getMaterialColor(AppColors.textColor1)),
@@ -904,7 +910,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
             Expanded(
-              flex: 5,
+              flex: 6,
               child: CommonWidgets().textView(
                   orderItem.name!,
                   StyleConstants.customTextStyle(
@@ -945,7 +951,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           billTextView(StringConstants.foodCost, foodCost),
           billTextView(StringConstants.salesTax, widget.events.salesTax.toDouble()),
           billTextView(StringConstants.subTotal, foodCost + widget.events.salesTax.toDouble()),
-          billTextView(StringConstants.discount, discount),
+         // billTextView(StringConstants.discount, discount),
           billTextView(StringConstants.tip, tip),
           //const SizedBox(height: 23.0),
           totalBillView(totalAmount),
@@ -1008,8 +1014,10 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     }
   }
 
-  onTapProceed() {
-    callPayOrderAPI();
+  onTapProceed(bool isDisabled) {
+    if (!isDisabled) {
+      callPayOrderAPI();
+    }
   }
 
   onTapBackButton() {
