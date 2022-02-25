@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
+import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -32,7 +33,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   bool isApiProcess = false;
   bool isPasswordVisible = true;
   bool editMode = false;
-  var userName = 'Guest';
+  var userName = '';
   String emailValidationMessage = "";
   String firstNameValidationMessage = "";
   String lastNameValidationMessage = "";
@@ -663,18 +664,39 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   void showSuccess(response) {
     if (response is MyProfileResponseModel) {
       setState(() {
+        getMyProfile.clear();
         isApiProcess = false;
         getMyProfile.add(response);
         getUserDetails();
       });
-    } else {}
+    } else {
+      setState(() {
+        editMode=false;
+        isApiProcess = false;
+      });
+
+      getMyProfileDetails();
+    }
   }
 
   getUserDetails() {
+    userName= getMyProfile[0].firstName.toString()+" "+ getMyProfile[0].lastName.toString();
     firstNameController.text = getMyProfile[0].firstName.toString();
     lastNameController.text = getMyProfile[0].lastName.toString();
     contactNumberController.text = getMyProfile[0].phoneNum.toString();
     emailIdController.text = getMyProfile[0].email.toString();
+    storeValuesInDB(getMyProfile[0].firstName.toString(),getMyProfile[0].lastName.toString(),getMyProfile[0].phoneNum.toString(),getMyProfile[0].email.toString());
+
+  }
+  storeValuesInDB(String firstName,String lastName,String contactNumber,String email){
+    SessionDAO()
+        .insert(Session(key: DatabaseKeys.firstName, value: firstName));
+    SessionDAO()
+        .insert(Session(key: DatabaseKeys.lastName, value: lastName));
+    SessionDAO()
+        .insert(Session(key: DatabaseKeys.email, value: email));
+    SessionDAO()
+        .insert(Session(key: DatabaseKeys.phoneNum, value: contactNumber));
   }
 /*  Widget _buildPopupDialog(BuildContext context) {
     return AlertDialog(
