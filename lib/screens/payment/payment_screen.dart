@@ -93,7 +93,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
               eventAddress: widget.events.getEventAddress(),
               showCenterWidget: false,
               onTapCallBack: onTapCallBack,
-              onDrawerTap: onDrawerTap,onProfileTap: onProfileChange,),
+          //    onDrawerTap: onDrawerTap,
+              onProfileTap: onProfileChange,),
 
             Expanded(child: bodyWidget()),
             BottomBarWidget(

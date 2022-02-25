@@ -202,7 +202,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       backgroundColor: getMaterialColor(AppColors.textColor3),
-      endDrawer: const NotificationDrawer(),
+    //  endDrawer: const NotificationDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -211,7 +211,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             eventAddress: widget.events.getEventAddress(),
             showCenterWidget: true,
             onTapCallBack: onTapCallBack,
-            onDrawerTap: onDrawerTap,
+            //onDrawerTap: onDrawerTap,
              onProfileTap: onProfileChange,
              isProduct: isProduct),
           Expanded(
