@@ -57,17 +57,20 @@ class CommonWidgets {
     );
   }
 
-  Widget profileImage(String imageName) {
+  Widget profileImage(String imageName,bool editPencilVisibility) {
     return Stack(
       children: [
         const CircleAvatar(
           radius: 80.0,
           backgroundImage: AssetImage(AssetsConstants.konaIcon),
         ),
-        Positioned(
-          child: buildEditIcon(AppColors.whiteColor),
-          right: 2,
-          top: 110,
+        Visibility(
+          visible: editPencilVisibility,
+          child: Positioned(
+            child: buildEditIcon(AppColors.whiteColor),
+            right: 2,
+            top: 110,
+          ),
         )
       ],
     );

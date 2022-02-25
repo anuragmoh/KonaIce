@@ -244,9 +244,12 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       children: [
         Visibility(
           visible: editMode ? false : true,
-          child: CommonWidgets().buttonWidget(
-            StringConstants.edit,
-            onTapChangePassword,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: CommonWidgets().buttonWidget(
+              StringConstants.edit,
+              onTapChangePassword,
+            ),
           ),
         ),
         Visibility(
@@ -254,7 +257,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           child: Row(
             children: [
               CommonWidgets().buttonWidgetUnFilled(
-                StringConstants.cancel,
+                StringConstants.cancelProfile,
                 onTapCancel,
               ),
               Padding(
@@ -294,7 +297,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
             const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: CommonWidgets().profileImage(userName),
+              child: CommonWidgets().profileImage(userName,editMode),
             ),
             const SizedBox(height: 33.0),
             Padding(
@@ -309,7 +312,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                           StringConstants.enterFirstName,
                           firstNameController,
                           firstNameValidationMessage,
-                          firstNameValidation),
+                          firstNameValidation,editMode),
                     ],
                   ),
                   profileDetailsComponent(
@@ -318,7 +321,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       StringConstants.enterLastName,
                       lastNameController,
                       lastNameValidationMessage,
-                      lastNameValidation),
+                      lastNameValidation,editMode),
                 ],
               ),
             ),
@@ -333,9 +336,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       StringConstants.enterContactNumber,
                       contactNumberController,
                       contactNumberValidationMessage,
-                      phoneNumberValidation),
+                      phoneNumberValidation,editMode),
                   profileEmailTextFiledComponent(StringConstants.emailId, "",
-                      StringConstants.enterEmailId, emailIdController),
+                      StringConstants.enterEmailId, emailIdController,editMode),
                 ],
               ),
             ),
@@ -350,7 +353,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       StringConstants.password,
                       newPasswordController,
                       passwordValidationMessage,
-                      passwordValidation),
+                      passwordValidation,editMode),
                 ],
               ),
             ),
@@ -372,7 +375,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           String txtHint,
           TextEditingController textEditingController,
           String validationMessage,
-          Function validationMethod) =>
+          Function validationMethod,
+      bool textFiledColor) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -405,7 +409,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                   controller: textEditingController,
                   decoration: InputDecoration(
                       filled: true,
-                      fillColor: AppColors.whiteColor,
+                      fillColor:textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
                       hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
@@ -432,7 +436,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       String txtHint,
       TextEditingController textEditingController,
       String validationMessage,
-      Function validationMethod) =>
+      Function validationMethod, bool textFiledColor) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -478,7 +482,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                                 : const Icon(Icons.visibility)),
                       ),
                       filled: true,
-                      fillColor: AppColors.whiteColor,
+                      fillColor:textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
                       hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
@@ -503,7 +507,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       );
 
   Widget profileEmailTextFiledComponent(String txtName, String txtValue,
-          String txtHint, TextEditingController textEditingController) =>
+          String txtHint, TextEditingController textEditingController, bool textFiledColor) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -521,7 +525,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               height: 40.0,
               width: 300.0,
               decoration: BoxDecoration(
-                  color: AppColors.whiteColor,
+                  color: textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
                       color: getMaterialColor(AppColors.textColor1)
@@ -541,7 +545,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       controller: textEditingController,
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: AppColors.whiteColor,
+                          fillColor:textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
                           hintText: txtHint,
                           border: InputBorder.none,
                           labelText: txtValue,
@@ -671,10 +675,10 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       });
     } else {
       setState(() {
+        CommonWidgets().showSuccessSnackBar(message: StringConstants.profileUpdateSuccessfully, context: context);
         editMode=false;
         isApiProcess = false;
       });
-
       getMyProfileDetails();
     }
   }

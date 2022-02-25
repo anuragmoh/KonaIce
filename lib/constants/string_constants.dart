@@ -46,6 +46,7 @@ class StringConstants {
   static const addNewMenuItem = 'Add New Menu Item';
   static const clear = 'CLEAR';
   static const cancel = 'CANCEL';
+  static const cancelProfile = 'Cancel';
   static const addCustomer = 'Select Customer';
   static const guestCustomer = 'Guest Customer';
   static const charge = 'CHARGE';
@@ -149,6 +150,7 @@ class StringConstants {
 
   //Success Message
   static const savedOrderSuccess = 'Order saved successfully!';
+  static const profileUpdateSuccessfully = 'Profile saved successfully!';
 
 
   //Data not available messages
