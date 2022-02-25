@@ -151,12 +151,9 @@ class StringConstants {
 
 
   //Data not available messages
-  static const eventNotAvailable = 'No Events items available';
-  static const noMenuItemsAvailable = 'No menu items available';
-  static const noOrdersToDisplay = "We don't have any previous order for this event.";
-
-
-
+  static const eventNotAvailable = 'No event has been assigned to you for today';
+  static const noMenuItemsAvailable = 'No menu items available for the selected event';
+  static const noOrdersToDisplay = "No records found in the order history";
 
 
   // Dialog String

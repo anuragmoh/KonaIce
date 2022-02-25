@@ -240,9 +240,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         ],
       ),
     ) :
-    const Align(
+     Align(
         alignment: Alignment.center,
-        child: Text(StringConstants.noMenuItemsAvailable));
+        child: CommonWidgets().textWidget(StringConstants.noMenuItemsAvailable, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
+    );
   }
 
   Widget leftContainer() {
@@ -697,6 +698,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               price: totalAmountOfSelectedItems),
           commonOrderBillComponents(
               text: StringConstants.salesTax, price: getSalesTax()),
+          commonOrderBillComponents(
+              text: StringConstants.subTotal, price: getSubTotal()),
           commonOrderBillComponents(text: StringConstants.tip, price: tip),
           Visibility(
             visible: false,
@@ -981,6 +984,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     return salesTax;
   }
 
+  double getSubTotal() {
+    return totalAmountOfSelectedItems + getSalesTax();
+  }
+
   updateCustomerName() {
     if (customerName == StringConstants.addCustomer &&
         selectedMenuItems.isNotEmpty) {
@@ -998,7 +1005,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   calculateTotal() {
     if (selectedMenuItems.isNotEmpty) {
-      totalAmount = totalAmountOfSelectedItems + tip + salesTax - discount;
+      totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
     } else {
       totalAmount = 0.0;
     }
@@ -1290,7 +1297,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   //Navigation
   showPaymentScreen() {
     PlaceOrderRequestModel requestModel = getOrderRequestModel();
-    Map billDetails = {'tip': tip, "discount": discount, 'totalAmount': totalAmount, 'foodCost': totalAmountOfSelectedItems};
+    Map billDetails = {'tip': tip, "discount": discount, 'totalAmount': totalAmount, 'foodCost': totalAmountOfSelectedItems, 'salesTax': getSalesTax()};
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,))
     ).then((value) => {
