@@ -169,7 +169,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                   child: DataTable(
                     sortAscending: false,
                     showCheckboxColumn: false,
-                    dataRowHeight: 7.51 * SizeConfig.heightSizeMultiplier,
+                    dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
                     columns: [
                       DataColumn(
                         label: CommonWidgets().textView(
@@ -179,14 +179,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                 color: getMaterialColor(AppColors.textColor1),
                                 fontFamily: FontConstants.montserratBold)),
                       ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.orderId,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
+                      // DataColumn(
+                      //   label: CommonWidgets().textView(
+                      //       StringConstants.orderId,
+                      //       StyleConstants.customTextStyle(
+                      //           fontSize: 12.0,
+                      //           color: getMaterialColor(AppColors.textColor1),
+                      //           fontFamily: FontConstants.montserratBold)),
+                      // ),
                       DataColumn(
                         label: CommonWidgets().textView(
                             StringConstants.date,
@@ -221,66 +221,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                       ),
                     ],
                     rows: List.generate(savedOrdersList.length, (index) => _getDataRow(savedOrdersList[index],index)),
-                    // [
-                    //   DataRow(
-                    //       selected: true,
-                    //       color: MaterialStateProperty.all(Colors.white),
-                    //       cells: [
-                    //         DataCell(Row(children: [
-                    //           circularImage(
-                    //               'https://picsum.photos/id/237/200/300'),
-                    //           const SizedBox(width: 8.0),
-                    //           CommonWidgets().textView(
-                    //               'Nicholas Gibson',
-                    //               StyleConstants.customTextStyle(
-                    //                   fontSize: 12.0,
-                    //                   color: getMaterialColor(
-                    //                       AppColors.textColor1),
-                    //                   fontFamily:
-                    //                       FontConstants.montserratMedium)),
-                    //         ])),
-                    //         DataCell(
-                    //           CommonWidgets().textView(
-                    //               '25636564',
-                    //               StyleConstants.customTextStyle(
-                    //                   fontSize: 12.0,
-                    //                   color: getMaterialColor(
-                    //                       AppColors.textColor1),
-                    //                   fontFamily:
-                    //                       FontConstants.montserratMedium)),
-                    //         ),
-                    //         DataCell(CommonWidgets().textView(
-                    //             '25 Nov 2021',
-                    //             StyleConstants.customTextStyle(
-                    //                 fontSize: 12.0,
-                    //                 color:
-                    //                     getMaterialColor(AppColors.textColor1),
-                    //                 fontFamily:
-                    //                     FontConstants.montserratMedium))),
-                    //         DataCell(
-                    //           CommonWidgets().textView(
-                    //               'QR Code',
-                    //               StyleConstants.customTextStyle(
-                    //                   fontSize: 12.0,
-                    //                   color: getMaterialColor(
-                    //                       AppColors.textColor1),
-                    //                   fontFamily:
-                    //                       FontConstants.montserratMedium)),
-                    //         ),
-                    //         DataCell(
-                    //           CommonWidgets().textView(
-                    //               '\$35.0',
-                    //               StyleConstants.customTextStyle(
-                    //                   fontSize: 12.0,
-                    //                   color: getMaterialColor(
-                    //                       AppColors.textColor1),
-                    //                   fontFamily:
-                    //                       FontConstants.montserratMedium)),
-                    //         ),
-                    //         DataCell(completedView())
-                    //       ]),
-                    //
-                    // ],
                   ),
                 ),
               ],
@@ -288,6 +228,91 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
           ),
         ),
       );
+
+  DataRow _getDataRow(SavedOrders savedOrders,int index){
+    return DataRow(
+        onSelectChanged: (value){
+          setState(() {
+            selectedRow = index;
+          });
+          //  if (selectedRow != index) {
+          getItemByOrderId(savedOrders.orderId);
+          //   }
+        },
+        color: selectedRow==index ? MaterialStateProperty.all(Colors.white): null,
+        cells: <DataCell>[
+          DataCell(Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+            circularImage(
+                'https://picsum.photos/id/237/200/300'),
+            const SizedBox(width: 8.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonWidgets().textView(
+                    savedOrders.customerName,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: getMaterialColor(
+                            AppColors.textColor1),
+                        fontFamily:
+                        FontConstants.montserratMedium)),
+                CommonWidgets().textView(
+                    savedOrders.orderId,
+                    StyleConstants.customTextStyle(
+                        fontSize: 10.0,
+                        color: getMaterialColor(
+                            AppColors.textColor1),
+                        fontFamily:
+                        FontConstants.montserratMedium))
+              ],
+            ),
+          ])),
+          // DataCell(
+          //   CommonWidgets().textView(
+          //       savedOrders.orderId,
+          //       StyleConstants.customTextStyle(
+          //           fontSize: 12.0,
+          //           color: getMaterialColor(
+          //               AppColors.textColor1),
+          //           fontFamily:
+          //           FontConstants.montserratMedium)),
+          // ),
+          DataCell(CommonWidgets().textView(
+              savedOrders.getOrderDate(),
+              StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color:
+                  getMaterialColor(AppColors.textColor1),
+                  fontFamily:
+                  FontConstants.montserratMedium))),
+          DataCell(
+            CommonWidgets().textView(
+                savedOrders.payment,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(
+                        AppColors.textColor1),
+                    fontFamily:
+                    FontConstants.montserratMedium)),
+          ),
+          DataCell(
+            CommonWidgets().textView(
+                '\$ ${savedOrders.totalAmount}',
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(
+                        AppColors.textColor1),
+                    fontFamily:
+                    FontConstants.montserratMedium)),
+          ),
+          DataCell(getOrderStatusView(savedOrders.orderStatus))
+        ]
+    );
+  }
 
   Widget circularImage(String imageUrl) => Container(
         width: 4.55 * SizeConfig.imageSizeMultiplier,
@@ -903,73 +928,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
 
   }
 
-  DataRow _getDataRow(SavedOrders savedOrders,int index){
-    return DataRow(
-      onSelectChanged: (value){
-        setState(() {
-          selectedRow = index;
-        });
-      //  if (selectedRow != index) {
-          getItemByOrderId(savedOrders.orderId);
-     //   }
-      },
-        color: selectedRow==index ? MaterialStateProperty.all(Colors.white): null,
-      cells: <DataCell>[
-        DataCell(Row(children: [
-          circularImage(
-              'https://picsum.photos/id/237/200/300'),
-          const SizedBox(width: 8.0),
-          CommonWidgets().textView(
-              savedOrders.customerName,
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(
-                      AppColors.textColor1),
-                  fontFamily:
-                  FontConstants.montserratMedium)),
-        ])),
-        DataCell(
-          CommonWidgets().textView(
-              savedOrders.orderId,
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(
-                      AppColors.textColor1),
-                  fontFamily:
-                  FontConstants.montserratMedium)),
-        ),
-        DataCell(CommonWidgets().textView(
-            savedOrders.getOrderDate(),
-            StyleConstants.customTextStyle(
-                fontSize: 12.0,
-                color:
-                getMaterialColor(AppColors.textColor1),
-                fontFamily:
-                FontConstants.montserratMedium))),
-        DataCell(
-          CommonWidgets().textView(
-              savedOrders.payment,
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(
-                      AppColors.textColor1),
-                  fontFamily:
-                  FontConstants.montserratMedium)),
-        ),
-        DataCell(
-          CommonWidgets().textView(
-              '\$ ${savedOrders.totalAmount}',
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(
-                      AppColors.textColor1),
-                  fontFamily:
-                  FontConstants.montserratMedium)),
-        ),
-        DataCell(getOrderStatusView(savedOrders.orderStatus))
-      ]
-    );
-  }
+
   Widget getOrderStatusView(String status){
     if(status == "saved"){
       return savedView();
