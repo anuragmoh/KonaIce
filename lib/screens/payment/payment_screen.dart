@@ -383,9 +383,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
             paymentModeView(
                 StringConstants.creditCard, 1, AssetsConstants.creditCard),
+            paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
             paymentModeView(StringConstants.qrCode, 2, AssetsConstants.qrCode),
           ],
         ),
@@ -413,8 +413,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                 const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
                 child: CommonWidgets().image(
                     image: icon,
-                    width: 3.25 * SizeConfig.imageSizeMultiplier,
-                    height: 3.25 * SizeConfig.imageSizeMultiplier),
+                    width: 4.25 * SizeConfig.imageSizeMultiplier,
+                    height: 4.25 * SizeConfig.imageSizeMultiplier),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -732,12 +732,12 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                         storeAddress: widget.events.getEventAddress(),
                         phone: widget.placeOrderRequestModel.getPhoneNumber()),
                     const SizedBox(height: 10.0),
-                    Expanded(
-                        child: SingleChildScrollView(
-                          child: Container(
-                              color: getMaterialColor(AppColors.whiteColor),
-                              child: itemView()),
-                        )),
+                    // Expanded removed from here.
+                    SingleChildScrollView(
+                      child: Container(
+                          color: getMaterialColor(AppColors.whiteColor),
+                          child: itemView()),
+                    ),
                     DottedLine(
                         height: 2.0,
                         color: getMaterialColor(AppColors.textColor1)),
@@ -951,7 +951,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           billTextView(StringConstants.foodCost, foodCost),
           billTextView(StringConstants.salesTax, widget.events.salesTax.toDouble()),
           billTextView(StringConstants.subTotal, foodCost + widget.events.salesTax.toDouble()),
-          billTextView(StringConstants.discount, discount),
+         // billTextView(StringConstants.discount, discount),
           billTextView(StringConstants.tip, tip),
           //const SizedBox(height: 23.0),
           totalBillView(totalAmount),
