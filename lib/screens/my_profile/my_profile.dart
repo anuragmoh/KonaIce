@@ -197,6 +197,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         isContactValid) {
       CheckConnection().connectionState().then((value) {
         if (value == true) {
+          isApiProcess = true;
           editMode = false;
           userPresenter.updateProfile(userID, myProfileUpdateRequestModel);
         } else {
@@ -678,6 +679,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         CommonWidgets().showSuccessSnackBar(message: StringConstants.profileUpdateSuccessfully, context: context);
         editMode=false;
         isApiProcess = false;
+        if(isPasswordVisible==false){
+          isPasswordVisible = !isPasswordVisible;
+        }
       });
       getMyProfileDetails();
     }
