@@ -159,7 +159,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       );
 
   Widget tableHeadRow() => Padding(
-        padding: const EdgeInsets.only(left: 21.0),
+        padding: const EdgeInsets.only(left: 15.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           //controller: _scrollController,
@@ -168,10 +168,11 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 17.0),
+                  padding: const EdgeInsets.only(left: 10.0),
                   child: DataTable(
                     sortAscending: false,
                     showCheckboxColumn: false,
+                    columnSpacing: 35,
                     dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
                     columns: [
                       DataColumn(
@@ -248,8 +249,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-            circularImage(
-                'https://picsum.photos/id/237/200/300'),
+            circularImage(AssetsConstants.defaultProfileImage),
             const SizedBox(width: 8.0),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -323,7 +323,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(imageUrl))),
+                fit: BoxFit.cover, image: AssetImage(imageUrl))),
       );
 
   Widget rightSideWidget() => Padding(

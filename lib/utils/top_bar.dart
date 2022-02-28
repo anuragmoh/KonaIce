@@ -16,7 +16,7 @@ class TopBar extends StatefulWidget {
   final String eventAddress;
   final bool showCenterWidget;
   final Function onTapCallBack;
-  final Function onDrawerTap;
+ // final Function onDrawerTap;
   final Function onProfileTap;
   final bool isProduct;
 
@@ -27,7 +27,7 @@ class TopBar extends StatefulWidget {
       required this.eventAddress,
       required this.showCenterWidget,
       required this.onTapCallBack,
-      required this.onDrawerTap,
+      //required this.onDrawerTap,
       required this.onProfileTap,
       this.isProduct = true})
       : super(key: key);
@@ -101,7 +101,7 @@ class _TopBarState extends State<TopBar> {
       onTap: () {
         // Scaffold.of(context).openDrawer();
 
-        widget.onDrawerTap();
+      //  widget.onDrawerTap();
       },
       child: Badge(
         badgeContent: Text(

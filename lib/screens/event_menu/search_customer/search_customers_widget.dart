@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
@@ -109,7 +110,7 @@ class _SearchCustomersState extends State<SearchCustomers>
       dense: true,
       leading: CircleAvatar(
         radius: 1.5 * SizeConfig.imageSizeMultiplier,
-        backgroundImage: const NetworkImage('https://picsum.photos/id/237/200/300'),
+        backgroundImage: const AssetImage(AssetsConstants.defaultProfileImage),
       ),
       title: Align(
         alignment: Alignment.centerLeft,
