@@ -56,6 +56,7 @@ class StringConstants {
   static const noItemsAdded = 'No Items Added';
   static const customize = 'Customize';
   static const add = 'Add';
+  static const update = 'Update';
   static const customMenuPackage = 'Custom Menu Package';
   static const amount = 'Amount';
   static const enterAmount = 'Enter Amount';

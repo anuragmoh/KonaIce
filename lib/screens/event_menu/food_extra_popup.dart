@@ -19,8 +19,25 @@ class FoodExtraPopup extends StatefulWidget {
 }
 
 class _FoodExtraPopupState extends State<FoodExtraPopup> {
+  List<FoodExtraItems> foodExtraItemList = [];
+  List<FoodExtraItems> selectedExtras = [];
 
-   
+  @override
+  void initState() {
+    super.initState();
+    foodExtraItemList.clear();
+    for(var extra in widget.item.foodExtraItemList) {
+      FoodExtraItems extraCopy = extra.getCopy();
+      extraCopy.isItemSelected = extra.isItemSelected;
+      extraCopy.selectedItemQuantity = extra.selectedItemQuantity;
+      if (extraCopy.isItemSelected) {
+        selectedExtras.add(extraCopy);
+      }
+      foodExtraItemList.add(extraCopy);
+      debugPrint('-----------$foodExtraItemList---------');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return showFoodExtrasPopUp(widget.item);
@@ -43,26 +60,26 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
         children: [
           CommonWidgets().popUpTopView(title: '${StringConstants.customize} \'${item.name}\'',
             onTapCloseButton: onTapCloseButton, ),
-          popUpBodyContainer(item),
+          popUpBodyContainer(),
           addFoodExtraPopUpButton(item)
         ],
       ),
     );
   }
 
-  Widget popUpBodyContainer(Item item) {
+  Widget popUpBodyContainer() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 21, 10),
       child: Table(
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: const {0: FlexColumnWidth(0.2), 1: FlexColumnWidth(1.0), 2: FlexColumnWidth(0.4), 3: FlexColumnWidth(0.4)},
-        children: (item.foodExtraItemList).map((foodExtraObject) => popUpTableContent(foodExtraObject)).toList(),
+        children: (foodExtraItemList).map((foodExtraObject) => popUpTableContent(foodExtraObject)).toList(),
       ),
     );
   }
 
   TableRow popUpTableContent(FoodExtraItems foodExtraObject) {
-    int index = (widget.item.foodExtraItemList).indexOf(foodExtraObject);
+    int index = (foodExtraItemList).indexOf(foodExtraObject);
     return TableRow(
         children: [
           SizedBox(
@@ -70,7 +87,8 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             child: Checkbox(
                 side: BorderSide(color: getMaterialColor(AppColors.textColor2)),
                 activeColor: getMaterialColor(AppColors.primaryColor1),
-                value: widget.item.selectedExtras.contains(foodExtraObject),
+               // value: widget.item.selectedExtras.contains(foodExtraObject),
+                value: foodExtraItemList[index].isItemSelected,
                 onChanged: (isSelected) {
                   onTapCheckBox((isSelected ?? false),index,foodExtraObject);
                 }),
@@ -107,11 +125,11 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             height: 30.0,
             width: 90.0,
             decoration: BoxDecoration(
-                color: getMaterialColor(item.selectedExtras.isEmpty ? AppColors.denotiveColor5 : AppColors.primaryColor2),
+                color: getMaterialColor((item.selectedExtras.isEmpty && selectedExtras.isEmpty) ? AppColors.denotiveColor5 : AppColors.primaryColor2),
                 borderRadius: BorderRadius.circular(15.0)
             ),
             child: Center(
-              child: CommonWidgets().textWidget(StringConstants.add, StyleConstants.customTextStyle(
+              child: CommonWidgets().textWidget(item.selectedExtras.isEmpty ? StringConstants.add : StringConstants.update, StyleConstants.customTextStyle(
                   fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold), textAlign: TextAlign.center),
             ),
           ),
@@ -124,20 +142,20 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
 
   onTapIncrementForFoodExtra(index) {
    setState(() {
-    if (widget.item.foodExtraItemList[index].isItemSelected) {
-       widget.item.foodExtraItemList[index].selectedItemQuantity += 1;
+    if (foodExtraItemList[index].isItemSelected) {
+      foodExtraItemList[index].selectedItemQuantity += 1;
      }
    });
   }
 
   onTapDecrementForFoodExtra(index) {
     setState(() {
-      if (widget.item.foodExtraItemList[index].selectedItemQuantity != 0 &&
-          (widget.item.foodExtraItemList[index].isItemSelected)) {
-      widget.item.foodExtraItemList[index].selectedItemQuantity -= 1;
-      if (widget.item.foodExtraItemList[index].selectedItemQuantity == 0) {
-        widget.item.foodExtraItemList[index].isItemSelected = false;
-        widget.item.selectedExtras.remove(widget.item.foodExtraItemList[index]);
+      if (foodExtraItemList[index].selectedItemQuantity != 0 &&
+          (foodExtraItemList[index].isItemSelected)) {
+      foodExtraItemList[index].selectedItemQuantity -= 1;
+      if (foodExtraItemList[index].selectedItemQuantity == 0) {
+        foodExtraItemList[index].isItemSelected = false;
+        selectedExtras.remove(foodExtraItemList[index]);
       }
       }
     });
@@ -145,16 +163,15 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
 
   onTapCheckBox(bool isSelected, int index, FoodExtraItems foodExtraObject) {
     setState(() {
-      widget.item.foodExtraItemList[index].isItemSelected = isSelected;
-      isSelected ? widget.item.selectedExtras.add(foodExtraObject) :
-      widget.item.selectedExtras.remove(foodExtraObject);
+      foodExtraItemList[index].isItemSelected = isSelected;
+      isSelected ? selectedExtras.add(foodExtraObject) : selectedExtras.remove(foodExtraObject);
 
        if (isSelected) {
-        if (widget.item.foodExtraItemList[index].selectedItemQuantity == 0) {
-        widget.item.foodExtraItemList[index].selectedItemQuantity = 1;
+        if (foodExtraItemList[index].selectedItemQuantity == 0) {
+        foodExtraItemList[index].selectedItemQuantity = 1;
         }
        } else {
-         widget.item.foodExtraItemList[index].selectedItemQuantity = 0;
+         foodExtraItemList[index].selectedItemQuantity = 0;
        }
     });
   }
@@ -164,6 +181,10 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
   }
 
   onTapAddExtrasButton() {
+    widget.item.selectedExtras.clear();
+    widget.item.foodExtraItemList.clear();
+    widget.item.foodExtraItemList.addAll(foodExtraItemList);
+    widget.item.selectedExtras.addAll(selectedExtras);
     Navigator.of(context).pop(widget.item);
   }
 

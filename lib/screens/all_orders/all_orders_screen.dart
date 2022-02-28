@@ -934,7 +934,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
 
   // Get data from local db function start from here
   getAllSavedOrders(String eventId)async{
-    debugPrint('EventID------>$eventId');
     var result = await SavedOrdersDAO().getOrdersList(eventId);
     if(result !=null){
       setState(() {
@@ -979,10 +978,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       setState(() {
         savedOrderItemList.addAll(result);
       });
+      getAllFoodExtras();
     }else{
       setState(() {
         savedOrderItemList.clear();
       });
+    }
+  }
+
+  getAllFoodExtras() async {
+    if (savedOrderItemList.isNotEmpty) {
+      savedOrderExtraItemList.clear();
+       for (var item in savedOrderItemList) {
+        await getExtraFoodItems(item.itemId, item.orderId);
+       }
     }
   }
 
@@ -992,10 +1001,11 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
       setState(() {
         savedOrderExtraItemList.addAll(result);
       });
-    }else{
-      setState(() {
-        savedOrderExtraItemList.clear();
-      });
     }
+    // else{
+    //   setState(() {
+    //     savedOrderExtraItemList.clear();
+    //   });
+    // }
   }
 }

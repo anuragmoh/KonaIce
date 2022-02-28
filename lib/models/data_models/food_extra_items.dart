@@ -99,6 +99,13 @@ class FoodExtraItems {
     """;
   }
 
+  FoodExtraItems getCopy() {
+  //   return FoodExtraItems(id: this.id, foodExtraItemCategoryId: this.foodExtraItemCategoryId, itemId: this.itemId, eventId: this.eventId, itemName: itemName,
+  // sellingPrice: this.sellingPrice, selection: this.selection, imageFileId: this.imageFileId, minQtyAllowed: this.minQtyAllowed, maxQtyAllowed: this.maxQtyAllowed, activated: this.activated,
+  // createdBy: this.createdBy, createdAt: this.createdAt, updatedBy: this.updatedBy, updatedAt: this.updatedAt, deleted: this.deleted);
+    return FoodExtraItems(id: id, foodExtraItemCategoryId: foodExtraItemCategoryId, itemId: itemId, eventId: eventId, itemName: itemName, sellingPrice: sellingPrice, selection: selection, imageFileId: imageFileId, minQtyAllowed: minQtyAllowed, maxQtyAllowed: maxQtyAllowed, activated: activated, createdBy: createdBy, createdAt: createdAt, updatedBy: updatedBy, updatedAt: updatedAt, deleted: deleted);
+}
+
   double getTotalPrice() {
     return selectedItemQuantity * sellingPrice.toDouble();
   }

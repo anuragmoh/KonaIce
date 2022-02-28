@@ -302,7 +302,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   //Add to cart Container
   Widget rightCartViewContainer() {
-    debugPrint('onRight cartView ${selectedMenuItems.length}');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -1153,7 +1152,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onBackFromAllOrder({required SavedOrders savedOrder, required List<SavedOrdersItem> savedOrderItemList, required List<SavedOrdersExtraItems> savedOrderExtraItemList}) async {
-
     await clearCart();
     setState(() {
       isProduct = true;
@@ -1188,6 +1186,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           item.selectedItemQuantity = itemSaveOrder.quantity;
           item.isItemSelected = true;
           for (var extraSaveOrder in savedOrderExtraItemList) {
+            if (item.foodExtraItemList.isEmpty) {
+              break;
+            }
             for (var extraItem in item.foodExtraItemList) {
               if (extraItem.id == extraSaveOrder.extraFoodItemId && item.id == extraSaveOrder.itemId) {
                 extraItem.selectedItemQuantity = extraSaveOrder.quantity;
