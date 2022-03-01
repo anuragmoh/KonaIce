@@ -31,10 +31,10 @@ class SyncEventMenu {
     pOsSyncItemCategoryDataDtoList: List<POsSyncItemCategoryDataDtoList>.from(json["pOSSyncItemCategoryDataDtoList"].map((x) => POsSyncItemCategoryDataDtoList.fromJson(x))),
     pOsSyncEventItemDataDtoList: List<POsSyncEventItemDataDtoList>.from(json["pOSSyncEventItemDataDtoList"].map((x) => POsSyncEventItemDataDtoList.fromJson(x))),
     pOsSyncEventItemExtrasDataDtoList: List<POsSyncEventItemExtrasDataDtoList>.from(json["pOSSyncEventItemExtrasDataDtoList"].map((x) => POsSyncEventItemExtrasDataDtoList.fromJson(x))),
-    pOsSyncDeletedEventDataDtoList: List<POsSyncEventDataDtoList>.from(json["pOSSyncDeletedEventDataDtoList"].map((x) => POsSyncEventDataDtoList.fromJson(x))),
-    pOsSyncDeletedItemCategoryDataDtoList: List<POsSyncItemCategoryDataDtoList>.from(json["pOSSyncDeletedItemCategoryDataDtoList"].map((x) => POsSyncItemCategoryDataDtoList.fromJson(x))),
-    pOsSyncDeletedEventItemDataDtoList: List<POsSyncEventItemDataDtoList>.from(json["pOSSyncDeletedEventItemDataDtoList"].map((x) => POsSyncEventItemDataDtoList.fromJson(x))),
-    pOsSyncDeletedEventItemExtrasDataDtoList: List<POsSyncEventItemExtrasDataDtoList>.from(json["pOSSyncDeletedEventItemExtrasDataDtoList"].map((x) => POsSyncEventItemExtrasDataDtoList.fromJson(x))),
+    pOsSyncDeletedEventDataDtoList: List<POsSyncEventDataDtoList>.from((json["pOSSyncDeletedEventDataDtoList"] ?? []).map((x) => POsSyncEventDataDtoList.fromJson(x))),
+    pOsSyncDeletedItemCategoryDataDtoList: List<POsSyncItemCategoryDataDtoList>.from((json["pOSSyncDeletedItemCategoryDataDtoList"] ?? []).map((x) => POsSyncItemCategoryDataDtoList.fromJson(x))),
+    pOsSyncDeletedEventItemDataDtoList: List<POsSyncEventItemDataDtoList>.from((json["pOSSyncDeletedEventItemDataDtoList"] ?? []).map((x) => POsSyncEventItemDataDtoList.fromJson(x))),
+    pOsSyncDeletedEventItemExtrasDataDtoList: List<POsSyncEventItemExtrasDataDtoList>.from((json["pOSSyncDeletedEventItemExtrasDataDtoList"] ?? []).map((x) => POsSyncEventItemExtrasDataDtoList.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

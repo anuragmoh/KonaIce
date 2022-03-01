@@ -34,7 +34,6 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
         selectedExtras.add(extraCopy);
       }
       foodExtraItemList.add(extraCopy);
-      debugPrint('-----------$foodExtraItemList---------');
     }
   }
 

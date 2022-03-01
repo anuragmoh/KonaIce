@@ -51,6 +51,15 @@ class EventsDAO {
     }
   }
 
+  Future clearEventsByEventID({required String eventID}) async {
+    try {
+      final db = await _db;
+      await db.rawDelete("DELETE from $tableName where id = ?", [eventID]);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   Future clearEventsData() async {
     try {
       final db = await _db;

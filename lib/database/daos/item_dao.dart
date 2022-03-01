@@ -80,6 +80,15 @@ Future<List<Item>?>getAllItemsByCategories(String categoryId) async {
   }
 }
 
+Future clearItemsByEventID({required String eventID}) async {
+    try {
+      final db = await _db;
+      await db.rawDelete("DELETE from $tableName where event_id = ?", [eventID]);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
 Future clearItemData() async {
   try {
     final db = await _db;

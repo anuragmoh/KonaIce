@@ -40,6 +40,24 @@ class FoodExtraItemsDAO {
     }
   }
 
+  Future clearFoodExtraItemsByEventID({required String eventID}) async {
+    try {
+      final db = await _db;
+      await db.rawDelete("DELETE from $tableName where event_id = ?", [eventID]);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
+  Future clearFoodExtraItemsByEventIDAndItemID({required String eventID, required String itemID}) async {
+    try {
+      final db = await _db;
+      await db.rawDelete("DELETE from $tableName where event_id = ? and item_id = ?", [eventID, itemID]);
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
+
   Future clearFoodExtraItemsData() async {
     try {
       final db = await _db;
