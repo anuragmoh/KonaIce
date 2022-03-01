@@ -50,12 +50,12 @@ class DatabaseHelper {
     final documentsDir = await getApplicationDocumentsDirectory();
     debugPrint(documentsDir.toString());
     final dbPath = join(documentsDir.path, "trans_passenger.db");
-   //  var password = await SecureStorage.getDBPassword();
-   var password = "";
-    // if (password == null) {
-    //   password = _randomAlphaNumericString(16);
-    //   await SecureStorage.setDBPassword(password);
-    // }
+     var password = await SecureStorage.getDBPassword();
+  // var password = "";
+    if (password == null) {
+      password = _randomAlphaNumericString(16);
+      await SecureStorage.setDBPassword(password);
+    }
     debugPrint(password);
     return await openDatabase(dbPath,
         password: password, version: migrationScripts.length,
