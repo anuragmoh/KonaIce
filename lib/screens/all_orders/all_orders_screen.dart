@@ -72,7 +72,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
     CheckConnection().connectionState().then((value){
       if(value!){
         getLastSync().then((value){
-          getSyncOrders(lastSync: value,orderStatus: "NEW",eventId: widget.events.id,offset: countOffSet);
+          getSyncOrders(lastSync: value,orderStatus: StringConstants.orderStatusNew,eventId: widget.events.id,offset: countOffSet);
         });
       }else{
         CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.noInternetConnection, context: context);
@@ -84,8 +84,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
   @override
   void initState() {
     super.initState();
-
-    //getAllSavedOrders(widget.events.id);
     getData();
     // _scrollController = ScrollController();
     // _scrollController.addListener(() {
@@ -96,13 +94,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
 
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
-  // }
-
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
@@ -354,7 +352,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
                     fontFamily:
                     FontConstants.montserratMedium)),
           ),
-          DataCell(getOrderStatusView(savedOrders.orderStatus))
+          DataCell(getOrderStatusView(savedOrders.orderStatus,savedOrders.payment))
         ]
     );
   }
@@ -518,7 +516,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
                     visible: selectedRow !=-1,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
-                      child: getRightOrderStatusView(selectedRow !=-1 ? savedOrdersList[selectedRow].orderStatus :"NA"),
+                      child: getRightOrderStatusView(selectedRow !=-1 ? savedOrdersList[selectedRow].orderStatus :"NA",selectedRow !=-1 ? savedOrdersList[selectedRow].payment : "NA"),
                     ),
                   ),
                 ]),
@@ -988,27 +986,36 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
   }
 
 
-  Widget getOrderStatusView(String status){
-    if(status == "saved"){
+  Widget getOrderStatusView(String status,String paymentStatus){
+    if(paymentStatus==StringConstants.paymentStatusSuccess){
+      if(status == StringConstants.orderStatusSaved){
+        return savedView();
+      }else if(status == StringConstants.orderStatusPreparing){
+        return preparingView();
+      }else if(status== StringConstants.orderStatusNew){
+        return completedView();
+      }else{
+        return inProgressView() ;
+      }
+    }else{
       return savedView();
-    }else if(status == "preparing"){
-      return preparingView();
-    }else if(status=="NEW"){
-      return completedView();
-    }else{
-      return inProgressView() ;
     }
+
   }
-  Widget getRightOrderStatusView(String status){
-    if(status == "saved"){
-      return rightSavedView();
-    }else if(status == "preparing"){
-      return rightPreparingView();
-    }else if(status=="NEW"){
-      return rightCompletedView();
-    }else{
-      return rightPendingView() ;
-    }
+  Widget getRightOrderStatusView(String status,String paymentStatus){
+   if(paymentStatus == StringConstants.paymentStatusSuccess){
+     if(status == StringConstants.orderStatusSaved){
+       return rightSavedView();
+     }else if(status == StringConstants.orderStatusPreparing){
+       return rightPreparingView();
+     }else if(status==StringConstants.orderStatusNew){
+       return rightCompletedView();
+     }else{
+       return rightPendingView() ;
+     }
+   }else{
+     return rightSavedView();
+   }
   }
 
   getItemByOrderId(String orderId) async{
@@ -1077,17 +1084,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
       allOrdersList.add(response);
     });
     for(var event in allOrdersList[0].data!){
-      debugPrint("Inserting");
       String customerName = event.firstName !=null ? "${event.firstName} " + event.lastName! : StringConstants.guestCustomer;
       // Insert Order into DB
-      await SavedOrdersDAO().insert(SavedOrders(eventId:event.eventId!,cardId:event.id!,orderId:event.orderCode!,customerName:customerName,email:event.email.toString(),phoneNumber:event.phoneNumber.toString(),phoneCountryCode:event.phoneNumCountryCode.toString(),address1:event.addressLine1.toString(),address2:event.addressLine2.toString(),country:event.country.toString(),state:event.state.toString(),city:event.city.toString(),zipCode:event.zipCode.toString(),orderDate:event.orderDate!,tip:0.0,discount:0.0,foodCost:event.orderInvoice!.foodTotal!,totalAmount:event.orderInvoice!.total!,payment:event.paymentStatus!,orderStatus:event.orderStatus!,deleted:false));
+      await SavedOrdersDAO().insert(SavedOrders(eventId:event.eventId!,cardId:event.id!,orderId:event.id!,customerName:customerName,email:event.email.toString(),phoneNumber:event.phoneNumber.toString(),phoneCountryCode:event.phoneNumCountryCode.toString(),address1:event.addressLine1.toString(),address2:event.addressLine2.toString(),country:event.country.toString(),state:event.state.toString(),city:event.city.toString(),zipCode:event.zipCode.toString(),orderDate:event.orderDate!,tip:0.0,discount:0.0,foodCost:event.orderInvoice!.foodTotal!,totalAmount:event.orderInvoice!.total!,payment:event.paymentStatus!,orderStatus:event.orderStatus!,deleted:false));
       for(var item in event.orderItemsList!){
-        await SavedOrdersItemsDAO().insert(SavedOrdersItem(orderId:event.orderCode!,itemId:item.itemId.toString(),itemName:item.name.toString(),quantity:item.quantity!,unitPrice:item.unitPrice!,totalPrice:item.totalAmount!,itemCategoryId:item.itemCategoryId.toString(),deleted:false));
+        await SavedOrdersItemsDAO().insert(SavedOrdersItem(orderId:event.id!,itemId:item.itemId.toString(),itemName:item.name.toString(),quantity:item.quantity!,unitPrice:item.unitPrice!,totalPrice:item.totalAmount!,itemCategoryId:item.itemCategoryId.toString(),deleted:false));
         if(item.foodExtraItemMappingList !=null){
           for(var extraItemMappingList in item.foodExtraItemMappingList!){
             if(extraItemMappingList.orderFoodExtraItemDetailDto !=null){
               for(var extraItem in extraItemMappingList.orderFoodExtraItemDetailDto!){
-                 await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(orderId:event.orderCode!,itemId:item.itemId.toString(),extraFoodItemId:extraItem.id!,extraFoodItemName:extraItem.foodExtraItemName!,extraFoodItemCategoryId:extraItemMappingList.foodExtraCategoryId!,quantity:extraItem.quantity!,unitPrice:extraItem.unitPrice!,totalPrice:extraItem.totalAmount!,deleted:false));
+                 await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(orderId:event.id!,itemId:item.itemId.toString(),extraFoodItemId:extraItem.id!,extraFoodItemName:extraItem.foodExtraItemName!,extraFoodItemCategoryId:extraItemMappingList.foodExtraCategoryId!,quantity:extraItem.quantity!,unitPrice:extraItem.unitPrice!,totalPrice:extraItem.totalAmount!,deleted:false));
               }
             }
           }

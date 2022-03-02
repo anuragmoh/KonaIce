@@ -1,7 +1,6 @@
 import 'package:kona_ice_pos/utils/date_formats.dart';
 
 class SavedOrders {
-  int id;
   String eventId;
   String cardId;
   String orderId;
@@ -25,7 +24,7 @@ class SavedOrders {
   bool deleted;
 
   SavedOrders(
-      {this.id = 1,
+      {
       required this.eventId,
       required this.cardId,
       required this.orderId,
@@ -50,7 +49,6 @@ class SavedOrders {
 
   Map<String, dynamic> toMap() {
     return {
-      "id": id,
       "eventId": eventId,
       "cardId": cardId,
       "orderId": orderId,
@@ -77,7 +75,6 @@ class SavedOrders {
 
   factory SavedOrders.fromMap(Map<String, dynamic> map) {
     return SavedOrders(
-      id: map["id"],
       eventId: map["event_id"],
       cardId: map["card_id"],
       orderId: map["order_id"],
@@ -105,7 +102,6 @@ class SavedOrders {
   @override
   String toString() {
     return """
-    id: $id,
     eventId:$eventId,
     cardId:$cardId,
     orderId:$orderId,

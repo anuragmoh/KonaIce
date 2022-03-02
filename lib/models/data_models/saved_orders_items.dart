@@ -1,5 +1,4 @@
 class SavedOrdersItem {
-  int id;
   String orderId;
   String itemId;
   String itemName;
@@ -10,7 +9,7 @@ class SavedOrdersItem {
   bool deleted;
 
   SavedOrdersItem(
-      {this.id=1,
+      {
       required this.orderId,
       required this.itemId,
       required this.itemName,
@@ -22,7 +21,6 @@ class SavedOrdersItem {
 
   Map<String, dynamic> toMap() {
     return {
-      "id":id,
       "orderId":orderId,
       "itemId":itemId,
       "itemName":itemName,
@@ -36,7 +34,6 @@ class SavedOrdersItem {
 
   factory SavedOrdersItem.fromMap(Map<String, dynamic> map) {
     return SavedOrdersItem(
-        id: map["id"],
         orderId:map["order_id"],
         itemId:map["item_id"],
         itemName:map["item_name"],
@@ -50,7 +47,6 @@ class SavedOrdersItem {
   @override
   String toString() {
     return """
-      id:$id,
       orderId:$orderId,
       itemId:$itemId,
       itemName:$itemName,
