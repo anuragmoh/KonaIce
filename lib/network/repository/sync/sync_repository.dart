@@ -27,5 +27,4 @@ class SyncRepository {
     return _eventRequestModel;
   }
 
-
 }
