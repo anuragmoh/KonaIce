@@ -2,18 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
+import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/repository/all_orders/all_order_presenter.dart';
+import 'package:kona_ice_pos/network/response_contractor.dart';
+import 'package:kona_ice_pos/screens/all_orders/all_order_model.dart';
+import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/date_formats.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -29,30 +37,70 @@ import 'package:kona_ice_pos/utils/utils.dart';
   noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-class _AllOrdersScreenState extends State<AllOrdersScreen> {
+class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseContractor {
   bool isItemClick = true;
   List<SavedOrders> savedOrdersList= [];
   List<SavedOrdersItem> savedOrderItemList = [];
   List<SavedOrdersExtraItems> savedOrderExtraItemList = [];
+  late AllOrderPresenter allOrderPresenter;
+  List<AllOrderResponse> allOrdersList = [];
 
   int selectedRow = -1;
  // late ScrollController _scrollController;
+  bool isApiProcess = false;
+  int countOffSet = 0;
 
+  _AllOrdersScreenState(){
+    allOrderPresenter = AllOrderPresenter(this);
+  }
+
+  getSyncOrders({required int lastSync, required String orderStatus,required String eventId, required int offset}){
+    setState(() {
+      isApiProcess = true;
+    });
+    allOrderPresenter.getSyncOrder(orderStatus: orderStatus, eventId: eventId, offset: offset, lastSync: lastSync);
+  }
+  Future<int> getLastSync()async{
+    var result = await SessionDAO().getValueForKey(DatabaseKeys.allOrders);
+    if(result !=null){
+      return int.parse(result.value);
+    }else{
+      return 0;
+    }
+  }
+  getData(){
+    CheckConnection().connectionState().then((value){
+      if(value!){
+        getLastSync().then((value){
+          getSyncOrders(lastSync: value,orderStatus: StringConstants.orderStatusNew,eventId: widget.events.id,offset: countOffSet);
+        });
+      }else{
+        CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.noInternetConnection, context: context);
+        getAllSavedOrders(widget.events.id);
+      }
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    getAllSavedOrders(widget.events.id);
+    getData();
     // _scrollController = ScrollController();
     // _scrollController.addListener(() {
     //   if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
     //     print("At the end of the screen");
     //   }
     // });
+
   }
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
@@ -160,7 +208,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
 
   Widget tableHeadRow() => Padding(
         padding: const EdgeInsets.only(left: 15.0),
-        child: SingleChildScrollView(
+        child:  SingleChildScrollView(
           scrollDirection: Axis.vertical,
           //controller: _scrollController,
           child: SingleChildScrollView(
@@ -169,7 +217,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
-                  child: DataTable(
+                  child:  DataTable(
                     sortAscending: false,
                     showCheckboxColumn: false,
                     columnSpacing: 35,
@@ -183,14 +231,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                                 color: getMaterialColor(AppColors.textColor1),
                                 fontFamily: FontConstants.montserratBold)),
                       ),
-                      // DataColumn(
-                      //   label: CommonWidgets().textView(
-                      //       StringConstants.orderId,
-                      //       StyleConstants.customTextStyle(
-                      //           fontSize: 12.0,
-                      //           color: getMaterialColor(AppColors.textColor1),
-                      //           fontFamily: FontConstants.montserratBold)),
-                      // ),
                       DataColumn(
                         label: CommonWidgets().textView(
                             StringConstants.date,
@@ -225,12 +265,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                       ),
                     ],
                     rows: List.generate(savedOrdersList.length, (index) => _getDataRow(savedOrdersList[index],index)),
-                  ),
+                  ) ,
                 ),
               ],
             ),
           ),
-        ),
+        ) ,
       );
 
   DataRow _getDataRow(SavedOrders savedOrders,int index){
@@ -312,7 +352,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                     fontFamily:
                     FontConstants.montserratMedium)),
           ),
-          DataCell(getOrderStatusView(savedOrders.orderStatus))
+          DataCell(getOrderStatusView(savedOrders.orderStatus,savedOrders.payment))
         ]
     );
   }
@@ -476,7 +516,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
                     visible: selectedRow !=-1,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
-                      child: getRightOrderStatusView(selectedRow !=-1 ? savedOrdersList[selectedRow].orderStatus :"NA"),
+                      child: getRightOrderStatusView(selectedRow !=-1 ? savedOrdersList[selectedRow].orderStatus :"NA",selectedRow !=-1 ? savedOrdersList[selectedRow].payment : "NA"),
                     ),
                   ),
                 ]),
@@ -946,27 +986,36 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
   }
 
 
-  Widget getOrderStatusView(String status){
-    if(status == "saved"){
+  Widget getOrderStatusView(String status,String paymentStatus){
+    if(paymentStatus==StringConstants.paymentStatusSuccess){
+      if(status == StringConstants.orderStatusSaved){
+        return savedView();
+      }else if(status == StringConstants.orderStatusPreparing){
+        return preparingView();
+      }else if(status== StringConstants.orderStatusNew){
+        return completedView();
+      }else{
+        return inProgressView() ;
+      }
+    }else{
       return savedView();
-    }else if(status == "preparing"){
-      return preparingView();
-    }else if(status=="completed"){
-      return completedView();
-    }else{
-      return inProgressView() ;
     }
+
   }
-  Widget getRightOrderStatusView(String status){
-    if(status == "saved"){
-      return rightSavedView();
-    }else if(status == "preparing"){
-      return rightPreparingView();
-    }else if(status=="completed"){
-      return rightCompletedView();
-    }else{
-      return rightPendingView() ;
-    }
+  Widget getRightOrderStatusView(String status,String paymentStatus){
+   if(paymentStatus == StringConstants.paymentStatusSuccess){
+     if(status == StringConstants.orderStatusSaved){
+       return rightSavedView();
+     }else if(status == StringConstants.orderStatusPreparing){
+       return rightPreparingView();
+     }else if(status==StringConstants.orderStatusNew){
+       return rightCompletedView();
+     }else{
+       return rightPendingView() ;
+     }
+   }else{
+     return rightSavedView();
+   }
   }
 
   getItemByOrderId(String orderId) async{
@@ -1008,4 +1057,53 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> {
     //   });
     // }
   }
+
+  @override
+  void showError(GeneralErrorResponse exception) {
+    setState(() {
+      isApiProcess = false;
+      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    });
+  }
+
+  @override
+  void showSuccess(response) {
+    setState(() {
+      isApiProcess = false;
+    });
+    ordersInsertIntoDb(response);
+  }
+
+  updateLastSync()async{
+    SessionDAO().insert(Session(key: DatabaseKeys.allOrders, value:DateTime.now().millisecondsSinceEpoch.toString()));
+  }
+
+  ordersInsertIntoDb(AllOrderResponse response)async{
+    List<AllOrderResponse> allOrdersList = [];
+    setState(() {
+      allOrdersList.add(response);
+    });
+    for(var event in allOrdersList[0].data!){
+      String customerName = event.firstName !=null ? "${event.firstName} " + event.lastName! : StringConstants.guestCustomer;
+      // Insert Order into DB
+      await SavedOrdersDAO().insert(SavedOrders(eventId:event.eventId!,cardId:event.id!,orderId:event.id!,customerName:customerName,email:event.email.toString(),phoneNumber:event.phoneNumber.toString(),phoneCountryCode:event.phoneNumCountryCode.toString(),address1:event.addressLine1.toString(),address2:event.addressLine2.toString(),country:event.country.toString(),state:event.state.toString(),city:event.city.toString(),zipCode:event.zipCode.toString(),orderDate:event.orderDate!,tip:0.0,discount:0.0,foodCost:event.orderInvoice!.foodTotal!,totalAmount:event.orderInvoice!.total!,payment:event.paymentStatus!,orderStatus:event.orderStatus!,deleted:false));
+      for(var item in event.orderItemsList!){
+        await SavedOrdersItemsDAO().insert(SavedOrdersItem(orderId:event.id!,itemId:item.itemId.toString(),itemName:item.name.toString(),quantity:item.quantity!,unitPrice:item.unitPrice!,totalPrice:item.totalAmount!,itemCategoryId:item.itemCategoryId.toString(),deleted:false));
+        if(item.foodExtraItemMappingList !=null){
+          for(var extraItemMappingList in item.foodExtraItemMappingList!){
+            if(extraItemMappingList.orderFoodExtraItemDetailDto !=null){
+              for(var extraItem in extraItemMappingList.orderFoodExtraItemDetailDto!){
+                 await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(orderId:event.id!,itemId:item.itemId.toString(),extraFoodItemId:extraItem.id!,extraFoodItemName:extraItem.foodExtraItemName!,extraFoodItemCategoryId:extraItemMappingList.foodExtraCategoryId!,quantity:extraItem.quantity!,unitPrice:extraItem.unitPrice!,totalPrice:extraItem.totalAmount!,deleted:false));
+              }
+            }
+          }
+        }
+      }
+
+    }
+    updateLastSync();
+    getAllSavedOrders(widget.events.id);
+  }
 }
+
+

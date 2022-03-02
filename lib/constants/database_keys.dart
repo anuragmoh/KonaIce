@@ -23,6 +23,7 @@ class DatabaseKeys {
   static const items = "items";
   static const categories = "categories";
   static const itemExtras = "itemextras";
+  static const allOrders = "allOrders";
 
 //End
 }

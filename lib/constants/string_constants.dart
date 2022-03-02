@@ -168,6 +168,13 @@ class StringConstants {
   static const yes = "Yes";
   static const no = "No";
 
+  //all Order status
+  static const paymentStatusSuccess = "SUCCESS";
+  static const paymentStatusPending = "PENDING";
+  static const orderStatusSaved = "saved";
+  static const orderStatusCompleted = "completed";
+  static const orderStatusPreparing = "preparing";
+  static const orderStatusNew = "NEW";
 
 
 }
