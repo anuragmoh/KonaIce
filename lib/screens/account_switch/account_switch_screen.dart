@@ -12,7 +12,7 @@ import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/available_device_list/available_device_list_screen.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
-import 'package:kona_ice_pos/utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -176,15 +176,16 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
     setState(() {
       isStaffModeSelected = staffSelected;
     });
-    if(!isStaffModeSelected){
-      P2PConnectionManager.shared.startService(isStaffView: false);
-    }
+
   }
 
   //Store Info
   storeInformation() async {
     await SessionDAO()
         .insert(Session(key: DatabaseKeys.selectedMode, value: isStaffModeSelected ? StringConstants.staffMode : StringConstants.customerMode));
+    if(!isStaffModeSelected){
+    await P2PConnectionManager.shared.startService(isStaffView: false);
+    }
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => isStaffModeSelected ? const AvailableDeviceListScreen() : SplashScreen()));
   }

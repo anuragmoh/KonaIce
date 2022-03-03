@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
+import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/events_dao.dart';
@@ -24,6 +25,7 @@ import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
@@ -392,15 +394,13 @@ class _HomeScreenState extends State<HomeScreen>
 
   }
 
-
   onTapClockInOutButton() {
     callClockInOutAPI();
   }
 
   onTapEventItem(Events events) {
-    // setState(() {
-    //   tempEventHomeNavigation = true;
-    // });
+
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.eventSelected);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => EventMenuScreen(events: events)));
   }

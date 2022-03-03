@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
-import 'package:kona_ice_pos/utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/constants/font_constants.dart';
+import 'package:kona_ice_pos/constants/p2p_constants.dart';
+import 'package:kona_ice_pos/constants/string_constants.dart';
+import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class AvailableDeviceListScreen extends StatefulWidget {
@@ -51,12 +57,25 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: Colors.white,
-      child: ListView.builder(
-          itemCount: deviceList.length,
-          itemBuilder: (context,index){
-            final device = deviceList[index];
-          return listView(device);
-      }),
+      child: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+                itemCount: deviceList.length,
+                itemBuilder: (context,index){
+                  final device = deviceList[index];
+                return listView(device);
+            }),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(40.0),
+            child: proceedButton(StringConstants.proceed, StyleConstants.customTextStyle(
+                fontSize: 12.0,
+                color: getMaterialColor(AppColors.textColor1),
+                fontFamily: FontConstants.montserratBold)),
+          )
+        ],
+      ),
     ),
   );
 
@@ -100,6 +119,35 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       const Divider(),
     ],
   );
+  Widget proceedButton(String buttonText, TextStyle textStyle) {
+    return GestureDetector(
+      onTap: () {
+        onTapProceedButton();
+      },
+      child: Container(
+        width: 210,
+        decoration: BoxDecoration(
+          color: getMaterialColor(AppColors.primaryColor2),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: 70.0),
+          child: Align (
+              alignment: Alignment.center,
+              child: CommonWidgets().textWidget(buttonText, textStyle)
+          ),
+        ),
+      ),
+    );
+  }
+
+  //Action Event
+  onTapProceedButton() {
+    Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => const Dashboard()));
+  }
 
   String getStateName(SessionState state) {
     switch (state) {

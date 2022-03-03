@@ -32,8 +32,8 @@ class PlaceOrderRequestModel {
     this.corporateDonation,
     this.corporateDonationBeforeCcCharges,
     this.ccChargesAmount,
-    this.addressLatitude,
-    this.addressLongitude,
+    this.addressLatitude = 0.0,
+    this.addressLongitude = 0.0,
     this.slotInterval1,
     this.slotInterval2,
     this.orderDate,
@@ -246,6 +246,7 @@ class OrderFoodExtraItemDetailDto {
     this.unitPrice,
     this.totalAmount,
     this.specialInstructions,
+    this.name,
   });
 
   String? id;
@@ -253,6 +254,7 @@ class OrderFoodExtraItemDetailDto {
   double? unitPrice;
   double? totalAmount;
   String? specialInstructions;
+  String? name;
 
   factory OrderFoodExtraItemDetailDto.fromJson(Map<String?, dynamic> json) => OrderFoodExtraItemDetailDto(
     id: json["id"],
@@ -260,6 +262,7 @@ class OrderFoodExtraItemDetailDto {
     unitPrice: json["unitPrice"],
     totalAmount: json["totalAmount"],
     specialInstructions: json["specialInstructions"],
+    name: json["name"],
   );
 
   Map<String?, dynamic> toJson() => {
@@ -268,5 +271,6 @@ class OrderFoodExtraItemDetailDto {
     "unitPrice": unitPrice,
     "totalAmount": totalAmount,
     "specialInstructions": specialInstructions,
+    "name": name,
   };
 }
