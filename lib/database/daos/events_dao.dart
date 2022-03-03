@@ -37,10 +37,13 @@ class EventsDAO {
     }
   }
   Future<List<Events>?> getTodayEvent(String startDateTimeStamp, String endDateTimeStamp) async {
+    debugPrint('$startDateTimeStamp, $endDateTimeStamp');
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName where start_date_time >= ? AND end_date_time <= ?", [startDateTimeStamp,endDateTimeStamp]);
+      await db.rawQuery("SELECT * FROM events WHERE end_date_time>= ? AND end_date_time <=? OR (end_date_time >= ? AND start_date_time <=  ?)", [startDateTimeStamp,endDateTimeStamp,endDateTimeStamp,endDateTimeStamp]); //SELECT * FROM events WHERE end_date_time>= '1646245800000' AND end_date_time <='1646332199000' OR (end_date_time >= '1646332199000' AND start_date_time <=  '1646332199000')
+      // var result =
+      // await db.rawQuery("SELECT * from $tableName where start_date_time >= ? AND end_date_time <= ?", [startDateTimeStamp,endDateTimeStamp]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => Events.fromMap(result[index]));
       } else {
