@@ -1024,6 +1024,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       addDiscountTextFieldController.clear();
       customerName = StringConstants.addCustomer;
       orderID = '';
+      customer  = null;
      getAllItems(widget.events.id);
     });
   }
@@ -1216,6 +1217,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   updateOrderDataToCustomer() {
     P2POrderDetailsModel dataModel = P2POrderDetailsModel();
         dataModel.orderRequestModel = getOrderRequestModel();
+        dataModel.orderRequestModel!.addressLongitude = 0.0;
+        dataModel.orderRequestModel!.addressLatitude = 0.0;
         dataModel.discount = discount;
         dataModel.tip = tip;
         dataModel.totalAmount = totalAmount;
