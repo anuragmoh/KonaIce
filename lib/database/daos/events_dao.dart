@@ -37,7 +37,6 @@ class EventsDAO {
     }
   }
   Future<List<Events>?> getTodayEvent(String startDateTimeStamp, String endDateTimeStamp) async {
-    debugPrint('$startDateTimeStamp, $endDateTimeStamp');
     try {
       final db = await _db;
       var result =

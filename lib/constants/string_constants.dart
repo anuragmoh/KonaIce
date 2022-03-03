@@ -139,6 +139,7 @@ class StringConstants {
   static const internetConnectionError = 'No Internet connection';
   static const apiNotResponding = 'API not responded in time';
   static const errorOccurredWithCode = 'Error occurred with code ';
+  static const errorSessionExpire = 'Session expired';
 
 
   // Error Messages
