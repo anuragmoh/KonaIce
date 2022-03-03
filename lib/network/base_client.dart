@@ -104,6 +104,7 @@ class BaseClient {
       debugPrint("Ok");
       return response.body.toString();
     } else if(response.isUnauthorizedUser()) {
+
       FunctionalUtils.clearSessionData();
     //   getErrorModel(response);
     } else {

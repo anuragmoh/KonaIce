@@ -447,7 +447,7 @@ class _LoginScreenState extends State<LoginScreen>
   checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
     var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
     if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
-      print("old user");
+      debugPrint("old user");
     } else {
       await FunctionalUtils.clearAllDBData();
     }
