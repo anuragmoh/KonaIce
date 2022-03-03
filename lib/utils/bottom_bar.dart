@@ -14,6 +14,7 @@ import 'package:kona_ice_pos/utils/bottombar_menu_abstract_class.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
+import 'ServiceNotifier.dart';
 import 'common_widgets.dart';
 
 class BottomBarWidget extends StatefulWidget {
@@ -35,18 +36,18 @@ class BottomBarWidget extends StatefulWidget {
 class _BottomBarWidgetState extends State<BottomBarWidget> {
   // late BottomBarMenu bottomBarMenu=Bottombarme;
   BottomBarMenuClass bottomBarMenuClass=BottomBarMenuClass();
-
+  final service = ServiceNotifier();
 /*  _BottomBarWidgetState() {
     bottomBarMenu = BottomBarMenu();
   }*/
 
   int currentIndex = 0;
-  List<Widget> bodyWidgets = [
+/*  List<Widget> bodyWidgets = [
     const HomeScreen(),
     const NotificationScreen(),
     const SettingScreen(),
     const AccountSwitchScreen(),
-  ];
+  ];*/
   List<BottomItems> bottomItemList = [
     BottomItems(
         title: StringConstants.home,
@@ -96,6 +97,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
+                service.increment(index);
                 setState(() {
                   // onTapBottomListItem(index);
                   // bottomBarMenuClass.changeIndex(index);

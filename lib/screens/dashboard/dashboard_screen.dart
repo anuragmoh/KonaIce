@@ -17,16 +17,15 @@ import 'package:kona_ice_pos/models/data_models/item_categories.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/models/data_models/sync_event_menu.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
-import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
 import 'package:kona_ice_pos/screens/home/home_screen.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/settings/settings.dart';
+import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/bottombar_menu_abstract_class.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -42,40 +41,29 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> implements ResponseContractor,BottomBarMenu {
-  late SyncPresenter _syncPresenter;
-
-/*  _DashboardState() {
-    _syncPresenter = SyncPresenter(this);
-  }*/
-
   List<Events> eventList = [];
-
+  final service = ServiceNotifier();
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
   List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
   List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
-      [];
+  [];
   List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
-      [];
+  [];
   List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList>
-      pOsSyncDeletedEventItemExtrasDataDtoList = [];
-
+  pOsSyncDeletedEventItemExtrasDataDtoList = [];
   bool isApiProcess = false;
   int currentIndex = 0;
   String userName = StringExtension.empty();
-  List<Widget> bodyWidgets = [const HomeScreen(), const SettingScreen()];
+  // List<Widget> bodyWidgets = [HomeScreen(onCallback:onCallBackDashboard), const SettingScreen()];
   List<BottomItems> bottomItemList = [
     BottomItems(
         title: StringConstants.home,
         basicImage: AssetsConstants.homeUnSelectedIcon,
         selectedImage: AssetsConstants.homeSelectedIcon),
-/*    BottomItems(
-        title: StringConstants.notification,
-        basicImage: AssetsConstants.notificationUnSelectedIcon,
-        selectedImage: AssetsConstants.notificationSelectedIcon),*/
     BottomItems(
         title: StringConstants.settings,
         basicImage: AssetsConstants.settingsUnSelectedIcon,
@@ -84,27 +72,37 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   Future<void> getSyncData() async {
     var result = await EventsDAO().getValues();
-      if (result != null) {
-        eventList.addAll(result);
+    if (result != null) {
+      eventList.addAll(result);
     } else {
       setState(() {
         isApiProcess = true;
       });
-      // _syncPresenter.syncData();
     }
   }
 
+  void getIndex() {
+    setState(() {
+      currentIndex=ServiceNotifier.count;
+      debugPrint(currentIndex.toString());
+    });
+
+    debugPrint('getIndexCalled');
+  }
 
   @override
   void initState() {
     super.initState();
-     configureData();
+    configureData();
+    getIndex();
     // getSyncData();
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('dashboardScreen');
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+
   }
 
   Widget mainUi(BuildContext context) {
@@ -116,7 +114,8 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
         children: [
           CommonWidgets().dashboardTopBar(topBarComponent()),
           Expanded(
-            child: bodyWidgets[currentIndex],
+            child: currentIndex==0?HomeScreen(onCallback: onReloadDashboardScreen):const SettingScreen(),
+            // child: bodyWidgets[currentIndex],
             //   child: CommonWidgets().bodyWidgets[],
             //   child: body(),
           ),
@@ -212,7 +211,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   void onProfileChange() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MyProfile()));
+        .push(MaterialPageRoute(builder: (context) => const MyProfile())).then((value){onReloadDashboardScreen(value);});
   }
 
   //Function Other than UI dependency
@@ -390,7 +389,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
       await FoodExtraItemsDAO().insert(FoodExtraItems(
           id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
           foodExtraItemCategoryId:
-              pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+          pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
           itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
           eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
           itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
@@ -450,7 +449,16 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
   void changeIndex(index) {
     setState(() {
       currentIndex = index;
-      print('Dashboard$index');
+      debugPrint('Dashboard$index');
     });
   }
+
+  void onReloadDashboardScreen(dynamic value){
+    print('onReloadDashboardScreen');
+    setState(() {
+      currentIndex=ServiceNotifier.count;
+    });
+  }
+
+
 }

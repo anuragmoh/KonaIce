@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
@@ -33,7 +32,9 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  var onCallback;
+  HomeScreen({Key? key, this.onCallback}) : super(key: key);
+
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   String currentDate =
-      Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
+  Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
   late DateTime startDateTime;
   Timer? clockInTimer;
@@ -62,18 +63,93 @@ class _HomeScreenState extends State<HomeScreen>
   List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
   List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
-      [];
+  [];
   List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
-      [];
+  [];
   List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList>
-      pOsSyncDeletedEventItemExtrasDataDtoList = [];
+  pOsSyncDeletedEventItemExtrasDataDtoList = [];
 
   late ClockInOutPresenter clockInOutPresenter;
   ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
 
-
+  // Future<void> getSyncData() async {
+  //   eventList.clear();
+  //   await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+  //     if (value != null) {
+  //       int lastSyncTime = int.parse(value.value);
+  //       CheckConnection().connectionState().then((value) {
+  //         if (value == true) {
+  //           setState(() {
+  //             isApiProcess = true;
+  //           });
+  //           _syncPresenter.syncData(lastSyncTime);
+  //         } else {
+  //           CommonWidgets().showErrorSnackBar(
+  //               errorMessage: StringConstants.noInternetConnection,
+  //               context: context);
+  //         }
+  //       });
+  //     } else {
+  //       CheckConnection().connectionState().then((value) {
+  //         if (value == true) {
+  //           setState(() {
+  //             isApiProcess = true;
+  //           });
+  //           _syncPresenter.syncData(0);
+  //         } else {
+  //           CommonWidgets().showErrorSnackBar(
+  //               errorMessage: StringConstants.noInternetConnection,
+  //               context: context);
+  //         }
+  //       });
+  //     }
+  //   });
+  //
+  //  // Old Code
+  //
+  //   // var result = await EventsDAO().getTodayEvent(
+  //   //     Date.getStartOfDateTimeStamp(date: DateTime.now()),
+  //   //    Date.getEndOfDateTimeStamp(date: DateTime.now()));
+  //   // //var result = await EventsDAO().getValues();
+  //   // if (result != null) {
+  //   //   setState(() {
+  //   //     eventList.addAll(result);
+  //   //   });
+  //   // } else {
+  //   //   await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
+  //   //     if (value != null) {
+  //   //       int lastSyncTime = int.parse(value.value);
+  //   //       CheckConnection().connectionState().then((value) {
+  //   //         if (value == true) {
+  //   //           setState(() {
+  //   //             isApiProcess = true;
+  //   //           });
+  //   //           _syncPresenter.syncData(lastSyncTime);
+  //   //         } else {
+  //   //           CommonWidgets().showErrorSnackBar(
+  //   //               errorMessage: StringConstants.noInternetConnection,
+  //   //               context: context);
+  //   //         }
+  //   //       });
+  //   //     } else {
+  //   //       CheckConnection().connectionState().then((value) {
+  //   //         if (value == true) {
+  //   //           setState(() {
+  //   //             isApiProcess = true;
+  //   //           });
+  //   //           _syncPresenter.syncData(0);
+  //   //         } else {
+  //   //           CommonWidgets().showErrorSnackBar(
+  //   //               errorMessage: StringConstants.noInternetConnection,
+  //   //               context: context);
+  //   //         }
+  //   //       });
+  //   //     }
+  //   //   });
+  //   // }
+  // }
   refreshDataOnRequest() async {
     await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
       if (value != null) {
@@ -114,8 +190,10 @@ class _HomeScreenState extends State<HomeScreen>
     setState(() {
       eventList.clear();
     });
-    var result = await EventsDAO().getTodayEvent(Date.getStartOfDateTimeStamp(date: DateTime.now()), Date.getEndOfDateTimeStamp(date: DateTime.now()));
-   // var result = await EventsDAO().getValues();
+    var result = await EventsDAO().getTodayEvent(
+        Date.getStartOfDateTimeStamp(date: DateTime.now()),
+        Date.getEndOfDateTimeStamp(date: DateTime.now()));
+    // var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
         eventList.addAll(result);
@@ -141,7 +219,6 @@ class _HomeScreenState extends State<HomeScreen>
         startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
         isClockIn ? startTimer() : stopTimer();
       });
-
     }
     callClockInOutDetailsAPI();
   }
@@ -220,112 +297,118 @@ class _HomeScreenState extends State<HomeScreen>
         padding: const EdgeInsets.all(8.0),
         child: eventList.isNotEmpty
             ? ListView.builder(
-                itemCount: eventList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var eventDetails = eventList[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        onTapEventItem(eventDetails);
-                      },
-                      child: Card(
-                          elevation: 0.0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                16.0, 12.0, 16.0, 18.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+            itemCount: eventList.length,
+            itemBuilder: (BuildContext context, int index) {
+              var eventDetails = eventList[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    onTapEventItem(eventDetails);
+                  },
+                  child: Card(
+                      elevation: 0.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            16.0, 12.0, 16.0, 18.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: CommonWidgets().textWidget(
+                                  eventDetails.getEventName(),
+                                  StyleConstants.customTextStyle(
+                                      fontSize: 16.0,
+                                      color: getMaterialColor(
+                                          AppColors.textColor1),
+                                      fontFamily:
+                                      FontConstants.montserratBold)),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 5.0),
+                              child: Row(
+                                children: [
+                                  CommonWidgets().image(
+                                      image:
+                                      AssetsConstants.locationPinIcon,
+                                      width: 2 *
+                                          SizeConfig.imageSizeMultiplier,
+                                      height: 2.47 *
+                                          SizeConfig.imageSizeMultiplier),
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.only(left: 8.0),
+                                    child: CommonWidgets().textWidget(
+                                        eventDetails.getEventAddress(),
+                                        StyleConstants.customTextStyle(
+                                            fontSize: 12.0,
+                                            color: getMaterialColor(
+                                                AppColors.textColor4),
+                                            fontFamily: FontConstants
+                                                .montserratMedium)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
                               children: [
+                                CommonWidgets().image(
+                                    image: AssetsConstants.dateIcon,
+                                    width:
+                                    2 * SizeConfig.imageSizeMultiplier,
+                                    height: 2.47 *
+                                        SizeConfig.imageSizeMultiplier),
                                 Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
+                                  padding: const EdgeInsets.only(left: 8.0),
                                   child: CommonWidgets().textWidget(
-                                      eventDetails.getEventName(),
-                                      StyleConstants.customTextStyle(
-                                          fontSize: 16.0,
-                                          color: getMaterialColor(
-                                              AppColors.textColor1),
-                                          fontFamily:
-                                              FontConstants.montserratBold)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: Row(
-                                    children: [
-                                      CommonWidgets().image(
-                                          image:
-                                              AssetsConstants.locationPinIcon,
-                                          width: 2 *
-                                              SizeConfig.imageSizeMultiplier,
-                                          height: 2.47 *
-                                              SizeConfig.imageSizeMultiplier),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: CommonWidgets().textWidget(
-                                            eventDetails.getEventAddress(),
-                                            StyleConstants.customTextStyle(
-                                                fontSize: 12.0,
-                                                color: getMaterialColor(
-                                                    AppColors.textColor4),
-                                                fontFamily: FontConstants
-                                                    .montserratMedium)),
-                                      ),
-                                    ],
+                                    eventDetails.getEventDate(),
+                                    StyleConstants.customTextStyle(
+                                        fontSize: 12.0,
+                                        color: getMaterialColor(
+                                            AppColors.textColor4),
+                                        fontFamily:
+                                        FontConstants.montserratMedium),
                                   ),
                                 ),
-                                Row(
-                                  children: [
-                                    CommonWidgets().image(
-                                        image: AssetsConstants.dateIcon,
-                                        width:
-                                            2 * SizeConfig.imageSizeMultiplier,
-                                        height: 2.47 *
-                                            SizeConfig.imageSizeMultiplier),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: CommonWidgets().textWidget(
-                                        eventDetails.getEventDate(),
-                                        StyleConstants.customTextStyle(
-                                            fontSize: 12.0,
-                                            color: getMaterialColor(
-                                                AppColors.textColor4),
-                                            fontFamily:
-                                                FontConstants.montserratMedium),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 40),
-                                      child: CommonWidgets().textWidget(
-                                        eventDetails.getEventTime(),
-                                        StyleConstants.customTextStyle(
-                                            fontSize: 12.0,
-                                            color: getMaterialColor(
-                                                AppColors.textColor4),
-                                            fontFamily:
-                                                FontConstants.montserratMedium),
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 40),
+                                  child: CommonWidgets().textWidget(
+                                    eventDetails.getEventTime(),
+                                    StyleConstants.customTextStyle(
+                                        fontSize: 12.0,
+                                        color: getMaterialColor(
+                                            AppColors.textColor4),
+                                        fontFamily:
+                                        FontConstants.montserratMedium),
+                                  ),
+                                ),
                               ],
-                            ),
-                          )),
-                    ),
-                  );
-                })
-            : Center(
-                child: ListView(
-                  children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.27),
-                    Center(
-                      child: Text(StringConstants.eventNotAvailable,style: StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold)),
-                    ),
-                  ],
+                            )
+                          ],
+                        ),
+                      )),
                 ),
+              );
+            })
+            : Center(
+          child: ListView(
+            children: [
+              SizedBox(height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.27),
+              Center(
+                child: Text(StringConstants.eventNotAvailable,
+                    style: StyleConstants.customTextStyle(fontSize: 20.0,
+                        color: AppColors.textColor1,
+                        fontFamily: FontConstants.montserratSemiBold)),
               ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -347,8 +430,8 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget clockInOutButton(
-      String buttonText, TextStyle textStyle, TextStyle timeTextStyle) {
+  Widget clockInOutButton(String buttonText, TextStyle textStyle,
+      TextStyle timeTextStyle) {
     return GestureDetector(
       onTap: onTapClockInOutButton,
       child: Container(
@@ -397,12 +480,15 @@ class _HomeScreenState extends State<HomeScreen>
     callClockInOutAPI();
   }
 
+
   onTapEventItem(Events events) {
     // setState(() {
     //   tempEventHomeNavigation = true;
     // });
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EventMenuScreen(events: events)));
+        builder: (context) => EventMenuScreen(events: events))).then((value) {
+      widget.onCallback(value);
+    });
   }
 
   startTimer() {
@@ -447,7 +533,6 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
 
-
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
@@ -462,17 +547,19 @@ class _HomeScreenState extends State<HomeScreen>
   void showSuccess(response) {
     List<ClockInOutDetailsResponseModel> clockInOutList = response;
     ClockInOutDetailsResponseModel? clockInOutDetailsModel =
-        clockInOutList.isNotEmpty
-            ? clockInOutList.firstWhere((element) => element.clockOutAt == 0,
-                orElse: () => ClockInOutDetailsResponseModel())
-            : null;
+    clockInOutList.isNotEmpty
+        ? clockInOutList.firstWhere((element) => element.clockOutAt == 0,
+        orElse: () => ClockInOutDetailsResponseModel())
+        : null;
     if (clockInOutDetailsModel != null &&
         clockInOutDetailsModel.clockInAt != null) {
       setState(() {
         isApiProcess = false;
         isClockIn = true;
         var timeStamp = clockInOutDetailsModel.clockInAt ??
-            DateTime.now().millisecondsSinceEpoch;
+            DateTime
+                .now()
+                .millisecondsSinceEpoch;
         startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
         FunctionalUtils.clockInTimestamp = timeStamp;
       });
@@ -544,7 +631,7 @@ class _HomeScreenState extends State<HomeScreen>
     storeDataIntoDB();
   }
 
-  void storeDataIntoDB() async {
+  void storeDataIntoDB() {
     setState(() {
       pOsSyncEventDataDtoList
           .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
@@ -564,45 +651,8 @@ class _HomeScreenState extends State<HomeScreen>
           _syncEventMenuResponseModel[0]
               .pOsSyncDeletedEventItemExtrasDataDtoList);
     });
-    await deleteEventSync();
+
     insertEventSync();
-  }
-
-  Future<void> deleteEventSync() async {
-    if (pOsSyncDeletedEventDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedEventDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedEventDataDtoList[i].eventId ?? StringExtension.empty();
-        await EventsDAO().clearEventsByEventID(eventID: eventID);
-        await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
-        await ItemDAO().clearItemsByEventID(eventID: eventID);
-        await FoodExtraItemsDAO().clearFoodExtraItemsByEventID(eventID: eventID);
-      }
-    }
-
-    if (pOsSyncDeletedItemCategoryDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedItemCategoryDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedItemCategoryDataDtoList[i].eventId ?? StringExtension.empty();
-        await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
-      }
-    }
-
-    if (pOsSyncDeletedEventItemDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedEventItemDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedEventItemDataDtoList[i].eventId ?? StringExtension.empty();
-        String itemID = pOsSyncDeletedEventItemDataDtoList[i].itemId ?? StringExtension.empty();
-        await ItemDAO().clearItemsByEventID(eventID: eventID);
-        await  FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(eventID: eventID, itemID: itemID);
-      }
-    }
-
-    if (pOsSyncDeletedEventItemExtrasDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedEventItemExtrasDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedEventItemExtrasDataDtoList[i].eventId ?? StringExtension.empty();
-        String itemID = pOsSyncDeletedEventItemExtrasDataDtoList[i].itemId ?? StringExtension.empty();
-        await FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(eventID: eventID, itemID: itemID);
-      }
-    }
-
   }
 
   Future<void> insertEventSync() async {
@@ -780,24 +830,36 @@ class _HomeScreenState extends State<HomeScreen>
   Future<void> updateLastEventSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.events,
-        value: DateTime.now().millisecondsSinceEpoch.toString()));
+        value: DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString()));
   }
 
   Future<void> updateLastItemSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.items,
-        value: DateTime.now().millisecondsSinceEpoch.toString()));
+        value: DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString()));
   }
 
   Future<void> updateLastCategoriesSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.categories,
-        value: DateTime.now().millisecondsSinceEpoch.toString()));
+        value: DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString()));
   }
 
   Future<void> updateLastItemExtrasSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.itemExtras,
-        value: DateTime.now().millisecondsSinceEpoch.toString()));
+        value: DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString()));
   }
 }
