@@ -555,19 +555,20 @@ class _HomeScreenState extends State<HomeScreen>
         clockInOutDetailsModel.clockInAt != null) {
       setState(() {
         isApiProcess = false;
-        isClockIn = true;
         var timeStamp = clockInOutDetailsModel.clockInAt ??
             DateTime
                 .now()
                 .millisecondsSinceEpoch;
         startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
         FunctionalUtils.clockInTimestamp = timeStamp;
+        isClockIn = true;
       });
     } else {
       setState(() {
         isApiProcess = false;
-        isClockIn = false;
         FunctionalUtils.clockInTimestamp = 0;
+        startDateTime = Date.getDateFromTimeStamp(timestamp: DateTime.now().millisecondsSinceEpoch);
+        isClockIn = false;
       });
     }
     isClockIn ? startTimer() : stopTimer();
@@ -588,7 +589,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (!isClockIn) {
       setState(() {
         isApiProcess = false;
-        isClockIn = !isClockIn;
+        //isClockIn = !isClockIn;
       });
       callClockInOutDetailsAPI();
     } else {
@@ -596,6 +597,7 @@ class _HomeScreenState extends State<HomeScreen>
         isApiProcess = false;
         isClockIn = !isClockIn;
         FunctionalUtils.clockInTimestamp = 0;
+        startDateTime = Date.getDateFromTimeStamp(timestamp: DateTime.now().millisecondsSinceEpoch);
       });
     }
   }
