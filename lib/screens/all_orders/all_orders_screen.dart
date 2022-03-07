@@ -304,7 +304,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
                         fontFamily:
                         FontConstants.montserratBold)),
                 CommonWidgets().textView(
-                    savedOrders.orderId,
+                    savedOrders.orderCode,
                     StyleConstants.customTextStyle(
                         fontSize: 10.0,
                         color: getMaterialColor(
@@ -314,24 +314,28 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
               ],
             ),
           ])),
-          // DataCell(
-          //   CommonWidgets().textView(
-          //       savedOrders.orderId,
-          //       StyleConstants.customTextStyle(
-          //           fontSize: 12.0,
-          //           color: getMaterialColor(
-          //               AppColors.textColor1),
-          //           fontFamily:
-          //           FontConstants.montserratMedium)),
-          // ),
-          DataCell(CommonWidgets().textView(
-              savedOrders.getOrderDate(),
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color:
-                  getMaterialColor(AppColors.textColor1),
-                  fontFamily:
-                  FontConstants.montserratMedium))),
+          DataCell(Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CommonWidgets().textView(
+                  savedOrders.getOrderDate(),
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color:
+                      getMaterialColor(AppColors.textColor1),
+                      fontFamily:
+                      FontConstants.montserratMedium)),
+              CommonWidgets().textView(
+                  savedOrders.getOrderDateTime(),
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color:
+                      getMaterialColor(AppColors.textColor1),
+                      fontFamily:
+                      FontConstants.montserratMedium))
+            ],
+          )),
           DataCell(
             CommonWidgets().textView(
                 savedOrders.payment,
@@ -732,8 +736,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
             color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
+              top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CommonWidgets().textView(
                   StringConstants.completed,
@@ -741,11 +746,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
                       fontSize: 9.0,
                       color: getMaterialColor(AppColors.denotiveColor2),
                       fontFamily: FontConstants.montserratMedium)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              CommonWidgets().image(
-                  image: AssetsConstants.greenTriangle, width: 6.0, height: 6.0)
+
             ],
           ),
         ),
@@ -810,6 +811,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
               width: 15.0,
@@ -821,13 +823,11 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
                     color: getMaterialColor(AppColors.primaryColor1),
                     fontFamily: FontConstants.montserratMedium)),
             const SizedBox(
-              width: 10.0,
-            ),
-            CommonWidgets().image(
-                image: AssetsConstants.blueTriangle, width: 6.0, height: 6.0),
-            const SizedBox(
               width: 15.0,
             ),
+            // CommonWidgets().image(
+            //     image: AssetsConstants.blueTriangle, width: 6.0, height: 6.0),
+
           ],
         ),
       );
@@ -838,9 +838,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
             color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
         child: Padding(
           padding: const EdgeInsets.only(
-              top: 11.0, bottom: 11.0, right: 19.0, left: 20.0),
+              top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CommonWidgets().textView(
                   StringConstants.completed,
@@ -848,10 +848,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
                       fontSize: 16.0,
                       color: getMaterialColor(AppColors.denotiveColor2),
                       fontFamily: FontConstants.montserratMedium)),
-              CommonWidgets().image(
-                  image: AssetsConstants.greenTriangle,
-                  width: 12.0,
-                  height: 9.0)
             ],
           ),
         ),
@@ -946,7 +942,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
           color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
       child: Padding(
         padding: const EdgeInsets.only(
-            top: 11.0, bottom: 11.0, right: 19.0, left: 20.0),
+            top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -1083,10 +1079,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
     setState(() {
       allOrdersList.add(response);
     });
+
     for(var event in allOrdersList[0].data!){
       String customerName = event.firstName !=null ? "${event.firstName} " + event.lastName! : StringConstants.guestCustomer;
+
       // Insert Order into DB
-      await SavedOrdersDAO().insert(SavedOrders(eventId:event.eventId!,cardId:event.id!,orderId:event.id!,customerName:customerName,email:event.email.toString(),phoneNumber:event.phoneNumber.toString(),phoneCountryCode:event.phoneNumCountryCode.toString(),address1:event.addressLine1.toString(),address2:event.addressLine2.toString(),country:event.country.toString(),state:event.state.toString(),city:event.city.toString(),zipCode:event.zipCode.toString(),orderDate:event.orderDate!,tip:0.0,discount:0.0,foodCost:event.orderInvoice!.foodTotal!,totalAmount:event.orderInvoice!.total!,payment:event.paymentStatus!,orderStatus:event.orderStatus!,deleted:false));
+      await SavedOrdersDAO().insert(SavedOrders(eventId:event.eventId!,cardId:event.id!,orderCode:event.orderCode!,orderId:event.id!,customerName:customerName,email:event.email.toString(),phoneNumber:event.phoneNumber.toString(),phoneCountryCode:event.phoneNumCountryCode.toString(),address1:event.addressLine1.toString(),address2:event.addressLine2.toString(),country:event.country.toString(),state:event.state.toString(),city:event.city.toString(),zipCode:event.zipCode.toString(),orderDate:event.orderDate!,tip:0.0,discount:0.0,foodCost:event.orderInvoice!.foodTotal!,totalAmount:event.orderInvoice!.total!,payment:event.paymentStatus!,orderStatus:event.orderStatus!,deleted:false));
       for(var item in event.orderItemsList!){
         await SavedOrdersItemsDAO().insert(SavedOrdersItem(orderId:event.id!,itemId:item.itemId.toString(),itemName:item.name.toString(),quantity:item.quantity!,unitPrice:item.unitPrice!,totalPrice:item.totalAmount!,itemCategoryId:item.itemCategoryId.toString(),deleted:false));
         if(item.foodExtraItemMappingList !=null){

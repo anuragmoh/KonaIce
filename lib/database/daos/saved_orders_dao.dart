@@ -14,11 +14,12 @@ class SavedOrdersDAO {
     try {
       final db = await _db;
       var result = await db.rawInsert(
-          "INSERT OR REPLACE INTO $tableName (event_id,card_id,order_id,customer_name,phone_number,phone_country_code,address1,address2,country,state,city,zip_code,order_date,tip,discount,food_cost,total_amount,payment,order_status,deleted)"
-          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+          "INSERT OR REPLACE INTO $tableName (event_id,card_id,order_code,order_id,customer_name,phone_number,phone_country_code,address1,address2,country,state,city,zip_code,order_date,tip,discount,food_cost,total_amount,payment,order_status,deleted)"
+          "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
           [
             savedOrders.eventId,
             savedOrders.cardId,
+            savedOrders.orderCode,
             savedOrders.orderId,
             savedOrders.customerName,
             savedOrders.phoneNumber,

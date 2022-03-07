@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -26,7 +25,6 @@ import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
-import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
@@ -85,6 +83,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   double discount = 0.0;
   double totalAmount = 0.0;
   String orderID = '';
+  String orderCode = '';
 
   double get totalAmountOfSelectedItems {
     if (selectedMenuItems.isEmpty) {
@@ -1065,11 +1064,20 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     if (orderID.isEmpty) {
       callPlaceOrderAPI();
     } else {
-      saveOrderIntoLocalDB(orderID);
+      saveOrderIntoLocalDB(orderID,orderCode);
     }
   }
 
   onTapNewOrderButton() {
+
+    DialogHelper.newOrderConfirmationDialog(context, onTapDialogSave, onTapDialogCancel);
+  }
+  onTapDialogSave(){
+    Navigator.of(context).pop();
+    callPlaceOrderAPI();
+  }
+  onTapDialogCancel(){
+    Navigator.of(context).pop();
     clearCart();
   }
 
@@ -1350,29 +1358,30 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       setState(() {
         isApiProcess = false;
         orderID = placeOrderResponseModel.id!;
-        saveOrderIntoLocalDB(orderID);
+        orderCode = placeOrderResponseModel.orderCode!;
+        saveOrderIntoLocalDB(orderID,orderCode);
       });
     }
   }
 
 
-  saveOrderIntoLocalDB(String orderId)async{
+  saveOrderIntoLocalDB(String orderId,String orderCode)async{
     var result = await SavedOrdersDAO().getOrder(orderId);
     if(result != null){
       await SavedOrdersDAO().clearEventDataByOrderID(orderID);
-      insertSavedOrderData(orderId);
+      insertSavedOrderData(orderId,orderCode);
     }else{
-      insertSavedOrderData(orderId);
+      insertSavedOrderData(orderId,orderCode);
     }
 
   }
-  insertSavedOrderData(String orderId)async{
+  insertSavedOrderData(String orderId,String orderCode)async{
 
     PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
     String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName} " + orderRequestModel.lastName! : StringConstants.guestCustomer;
 
     // Insert Order into DB
-    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderCode:orderCode,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();
     for(var items in orderItem) {

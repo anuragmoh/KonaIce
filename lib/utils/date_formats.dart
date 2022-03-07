@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 class DateFormatsConstant {
   static const ddMMMYYYYDay = 'dd MMM yyyy, EEEE';
   static const ddMMMYYY = 'dd MMM yyyy';
-  static const hhmmaa = 'hh mm aa';
+  static const hhmmaa = 'hh : mm aa';
 }
 
 class Date {
