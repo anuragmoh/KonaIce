@@ -19,7 +19,8 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class CustomerOrderDetails extends StatefulWidget {
-  const CustomerOrderDetails({Key? key}) : super(key: key);
+  P2POrderDetailsModel orderDetailsModel;
+   CustomerOrderDetails({required this.orderDetailsModel,Key? key}) : super(key: key);
 
   @override
   _CustomerOrderDetailsState createState() => _CustomerOrderDetailsState();
@@ -38,15 +39,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
   @override
   initState() {
     super.initState();
-    orderDetailsModel = P2POrderDetailsModel();
-    orderDetailsModel!.tip = 10.0 ;
-    orderDetailsModel!.discount = 10.0 ;
-    orderDetailsModel!.salesTax = 10.0 ;
-    orderDetailsModel!.foodCost = 10.0 ;
-    orderDetailsModel!.totalAmount = 10.0 ;
-    orderDetailsModel!.orderRequestModel = PlaceOrderRequestModel();
-    orderDetailsModel!.orderRequestModel!.email = "";
-    orderDetailsModel!.orderRequestModel!.firstName = "";
+    orderDetailsModel = widget.orderDetailsModel;
   }
 
   @override
@@ -355,7 +348,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratBold)),
             CommonWidgets().textView(
-                '$itemAmount',
+                itemAmount.toStringAsFixed(2),
                 StyleConstants.customTextStyle(
                     fontSize: 14.0,
                     color: getMaterialColor(AppColors.textColor1),
@@ -392,25 +385,52 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
   //Action Event
    onTapConfirmButton() {
-     Navigator.of(context).push( MaterialPageRoute(builder: (context) => const PaymentOption()));
+     updateConfirmOrderToStaff();
+    showPaymentScreen();
    }
 
    double getSubTotal() {
      return (orderDetailsModel!.foodCost ?? 0.0) + (orderDetailsModel!.salesTax ?? 0.0);
    }
 
+   //Navigation
+  showPaymentScreen() {
+     debugPrint("inside show payment ---------------------------------->");
+    Navigator.of(context).push( MaterialPageRoute(builder: (context) => const PaymentOption())).then((value) =>
+    {
+    P2PConnectionManager.shared.getP2PContractor(this)
+    });
+  }
+
+  showSplashScreen() {
+     Navigator.of(context).pop();
+  }
+
+  //data for p2pConnection
+  updateConfirmOrderToStaff() {
+     P2PConnectionManager.shared.updateData(action: CustomerActionConst.orderConfirmed);
+  }
+
 
   @override
   void receivedDataFromP2P(P2PDataModel response) {
-    // TODO: implement receivedDataFromP2P
-    orderDetailsModel = P2POrderDetailsModel();
+    debugPrint("<>---------------inside received Data${response.action}");
     if (response.action == StaffActionConst.orderModelUpdated) {
-
+      debugPrint("---------------inside received Data${response.action}");
+      orderDetailsModel = P2POrderDetailsModel();
       P2POrderDetailsModel modelObjc = p2POrderDetailsModelFromJson(
           response.data);
+      if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
       setState(() {
         orderDetailsModel = modelObjc;
       });
+      } else {
+        showSplashScreen();
+      }
+    }
+    else if (response.action == StaffActionConst.chargeOrderBill) {
+      debugPrint("---------------inside received Data${response.action}");
+      showPaymentScreen();
     }
   }
 }

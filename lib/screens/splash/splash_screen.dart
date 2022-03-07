@@ -14,6 +14,7 @@ import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 enum NextScreen {
@@ -50,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
              break;
 
             case NextScreen.dashboard:
-              Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) => const Dashboard()));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Dashboard()));
             break;
 
             case NextScreen.modeSelection:
@@ -69,7 +70,9 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
        if (selectedMode.value == StringConstants.staffMode) {
          openNextScreen(screenType: NextScreen.dashboard);
        } else {
-         debugPrint("CustomerModeIN ${widget.isCustomerMode}");
+         if (!P2PConnectionManager.shared.isServiceStarted) {
+           P2PConnectionManager.shared.startService(isStaffView: false);
+         }
          setState(() {
            widget.isCustomerMode = true;
          });
@@ -83,12 +86,10 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
    }
  }
 
- showCustomerView() {
-   // Future.delayed(
-   //     const Duration(seconds: 60),
-   // () {
-     Navigator.of(context).push( MaterialPageRoute(builder: (context) => const CustomerOrderDetails()));
-   //});
+ showCustomerView(P2POrderDetailsModel orderDetailsModel) {
+     Navigator.of(context).push( MaterialPageRoute(builder: (context) => CustomerOrderDetails(orderDetailsModel: orderDetailsModel,))).then((value) => {
+     P2PConnectionManager.shared.getP2PContractor(this)
+     });
  }
 
   @override
@@ -122,9 +123,7 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
 
   //Action Event
    onTapScreenWithMultipleTimes() {
-    debugPrint("TapOut ${widget.isCustomerMode}");
      if (widget.isCustomerMode) {
-       debugPrint("Tapin");
        int currentTap = DateTime.now().millisecondsSinceEpoch;
        if (currentTap - lastTap < 1000) {
          numberOfTaps++;
@@ -141,9 +140,14 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
 
   @override
   void receivedDataFromP2P(P2PDataModel response) {
-    // TODO: implement receivedDataFromP2P
      if (response.action == StaffActionConst.eventSelected) {
-       showCustomerView();
+     //  showCustomerView();
+     } else if (response.action == StaffActionConst.orderModelUpdated) {
+       P2POrderDetailsModel modelObjc = p2POrderDetailsModelFromJson(
+           response.data);
+       if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
+         showCustomerView(modelObjc);
+       }
      }
   }
 }

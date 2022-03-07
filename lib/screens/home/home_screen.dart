@@ -146,6 +146,9 @@ class _HomeScreenState extends State<HomeScreen>
 
     }
     callClockInOutDetailsAPI();
+    if (!P2PConnectionManager.shared.isServiceStarted) {
+      P2PConnectionManager.shared.startService(isStaffView: true);
+    }
   }
 
   @override
@@ -400,7 +403,6 @@ class _HomeScreenState extends State<HomeScreen>
 
   onTapEventItem(Events events) {
 
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.eventSelected);
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => EventMenuScreen(events: events)));
   }

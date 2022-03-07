@@ -18,6 +18,20 @@ class OrderComplete extends StatefulWidget {
 }
 
 class _OrderCompleteState extends State<OrderComplete> {
+  bool isMovedToNextScreen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(
+        const Duration(seconds: 3),
+            () {
+          if (!isMovedToNextScreen) {
+            showSplashScreen();
+          }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,7 +96,11 @@ class _OrderCompleteState extends State<OrderComplete> {
       );
 
   onTapOkay() {
-   // Navigator.of(context).popUntil((route) => route.isFirst);
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  SplashScreen()));
+    showSplashScreen();
   }
+
+  //Navigation
+   showSplashScreen() {
+     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  SplashScreen()));
+   }
 }

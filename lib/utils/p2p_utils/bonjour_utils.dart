@@ -28,6 +28,7 @@ class P2PConnectionManager {
   late NearbyService nearbyService;
   late StreamSubscription subscription;
   late StreamSubscription receivedDataSubscription;
+  bool isServiceStarted = false;
   Device? connectedDevice;
   String userName= "";
 
@@ -39,6 +40,7 @@ class P2PConnectionManager {
     nearbyService = NearbyService();
     String userID = await FunctionalUtils.getUserID();
      userName = await FunctionalUtils.getUserName();
+    isServiceStarted = true;
 
     await nearbyService.init(serviceType: "mpconn",
         deviceName: userName,
@@ -55,6 +57,8 @@ class P2PConnectionManager {
               await Future.delayed(const Duration(microseconds: 200));
               await nearbyService.startAdvertisingPeer();
               await nearbyService.startBrowsingForPeers();
+
+              getDeviceListAtCustomer();
             }
           }
         }
@@ -87,6 +91,10 @@ class P2PConnectionManager {
       sentBackValue(devices);
     });
     return devices;
+  }
+
+  getDeviceListAtCustomer() {
+    getDeviceList((deviceList) => {});
   }
 
   configureDataSubscription() {
@@ -127,6 +135,13 @@ class P2PConnectionManager {
   _sendData(String text) {
     if (connectedDevice != null && connectedDevice!.state == SessionState.connected) {
       nearbyService.sendMessage(connectedDevice!.deviceId, text);
+      debugPrint("-----------data sent-------------------");
+    } else {
+      debugPrint("-----------connection Lost-------------");
+      if (connectedDevice != null) {
+        debugPrint("---------Auto connect------");
+        connectWithDevice(connectedDevice!);
+      }
     }
   }
 
@@ -153,10 +168,6 @@ class P2PConnectionManager {
     }
   }
 
-  updateDataWithFlag({required String action, required bool flag}) {
-
-  }
-
   updateDataWithObject({required String action, required dynamic dataObject}) {
     String dataStr = StringExtension.empty();
      if (action == StaffActionConst.orderModelUpdated) {
@@ -168,15 +179,18 @@ class P2PConnectionManager {
 
   }
 
+
   notifyChangeToCustomer({required String action, required String data}) {
     P2PDataModel dataObject =  P2PDataModel(action: action, data: data);
     String dataInStr = p2PDataModelToJson(dataObject);
-
     _sendData(dataInStr);
   }
 
   notifyChangeToStaff({required String action, required String data}) {
+    P2PDataModel dataObject =  P2PDataModel(action: action, data: data);
+    String dataInStr = p2PDataModelToJson(dataObject);
 
+    _sendData(dataInStr);
   }
 
 
