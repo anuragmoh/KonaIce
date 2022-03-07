@@ -168,6 +168,8 @@ class StringConstants {
   static const confirmMessage = "Do you really want to clear the cart ?";
   static const yes = "Yes";
   static const no = "No";
+  static const confirmNewOrder = "Do you want to save or cancel currently selected order ?";
+
 
   //all Order status
   static const paymentStatusSuccess = "SUCCESS";

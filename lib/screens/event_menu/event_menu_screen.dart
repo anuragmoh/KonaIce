@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -26,7 +25,6 @@ import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
-import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
@@ -1071,6 +1069,15 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapNewOrderButton() {
+
+    DialogHelper.newOrderConfirmationDialog(context, onTapDialogSave, onTapDialogCancel);
+  }
+  onTapDialogSave(){
+    Navigator.of(context).pop();
+    callPlaceOrderAPI();
+  }
+  onTapDialogCancel(){
+    Navigator.of(context).pop();
     clearCart();
   }
 
