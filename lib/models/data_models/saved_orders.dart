@@ -3,6 +3,7 @@ import 'package:kona_ice_pos/utils/date_formats.dart';
 class SavedOrders {
   String eventId;
   String cardId;
+  String orderCode;
   String orderId;
   String customerName;
   String email;
@@ -24,20 +25,20 @@ class SavedOrders {
   bool deleted;
 
   SavedOrders(
-      {
-      required this.eventId,
+      {required this.eventId,
       required this.cardId,
+      required this.orderCode,
       required this.orderId,
       required this.customerName,
-       this.email= "NA",
-       this.phoneNumber = "NA",
-       this.phoneCountryCode="NA",
-       this.address1="NA",
-       this.address2="NA",
-       this.country ="NA",
-       this.state="NA",
-       this.city="NA",
-       this.zipCode="NA",
+      this.email = "NA",
+      this.phoneNumber = "NA",
+      this.phoneCountryCode = "NA",
+      this.address1 = "NA",
+      this.address2 = "NA",
+      this.country = "NA",
+      this.state = "NA",
+      this.city = "NA",
+      this.zipCode = "NA",
       required this.orderDate,
       required this.tip,
       required this.discount,
@@ -51,6 +52,7 @@ class SavedOrders {
     return {
       "eventId": eventId,
       "cardId": cardId,
+      "orderCode": orderCode,
       "orderId": orderId,
       "customerName": customerName,
       "email": email,
@@ -63,9 +65,9 @@ class SavedOrders {
       "city": city,
       "zipCode": zipCode,
       "orderDate": orderDate,
-      "tip":tip,
-      "discount":discount,
-      "foodCost":foodCost,
+      "tip": tip,
+      "discount": discount,
+      "foodCost": foodCost,
       "totalAmount": totalAmount,
       "payment": payment,
       "orderStatus": orderStatus,
@@ -77,6 +79,7 @@ class SavedOrders {
     return SavedOrders(
       eventId: map["event_id"],
       cardId: map["card_id"],
+      orderCode: map["order_code"],
       orderId: map["order_id"],
       customerName: map["customer_name"],
       email: map["email"].toString(),
@@ -104,6 +107,7 @@ class SavedOrders {
     return """
     eventId:$eventId,
     cardId:$cardId,
+    orderCode:$orderCode,
     orderId:$orderId,
     customerName:$customerName,
     email:$email,
@@ -128,15 +132,18 @@ class SavedOrders {
 
   String getOrderDateTime() {
     DateTime date = Date.getDateFromTimeStamp(timestamp: orderDate);
-    String dateStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
-    String timeStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.hhmmaa);
+    String dateStr =
+        Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
+    String timeStr =
+        Date.getDateFrom(date: date, formatValue: DateFormatsConstant.hhmmaa);
 
-    return '$dateStr at $timeStr';
+    return timeStr;
   }
 
   String getOrderDate() {
     DateTime date = Date.getDateFromTimeStamp(timestamp: orderDate);
-    String dateStr = Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
+    String dateStr =
+        Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
     return dateStr;
   }
 }

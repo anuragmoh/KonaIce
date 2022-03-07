@@ -252,6 +252,7 @@ class DBScheme {
   static const savedOrders = '''CREATE TABLE saved_orders (
    event_id character varying(50),
    card_id character varying(50),
+   order_code character varying(50), 
    order_id character varying(50) PRIMARY KEY NOT NULL,
    customer_name character varying(100),
    phone_number character varying(15),
