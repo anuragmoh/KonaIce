@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
+import 'package:kona_ice_pos/constants/other_constants.dart';
+import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/order_complete/order_complete.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -16,8 +20,12 @@ class PaymentOption extends StatefulWidget {
   _PaymentOptionState createState() => _PaymentOptionState();
 }
 
-class _PaymentOptionState extends State<PaymentOption> {
+class _PaymentOptionState extends State<PaymentOption> implements P2PContractor {
   int paymentModeType = -1;
+
+  _PaymentOptionState() {
+    P2PConnectionManager.shared.getP2PContractor(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,27 +33,30 @@ class _PaymentOptionState extends State<PaymentOption> {
       child: Column(
         children: [
           CommonWidgets().topEmptyBar(),
-          Expanded(child: Column(
-            children: [
-              paymentOption(0.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Divider(
-                  color:
-                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-                  thickness: 1,
+          Expanded(child: Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Column(
+              children: [
+                paymentOption(0.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Divider(
+                    color:
+                    getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+                    thickness: 1,
+                  ),
                 ),
-              ),
-              paymentModeWidget(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Divider(
-                  color:
-                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-                  thickness: 1,
+                paymentModeWidget(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Divider(
+                    color:
+                    getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+                    thickness: 1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),),
           CommonWidgets().bottomEmptyBar(),
         ],
@@ -53,19 +64,19 @@ class _PaymentOptionState extends State<PaymentOption> {
   }
 
   Widget paymentOption(double totalAmount) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30, top: 20),
     child: SizedBox(
       height: 25.0,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
                   onTap: (){
-                    Navigator.of(context).pop();
+                    onTapBackButton();
+
                   },
                   child:  CommonWidgets().image(
                       image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
@@ -77,13 +88,7 @@ class _PaymentOptionState extends State<PaymentOption> {
                         fontSize: 22.0,
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratBold)),
-                const SizedBox(
-                  height: 2.0,
-                ),
               ],
-            ),
-            const SizedBox(
-              width: 51.0,
             ),
             // Amount to return field
           ]),
@@ -95,10 +100,10 @@ class _PaymentOptionState extends State<PaymentOption> {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
         paymentModeView(
-            StringConstants.creditCard, 1, AssetsConstants.creditCard),
-        paymentModeView(StringConstants.qrCode, 2, AssetsConstants.qrCode),
+            StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCard),
+        paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
+        paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
       ],
     ),
   );
@@ -106,12 +111,7 @@ class _PaymentOptionState extends State<PaymentOption> {
   Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
         onTap: () {
-          setState(() {
-            paymentModeType = index;
-          });
-          if (index == 0) {
-            onTapCashMode();
-          }
+          onTapPaymentMode(index);
         },
         child: Row(
           children: [
@@ -127,7 +127,9 @@ class _PaymentOptionState extends State<PaymentOption> {
                 padding:
                 const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
                 child: CommonWidgets()
-                    .image(image: icon, width:3.25*SizeConfig.imageSizeMultiplier , height: 3.25*SizeConfig.imageSizeMultiplier),
+                    .image(image: icon,
+                    width:4.25*SizeConfig.imageSizeMultiplier ,
+                    height: 4.25*SizeConfig.imageSizeMultiplier),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -143,7 +145,50 @@ class _PaymentOptionState extends State<PaymentOption> {
 
   //Action Event
   onTapCashMode() {
-    Navigator.of(context).push( MaterialPageRoute(builder: (context) => const OrderComplete()));
+
+  }
+  onTapPaymentMode(int index) {
+    setState(() {
+      paymentModeType = index;
+      updateSelectedPaymentMode();
+    });
   }
 
+  onTapBackButton() {
+    editAndUpdateOrder();
+    showOrderDetailsScreen();
+  }
+
+  //Navigation
+  showPaymentSuccessScreen() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OrderComplete()));
+  }
+
+  showOrderDetailsScreen() {
+    Navigator.of(context).pop();
+  }
+
+  //data for p2pConnection to Staff
+  updateSelectedPaymentMode() {
+    P2PConnectionManager.shared.updateData(action: CustomerActionConst.paymentModeSelected,
+        data: paymentModeType.toString());
+  }
+
+  editAndUpdateOrder() {
+    P2PConnectionManager.shared.updateData(action: CustomerActionConst.editOrderDetails);
+  }
+
+  @override
+  void receivedDataFromP2P(P2PDataModel response) {
+    if (response.action == StaffActionConst.paymentModeSelected) {
+      String modeType = response.data;
+      setState(() {
+        paymentModeType = int.parse(modeType);
+      });
+    } else if (response.action == StaffActionConst.editOrderDetails) {
+      showOrderDetailsScreen();
+    } else if (response.action == StaffActionConst.paymentCompleted) {
+      showPaymentSuccessScreen();
+    }
+  }
 }

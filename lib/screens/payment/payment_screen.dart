@@ -5,6 +5,8 @@ import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
+import 'package:kona_ice_pos/constants/other_constants.dart';
+import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
@@ -21,6 +23,9 @@ import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_m
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -40,7 +45,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> implements
-    OrderResponseContractor{
+    OrderResponseContractor, P2PContractor{
   int paymentModeType = -1;
   double returnAmount = 0.0;
   double receivedAmount = 0.0;
@@ -64,6 +69,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   _PaymentScreenState() {
     orderPresenter = OrderPresenter(this);
+    P2PConnectionManager.shared.getP2PContractor(this);
   }
 
   @override
@@ -83,6 +89,10 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
@@ -93,7 +103,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
               eventAddress: widget.events.getEventAddress(),
               showCenterWidget: false,
               onTapCallBack: onTapCallBack,
-          //    onDrawerTap: onDrawerTap,
+              //    onDrawerTap: onDrawerTap,
               onProfileTap: onProfileChange,),
 
             Expanded(child: bodyWidget()),
@@ -385,9 +395,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             paymentModeView(
-                StringConstants.creditCard, 1, AssetsConstants.creditCard),
-            paymentModeView(StringConstants.cash, 0, AssetsConstants.cash),
-            paymentModeView(StringConstants.qrCode, 2, AssetsConstants.qrCode),
+                StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCard),
+            paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
+            paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
           ],
         ),
       );
@@ -395,9 +405,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
         onTap: () {
-          setState(() {
-            paymentModeType = index;
-          });
+         onTapPaymentMode(index);
         },
         child: Row(
           children: [
@@ -1009,9 +1017,16 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   //Action Event
 
+  onTapPaymentMode(int index) {
+    setState(() {
+      paymentModeType = index;
+      updateSelectedPaymentMode();
+    });
+  }
+
   onTapNewOrder() {
     if (isPaymentDone) {
-      Navigator.of(context).pop(getMapToSendBack(true));
+      Navigator.of(context).pop(getOrderInfoToSendBack(true));
     }
   }
 
@@ -1022,7 +1037,10 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   }
 
   onTapBackButton() {
-    Navigator.of(context).pop(getMapToSendBack(isPaymentDone));
+    if (!isPaymentDone) {
+      editAndUpdateOrder();
+    }
+    showEventMenuScreen();
   }
 
   onTapBottomListItem(int index) {
@@ -1035,16 +1053,33 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   }
 
-  //Other functions
+  //Navigation
+  showEventMenuScreen() {
+    Navigator.of(context).pop(getOrderInfoToSendBack(isPaymentDone));
+  }
 
-  Map getMapToSendBack(bool isOrderComplete) {
+
+  //data for p2pConnection to Customer
+  updateSelectedPaymentMode() {
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.paymentModeSelected,
+        data: paymentModeType.toString());
+  }
+
+  editAndUpdateOrder() {
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.editOrderDetails);
+  }
+
+  updatePaymentSuccess() {
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.paymentCompleted);
+  }
+
+  //Other functions
+  Map getOrderInfoToSendBack(bool isOrderComplete) {
     String orderComplete = isOrderComplete ? "True" : "False";
     Map orderInfo = {"isOrderComplete": orderComplete, "orderID": orderID};
     debugPrint("insideGetMap $orderInfo");
     return orderInfo;
   }
-
-
   PayOrderRequestModel getPayOrderRequestModel() {
     PayOrderRequestModel payOrderRequestModel = PayOrderRequestModel();
     payOrderRequestModel.orderId = orderID;
@@ -1056,39 +1091,43 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   //API call
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+
     orderPresenter.placeOrder(widget.placeOrderRequestModel);
   }
 
   callPayOrderAPI() {
     PayOrderRequestModel payOrderRequestModel = getPayOrderRequestModel();
+    setState(() {
+      isApiProcess = true;
+    });
     orderPresenter.payOrder(payOrderRequestModel);
   }
 
   @override
   void showError(GeneralErrorResponse exception) {
-    // TODO: implement showError
+    setState(() {
+      isApiProcess = false;
+    });
       CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
   }
 
   @override
   void showSuccess(response) {
-    // TODO: implement showSuccess
     setState(() {
+      updatePaymentSuccess();
       isPaymentDone = true;
+      isApiProcess = false;
     });
     clearOderData();
   }
 
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
-    // TODO: implement showErrorForPay
     CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
   }
 
   @override
   void showSuccessForPlaceOrder(response) {
-    // TODO: implement showSuccessForPay
-    print('response-----$response');
     placeOrderResponseModel = response;
     if (placeOrderResponseModel.id != null) {
       setState(() {
@@ -1100,6 +1139,20 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   //DB Calls
   clearOderData() async {
     await SavedOrdersDAO().clearEventDataByOrderID(orderID);
+  }
+
+  //P2P Implemented Method
+  @override
+  void receivedDataFromP2P(P2PDataModel response) {
+    if (response.action == CustomerActionConst.paymentModeSelected) {
+      String modeType = response.data;
+      setState(() {
+        paymentModeType = int.parse(modeType);
+      });
+    }
+    else if (response.action == CustomerActionConst.editOrderDetails) {
+      showEventMenuScreen();
+    }
   }
 
 }
