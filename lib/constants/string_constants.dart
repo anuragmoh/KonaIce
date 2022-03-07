@@ -139,6 +139,7 @@ class StringConstants {
   static const internetConnectionError = 'No Internet connection';
   static const apiNotResponding = 'API not responded in time';
   static const errorOccurredWithCode = 'Error occurred with code ';
+  static const errorSessionExpire = 'Session expired';
 
 
   // Error Messages
@@ -146,6 +147,8 @@ class StringConstants {
   static const enterValidEmail = 'Please Enter Valid Email Address';
   static const emptyValidPassword = 'Please Enter Password';
   static const enterValidPassword = 'Please Enter Valid Password';
+  static const enterValidPasswordLength = 'Password should be at least 8 to 12 alphanumeric characters';
+  static const enterSpecialChar="At least 1 Special character";
   static const noInternetConnection = 'Please check your internet connection.';
   static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
 
