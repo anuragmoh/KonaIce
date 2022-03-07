@@ -262,7 +262,7 @@ class OrderFoodExtraItemDetailDto {
     unitPrice: json["unitPrice"],
     totalAmount: json["totalAmount"],
     specialInstructions: json["specialInstructions"],
-    name: json["name"],
+    name: json["foodExtraItemName"],
   );
 
   Map<String?, dynamic> toJson() => {
@@ -271,6 +271,6 @@ class OrderFoodExtraItemDetailDto {
     "unitPrice": unitPrice,
     "totalAmount": totalAmount,
     "specialInstructions": specialInstructions,
-    "name": name,
+    "foodExtraItemName": name,
   };
 }

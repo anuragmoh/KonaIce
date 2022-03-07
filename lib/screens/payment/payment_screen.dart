@@ -23,6 +23,7 @@ import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_m
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -88,6 +89,10 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
@@ -98,7 +103,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
               eventAddress: widget.events.getEventAddress(),
               showCenterWidget: false,
               onTapCallBack: onTapCallBack,
-          //    onDrawerTap: onDrawerTap,
+              //    onDrawerTap: onDrawerTap,
               onProfileTap: onProfileChange,),
 
             Expanded(child: bodyWidget()),
@@ -1086,40 +1091,43 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   //API call
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+
     orderPresenter.placeOrder(widget.placeOrderRequestModel);
   }
 
   callPayOrderAPI() {
     PayOrderRequestModel payOrderRequestModel = getPayOrderRequestModel();
+    setState(() {
+      isApiProcess = true;
+    });
     orderPresenter.payOrder(payOrderRequestModel);
   }
 
   @override
   void showError(GeneralErrorResponse exception) {
-    // TODO: implement showError
+    setState(() {
+      isApiProcess = false;
+    });
       CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
   }
 
   @override
   void showSuccess(response) {
-    // TODO: implement showSuccess
     setState(() {
       updatePaymentSuccess();
       isPaymentDone = true;
+      isApiProcess = false;
     });
     clearOderData();
   }
 
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
-    // TODO: implement showErrorForPay
     CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
   }
 
   @override
   void showSuccessForPlaceOrder(response) {
-    // TODO: implement showSuccessForPay
-    print('response-----$response');
     placeOrderResponseModel = response;
     if (placeOrderResponseModel.id != null) {
       setState(() {
