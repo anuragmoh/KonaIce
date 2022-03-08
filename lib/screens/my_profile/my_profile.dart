@@ -13,6 +13,7 @@ import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile_model/my_profile_request_model.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile_model/my_profile_response_model.dart';
+import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -85,6 +86,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   void initState() {
     super.initState();
     getMyProfileDetails();
+    ServiceNotifier().increment(2);
     // getUserDetails();
   }
   @override
@@ -134,6 +136,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   onTapBottomListItem(int index) {
     setState(() {
       currentIndex = index;
+      print('profile$index');
     });
   }
 

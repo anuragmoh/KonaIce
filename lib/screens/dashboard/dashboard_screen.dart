@@ -205,7 +205,9 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   onTapBottomListItem(int index) {
     setState(() {
+
       currentIndex = index;
+      print('dasssss$index');
     });
   }
 

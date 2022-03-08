@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/login/login_screen.dart';
+import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -76,8 +77,10 @@ class _SettingScreenState extends State<SettingScreen>
 
   @override
   void showSuccess(response) {
+    final service = ServiceNotifier();
     setState(() {
       isApiProcess = false;
+      service.increment(0);
     });
     deleteUserInformation();
   }

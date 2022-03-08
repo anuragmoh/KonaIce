@@ -97,13 +97,15 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-                service.increment(index);
+
                 setState(() {
                   // onTapBottomListItem(index);
                   // bottomBarMenuClass.changeIndex(index);
                   currentIndex = index;
                   widget.onTapCallBack(index);
+                  print('bottombar$index');
                 });
+                service.increment(index);
                 if (!widget.isFromDashboard) {
                   Navigator.popUntil(context, (route) => route.isFirst);
                 }
@@ -115,7 +117,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: CommonWidgets().image(
-                          image: currentIndex == index
+                          image: ServiceNotifier.count  == index
                               ? bottomItemList[index].selectedImage
                               : bottomItemList[index].basicImage,
                           width: 3.38 * SizeConfig.imageSizeMultiplier,
@@ -128,7 +130,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                         bottomItemList[index].title,
                         StyleConstants.customTextStyle(
                             fontSize: 13.0,
-                            color: currentIndex == index
+                            color: ServiceNotifier.count == index
                                 ? AppColors.primaryColor2
                                 : AppColors.whiteColor,
                             fontFamily: currentIndex == index
