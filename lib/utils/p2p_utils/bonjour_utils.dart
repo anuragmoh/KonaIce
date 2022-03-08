@@ -42,7 +42,7 @@ class P2PConnectionManager {
      userName = await FunctionalUtils.getUserName();
     isServiceStarted = true;
 
-    await nearbyService.init(serviceType: "mpconn",
+    await nearbyService.init(serviceType: "kona-connection",
         deviceName: userName,
         strategy: Strategy.P2P_POINT_TO_POINT,
         callback: (isRunning) async {

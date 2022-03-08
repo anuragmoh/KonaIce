@@ -41,5 +41,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Uses Bluetooth for P2P connection</string>
+	<key>UIRequiresPersistentWiFi</key>
+	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_kona-connection._tcp</string>
+	</array>
 </dict>
 </plist>
