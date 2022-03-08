@@ -190,6 +190,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     getUserName();
    // setSalesTax();
   }
+  @override
+  void dispose() {
+    super.dispose();
+
+  }
 
   @override
   Widget build(BuildContext context) {

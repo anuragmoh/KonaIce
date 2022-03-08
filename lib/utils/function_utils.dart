@@ -176,6 +176,7 @@ class FunctionalUtils {
       await SessionDAO().delete(DatabaseKeys.sessionKey);
       Navigator.of(navigatorKey.currentContext!).pushReplacement(
           MaterialPageRoute(builder: (context) => const LoginScreen()));
+      ScaffoldMessenger.of(navigatorKey.currentContext!).clearSnackBars();
     });
   }
 
