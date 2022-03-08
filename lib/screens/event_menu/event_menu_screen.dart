@@ -1,9 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
+import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
@@ -26,7 +26,6 @@ import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
-import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
@@ -35,6 +34,9 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dialog/dialog_helper.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -51,13 +53,14 @@ class EventMenuScreen extends StatefulWidget {
 }
 
 class _EventMenuScreenState extends State<EventMenuScreen> implements
-    OrderResponseContractor{
+    OrderResponseContractor, P2PContractor {
 
   late OrderPresenter orderPresenter;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
 
   _EventMenuScreenState() {
     orderPresenter = OrderPresenter(this);
+    P2PConnectionManager.shared.getP2PContractor(this);
   }
 
   bool isApiProcess = false;
@@ -70,7 +73,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   TextEditingController addTipTextFieldController = TextEditingController();
   TextEditingController addDiscountTextFieldController = TextEditingController();
   TextEditingController applyCouponTextFieldController = TextEditingController();
-
 
   int selectedCategoryIndex = 1;
   int currentIndex = 0;
@@ -85,6 +87,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   double discount = 0.0;
   double totalAmount = 0.0;
   String orderID = '';
+  String orderCode = '';
 
   double get totalAmountOfSelectedItems {
     if (selectedMenuItems.isEmpty) {
@@ -187,16 +190,20 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     getUserName();
    // setSalesTax();
   }
+  @override
+  void dispose() {
+    super.dispose();
+
+  }
 
   @override
   Widget build(BuildContext context) {
     updateCustomerName();
     calculateTotal();
+    updateOrderDataToCustomer();
 
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
-
-
   Widget mainUi(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -1020,6 +1027,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       addDiscountTextFieldController.clear();
       customerName = StringConstants.addCustomer;
       orderID = '';
+      customer  = null;
      getAllItems(widget.events.id);
     });
   }
@@ -1058,6 +1066,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapChargeButton() {
+    moveCustomerToPaymentScreen();
     showPaymentScreen();
   }
 
@@ -1065,11 +1074,20 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     if (orderID.isEmpty) {
       callPlaceOrderAPI();
     } else {
-      saveOrderIntoLocalDB(orderID);
+      saveOrderIntoLocalDB(orderID,orderCode);
     }
   }
 
   onTapNewOrderButton() {
+
+    DialogHelper.newOrderConfirmationDialog(context, onTapDialogSave, onTapDialogCancel);
+  }
+  onTapDialogSave(){
+    Navigator.of(context).pop();
+    callPlaceOrderAPI();
+  }
+  onTapDialogCancel(){
+    Navigator.of(context).pop();
     clearCart();
   }
 
@@ -1208,6 +1226,26 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     );
   }
 
+  //data for p2pConnection
+  showOrderScreenToCustomer(){
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.eventSelected);
+  }
+  updateOrderDataToCustomer() {
+    P2POrderDetailsModel dataModel = P2POrderDetailsModel();
+        dataModel.orderRequestModel = getOrderRequestModel();
+        dataModel.orderRequestModel!.addressLongitude = 0.0;
+        dataModel.orderRequestModel!.addressLatitude = 0.0;
+        dataModel.discount = discount;
+        dataModel.tip = tip;
+        dataModel.totalAmount = totalAmount;
+        dataModel.foodCost = totalAmountOfSelectedItems;
+        dataModel.salesTax = getSalesTax();
+        P2PConnectionManager.shared.updateDataWithObject(action: StaffActionConst.orderModelUpdated, dataObject: dataModel);
+  }
+  moveCustomerToPaymentScreen(){
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.chargeOrderBill);
+  }
+
   //data required for next screen
   PlaceOrderRequestModel getOrderRequestModel() {
     PlaceOrderRequestModel orderRequestModel = PlaceOrderRequestModel();
@@ -1283,6 +1321,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       orderExtraItem.unitPrice = extraItem.sellingPrice.toDouble();
       orderExtraItem.totalAmount = extraItem.getTotalPrice();
       orderExtraItem.specialInstructions = "";
+      orderExtraItem.name = extraItem.itemName;
 
       orderFoodExtraList.add(orderExtraItem);
     }
@@ -1302,6 +1341,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,))
     ).then((value) => {
+      P2PConnectionManager.shared.getP2PContractor(this),
       if (value != null) {
          if (value["isOrderComplete"] == "True"){
            clearCart()
@@ -1350,29 +1390,39 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       setState(() {
         isApiProcess = false;
         orderID = placeOrderResponseModel.id!;
-        saveOrderIntoLocalDB(orderID);
+        orderCode = placeOrderResponseModel.orderCode!;
+        saveOrderIntoLocalDB(orderID,orderCode);
       });
     }
   }
 
 
-  saveOrderIntoLocalDB(String orderId)async{
+  saveOrderIntoLocalDB(String orderId,String orderCode)async{
     var result = await SavedOrdersDAO().getOrder(orderId);
     if(result != null){
       await SavedOrdersDAO().clearEventDataByOrderID(orderID);
-      insertSavedOrderData(orderId);
+      insertSavedOrderData(orderId,orderCode);
     }else{
-      insertSavedOrderData(orderId);
+      insertSavedOrderData(orderId,orderCode);
     }
 
   }
-  insertSavedOrderData(String orderId)async{
+  insertSavedOrderData(String orderId,String orderCode)async{
 
     PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
     String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName} " + orderRequestModel.lastName! : StringConstants.guestCustomer;
 
     // Insert Order into DB
-    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderCode:orderCode,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+    // await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,
+    //     email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),
+    //     phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),
+    // address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString()
+    // ,country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),
+    // city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),
+    // orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,
+    // totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();
     for(var items in orderItem) {
@@ -1389,6 +1439,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     }
     clearCart();
     CommonWidgets().showSuccessSnackBar(message: StringConstants.savedOrderSuccess, context: context);
+  }
+
+  //P2P Implemented Method
+  @override
+  void receivedDataFromP2P(P2PDataModel response) {
+    if (response.action == CustomerActionConst.orderConfirmed) {
+      showPaymentScreen();
+    }
   }
 
 }

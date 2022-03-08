@@ -138,8 +138,8 @@ class StringConstants {
 
   static const internetConnectionError = 'No Internet connection';
   static const apiNotResponding = 'API not responded in time';
-  static const errorOccurredWithCode = 'Error occurred with code ';
-  static const errorSessionExpire = 'Session expired';
+  static const errorOccurredWithCode = 'Error occurred with code';
+  static const errorSessionExpire = 'Your session has expired';
 
 
   // Error Messages
@@ -168,6 +168,9 @@ class StringConstants {
   static const confirmMessage = "Do you really want to clear the cart ?";
   static const yes = "Yes";
   static const no = "No";
+  static const confirmNewOrder = "Do you want to save or cancel currently selected order ?";
+  static const btnCancel = "Cancel";
+
 
   //all Order status
   static const paymentStatusSuccess = "SUCCESS";

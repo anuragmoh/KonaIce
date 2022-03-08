@@ -246,6 +246,7 @@ class OrderFoodExtraItemDetailDto {
     this.unitPrice,
     this.totalAmount,
     this.specialInstructions,
+    this.name,
   });
 
   String? id;
@@ -253,6 +254,7 @@ class OrderFoodExtraItemDetailDto {
   double? unitPrice;
   double? totalAmount;
   String? specialInstructions;
+  String? name;
 
   factory OrderFoodExtraItemDetailDto.fromJson(Map<String?, dynamic> json) => OrderFoodExtraItemDetailDto(
     id: json["id"],
@@ -260,6 +262,7 @@ class OrderFoodExtraItemDetailDto {
     unitPrice: json["unitPrice"],
     totalAmount: json["totalAmount"],
     specialInstructions: json["specialInstructions"],
+    name: json["foodExtraItemName"],
   );
 
   Map<String?, dynamic> toJson() => {
@@ -268,5 +271,6 @@ class OrderFoodExtraItemDetailDto {
     "unitPrice": unitPrice,
     "totalAmount": totalAmount,
     "specialInstructions": specialInstructions,
+    "foodExtraItemName": name,
   };
 }

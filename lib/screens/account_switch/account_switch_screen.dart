@@ -1,4 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
@@ -7,8 +10,9 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
-import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
+import 'package:kona_ice_pos/screens/available_device_list/available_device_list_screen.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
@@ -22,6 +26,13 @@ class AccountSwitchScreen extends StatefulWidget {
 class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
 
   bool isStaffModeSelected = true;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
 
 
 
@@ -165,14 +176,19 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
     setState(() {
       isStaffModeSelected = staffSelected;
     });
+
   }
 
   //Store Info
   storeInformation() async {
     await SessionDAO()
         .insert(Session(key: DatabaseKeys.selectedMode, value: isStaffModeSelected ? StringConstants.staffMode : StringConstants.customerMode));
+    if(!isStaffModeSelected){
+    await P2PConnectionManager.shared.startService(isStaffView: false);
+    }
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => isStaffModeSelected ? const Dashboard() : SplashScreen()));
+        MaterialPageRoute(builder: (context) => isStaffModeSelected ? const AvailableDeviceListScreen() : SplashScreen()));
   }
+
 }
 
