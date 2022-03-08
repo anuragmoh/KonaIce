@@ -65,7 +65,7 @@ class _NewOrderConfirmationDialogState extends State<NewOrderConfirmationDialog>
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  button(StringConstants.cancel, widget.onTapCancel,
+                  button(StringConstants.btnCancel, widget.onTapCancel,
                       AppColors.textColor2.withOpacity(0.3)),
                   const SizedBox(width: 12.0),
                   button(StringConstants.save, widget.onTapSave,
