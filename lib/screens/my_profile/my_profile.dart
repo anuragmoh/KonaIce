@@ -603,7 +603,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   firstNameValidation() {
     if (firstNameController.text.isEmpty) {
       setState(() {
-        firstNameValidationMessage = "Please Enter First Name";
+        firstNameValidationMessage = StringConstants.emptyFirstName;
       });
       return false;
     } else {
@@ -617,7 +617,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   lastNameValidation() {
     if (lastNameController.text.isEmpty) {
       setState(() {
-        lastNameValidationMessage = "Please Enter Last Name";
+        lastNameValidationMessage =StringConstants.emptyLastName;
       });
       return false;
     } else {
@@ -632,7 +632,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   phoneNumberValidation() {
     if (contactNumberController.text.isEmpty) {
       setState(() {
-        contactNumberValidationMessage = "Please Enter Contact Number";
+        contactNumberValidationMessage =StringConstants.emptyContactNumber;
       });
       return false;
     } else {
@@ -644,7 +644,13 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     }
   }
 
+  bool validateStructure(String value){
+    String  pattern = r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~^%]).{7,}$';
+    RegExp regExp = RegExp(pattern);
+    return regExp.hasMatch(value);}
+
   passwordValidation() {
+
     if (newPasswordController.text.isEmpty) {
       setState(() {
         passwordValidationMessage = "";
@@ -657,7 +663,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       });
       return false;
     }
-    if (!newPasswordController.text.isValidPassword()) {
+    if (!validateStructure(newPasswordController.text.toString())) {
       setState(() {
         passwordValidationMessage = StringConstants.enterSpecialChar;
       });
@@ -670,6 +676,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       return true;
     }
   }
+
 
   @override
   void showError(GeneralErrorResponse exception) {
