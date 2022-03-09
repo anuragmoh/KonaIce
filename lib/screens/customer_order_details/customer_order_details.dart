@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -15,9 +13,9 @@ import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
-import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
+// ignore: must_be_immutable
 class CustomerOrderDetails extends StatefulWidget {
   P2POrderDetailsModel orderDetailsModel;
    CustomerOrderDetails({required this.orderDetailsModel,Key? key}) : super(key: key);
@@ -79,24 +77,32 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           color: getMaterialColor(AppColors.whiteColor)),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            componentHead(currentDate),
-            componentCustomerDetails(orderDetailsModel!.orderRequestModel!.getCustomerName(),  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
-                orderDetailsModel!.orderRequestModel?.email ??
-                    StringExtension.empty()),
-            const Padding(
-              padding:
-              EdgeInsets.symmetric(vertical: 15.0, horizontal: 19.0),
-              child: Divider(
-                height: 1.0,
-                thickness: 1.0,
-              ),
+      child: Column(
+        children: [
+          componentHead(currentDate),
+          componentCustomerDetails(orderDetailsModel!.orderRequestModel!.getCustomerName(),  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
+              orderDetailsModel!.orderRequestModel?.email ??
+                  StringExtension.empty()),
+          const Padding(
+            padding:
+            EdgeInsets.symmetric(vertical: 15.0, horizontal: 19.0),
+            child: Divider(
+              height: 1.0,
+              thickness: 1.0,
             ),
-            componentOrderItem(),
-          ],
-        ),
+          ),
+          Expanded(child: SingleChildScrollView(child: componentOrderItem())),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              children: [
+                DottedLine(
+                    height: 2.0, color: getMaterialColor(AppColors.textColor1)),
+                componentBill(),
+              ],
+            ),
+          )
+        ],
       ),
     ),
   );
@@ -135,13 +141,14 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
                 fontFamily: FontConstants.montserratBold)),
         ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: orderDetailsModel!.orderRequestModel?.orderItemsList?.length ?? 0,
             itemBuilder: (context, index) {
               return orderItemView(orderItem:  orderDetailsModel!.orderRequestModel!.orderItemsList![index]);
             }),
-        DottedLine(
-            height: 2.0, color: getMaterialColor(AppColors.textColor1)),
-        componentBill(),
+        // DottedLine(
+        //     height: 2.0, color: getMaterialColor(AppColors.textColor1)),
+        // componentBill(),
       ],
     ),
   );
@@ -376,7 +383,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
                 color: getMaterialColor(AppColors.denotiveColor2),
                 fontFamily: FontConstants.montserratBold)),
         CommonWidgets().textView(
-            '$totalAmount',
+            totalAmount.toStringAsFixed(2),
             StyleConstants.customTextStyle(
                 fontSize: 24.0,
                 color: getMaterialColor(AppColors.denotiveColor2),

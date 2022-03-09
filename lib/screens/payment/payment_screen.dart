@@ -120,10 +120,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   }
 
   onDrawerTap() {
-    Scaffold.of(context).openDrawer();
+    //Scaffold.of(context).openDrawer();
   }
   onProfileChange() {
-    print('profileTap');
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
@@ -707,7 +706,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
             height: MediaQuery
                 .of(context)
                 .size
-                .height,
+                .height * 0.78,
             decoration: BoxDecoration(
                 color: getMaterialColor(AppColors.whiteColor),
                 borderRadius: const BorderRadius.all(Radius.circular(8.0))),
@@ -742,10 +741,12 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                         phone: widget.placeOrderRequestModel.getPhoneNumber()),
                     const SizedBox(height: 10.0),
                     // Expanded removed from here.
-                    SingleChildScrollView(
-                      child: Container(
-                          color: getMaterialColor(AppColors.whiteColor),
-                          child: itemView()),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                            color: getMaterialColor(AppColors.whiteColor),
+                            child: itemView()),
+                      ),
                     ),
                     DottedLine(
                         height: 2.0,
