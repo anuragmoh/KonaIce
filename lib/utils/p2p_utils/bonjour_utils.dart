@@ -196,7 +196,11 @@ class P2PConnectionManager {
 
   //Received Data
   dataReceivedAtCustomer(P2PDataModel data) {
-    _view.receivedDataFromP2P(data);
+    if (data.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+      FunctionalUtils.showCustomerSplashScreen();
+    } else {
+      _view.receivedDataFromP2P(data);
+    }
 
   }
 

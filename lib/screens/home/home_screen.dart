@@ -226,6 +226,7 @@ class _HomeScreenState extends State<HomeScreen>
     if (!P2PConnectionManager.shared.isServiceStarted) {
       P2PConnectionManager.shared.startService(isStaffView: true);
     }
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
   }
 
   @override

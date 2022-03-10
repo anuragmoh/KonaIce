@@ -161,6 +161,7 @@ class StringConstants {
   static const eventNotAvailable = 'No event has been assigned to you for today';
   static const noMenuItemsAvailable = 'No menu items available for the selected event';
   static const noOrdersToDisplay = "No records found in the order history";
+  static const noDeviceAvailableToConnect = "No device found please wait...";
 
 
   // Dialog String

@@ -52,20 +52,23 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
     );
   }
   Widget bodyContainer()=> Padding(
-    padding: const EdgeInsets.all(60.0),
+    padding: const EdgeInsets.all(500.0),
     child: Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
       color: Colors.white,
-      child: Column(
+      child:  Column(
         children: [
-          Expanded(
-            child: ListView.builder(
+           Expanded(
+            child:  deviceList.isNotEmpty ? ListView.builder(
                 itemCount: deviceList.length,
                 itemBuilder: (context,index){
                   final device = deviceList[index];
                 return listView(device);
-            }),
+            }) : Align(
+                alignment: Alignment.center,
+                child: CommonWidgets().textWidget(StringConstants.noDeviceAvailableToConnect, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(40.0),
@@ -75,7 +78,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
                 fontFamily: FontConstants.montserratBold)),
           )
         ],
-      ),
+      ) ,
     ),
   );
 
