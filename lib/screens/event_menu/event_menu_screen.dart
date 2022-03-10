@@ -205,31 +205,37 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
   Widget mainUi(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      key: _scaffoldKey,
-      backgroundColor: getMaterialColor(AppColors.textColor3),
-    //  endDrawer: const NotificationDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          TopBar(userName: userName,
-            eventName: widget.events.getEventName(),
-            eventAddress: widget.events.getEventAddress(),
-            showCenterWidget: true,
-            onTapCallBack: onTapCallBack,
-            //onDrawerTap: onDrawerTap,
-             onProfileTap: onProfileChange,
-             isProduct: isProduct),
-          Expanded(
-            child: isProduct ? body() : AllOrdersScreen(onBackTap: (saveOrders, orderItemList, extraItemList ) {
-              onBackFromAllOrder(savedOrder: saveOrders, savedOrderItemList: orderItemList, savedOrderExtraItemList: extraItemList);
-            }, events: widget.events),
-          ),
-          BottomBarWidget(onTapCallBack: onTapBottomListItem,
-            accountImageVisibility: false,
-            isFromDashboard: false,)
-        ],
+    return WillPopScope(
+      onWillPop: ()async=>false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        key: _scaffoldKey,
+        backgroundColor: getMaterialColor(AppColors.textColor3),
+      //  endDrawer: const NotificationDrawer(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TopBar(userName: userName,
+              eventName: widget.events.getEventName(),
+              eventAddress: widget.events.getEventAddress(),
+              showCenterWidget: true,
+              onTapCallBack: onTapCallBack,
+              //onDrawerTap: onDrawerTap,
+               onProfileTap: onProfileChange,
+               isProduct: isProduct),
+            Expanded(
+              child: isProduct ? body() : AllOrdersScreen(onBackTap: (saveOrders, orderItemList, extraItemList ) {
+                onBackFromAllOrder(savedOrder: saveOrders, savedOrderItemList: orderItemList, savedOrderExtraItemList: extraItemList);
+              }, events: widget.events),
+            ),
+            Visibility(
+              visible: selectedMenuItems.isEmpty ? true :false,
+              child: BottomBarWidget(onTapCallBack: onTapBottomListItem,
+                accountImageVisibility: false,
+                isFromDashboard: false,),
+            )
+          ],
+        ),
       ),
     );
   }
