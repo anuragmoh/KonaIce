@@ -148,9 +148,12 @@ class StringConstants {
   static const emptyValidPassword = 'Please Enter Password';
   static const enterValidPassword = 'Please Enter Valid Password';
   static const enterValidPasswordLength = 'Password should be at least 8 to 12 alphanumeric characters';
-  static const enterSpecialChar="At least 1 Special character";
+  static const enterSpecialChar="Please Enter At least 1 Special character";
   static const noInternetConnection = 'Please check your internet connection.';
   static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
+  static const emptyLastName="Please Enter Last Name";
+  static const emptyFirstName="Please Enter First Name";
+  static const emptyContactNumber="Please Enter Contact Number";
 
   //Success Message
   static const savedOrderSuccess = 'Order saved successfully!';
