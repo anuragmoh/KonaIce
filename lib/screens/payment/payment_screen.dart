@@ -1189,8 +1189,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     if (results.length == 0) return;
     for (var result in results) {
       if (result is BlinkCardRecognizerResult) {
+        debugPrint("Card Number : ${result.cardNumber}");
         _resultString = getCardResultString(result);
-
+        debugPrint(_resultString.toString());
         setState(() {
           _resultString = _resultString;
           _fullDocumentFirstImageBase64 =
