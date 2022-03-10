@@ -59,6 +59,10 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       color: Colors.white,
       child: Column(
         children: [
+           Padding(
+            padding: const EdgeInsets.only(top: 24.0),
+            child: Text(StringConstants.allDeviceScreenHead,style: StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratBold),),
+          ),
           Expanded(
             child: ListView.builder(
                 itemCount: deviceList.length,
