@@ -48,7 +48,7 @@ class SavedOrdersDAO {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * from $tableName where event_id=?", [eventId]);
+      await db.rawQuery("SELECT * from $tableName where event_id=? order by order_date DESC", [eventId]);
       if (result.isNotEmpty) {
         return List.generate(result.length, (index) => SavedOrders.fromMap(result[index]));
       } else {
