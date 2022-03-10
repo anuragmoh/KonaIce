@@ -1169,11 +1169,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   Future<void> scan() async {
     String license;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      license =
-      "sRwAAAEYY29tLm1vYmlzb2Z0LmNhcmRzY2FubmVyng7gcmH9+49/nKTmkyV3fnkZG1MKCAnozoSkJ5CWAyzYBbxMjKWkKqYBKLYm7SFLFrj6AFA1mbFDRtlBv9+SIE45ndHPCihlGC5qJ0ezOuSajiROBuPa/zUahE+8d8q+xJsFufUog4kNGqn+4gIXs0qMX3Vd/NJHE4FKpTknpQg/tI4EABFM+WGhEKQhpFKXXnOXOo/5EMfAneIZgmzFb0jj0MWBVcuR6D5m7LNgfw==";
+      license = BlinkConstants.blinkKey;
     } else if (Theme.of(context).platform == TargetPlatform.android) {
-      license =
-      "sRwAAAEYY29tLm1vYmlzb2Z0LmNhcmRzY2FubmVyng7gcmH9+49/nKTmkyV3fnkZG1MKCAnozoSkJ5CWAyzYBbxMjKWkKqYBKLYm7SFLFrj6AFA1mbFDRtlBv9+SIE45ndHPCihlGC5qJ0ezOuSajiROBuPa/zUahE+8d8q+xJsFufUog4kNGqn+4gIXs0qMX3Vd/NJHE4FKpTknpQg/tI4EABFM+WGhEKQhpFKXXnOXOo/5EMfAneIZgmzFb0jj0MWBVcuR6D5m7LNgfw==";
+      license = BlinkConstants.blinkKey;
     } else {
       license = "";
     }
