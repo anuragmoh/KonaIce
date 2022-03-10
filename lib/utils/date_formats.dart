@@ -4,6 +4,7 @@ class DateFormatsConstant {
   static const ddMMMYYYYDay = 'dd MMM yyyy, EEEE';
   static const ddMMMYYY = 'dd MMM yyyy';
   static const hhmmaa = 'hh : mm aa';
+  static const ddMMMYYYYDayhhmmaa = 'dd MMM yyyy, EEEE hh : mm aa';
 }
 
 class Date {
