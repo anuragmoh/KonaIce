@@ -1191,6 +1191,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       if (result is BlinkCardRecognizerResult) {
         debugPrint("Card Number : ${result.cardNumber}");
         _resultString = getCardResultString(result);
+
+        CommonWidgets().showSuccessSnackBar(message: 'Payment Done Successfully Card Number is ${result.cardNumber}', context: context);
         debugPrint(_resultString.toString());
         setState(() {
           _resultString = _resultString;
