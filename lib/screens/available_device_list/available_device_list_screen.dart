@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -59,6 +60,12 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       color: Colors.white,
       child: Column(
         children: [
+          const SizedBox(height: 24.0),
+          splashIcon(),
+           Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Text(StringConstants.allDeviceScreenHead,style: StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratBold),),
+          ),
           Expanded(
             child: ListView.builder(
                 itemCount: deviceList.length,
@@ -78,6 +85,9 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       ),
     ),
   );
+  Widget splashIcon(){
+    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 100.0, height: 60.0);
+  }
 
   Widget listView(Device device)=> Column(
     children: [

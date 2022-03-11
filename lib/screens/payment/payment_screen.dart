@@ -955,9 +955,31 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                       fontFamily: FontConstants.montserratSemiBold)),
             ),
           ]),
+          Visibility(
+            visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty ? (orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto?.length ?? 0) : 0,
+                itemBuilder: (context, innerIndex) {
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: subOrderItemView(orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].name ?? ''),
+                      ),
+                      const Text(','),
+                      const SizedBox(
+                        width: 3.0,
+                      )
+                    ],
+                  );
+                }),
+          ),
           const SizedBox(height: 20.0),
         ],
       );
+  Widget subOrderItemView(String subItem) => Text(subItem,style: const TextStyle(fontSize: 10.0),);
 
   Widget componentBill() =>
       Column(

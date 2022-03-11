@@ -183,5 +183,8 @@ class StringConstants {
   static const orderStatusPreparing = "preparing";
   static const orderStatusNew = "NEW";
 
+  // all device screen
+  static const allDeviceScreenHead = "Please select a customer device from the list";
+
 
 }
