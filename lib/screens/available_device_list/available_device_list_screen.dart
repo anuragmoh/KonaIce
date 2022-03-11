@@ -172,7 +172,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   Color getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
-        return Colors.black;
+        return Colors.red;
       case SessionState.connecting:
         return Colors.grey;
       default:
