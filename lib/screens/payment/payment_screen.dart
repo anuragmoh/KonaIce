@@ -1,4 +1,3 @@
-import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1052,7 +1051,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     });
 
     if(paymentModeType==PaymentModeConstants.creditCard){
-      scan();
+      //scan();
     }
   }
 
@@ -1188,48 +1187,48 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   }
 
 
-  Future<void> scan() async {
-    String license;
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      license = BlinkConstants.blinkKey;
-    } else if (Theme.of(context).platform == TargetPlatform.android) {
-      license = BlinkConstants.blinkKey;
-    } else {
-      license = "";
-    }
+  // Future<void> scan() async {
+  //   String license;
+  //   if (Theme.of(context).platform == TargetPlatform.iOS) {
+  //     license = BlinkConstants.blinkKey;
+  //   } else if (Theme.of(context).platform == TargetPlatform.android) {
+  //     license = BlinkConstants.blinkKey;
+  //   } else {
+  //     license = "";
+  //   }
+  //
+  //   var cardRecognizer = BlinkCardRecognizer();
+  //   cardRecognizer.returnFullDocumentImage = true;
+  //
+  //   BlinkCardOverlaySettings settings = BlinkCardOverlaySettings();
+  //
+  //   var results = await MicroblinkScanner.scanWithCamera(
+  //       RecognizerCollection([cardRecognizer]), settings, license);
+  //
+  //   if (!mounted) return;
+  //
+  //   if (results.length == 0) return;
+  //   for (var result in results) {
+  //     if (result is BlinkCardRecognizerResult) {
+  //       debugPrint("Card Number : ${result.cardNumber}");
+  //       _resultString = getCardResultString(result);
+  //
+  //       CommonWidgets().showSuccessSnackBar(message: 'Payment Done Successfully Card Number is ${result.cardNumber}', context: context);
+  //       debugPrint(_resultString.toString());
+  //       setState(() {
+  //         _resultString = _resultString;
+  //         _fullDocumentFirstImageBase64 =
+  //             result.firstSideFullDocumentImage ?? "";
+  //         _fullDocumentSecondImageBase64 =
+  //             result.secondSideFullDocumentImage ?? "";
+  //       });
+  //
+  //       return;
+  //     }
+  //   }
+  // }
 
-    var cardRecognizer = BlinkCardRecognizer();
-    cardRecognizer.returnFullDocumentImage = true;
-
-    BlinkCardOverlaySettings settings = BlinkCardOverlaySettings();
-
-    var results = await MicroblinkScanner.scanWithCamera(
-        RecognizerCollection([cardRecognizer]), settings, license);
-
-    if (!mounted) return;
-
-    if (results.length == 0) return;
-    for (var result in results) {
-      if (result is BlinkCardRecognizerResult) {
-        debugPrint("Card Number : ${result.cardNumber}");
-        _resultString = getCardResultString(result);
-
-        CommonWidgets().showSuccessSnackBar(message: 'Payment Done Successfully Card Number is ${result.cardNumber}', context: context);
-        debugPrint(_resultString.toString());
-        setState(() {
-          _resultString = _resultString;
-          _fullDocumentFirstImageBase64 =
-              result.firstSideFullDocumentImage ?? "";
-          _fullDocumentSecondImageBase64 =
-              result.secondSideFullDocumentImage ?? "";
-        });
-
-        return;
-      }
-    }
-  }
-
-  String getCardResultString(BlinkCardRecognizerResult result) {
+ /* String getCardResultString(BlinkCardRecognizerResult result) {
     return buildResult(result.cardNumber, 'Card Number') +
         buildResult(result.cardNumberPrefix, 'Card Number Prefix') +
         buildResult(result.iban, 'IBAN') +
@@ -1262,6 +1261,6 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     }
 
     return buildResult(result.toString(), propertyName);
-  }
+  }*/
 
 }
