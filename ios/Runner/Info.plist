@@ -49,5 +49,7 @@
 	<array>
 		<string>_kona-connection._tcp</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+    <string>Uses camera for scanning your cards</string>
 </dict>
 </plist>
