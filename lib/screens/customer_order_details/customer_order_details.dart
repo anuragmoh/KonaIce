@@ -28,7 +28,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
   P2POrderDetailsModel? orderDetailsModel;
   String currentDate =
-  Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
+  Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDayhhmmaa);
 
   _CustomerOrderDetailsState() {
     P2PConnectionManager.shared.getP2PContractor(this);
@@ -202,29 +202,24 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
           ]),
           Visibility(
             visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
-            child: SizedBox(
-              height: 30.0,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty ? (orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto?.length ?? 0) : 0,
-                      itemBuilder: (context, innerIndex) {
-                        return Row(
-                          children: [
-                            subOrderItemView(orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].name ?? ''),
-                            const Text(','),
-                            const SizedBox(
-                              width: 3.0,
-                            )
-                          ],
-                        );
-                      }),
-                ],
-              ),
-            ),
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty ? (orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto?.length ?? 0) : 0,
+                itemBuilder: (context, innerIndex) {
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: subOrderItemView(orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].name ?? ''),
+                      ),
+                      const Text(','),
+                      const SizedBox(
+                        width: 3.0,
+                      )
+                    ],
+                  );
+                }),
           ),
           const SizedBox(height: 15.0),
         ],

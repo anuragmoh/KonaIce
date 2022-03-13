@@ -24,7 +24,7 @@ class _OrderCompleteState extends State<OrderComplete> {
   void initState() {
     super.initState();
     Future.delayed(
-        const Duration(seconds: 3),
+        const Duration(seconds: 5),
             () {
           if (!isMovedToNextScreen) {
             showSplashScreen();
@@ -73,7 +73,7 @@ class _OrderCompleteState extends State<OrderComplete> {
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratSemiBold)),
             CommonWidgets().textWidget(
-                "",
+                "35891456",
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: getMaterialColor(AppColors.textColor1),
