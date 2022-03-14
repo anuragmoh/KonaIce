@@ -46,14 +46,15 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
 
   showFoodExtrasPopUp(Item item) {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: SingleChildScrollView(child: foodExtraPopUpComponent(item)),
     );
   }
 
   Widget foodExtraPopUpComponent(Item item) {
-    return SizedBox(
+    return Container(
+      color: Colors.transparent,
       width: MediaQuery.of(context).size.width * 0.49,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -63,8 +64,13 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             title: '${StringConstants.customize} \'${item.name}\'',
             onTapCloseButton: onTapCloseButton,
           ),
-          popUpBodyContainer(),
-          addFoodExtraPopUpButton(item)
+          Container(
+              color: Colors.white,
+              child: popUpBodyContainer()),
+          Container(
+              color: Colors.white,
+              child: addFoodExtraPopUpButton(item)),
+
         ],
       ),
     );

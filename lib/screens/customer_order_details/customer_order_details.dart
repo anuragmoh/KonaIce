@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -71,6 +72,10 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
     child: bodyWidgetComponent(),
   );
 
+  Widget splashIcon(){
+    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 100.0, height: 60.0);
+  }
+
   Widget bodyWidgetComponent() => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 237.0, vertical: 20.0),
     child: Container(
@@ -79,6 +84,8 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
           color: getMaterialColor(AppColors.whiteColor)),
       child: Column(
         children: [
+          const SizedBox(height: 20.0),
+          splashIcon(),
           componentHead(currentDate),
           componentCustomerDetails(orderDetailsModel!.orderRequestModel!.getCustomerName(),  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
               orderDetailsModel!.orderRequestModel?.email ??
@@ -314,6 +321,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       );
 
   Widget subOrderItemView(String subItem) => Text(subItem);
+
 
   Widget componentBill() => Column(
     children: [
