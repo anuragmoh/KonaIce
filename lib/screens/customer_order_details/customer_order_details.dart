@@ -397,7 +397,6 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
    //Navigation
   showPaymentScreen() {
-     debugPrint("inside show payment ---------------------------------->");
     Navigator.of(context).push( MaterialPageRoute(builder: (context) => const PaymentOption())).then((value) =>
     {
     P2PConnectionManager.shared.getP2PContractor(this)
@@ -416,9 +415,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
   @override
   void receivedDataFromP2P(P2PDataModel response) {
-    debugPrint("<>---------------inside received Data${response.action}");
     if (response.action == StaffActionConst.orderModelUpdated) {
-      debugPrint("---------------inside received Data${response.action}");
       orderDetailsModel = P2POrderDetailsModel();
       P2POrderDetailsModel modelObjc = p2POrderDetailsModelFromJson(
           response.data);
@@ -431,8 +428,10 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       }
     }
     else if (response.action == StaffActionConst.chargeOrderBill) {
-      debugPrint("---------------inside received Data${response.action}");
       showPaymentScreen();
+    }
+    else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+      showSplashScreen();
     }
   }
 }

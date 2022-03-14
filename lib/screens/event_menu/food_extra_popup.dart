@@ -138,7 +138,9 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
 
   Widget addFoodExtraPopUpButton(Item item) {
     return GestureDetector(
-      onTap: onTapAddExtrasButton,
+      onTap: () {
+        onTapAddExtrasButton(item);
+      },
       child: Align(
         alignment: Alignment.centerRight,
         child: Padding(
@@ -213,11 +215,13 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
     Navigator.of(context).pop('text to reach back');
   }
 
-  onTapAddExtrasButton() {
-    widget.item.selectedExtras.clear();
-    widget.item.foodExtraItemList.clear();
-    widget.item.foodExtraItemList.addAll(foodExtraItemList);
-    widget.item.selectedExtras.addAll(selectedExtras);
-    Navigator.of(context).pop(widget.item);
+  onTapAddExtrasButton(Item item) {
+   if (!(item.selectedExtras.isEmpty && selectedExtras.isEmpty)) {
+   widget.item.selectedExtras.clear();
+   widget.item.foodExtraItemList.clear();
+   widget.item.foodExtraItemList.addAll(foodExtraItemList);
+   widget.item.selectedExtras.addAll(selectedExtras);
+   Navigator.of(context).pop(widget.item);
+   }
   }
 }

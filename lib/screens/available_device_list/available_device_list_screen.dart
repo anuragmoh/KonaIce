@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -27,6 +28,8 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
 
   }
 
+  bool isConnectionProcess = false;
+
   getBackValue(dynamic value){
     setState(() {
       deviceList.clear();
@@ -43,6 +46,9 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isConnectionProcess, child: mainUi(context));
+  }
+  Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -165,10 +171,12 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   String getStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
+        isConnectionProcess = false;
         return "disconnected";
       case SessionState.connecting:
         return "waiting";
       default:
+        isConnectionProcess = false;
         return "connected";
     }
   }
@@ -182,12 +190,18 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         return Colors.green;
     }
   }
+
   _onButtonClicked(Device device) {
+    setState(() {
+      isConnectionProcess = true;
+    });
+    debugPrint("tapped");
     switch (device.state) {
       case SessionState.notConnected:
         P2PConnectionManager.shared.connectWithDevice(device);
         break;
       case SessionState.connected:
+        P2PConnectionManager.shared.connectWithDevice(device);
         break;
       case SessionState.connecting:
         break;

@@ -105,7 +105,7 @@ class Item {
       for (var element in selectedExtras) {
         totalExtraItemPrice += element.getTotalPrice();
       }}
-    return selectedItemQuantity * price.toDouble() + totalExtraItemPrice * selectedItemQuantity;
+    return selectedItemQuantity * price.toDouble() + totalExtraItemPrice;
   }
 
   double getOnlyMenuItemTotalPrice() {
@@ -120,5 +120,12 @@ class Item {
        extraNames = extrasNameList.join('\n');
     }
      return extraNames;
+  }
+
+  removeAllExtraItems() {
+    for (var element in foodExtraItemList) {
+      element.isItemSelected = false;
+      element.selectedItemQuantity = 0;
+    }
   }
 }

@@ -490,6 +490,7 @@ class _HomeScreenState extends State<HomeScreen>
 
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => EventMenuScreen(events: events))).then((value) {
+      P2PConnectionManager.shared.updateData(action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
       widget.onCallback(value);
     });
   }

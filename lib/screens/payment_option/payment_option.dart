@@ -8,6 +8,7 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/order_complete/order_complete.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -189,6 +190,8 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
       showOrderDetailsScreen();
     } else if (response.action == StaffActionConst.paymentCompleted) {
       showPaymentSuccessScreen();
+    } else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+      FunctionalUtils.showCustomerSplashScreen();
     }
   }
 }

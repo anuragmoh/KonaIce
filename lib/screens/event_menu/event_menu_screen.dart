@@ -1124,15 +1124,18 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     //   print('add New Item');
     // } else {
     setState(() {
-      itemList[index].selectedItemQuantity =
-      itemList[index].isItemSelected ? 0 : 1;
-      itemList[index].isItemSelected
-          ? selectedMenuItems.remove(itemList[index])
-          : selectedMenuItems.add(itemList[index]);
-      itemList[index].isItemSelected = !itemList[index].isItemSelected;
+
       if (itemList[index].isItemSelected) {
+        itemList[index].selectedItemQuantity = 0;
+        selectedMenuItems.remove(itemList[index]);
+        itemList[index].removeAllExtraItems();
+      } else {
+        itemList[index].selectedItemQuantity = 1;
+        selectedMenuItems.add(itemList[index]);
         itemList[index].selectedExtras = [];
       }
+
+      itemList[index].isItemSelected = !itemList[index].isItemSelected;
     });
     // }
   }
