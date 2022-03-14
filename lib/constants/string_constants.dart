@@ -115,6 +115,22 @@ class StringConstants {
   static const orderCompleted='Your order is complete !';
   static const selectPaymentOption='Select Payment Option';
 
+  // Create adhoc event popup
+  static const popHeading = "Create Adhoc Event";
+  static const name = "Name";
+  static const enterName = "Enter event name";
+  static const address = "Address";
+  static const enterAddress = "Enter address";
+  static const city = "City";
+  static const enterCity = "Enter city";
+  static const state = "State";
+  static const enterState = "Enter state";
+  static const zipCode = "Zipcode";
+  static const enterZipCode = "Enter zipcode";
+  static const equipment = "Equipment";
+  static const selectEquipment = "Select Equipment";
+  static const create = "Create";
+
   //MyProfile
   static const myProfile = 'My Profile';
   static const firstName = 'First Name';
