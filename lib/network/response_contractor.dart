@@ -19,3 +19,8 @@ abstract class SyncResponseContractor extends ResponseContractor{
   void showSyncSuccess(dynamic response);
   void showSyncError(GeneralErrorResponse exception);
 }
+
+abstract class AssetsResponseContractor extends ResponseContractor{
+  void showAssetsSuccess(dynamic response);
+  void showAssetsError(GeneralErrorResponse exception);
+}
