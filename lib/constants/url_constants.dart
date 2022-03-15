@@ -19,6 +19,8 @@ class UrlConstants {
 
   static const assets = '/api/v1/secure/assets/grid-data?limit=9999&applyActivatedStatus=true&activated=true';
 
+  static const createAdhocEvent ='/api/v1/secure/events/adhoc';
+
   static const allOrders = '/api/v2/secure/orders';
 
   static getAllOrders({required String orderStatus, required String eventId, required int offset, required int lastSync }){

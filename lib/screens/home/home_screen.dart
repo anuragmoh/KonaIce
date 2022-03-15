@@ -485,7 +485,9 @@ class _HomeScreenState extends State<HomeScreen>
         builder: (context) {
           return const CreateAdhocEvent();
         }).then((value){
-
+        if(value){
+          refreshDataOnRequest();
+        }
     });
   }
 

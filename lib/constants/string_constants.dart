@@ -171,9 +171,17 @@ class StringConstants {
   static const emptyFirstName="Please Enter First Name";
   static const emptyContactNumber="Please Enter Contact Number";
 
+  static const emptyEventName = "Please enter event name";
+  static const emptyAddress = "Please enter address";
+  static const emptyCity = "Please enter city";
+  static const emptyState = "Please enter state";
+  static const emptyZipCode = "Please enter zipcode";
+  static const selectEquipments = "Please select equipment";
+
   //Success Message
   static const savedOrderSuccess = 'Order saved successfully!';
   static const profileUpdateSuccessfully = 'Profile saved successfully!';
+  static const eventCreatedSuccessfully = "Adhoc event created successfully";
 
 
   //Data not available messages

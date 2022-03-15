@@ -86,8 +86,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
       currentIndex=ServiceNotifier.count;
       debugPrint(currentIndex.toString());
     });
-
-    debugPrint('getIndexCalled');
   }
 
   @override
@@ -100,7 +98,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('dashboardScreen');
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
 
   }

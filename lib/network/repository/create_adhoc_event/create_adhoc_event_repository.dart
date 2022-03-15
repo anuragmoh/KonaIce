@@ -1,9 +1,10 @@
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import 'package:kona_ice_pos/screens/home/assest_model.dart';
+import 'package:kona_ice_pos/screens/home/create_event_model.dart';
 
 import '../../base_client.dart';
 
-class AssetsRepository{
+class CreateAdhocEventRepository{
 
   BaseClient baseClient = BaseClient();
 
@@ -12,5 +13,9 @@ class AssetsRepository{
       return assetsModelResponseFromJson(value);
     });
   }
+  Future<CreateEventResponseModel> createEvent(CreateEventRequestModel requestModel){
+    return baseClient.post(UrlConstants.createAdhocEvent, requestModel).then((value) => createEventResponseModelFromJson(value));
+  }
+
 
 }
