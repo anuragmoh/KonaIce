@@ -24,6 +24,7 @@ import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
+import 'package:kona_ice_pos/screens/home/create_adhvoc_event_popup.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
@@ -477,8 +478,18 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   //Action Events
-  onTapCreateEventButton() {
-
+  onTapCreateEventButton()async{
+    await showDialog(
+        barrierDismissible: false,
+        barrierColor:AppColors.textColor1.withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return const CreateAdhocEvent();
+        }).then((value){
+        if(value){
+          refreshDataOnRequest();
+        }
+    });
   }
 
   onTapClockInOutButton() {
