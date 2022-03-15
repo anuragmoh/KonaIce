@@ -47,5 +47,9 @@ class UrlConstants {
     return getProfile.replaceAll('{userId}', userID);
   }
 
+  static deleteOrder({required String orderId}){
+    return '$allOrders?orderCodeOrId=$orderId';
+  }
+
 
 }

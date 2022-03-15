@@ -20,6 +20,8 @@ import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/general_success_model.dart';
+import 'package:kona_ice_pos/network/repository/event/event_presenter.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
@@ -56,10 +58,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     OrderResponseContractor, P2PContractor {
 
   late OrderPresenter orderPresenter;
+  late EventPresenter eventPresenter;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
 
   _EventMenuScreenState() {
     orderPresenter = OrderPresenter(this);
+    eventPresenter = EventPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
   }
 
@@ -1064,12 +1068,17 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo);
   }
   onConfirmTapYes(){
-  clearCart();
+    if(orderID == ""){
+      clearCart();
+    }else{
+      deleteOrder();
+    }
   onConfirmTapNo();
   }
   onConfirmTapNo(){
     Navigator.of(context).pop();
   }
+
 
   onTapChargeButton() {
     moveCustomerToPaymentScreen();
@@ -1373,17 +1382,27 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   @override
   void showError(GeneralErrorResponse exception) {
-    // TODO: implement showError
+    setState(() {
+      isApiProcess = false;
+    });
+    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
   }
 
   @override
   void showSuccess(response) {
-    // TODO: implement showSuccess
+    GeneralSuccessModel responseModel = response;
+   setState(() {
+     isApiProcess = false;
+   });
+   CommonWidgets().showSuccessSnackBar(
+       message: responseModel.general![0].message ??
+           StringConstants.eventCreatedSuccessfully,
+       context: context);
+   clearCart();
   }
 
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
-    // TODO: implement showErrorForPay
     setState(() {
       isApiProcess = false;
       CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
@@ -1458,4 +1477,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     }
   }
 
+  // Delete Order function start from here
+  deleteOrder()async{
+    setState(() {
+      isApiProcess = true;
+    });
+    await SavedOrdersDAO().clearEventDataByOrderID(orderID).then((value){
+      eventPresenter.deleteOrder(orderId: orderID);
+    });
+  }
 }
