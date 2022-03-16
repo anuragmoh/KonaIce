@@ -44,4 +44,12 @@ class UrlConstants {
   }
 
 
+
+  static const paymentBaseUrl='https://api.stripe.com';
+
+  static const paymentGetToken='/v1/tokens';
+
+  static const paymentMethod='/v1/payment_methods';
+
+
 }

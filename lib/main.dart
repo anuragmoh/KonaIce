@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
+import 'package:kona_ice_pos/screens/demoScreen.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
               primarySwatch: getMaterialColor(AppColors.primaryColor2),
             ),
             debugShowCheckedModeBanner: false,
-            home: SplashScreen(),
+            home: DemoScreen(),
           );
         });
       }

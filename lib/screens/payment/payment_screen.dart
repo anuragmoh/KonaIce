@@ -15,6 +15,9 @@ import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
+import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
+import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
+import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
@@ -38,15 +41,20 @@ class PaymentScreen extends StatefulWidget {
   final Map billDetails;
   final String userName;
 
-  const PaymentScreen({Key? key, required this.events, required this.selectedMenuItems, required this.placeOrderRequestModel, required this.billDetails, required this.userName}) : super(key: key);
+  const PaymentScreen(
+      {Key? key, required this.events, required this.selectedMenuItems, required this.placeOrderRequestModel, required this.billDetails, required this.userName})
+      : super(key: key);
 
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> implements
-    OrderResponseContractor, P2PContractor{
+class _PaymentScreenState extends State<PaymentScreen>
+    implements
+        OrderResponseContractor,
+        P2PContractor,
+        ResponseContractor {
   int paymentModeType = -1;
   double returnAmount = 0.0;
   double receivedAmount = 0.0;
@@ -60,6 +68,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   String orderID = 'NA';
 
   String _resultString = "";
+  String cardNumber="",cardCvc="",cardExpiryYear="",cardExpiryMonth="";
+  String stripeTokenId="",stripePaymentMethodId="";
   String _fullDocumentFirstImageBase64 = "";
   String _fullDocumentSecondImageBase64 = "";
 
@@ -71,10 +81,12 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   late OrderPresenter orderPresenter;
   bool isApiProcess = false;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
+  late PaymentPresenter paymentPresenter;
 
   _PaymentScreenState() {
     orderPresenter = OrderPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
+    paymentPresenter = PaymentPresenter(this);
   }
 
   @override
@@ -85,7 +97,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     discount = widget.billDetails['discount'];
     foodCost = widget.billDetails['foodCost'];
     salesTax = widget.billDetails['salesTax'];
-    if (widget.placeOrderRequestModel.id != null && widget.placeOrderRequestModel.id!.isNotEmpty) {
+    if (widget.placeOrderRequestModel.id != null &&
+        widget.placeOrderRequestModel.id!.isNotEmpty) {
       orderID = widget.placeOrderRequestModel.id!;
     }
     callPlaceOrderAPI();
@@ -103,7 +116,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: Column(
           children: [
-            TopBar(userName: widget.userName,
+            TopBar(
+              userName: widget.userName,
               eventName: widget.events.getEventName(),
               eventAddress: widget.events.getEventAddress(),
               showCenterWidget: false,
@@ -127,10 +141,12 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   onDrawerTap() {
     //Scaffold.of(context).openDrawer();
   }
+
   onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
+
   Widget bodyWidget() =>
       Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
@@ -348,15 +364,18 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       );
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
-    bool showDisabledButton = !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;
+    bool showDisabledButton = !isPaymentDone && receivedAmount < totalAmount &&
+        paymentModeType <= 0;
     return GestureDetector(
       onTap: isPaymentDone == false ? () {
-        onTapProceed(showDisabledButton) ;
+        onTapProceed(showDisabledButton);
       } : onTapNewOrder,
 
       child: Container(
         decoration: BoxDecoration(
-          color: getMaterialColor(showDisabledButton ? AppColors.denotiveColor4 : AppColors.primaryColor2),
+          color: getMaterialColor(
+              showDisabledButton ? AppColors.denotiveColor4 : AppColors
+                  .primaryColor2),
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -399,9 +418,12 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             paymentModeView(
-                StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCard),
-            paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
-            paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
+                StringConstants.creditCard, PaymentModeConstants.creditCard,
+                AssetsConstants.creditCard),
+            paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
+                AssetsConstants.cash),
+            paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode,
+                AssetsConstants.qrCode),
           ],
         ),
       );
@@ -409,7 +431,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
   Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
         onTap: () {
-         onTapPaymentMode(index);
+          onTapPaymentMode(index);
         },
         child: Row(
           children: [
@@ -914,7 +936,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
             itemCount: widget.placeOrderRequestModel.orderItemsList!.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return itemViewListItem(orderItem: widget.placeOrderRequestModel.orderItemsList![index]);
+              return itemViewListItem(orderItem: widget.placeOrderRequestModel
+                  .orderItemsList![index]);
             }),
       ]);
 
@@ -924,49 +947,55 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-            Expanded(
-              flex: 6,
-              child: CommonWidgets().textView(
-                  orderItem.name!,
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular)),
-            ),
-            Expanded(
-              flex: 2,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: CommonWidgets().textView(
-                    "${StringConstants.qty} - ${orderItem.quantity!}",
-                    StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratRegular)),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: CommonWidgets().textView(
-                  "\$${orderItem.getTotalPrice().toStringAsFixed(2)}",
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratSemiBold)),
-            ),
-          ]),
+                Expanded(
+                  flex: 6,
+                  child: CommonWidgets().textView(
+                      orderItem.name!,
+                      StyleConstants.customTextStyle(
+                          fontSize: 12.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratRegular)),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: CommonWidgets().textView(
+                        "${StringConstants.qty} - ${orderItem.quantity!}",
+                        StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: getMaterialColor(AppColors.textColor1),
+                            fontFamily: FontConstants.montserratRegular)),
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: CommonWidgets().textView(
+                      "\$${orderItem.getTotalPrice().toStringAsFixed(2)}",
+                      StyleConstants.customTextStyle(
+                          fontSize: 12.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratSemiBold)),
+                ),
+              ]),
           Visibility(
             visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty ? (orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto?.length ?? 0) : 0,
+                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
+                    ? (orderItem.foodExtraItemMappingList![0]
+                    .orderFoodExtraItemDetailDto?.length ?? 0)
+                    : 0,
                 itemBuilder: (context, innerIndex) {
                   return Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
-                        child: subOrderItemView(orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].name ?? ''),
+                        child: subOrderItemView(
+                            orderItem.foodExtraItemMappingList![0]
+                                .orderFoodExtraItemDetailDto![innerIndex]
+                                .name ?? ''),
                       ),
                       const Text(','),
                       const SizedBox(
@@ -979,7 +1008,9 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           const SizedBox(height: 20.0),
         ],
       );
-  Widget subOrderItemView(String subItem) => Text(subItem,style: const TextStyle(fontSize: 10.0),);
+
+  Widget subOrderItemView(String subItem) =>
+      Text(subItem, style: const TextStyle(fontSize: 10.0),);
 
   Widget componentBill() =>
       Column(
@@ -988,7 +1019,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
           billTextView(StringConstants.foodCost, foodCost),
           billTextView(StringConstants.salesTax, salesTax),
           billTextView(StringConstants.subTotal, foodCost + salesTax),
-         // billTextView(StringConstants.discount, discount),
+          // billTextView(StringConstants.discount, discount),
           billTextView(StringConstants.tip, tip),
           //const SizedBox(height: 23.0),
           totalBillView(totalAmount),
@@ -1051,8 +1082,8 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       updateSelectedPaymentMode();
     });
 
-    if(paymentModeType==PaymentModeConstants.creditCard){
-      scan();
+    if (paymentModeType == PaymentModeConstants.creditCard) {
+      // scan();
     }
   }
 
@@ -1093,16 +1124,19 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   //data for p2pConnection to Customer
   updateSelectedPaymentMode() {
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.paymentModeSelected,
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentModeSelected,
         data: paymentModeType.toString());
   }
 
   editAndUpdateOrder() {
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.editOrderDetails);
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.editOrderDetails);
   }
 
   updatePaymentSuccess() {
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.paymentCompleted);
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentCompleted);
   }
 
   //Other functions
@@ -1112,6 +1146,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     debugPrint("insideGetMap $orderInfo");
     return orderInfo;
   }
+
   PayOrderRequestModel getPayOrderRequestModel() {
     PayOrderRequestModel payOrderRequestModel = PayOrderRequestModel();
     payOrderRequestModel.orderId = orderID;
@@ -1123,7 +1158,6 @@ class _PaymentScreenState extends State<PaymentScreen> implements
 
   //API call
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
-
     orderPresenter.placeOrder(widget.placeOrderRequestModel);
   }
 
@@ -1140,22 +1174,48 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     setState(() {
       isApiProcess = false;
     });
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    CommonWidgets().showErrorSnackBar(
+        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+        context: context);
   }
 
   @override
   void showSuccess(response) {
     setState(() {
-      updatePaymentSuccess();
-      isPaymentDone = true;
       isApiProcess = false;
     });
-    clearOderData();
+
+
+    if(response is StripTokenResponseModel){
+
+      //PaymentMethodApi call
+      getMethodPayment(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
+
+      //getting StripeTokenId
+      stripeTokenId=response.id.toString();
+    }
+    else if (response is StripePaymentMethodRequestModel){
+
+      //getting StripePaymentMethodId
+      stripePaymentMethodId=response.id.toString();
+
+    }else{
+      setState(() {
+        updatePaymentSuccess();
+        isPaymentDone = true;
+
+      });
+      clearOderData();
+    }
+
+
   }
 
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
-    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    CommonWidgets().showErrorSnackBar(
+        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+        context: context);
   }
 
   @override
@@ -1187,12 +1247,15 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     }
   }
 
-
   Future<void> scan() async {
     String license;
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
+    if (Theme
+        .of(context)
+        .platform == TargetPlatform.iOS) {
       license = BlinkConstants.blinkKey;
-    } else if (Theme.of(context).platform == TargetPlatform.android) {
+    } else if (Theme
+        .of(context)
+        .platform == TargetPlatform.android) {
       license = BlinkConstants.blinkKey;
     } else {
       license = "";
@@ -1214,8 +1277,20 @@ class _PaymentScreenState extends State<PaymentScreen> implements
         debugPrint("Card Number : ${result.cardNumber}");
         _resultString = getCardResultString(result);
 
-        CommonWidgets().showSuccessSnackBar(message: 'Payment Done Successfully Card Number is ${result.cardNumber}', context: context);
+        cardNumber=result.cardNumber.toString();
+        cardCvc=result.cvv.toString();
+        cardExpiryMonth=result.expiryDate!.month.toString();
+        cardExpiryYear=result.expiryDate!.year.toString();
+
+        //TokenMethodApi call
+       getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
+
+
+        CommonWidgets().showSuccessSnackBar(
+            message: 'Payment Done Successfully Card Number is ${result
+                .cardNumber}', context: context);
         debugPrint(_resultString.toString());
+
         setState(() {
           _resultString = _resultString;
           _fullDocumentFirstImageBase64 =
@@ -1262,6 +1337,27 @@ class _PaymentScreenState extends State<PaymentScreen> implements
     }
 
     return buildResult(result.toString(), propertyName);
+  }
+
+  void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
+      String expiryYear) {
+    final body = {
+      "card[number]": cardNumber,
+      "card[cvc]": cardCvc,
+      "card[exp_month]": expiryMonth,
+      "card[exp_year]": expiryYear};
+    paymentPresenter.getToken(body);
+  }
+
+  void getMethodPayment(String cardNumber, String cardCvc, String expiryMonth,
+      String expiryYear) {
+    final bodyPaymentMethod = {
+      "type": "card",
+      "card[number]": cardNumber,
+      "card[cvc]": cardCvc,
+      "card[exp_month]": expiryMonth,
+      "card[exp_year]": expiryYear};
+    paymentPresenter.getPaymentMethod(bodyPaymentMethod);
   }
 
 }
