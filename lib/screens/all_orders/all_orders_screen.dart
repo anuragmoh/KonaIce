@@ -46,7 +46,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
   List<AllOrderResponse> allOrdersList = [];
 
   int selectedRow = -1;
-  late ScrollController _scrollController;
+ // late ScrollController _scrollController;
   bool isApiProcess = false;
   int countOffSet = 0;
 
@@ -85,15 +85,15 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
   void initState() {
     super.initState();
     getData();
-    _scrollController = ScrollController();
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        setState(() {
-          countOffSet = countOffSet + 1;
-        });
-        getData();
-      }
-    });
+    // _scrollController = ScrollController();
+    // _scrollController.addListener(() {
+    //   if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    //     setState(() {
+    //       countOffSet = countOffSet + 1;
+    //     });
+    //     getData();
+    //   }
+    // });
 
   }
 
@@ -213,7 +213,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
         padding: const EdgeInsets.only(left: 15.0),
         child:  SingleChildScrollView(
           scrollDirection: Axis.vertical,
-          controller: _scrollController,
+         // controller: _scrollController,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Column(

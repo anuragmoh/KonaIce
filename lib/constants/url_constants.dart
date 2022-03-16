@@ -24,7 +24,7 @@ class UrlConstants {
   static const allOrders = '/api/v2/secure/orders';
 
   static getAllOrders({required String orderStatus, required String eventId, required int offset, required int lastSync }){
-    return '$allOrders?searchText=&orderStatus=$orderStatus&eventId=$eventId&limit=10&offset=$offset&lastSyncAt=$lastSync';
+    return '$allOrders?searchText=&orderStatus=$orderStatus&eventId=$eventId&limit=0&offset=$offset&lastSyncAt=$lastSync';
   }
 
   static getDutyStatus({required String userID}) {
