@@ -114,6 +114,7 @@ class StringConstants {
   static const billTotal = 'Bill Total';
   static const orderCompleted='Your order is complete !';
   static const selectPaymentOption='Select Payment Option';
+  static const confirmCardDetails='Please Confirm Details';
 
   //MyProfile
   static const myProfile = 'My Profile';

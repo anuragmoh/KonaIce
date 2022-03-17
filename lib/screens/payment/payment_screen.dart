@@ -1371,7 +1371,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       title: Container(
         alignment: Alignment.center,
         child: CommonWidgets().textWidget(
-          StringConstants.changePassword,
+          StringConstants.confirmCardDetails,
           StyleConstants.customTextStyle(
               fontSize: 22.0,
               color: getMaterialColor(AppColors.textColor1),
