@@ -1083,7 +1083,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     });
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
-      // scan();
+       scan();
     }
   }
 
@@ -1290,10 +1290,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
 
 
-        CommonWidgets().showSuccessSnackBar(
-            message: 'Payment Done Successfully Card Number is ${result
-                .cardNumber}', context: context);
-        debugPrint(_resultString.toString());
+        // CommonWidgets().showSuccessSnackBar(
+        //     message: 'Payment Done Successfully Card Number is ${result
+        //         .cardNumber}', context: context);
+        // debugPrint(_resultString.toString());
 
         setState(() {
           _resultString = _resultString;
