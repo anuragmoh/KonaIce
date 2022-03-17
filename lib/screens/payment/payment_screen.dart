@@ -1188,11 +1188,12 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     if(response is StripTokenResponseModel){
 
+      //getting StripeTokenId
+      stripeTokenId=response.id.toString();
+
       //PaymentMethodApi call
       getMethodPayment(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
 
-      //getting StripeTokenId
-      stripeTokenId=response.id.toString();
     }
     else if (response is StripePaymentMethodRequestModel){
 
@@ -1282,8 +1283,11 @@ class _PaymentScreenState extends State<PaymentScreen>
         cardExpiryMonth=result.expiryDate!.month.toString();
         cardExpiryYear=result.expiryDate!.year.toString();
 
-        //TokenMethodApi call
-       getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => _buildPopupDialog(context),
+        );
+
 
 
         CommonWidgets().showSuccessSnackBar(
@@ -1358,6 +1362,64 @@ class _PaymentScreenState extends State<PaymentScreen>
       "card[exp_month]": expiryMonth,
       "card[exp_year]": expiryYear};
     paymentPresenter.getPaymentMethod(bodyPaymentMethod);
+  }
+
+
+//Card Details Confirmation Popup
+  Widget _buildPopupDialog(BuildContext context) {
+    return AlertDialog(
+      title: Container(
+        alignment: Alignment.center,
+        child: CommonWidgets().textWidget(
+          StringConstants.changePassword,
+          StyleConstants.customTextStyle(
+              fontSize: 22.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratSemiBold),
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
+              child: TextField(
+                // controller: textEditingController,
+                decoration: InputDecoration(
+                    filled: true,
+                    border: InputBorder.none,
+                    labelText: cardNumber,
+                    hintStyle: StyleConstants.customTextStyle(
+                        fontSize: 15.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratRegular)),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 23.0,
+                    vertical: 3.90 * SizeConfig.heightSizeMultiplier),
+                child: CommonWidgets().buttonWidget(
+                  StringConstants.submit,
+                  onTapConfirmPayment,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  onTapConfirmPayment() {
+    //TokenMethodApi call
+    getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
+
+    Navigator.pop(context);
   }
 
 }
