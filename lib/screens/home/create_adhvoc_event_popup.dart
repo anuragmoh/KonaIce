@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
+import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
@@ -9,12 +10,17 @@ import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/home/assest_model.dart';
 import 'package:kona_ice_pos/screens/home/create_event_model.dart';
+import 'package:kona_ice_pos/screens/home/uuid.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+
 
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
@@ -30,6 +36,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController zipCodeController = TextEditingController();
+  String selectedState="",selectedCity="",selectedZipcode="",selectedAddress="";
 
   bool isValidEventName = true,
       isValidAddress = true,
@@ -167,6 +174,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ],
       );
 
+
   Widget address() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,20 +187,26 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     color: AppColors.textColor2,
                     fontFamily: FontConstants.montserratRegular)),
             const SizedBox(height: 5.0),
-            TextField(
-              controller: addressController,
-              keyboardType: TextInputType.streetAddress,
-              decoration: InputDecoration(
-                hintText: StringConstants.enterAddress,
-                errorText: isValidAddress ? null : StringConstants.emptyAddress,
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.textColor2),
-                ),
-                enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.textColor2),
-                ),
-                focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.textColor2),
+            GestureDetector(
+              onTap: (){
+                googlePlaces();
+              },
+              child: TextField(
+                enabled: false,
+                controller: addressController,
+                keyboardType: TextInputType.streetAddress,
+                decoration: InputDecoration(
+                  hintText: StringConstants.enterAddress,
+                  errorText: isValidAddress ? null : StringConstants.emptyAddress,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.textColor2),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.textColor2),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.textColor2),
+                  ),
                 ),
               ),
             )
@@ -211,6 +225,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     fontFamily: FontConstants.montserratRegular)),
             const SizedBox(height: 5.0),
             TextField(
+              enabled: false,
               controller: cityController,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
@@ -563,6 +578,103 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       });
     } catch (e) {
       debugPrint("$e");
+    }
+  }
+
+
+  //get location using google places
+  Future<void> googlePlaces() async {
+    Prediction? p = await PlacesAutocomplete.show(
+      offset: 0,
+      strictbounds: false,
+      context: context,
+      apiKey: GoogleMapKey.googleMapKey,
+      onError: onError,
+      mode: Mode.overlay,
+      region: "IN",
+      language: "en",
+      decoration: InputDecoration(
+        hintText: 'Search Address',
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: const BorderSide(color: Colors.white),
+        ),
+      ),
+      sessionToken: Uuid().generateV4(),
+      components: [Component(Component.country, "IN")],
+      types: [""],
+      // types: ["(cities)"],
+    );
+    if (p != null) {
+      displayPrediction(p);
+      //print("prediction: ${p}");
+    }
+  }
+
+  void onError(PlacesAutocompleteResponse response) {
+    debugPrint(response.toString());
+  }
+
+  Future<void> displayPrediction(Prediction p) async {
+    GoogleMapsPlaces _places = GoogleMapsPlaces(
+      apiKey: GoogleMapKey.googleMapKey,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail =
+    await _places.getDetailsByPlaceId(p.placeId.toString());
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+
+    debugPrint("Result ${detail.result.addressComponents[0].longName}");
+
+    debugPrint(
+        "Picked lat and long : ${detail.result.geometry!.location.lat} & ${detail.result.geometry!.location.lng}");
+    debugPrint("Picked location: ${detail.result.formattedAddress}");
+
+    for (int i = 0; i < detail.result.addressComponents.length; i++) {
+      try {
+        for (int j = 0;
+        j < detail.result.addressComponents[i].types.length;
+        i++) {
+
+          if (detail.result.addressComponents[i].types[j] == "route") {
+            String route = detail.result.addressComponents[i].longName;
+            debugPrint("route: $route");
+          }
+          if (detail.result.addressComponents[i].types[j] == "locality") {
+            setState(() {
+              cityController.text= detail.result.addressComponents[i].longName;
+            });
+            debugPrint("city: $selectedCity");
+          }
+          if (detail.result.addressComponents[i].types[j] ==
+              "administrative_area_level_1") {
+            setState(() {
+              stateController.text= detail.result.addressComponents[i].longName;
+            });
+
+            debugPrint("state: $selectedState");
+          }
+          if (detail.result.addressComponents[i].types[j] ==
+              "postal_code") {
+            setState(() {
+              zipCodeController.text=detail.result.addressComponents[i].longName;
+            });
+            debugPrint("pinCode : $selectedZipcode");
+          }
+          if (detail.result.addressComponents[i].types[j] ==
+              "country") {
+            String country = detail.result.addressComponents[i].longName;
+            debugPrint("country: $country");
+          }
+
+        }
+      } on RangeError catch (e) {
+        // ShowMessage().showToast(e.toString());
+        debugPrint(e.toString());
+      } catch (e) {
+        // print("Error: $e");
+      }
     }
   }
 }
