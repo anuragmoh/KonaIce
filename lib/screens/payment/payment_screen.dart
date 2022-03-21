@@ -790,7 +790,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
       Column(
         children: [
           Visibility(
-            visible: eventName.isNotEmpty,
+            visible: eventName.isNotEmpty ,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
@@ -812,7 +812,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
             ),
           ),
           Visibility(
-            visible: email.isNotEmpty,
+            visible: email.isNotEmpty && email != "null",
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(

@@ -292,7 +292,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
             ),
           ),
           Visibility(
-            visible: email.isNotEmpty,
+            visible: email.isNotEmpty && email != "null",
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
