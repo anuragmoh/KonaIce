@@ -21,7 +21,6 @@ import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 
-
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
 
@@ -36,7 +35,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController zipCodeController = TextEditingController();
-  String selectedState="",selectedCity="",selectedZipcode="",selectedAddress="";
+  String selectedState = "",
+      selectedCity = "",
+      selectedZipcode = "",
+      selectedAddress = "";
 
   bool isValidEventName = true,
       isValidAddress = true,
@@ -174,7 +176,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ],
       );
 
-
   Widget address() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,16 +189,18 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     fontFamily: FontConstants.montserratRegular)),
             const SizedBox(height: 5.0),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 googlePlaces();
               },
               child: TextField(
+                scrollPhysics: const ScrollPhysics(),
                 enabled: false,
                 controller: addressController,
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   hintText: StringConstants.enterAddress,
-                  errorText: isValidAddress ? null : StringConstants.emptyAddress,
+                  errorText:
+                      isValidAddress ? null : StringConstants.emptyAddress,
                   border: const OutlineInputBorder(
                     borderSide: BorderSide(color: AppColors.textColor2),
                   ),
@@ -229,6 +232,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
               controller: cityController,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
+                enabled: false,
                 hintText: StringConstants.enterCity,
                 errorText: isValidCity ? null : StringConstants.emptyCity,
                 border: const OutlineInputBorder(
@@ -260,6 +264,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
               controller: stateController,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
+                enabled: false,
                 hintText: StringConstants.enterState,
                 errorText: isValidState ? null : StringConstants.emptyState,
                 border: const OutlineInputBorder(
@@ -294,6 +299,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 FilteringTextInputFormatter.digitsOnly
               ],
               decoration: InputDecoration(
+                enabled: false,
                 hintText: StringConstants.enterZipCode,
                 errorText: isValidZipCode ? null : StringConstants.emptyZipCode,
                 border: const OutlineInputBorder(
@@ -581,7 +587,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     }
   }
 
-
   //get location using google places
   Future<void> googlePlaces() async {
     Prediction? p = await PlacesAutocomplete.show(
@@ -621,7 +626,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );
     PlacesDetailsResponse detail =
-    await _places.getDetailsByPlaceId(p.placeId.toString());
+        await _places.getDetailsByPlaceId(p.placeId.toString());
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
 
@@ -634,40 +639,54 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     for (int i = 0; i < detail.result.addressComponents.length; i++) {
       try {
         for (int j = 0;
-        j < detail.result.addressComponents[i].types.length;
-        i++) {
-
+            j < detail.result.addressComponents[i].types.length;
+            i++) {
           if (detail.result.addressComponents[i].types[j] == "route") {
             String route = detail.result.addressComponents[i].longName;
             debugPrint("route: $route");
           }
           if (detail.result.addressComponents[i].types[j] == "locality") {
             setState(() {
-              cityController.text= detail.result.addressComponents[i].longName;
+              cityController.text = detail.result.addressComponents[i].longName;
             });
             debugPrint("city: $selectedCity");
+
+            //Split the string to show in address
+            const start = "";
+            final end = cityController.text;
+            debugPrint("trimmedEnd======>: $end");
+            final startIndex = detail.result.formattedAddress!.indexOf(start);
+            final endIndex = detail.result.formattedAddress!.indexOf(end);
+            final result = detail.result.formattedAddress!
+                .substring(startIndex + start.length, endIndex)
+                .trim();
+            String strFinal = result.substring(0, result.length - 1);
+            setState(() {
+              addressController.text = strFinal;
+            });
+
+            debugPrint("trimmed======>: $strFinal");
           }
           if (detail.result.addressComponents[i].types[j] ==
               "administrative_area_level_1") {
             setState(() {
-              stateController.text= detail.result.addressComponents[i].longName;
+              stateController.text =
+                  detail.result.addressComponents[i].longName;
             });
 
             debugPrint("state: $selectedState");
           }
-          if (detail.result.addressComponents[i].types[j] ==
-              "postal_code") {
+          if (detail.result.addressComponents[i].types[j] == "postal_code") {
             setState(() {
-              zipCodeController.text=detail.result.addressComponents[i].longName;
+              zipCodeController.text =
+                  detail.result.addressComponents[i].longName;
             });
             debugPrint("pinCode : $selectedZipcode");
           }
-          if (detail.result.addressComponents[i].types[j] ==
-              "country") {
+          if (detail.result.addressComponents[i].types[j] == "country") {
             String country = detail.result.addressComponents[i].longName;
             debugPrint("country: $country");
           }
-
         }
       } on RangeError catch (e) {
         // ShowMessage().showToast(e.toString());
