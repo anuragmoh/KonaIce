@@ -256,26 +256,28 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                                       border: Border.all(
                                           color: getMaterialColor(
                                               AppColors.primaryColor2))),
-                                  width: 70.0,
+                                  width: 80.0,
                                   height: 42.0,
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 8.0, bottom: 2.0),
+                                          left: 4.0, bottom: 2.0),
                                       child: TextField(
+                                        maxLength: TextFieldLengthConstant.amountReceived,
                                         controller: amountReceivedController,
                                         style: StyleConstants.customTextStyle(
-                                            fontSize: 22.0,
+                                            fontSize: 20.0,
                                             color: getMaterialColor(
                                                 AppColors.textColor1),
                                             fontFamily:
                                             FontConstants.montserratMedium),
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                         inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.digitsOnly
+                                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
                                         ],
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
+                                          counterText: "",
                                         ),
                                         onChanged: (value) {
                                           if (value.isNotEmpty) {

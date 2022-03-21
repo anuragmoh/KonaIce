@@ -208,7 +208,7 @@ class StringConstants {
   static const orderStatusNew = "NEW";
 
   // all device screen
-  static const allDeviceScreenHead = "Please select a customer device from the list";
+  static const allDeviceScreenHead = "Please select customer device from the list";
 
   static String noDeviceAvailableToConnect = "No device available to connect";
 
