@@ -1156,17 +1156,36 @@ class _PaymentScreenState extends State<PaymentScreen>
     return payOrderRequestModel;
   }
 
+  PayOrderCardRequestModel getPayOrderCardMethodRequestModel() {
+    PayOrderCardRequestModel payOrderCardRequestModel = PayOrderCardRequestModel();
+    payOrderCardRequestModel.orderId = orderID;
+    payOrderCardRequestModel.paymentMethod = "CARD";
+    payOrderCardRequestModel.stripeCardId=stripeTokenId;
+    payOrderCardRequestModel.stripePaymentMethodId =stripePaymentMethodId;
+
+    return payOrderCardRequestModel;
+  }
+
   //API call
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
     orderPresenter.placeOrder(widget.placeOrderRequestModel);
   }
 
+  //API call for card payment method
   callPayOrderAPI() {
     PayOrderRequestModel payOrderRequestModel = getPayOrderRequestModel();
     setState(() {
       isApiProcess = true;
     });
     orderPresenter.payOrder(payOrderRequestModel);
+  }
+
+  callPayOrderCardMethodAPI() {
+    PayOrderCardRequestModel payOrderCardRequestModel = getPayOrderCardMethodRequestModel();
+    setState(() {
+      isApiProcess = true;
+    });
+    orderPresenter.payOrderCardMethod(payOrderCardRequestModel);
   }
 
   @override
@@ -1199,6 +1218,8 @@ class _PaymentScreenState extends State<PaymentScreen>
 
       //getting StripePaymentMethodId
       stripePaymentMethodId=response.id.toString();
+
+      callPayOrderCardMethodAPI();
 
     }else{
       setState(() {

@@ -25,4 +25,12 @@ class OrderRepository {
       return payOrderResponseModelFromJson(value);
     });
   }
+
+  Future<PayOrderCardRequestModel> payOrderCardMethod(
+      {required PayOrderCardRequestModel payOrderCardRequestModel}) {
+    return baseClient.put(UrlConstants.payOrder, payOrderCardRequestModel).then((
+        value) {
+      return payOrderCardRequestModelFromJson(value);
+    });
+  }
 }

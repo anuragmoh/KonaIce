@@ -35,4 +35,16 @@ class OrderPresenter {
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }
+
+  void payOrderCardMethod(PayOrderCardRequestModel payOrderCardRequestModel) {
+    _orderRepository
+        .payOrderCardMethod(payOrderCardRequestModel: payOrderCardRequestModel)
+        .then((value){
+      print("Success ----- $value}");
+      _view.showSuccess(value);
+    }).onError((error, stackTrace){
+      print("Errror ----- ${error.toString()}");
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
+  }
 }
