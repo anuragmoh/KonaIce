@@ -11,8 +11,8 @@ class StringConstants {
   static const signOut = 'Sign Out';
 
   //DB Insertion default Value
-   static const trueText = 'true';
-   static const falseText = 'false';
+  static const trueText = 'true';
+  static const falseText = 'false';
 
   //AccountSwitch Screen TEXT
   static const selectMode = 'Select Mode';
@@ -116,6 +116,22 @@ class StringConstants {
   static const selectPaymentOption='Select Payment Option';
   static const confirmCardDetails='Please Confirm Details';
 
+  // Create adhoc event popup
+  static const popHeading = "Create Adhoc Event";
+  static const name = "Name";
+  static const enterName = "Enter event name";
+  static const address = "Address";
+  static const enterAddress = "Enter address";
+  static const city = "City";
+  static const enterCity = "Enter city";
+  static const state = "State";
+  static const enterState = "Enter state";
+  static const zipCode = "Zipcode";
+  static const enterZipCode = "Enter zipcode";
+  static const equipment = "Equipment";
+  static const selectEquipment = "Select Equipment";
+  static const create = "Create";
+
   //MyProfile
   static const myProfile = 'My Profile';
   static const firstName = 'First Name';
@@ -156,9 +172,17 @@ class StringConstants {
   static const emptyFirstName="Please Enter First Name";
   static const emptyContactNumber="Please Enter Contact Number";
 
+  static const emptyEventName = "Please enter event name";
+  static const emptyAddress = "Please enter address";
+  static const emptyCity = "Please enter city";
+  static const emptyState = "Please enter state";
+  static const emptyZipCode = "Please enter zipcode";
+  static const selectEquipments = "Please select equipment";
+
   //Success Message
   static const savedOrderSuccess = 'Order saved successfully!';
   static const profileUpdateSuccessfully = 'Profile saved successfully!';
+  static const eventCreatedSuccessfully = "Adhoc event created successfully";
 
 
   //Data not available messages
@@ -185,7 +209,9 @@ class StringConstants {
   static const orderStatusNew = "NEW";
 
   // all device screen
-  static const allDeviceScreenHead = "Please select a customer device from the list";
+  static const allDeviceScreenHead = "Please select customer device from the list";
+
+  static String noDeviceAvailableToConnect = "No device available to connect";
 
 
 }

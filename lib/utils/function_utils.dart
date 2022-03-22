@@ -15,6 +15,7 @@ import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/login/login_model.dart';
 import 'package:kona_ice_pos/screens/login/login_screen.dart';
+import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 
 class FunctionalUtils {
@@ -178,6 +179,11 @@ class FunctionalUtils {
           MaterialPageRoute(builder: (context) => const LoginScreen()));
       ScaffoldMessenger.of(navigatorKey.currentContext!).clearSnackBars();
     });
+  }
+
+  static showCustomerSplashScreen() {
+    Navigator.of(navigatorKey.currentContext!).pushReplacement(
+        MaterialPageRoute(builder: (context) =>  SplashScreen()));
   }
 
 

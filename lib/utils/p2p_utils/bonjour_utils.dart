@@ -115,7 +115,6 @@ class P2PConnectionManager {
   }
 
   connectWithDevice(Device device) {
-    // debugPrint("connectWithDevice function call----${device.state}");
     switch (device.state) {
       case SessionState.notConnected:
         nearbyService.invitePeer(
@@ -196,8 +195,8 @@ class P2PConnectionManager {
 
   //Received Data
   dataReceivedAtCustomer(P2PDataModel data) {
-    _view.receivedDataFromP2P(data);
 
+      _view.receivedDataFromP2P(data);
   }
 
   dataReceivedAtStaff(P2PDataModel data) {

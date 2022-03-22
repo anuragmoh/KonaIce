@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
+import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
@@ -10,6 +11,7 @@ import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class SettingScreen extends StatefulWidget {
@@ -31,6 +33,11 @@ class _SettingScreenState extends State<SettingScreen>
 
   bool isApiProcess = false;
 
+  @override
+  void initState() {
+    super.initState();
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -46,14 +46,15 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
 
   showFoodExtrasPopUp(Item item) {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: SingleChildScrollView(child: foodExtraPopUpComponent(item)),
     );
   }
 
   Widget foodExtraPopUpComponent(Item item) {
-    return SizedBox(
+    return Container(
+      color: Colors.transparent,
       width: MediaQuery.of(context).size.width * 0.49,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -63,8 +64,13 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             title: '${StringConstants.customize} \'${item.name}\'',
             onTapCloseButton: onTapCloseButton,
           ),
-          popUpBodyContainer(),
-          addFoodExtraPopUpButton(item)
+          Container(
+              color: Colors.white,
+              child: popUpBodyContainer()),
+          Container(
+              color: Colors.white,
+              child: addFoodExtraPopUpButton(item)),
+
         ],
       ),
     );
@@ -138,7 +144,9 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
 
   Widget addFoodExtraPopUpButton(Item item) {
     return GestureDetector(
-      onTap: onTapAddExtrasButton,
+      onTap: () {
+        onTapAddExtrasButton(item);
+      },
       child: Align(
         alignment: Alignment.centerRight,
         child: Padding(
@@ -213,11 +221,13 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
     Navigator.of(context).pop('text to reach back');
   }
 
-  onTapAddExtrasButton() {
-    widget.item.selectedExtras.clear();
-    widget.item.foodExtraItemList.clear();
-    widget.item.foodExtraItemList.addAll(foodExtraItemList);
-    widget.item.selectedExtras.addAll(selectedExtras);
-    Navigator.of(context).pop(widget.item);
+  onTapAddExtrasButton(Item item) {
+   if (!(item.selectedExtras.isEmpty && selectedExtras.isEmpty)) {
+   widget.item.selectedExtras.clear();
+   widget.item.foodExtraItemList.clear();
+   widget.item.foodExtraItemList.addAll(foodExtraItemList);
+   widget.item.selectedExtras.addAll(selectedExtras);
+   Navigator.of(context).pop(widget.item);
+   }
   }
 }

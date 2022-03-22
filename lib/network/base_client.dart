@@ -115,7 +115,7 @@ class BaseClient {
 
   getErrorModel(http.Response response) {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
-     print("ErrorList--->${errorList.general![0].toRawJson().toString()}");
+    debugPrint("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
       String value = errorList.general![0].toRawJson().toString();
       throw GeneralApiResponseErrorException(value);

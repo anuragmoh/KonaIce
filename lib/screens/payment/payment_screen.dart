@@ -1,4 +1,3 @@
-import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -273,26 +272,28 @@ class _PaymentScreenState extends State<PaymentScreen>
                                       border: Border.all(
                                           color: getMaterialColor(
                                               AppColors.primaryColor2))),
-                                  width: 70.0,
+                                  width: 80.0,
                                   height: 42.0,
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 8.0, bottom: 2.0),
+                                          left: 4.0, bottom: 2.0),
                                       child: TextField(
+                                        maxLength: TextFieldLengthConstant.amountReceived,
                                         controller: amountReceivedController,
                                         style: StyleConstants.customTextStyle(
-                                            fontSize: 22.0,
+                                            fontSize: 20.0,
                                             color: getMaterialColor(
                                                 AppColors.textColor1),
                                             fontFamily:
                                             FontConstants.montserratMedium),
-                                        keyboardType: TextInputType.number,
+                                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                         inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.digitsOnly
+                                          FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
                                         ],
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
+                                          counterText: "",
                                         ),
                                         onChanged: (value) {
                                           if (value.isNotEmpty) {
@@ -811,7 +812,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       Column(
         children: [
           Visibility(
-            visible: eventName.isNotEmpty,
+            visible: eventName.isNotEmpty ,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
@@ -833,7 +834,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             ),
           ),
           Visibility(
-            visible: email.isNotEmpty,
+            visible: email.isNotEmpty && email != "null",
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Row(
@@ -1297,6 +1298,47 @@ class _PaymentScreenState extends State<PaymentScreen>
     var results = await MicroblinkScanner.scanWithCamera(
         RecognizerCollection([cardRecognizer]), settings, license);
 
+  // Future<void> scan() async {
+  //   String license;
+  //   if (Theme.of(context).platform == TargetPlatform.iOS) {
+  //     license = BlinkConstants.blinkKey;
+  //   } else if (Theme.of(context).platform == TargetPlatform.android) {
+  //     license = BlinkConstants.blinkKey;
+  //   } else {
+  //     license = "";
+  //   }
+  //
+  //   var cardRecognizer = BlinkCardRecognizer();
+  //   cardRecognizer.returnFullDocumentImage = true;
+  //
+  //   BlinkCardOverlaySettings settings = BlinkCardOverlaySettings();
+  //
+  //   var results = await MicroblinkScanner.scanWithCamera(
+  //       RecognizerCollection([cardRecognizer]), settings, license);
+  //
+  //   if (!mounted) return;
+  //
+  //   if (results.length == 0) return;
+  //   for (var result in results) {
+  //     if (result is BlinkCardRecognizerResult) {
+  //       debugPrint("Card Number : ${result.cardNumber}");
+  //       _resultString = getCardResultString(result);
+  //
+  //       CommonWidgets().showSuccessSnackBar(message: 'Payment Done Successfully Card Number is ${result.cardNumber}', context: context);
+  //       debugPrint(_resultString.toString());
+  //       setState(() {
+  //         _resultString = _resultString;
+  //         _fullDocumentFirstImageBase64 =
+  //             result.firstSideFullDocumentImage ?? "";
+  //         _fullDocumentSecondImageBase64 =
+  //             result.secondSideFullDocumentImage ?? "";
+  //       });
+  //
+  //       return;
+  //     }
+  //   }
+  // }
+
     if (!mounted) return;
 
     if (results.length == 0) return;
@@ -1338,6 +1380,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   String getCardResultString(BlinkCardRecognizerResult result) {
+ /* String getCardResultString(BlinkCardRecognizerResult result) {
     return buildResult(result.cardNumber, 'Card Number') +
         buildResult(result.cardNumberPrefix, 'Card Number Prefix') +
         buildResult(result.iban, 'IBAN') +
@@ -1370,7 +1413,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
 
     return buildResult(result.toString(), propertyName);
-  }
+  }*/
 
   void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
       String expiryYear) {

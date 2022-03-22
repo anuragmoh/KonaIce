@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -71,6 +72,10 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
     child: bodyWidgetComponent(),
   );
 
+  Widget splashIcon(){
+    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 100.0, height: 60.0);
+  }
+
   Widget bodyWidgetComponent() => Padding(
     padding: const EdgeInsets.symmetric(horizontal: 237.0, vertical: 20.0),
     child: Container(
@@ -79,6 +84,8 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
           color: getMaterialColor(AppColors.whiteColor)),
       child: Column(
         children: [
+          const SizedBox(height: 20.0),
+          splashIcon(),
           componentHead(currentDate),
           componentCustomerDetails(orderDetailsModel!.orderRequestModel!.getCustomerName(),  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
               orderDetailsModel!.orderRequestModel?.email ??
@@ -285,7 +292,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
             ),
           ),
           Visibility(
-            visible: email.isNotEmpty,
+            visible: email.isNotEmpty && email != "null",
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -314,6 +321,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       );
 
   Widget subOrderItemView(String subItem) => Text(subItem);
+
 
   Widget componentBill() => Column(
     children: [
@@ -397,7 +405,6 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
    //Navigation
   showPaymentScreen() {
-     debugPrint("inside show payment ---------------------------------->");
     Navigator.of(context).push( MaterialPageRoute(builder: (context) => const PaymentOption())).then((value) =>
     {
     P2PConnectionManager.shared.getP2PContractor(this)
@@ -416,9 +423,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
   @override
   void receivedDataFromP2P(P2PDataModel response) {
-    debugPrint("<>---------------inside received Data${response.action}");
     if (response.action == StaffActionConst.orderModelUpdated) {
-      debugPrint("---------------inside received Data${response.action}");
       orderDetailsModel = P2POrderDetailsModel();
       P2POrderDetailsModel modelObjc = p2POrderDetailsModelFromJson(
           response.data);
@@ -431,8 +436,10 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       }
     }
     else if (response.action == StaffActionConst.chargeOrderBill) {
-      debugPrint("---------------inside received Data${response.action}");
       showPaymentScreen();
+    }
+    else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+      showSplashScreen();
     }
   }
 }

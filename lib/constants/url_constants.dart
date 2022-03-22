@@ -17,30 +17,38 @@ class UrlConstants {
   static const placeOrder = '/api/v2/secure/orders-stripe/staff-user';
   static const payOrder = '/api/v2/secure/orders-payment/staff-user';
 
+  static const assets = '/api/v1/secure/assets/grid-data?limit=9999&applyActivatedStatus=true&activated=true';
+
+  static const createAdhocEvent ='/api/v1/secure/events/adhoc';
+
   static const allOrders = '/api/v2/secure/orders';
 
   static getAllOrders({required String orderStatus, required String eventId, required int offset, required int lastSync }){
-    return '$allOrders?searchText=&orderStatus=$orderStatus&eventId=$eventId&limit=10&offset=$offset&lastSyncAt=$lastSync';
+    return '$allOrders?searchText=&orderStatus=$orderStatus&eventId=$eventId&limit=0&offset=$offset&lastSyncAt=$lastSync';
   }
 
   static getDutyStatus({required String userID}) {
-     return dutyStatus.replaceAll('{userID}', userID);
+    return dutyStatus.replaceAll('{userID}', userID);
   }
 
   static getCustomerList({required String searchText}) {
     return '$customerList?searchText=$searchText';
   }
 
-   static getClockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {
-     return '$clockInOutDetails?fromDate=$startTimestamp&toDate=$endTimestamp'.replaceAll('{userID}', userID);
-   }
+  static getClockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {
+    return '$clockInOutDetails?fromDate=$startTimestamp&toDate=$endTimestamp'.replaceAll('{userID}', userID);
+  }
 
-   static getMyProfile({required String userID}){
+  static getMyProfile({required String userID}){
     return getProfile.replaceAll('{userId}', userID);
-   }
+  }
 
   static updateMyProfile({required String userID}){
     return getProfile.replaceAll('{userId}', userID);
+  }
+
+  static deleteOrder({required String orderId}){
+    return '$allOrders?orderCodeOrId=$orderId';
   }
 
 
