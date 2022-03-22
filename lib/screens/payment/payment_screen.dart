@@ -21,7 +21,6 @@ import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_mo
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
-import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
@@ -68,7 +67,8 @@ class _PaymentScreenState extends State<PaymentScreen>
   String orderID = 'NA';
 
   String _resultString = "";
-  String cardNumber="",cardCvc="",cardExpiryYear="",cardExpiryMonth="";
+  String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
+  String demoCardNumber = "";
   String stripeTokenId="",stripePaymentMethodId="";
   String _fullDocumentFirstImageBase64 = "";
   String _fullDocumentSecondImageBase64 = "";
@@ -1084,6 +1084,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
        scan();
+      //getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
     }
   }
 
@@ -1203,12 +1204,13 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       isApiProcess = false;
     });
-
-
     if(response is StripTokenResponseModel){
 
       //getting StripeTokenId
-      stripeTokenId=response.id.toString();
+      setState(() {
+        stripeTokenId=response.id.toString();
+      });
+      debugPrint("Stripe Token Id is :- $stripeTokenId");
 
       //PaymentMethodApi call
       getMethodPayment(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
@@ -1217,8 +1219,12 @@ class _PaymentScreenState extends State<PaymentScreen>
     else if (response is StripePaymentMethodRequestModel){
 
       //getting StripePaymentMethodId
-      stripePaymentMethodId=response.id.toString();
+      setState(() {
+        stripePaymentMethodId=response.id.toString();
+      });
+      debugPrint("Stripe Payment Id is :- $stripePaymentMethodId");
 
+      debugPrint("Calling order API");
       callPayOrderCardMethodAPI();
 
     }else{
@@ -1299,10 +1305,12 @@ class _PaymentScreenState extends State<PaymentScreen>
         debugPrint("Card Number : ${result.cardNumber}");
         _resultString = getCardResultString(result);
 
-        cardNumber=result.cardNumber.toString();
-        cardCvc=result.cvv.toString();
-        cardExpiryMonth=result.expiryDate!.month.toString();
-        cardExpiryYear=result.expiryDate!.year.toString();
+        demoCardNumber = result.cardNumber.toString();
+
+        // cardNumber=result.cardNumber.toString();
+        // cardCvc=result.cvv.toString();
+        // cardExpiryMonth=result.expiryDate!.month.toString();
+        // cardExpiryYear=result.expiryDate!.year.toString();
 
         showDialog(
           context: context,
@@ -1366,6 +1374,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
       String expiryYear) {
+    debugPrint("Token API Call");
     final body = {
       "card[number]": cardNumber,
       "card[cvc]": cardCvc,
@@ -1376,6 +1385,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   void getMethodPayment(String cardNumber, String cardCvc, String expiryMonth,
       String expiryYear) {
+    debugPrint("Payment Method API Call");
     final bodyPaymentMethod = {
       "type": "card",
       "card[number]": cardNumber,
@@ -1411,7 +1421,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                 decoration: InputDecoration(
                     filled: true,
                     border: InputBorder.none,
-                    labelText: cardNumber,
+                    labelText: demoCardNumber,
                     hintStyle: StyleConstants.customTextStyle(
                         fontSize: 15.0,
                         color: getMaterialColor(AppColors.textColor1),

@@ -9,14 +9,12 @@ PaymentBaseClient paymentBaseClient=PaymentBaseClient();
 
 Future<StripTokenResponseModel> getStripeToken(dynamic stripTokenRequestModel){
   return paymentBaseClient.post(UrlConstants.paymentGetToken, stripTokenRequestModel).then((value) {
-    debugPrint(value.toString());
     return stripTokenResponseModelFromJson(value);
   } );
 }
 
 Future<StripePaymentMethodRequestModel> getPaymentMethod(dynamic response){
   return paymentBaseClient.post(UrlConstants.paymentMethod, response).then((value) {
-    debugPrint(value.toString());
     return stripePaymentMethodRequestModelFromJson(value);
   } );
 }
