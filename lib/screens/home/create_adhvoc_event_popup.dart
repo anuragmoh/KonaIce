@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/network/app_exception.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_event_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -15,8 +16,6 @@ import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -56,7 +55,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   // ignore: prefer_typing_uninitialized_variables
   var _selectedAsset;
 
-  late Position _currentPosition;
+
+  late final lat;
+  late final long;
   late String _currentCountry;
 
   _CreateAdhocEventState() {
@@ -82,7 +83,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   void initState() {
     super.initState();
     getAssets();
-    _determinePosition();
   }
 
   @override
@@ -446,9 +446,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     setState(() {
       isApiProcess = false;
     });
-    CommonWidgets().showErrorSnackBar(
-        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
-        context: context);
+   CommonWidgets().showErrorSnackBar(
+       errorMessage: exception.message!,
+       context: context);
+
   }
 
   @override
@@ -525,8 +526,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         int.parse(Date.getStartOfDateTimeStamp(date: DateTime.now()));
     createEventRequestModel.endDateTime =
         int.parse(Date.getEndOfDateTimeStamp(date: DateTime.now()));
-    createEventRequestModel.addressLatitude = _currentPosition.latitude;
-    createEventRequestModel.addressLongitude = _currentPosition.longitude;
+    createEventRequestModel.addressLatitude = lat;
+    createEventRequestModel.addressLongitude = long;
     createEventRequestModel.country = _currentCountry;
     EventAssetsList eventAssetsList = EventAssetsList();
     eventAssetsList.assetId = _selectedAsset;
@@ -537,55 +538,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     presenter.createEvent(createEventRequestModel);
   }
 
-  _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      await Geolocator.requestPermission();
-      debugPrint("Location services are disabled.");
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        debugPrint("Location permissions are denied");
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      debugPrint(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    _getCurrentLocation();
-  }
-
-  _getCurrentLocation() {
-    Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.best,
-            forceAndroidLocationManager: true)
-        .then((Position position) {
-      setState(() {
-        _currentPosition = position;
-        _getAddressFromLatLng();
-      });
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
-
-  _getAddressFromLatLng() async {
-    try {
-      List<Placemark> placeMarks = await placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
-      Placemark place = placeMarks[0];
-      setState(() {
-        _currentCountry = "${place.country}";
-      });
-    } catch (e) {
-      debugPrint("$e");
-    }
-  }
 
   //get location using google places
   Future<void> googlePlaces() async {
@@ -627,8 +579,11 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     );
     PlacesDetailsResponse detail =
         await _places.getDetailsByPlaceId(p.placeId.toString());
-    final lat = detail.result.geometry!.location.lat;
-    final lng = detail.result.geometry!.location.lng;
+
+    setState(() {
+       lat = detail.result.geometry!.location.lat;
+       long = detail.result.geometry!.location.lng;
+    });
 
     debugPrint("Result ${detail.result.addressComponents[0].longName}");
 
@@ -642,8 +597,11 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             j < detail.result.addressComponents[i].types.length;
             i++) {
           if (detail.result.addressComponents[i].types[j] == "route") {
-            String route = detail.result.addressComponents[i].longName;
-            debugPrint("route: $route");
+           setState(() {
+             String route = detail.result.addressComponents[i].longName;
+             debugPrint("route: $route");
+           });
+
           }
           if (detail.result.addressComponents[i].types[j] == "locality") {
             setState(() {
@@ -660,12 +618,11 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             final result = detail.result.formattedAddress!
                 .substring(startIndex + start.length, endIndex)
                 .trim();
-            String strFinal = result.substring(0, result.length - 1);
             setState(() {
+              String strFinal = result.substring(0, result.length - 1);
               addressController.text = strFinal;
+              debugPrint("trimmed======>: $strFinal");
             });
-
-            debugPrint("trimmed======>: $strFinal");
           }
           if (detail.result.addressComponents[i].types[j] ==
               "administrative_area_level_1") {
@@ -681,11 +638,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
               zipCodeController.text =
                   detail.result.addressComponents[i].longName;
             });
-            debugPrint("pinCode : $selectedZipcode");
+
           }
           if (detail.result.addressComponents[i].types[j] == "country") {
-            String country = detail.result.addressComponents[i].longName;
-            debugPrint("country: $country");
+            setState(() {
+               _currentCountry = detail.result.addressComponents[i].longName;
+              debugPrint("country: $_currentCountry");
+            });
           }
         }
       } on RangeError catch (e) {

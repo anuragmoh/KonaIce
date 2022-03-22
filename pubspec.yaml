@@ -48,8 +48,6 @@ dependencies:
   device_info: ^2.0.3
   #bonjour service
   flutter_nearby_connections: ^1.1.1
-  geolocator: ^8.2.0
-  geocoding: ^2.0.4
   #Google location
   flutter_google_places: ^0.3.0
 
