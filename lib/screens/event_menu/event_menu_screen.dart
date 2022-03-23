@@ -1196,7 +1196,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       isProduct = true;
     });
     Future.delayed(
-        const Duration(milliseconds: 100),
+        const Duration(milliseconds: 500),
             () {
 
 
@@ -1241,7 +1241,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         }
       }
     }
-
     });
             }
     );
