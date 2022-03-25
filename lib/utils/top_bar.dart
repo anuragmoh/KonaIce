@@ -4,7 +4,6 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/screens/home/notification_drawer.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -16,7 +15,8 @@ class TopBar extends StatefulWidget {
   final String eventAddress;
   final bool showCenterWidget;
   final Function onTapCallBack;
- // final Function onDrawerTap;
+
+  // final Function onDrawerTap;
   final Function onProfileTap;
   final bool isProduct;
 
@@ -101,7 +101,7 @@ class _TopBarState extends State<TopBar> {
       onTap: () {
         // Scaffold.of(context).openDrawer();
 
-      //  widget.onDrawerTap();
+        //  widget.onDrawerTap();
       },
       child: Badge(
         badgeContent: Text(
@@ -128,36 +128,43 @@ class _TopBarState extends State<TopBar> {
           const SizedBox(
             width: 18.0,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: CommonWidgets().textWidget(
-                        eventName,
-                        StyleConstants.customTextStyle(
-                            fontSize: 16.0,
-                            color: getMaterialColor(AppColors.whiteColor),
-                            fontFamily: FontConstants.montserratBold)),
-                  ),
-                  Visibility(
-                      visible: false,
-                      child: CommonWidgets().image(
-                          image: AssetsConstants.dropDownArrowIcon,
-                          width: 1.30 * SizeConfig.imageSizeMultiplier,
-                          height: 1.04 * SizeConfig.imageSizeMultiplier))
-                ],
-              ),
-              CommonWidgets().textWidget(
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: CommonWidgets().textWidget(
+                          eventName,
+                          StyleConstants.customTextStyle(
+                              fontSize: 16.0,
+                              color: getMaterialColor(AppColors.whiteColor),
+                              fontFamily: FontConstants.montserratBold)),
+                    ),
+                    Visibility(
+                        visible: false,
+                        child: CommonWidgets().image(
+                            image: AssetsConstants.dropDownArrowIcon,
+                            width: 1.30 * SizeConfig.imageSizeMultiplier,
+                            height: 1.04 * SizeConfig.imageSizeMultiplier))
+                  ],
+                ),
+                Text(
                   eventAddress,
-                  StyleConstants.customTextStyle(
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+
+                  softWrap: false,
+                  style: StyleConstants.customTextStyle(
                       fontSize: 12.0,
                       color: getMaterialColor(AppColors.whiteColor),
-                      fontFamily: FontConstants.montserratRegular))
-            ],
+                      fontFamily: FontConstants.montserratRegular),
+                ),
+              ],
+            ),
           ),
         ],
       );

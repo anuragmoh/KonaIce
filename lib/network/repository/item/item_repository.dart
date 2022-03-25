@@ -1,5 +1,3 @@
-import 'package:kona_ice_pos/database/daos/item_dao.dart';
-import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/network/base_client.dart';
 
 class ItemRepository{

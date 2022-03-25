@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:kona_ice_pos/models/data_models/sync_event_menu.dart';
 import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/network/repository/sync/sync_repository.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
