@@ -343,10 +343,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       equipmentDropDown(),
-                      const Padding(
+/*                      const Padding(
                         padding: EdgeInsets.only(right: 16.0),
                         child: Icon(Icons.arrow_drop_down_sharp, size: 20.0),
-                      )
+                      )*/
                     ],
                   ),
                 )),
@@ -368,14 +368,18 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
 
   Widget equipmentDropDown() => DropdownButton(
         hint: const Text(StringConstants.selectEquipment),
+        isDense:true,
         underline: Container(),
-        iconSize: 0.0,
+        iconSize: 20.0,
         menuMaxHeight: 300.0,
         items: assetList.map((item) {
           return DropdownMenuItem(
             child: SizedBox(
                 //width: MediaQuery.of(context).size.width * 0.35,
-                child: Text(item.assetName!)),
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 250.0),
+                  child: Text(item.assetName!),
+                )),
             value: item.id.toString(),
           );
         }).toList(),
