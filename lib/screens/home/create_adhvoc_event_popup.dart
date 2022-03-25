@@ -555,7 +555,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       region: "IN",
       language: "en",
       decoration: InputDecoration(
-        hintText: 'Search Address',
+        hintText: 'search address',
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: const BorderSide(color: Colors.white),
