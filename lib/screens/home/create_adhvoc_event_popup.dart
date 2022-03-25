@@ -56,8 +56,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   var _selectedAsset;
 
 
-  late final lat;
-  late final long;
+  var lat;
+  var long;
   late String _currentCountry;
 
   _CreateAdhocEventState() {
