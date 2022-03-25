@@ -1,5 +1,4 @@
 
-import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
 
@@ -8,7 +7,7 @@ import '../../response_contractor.dart';
 import 'order_repository.dart';
 
 class OrderPresenter {
-  late final OrderResponseContractor _view;
+  late OrderResponseContractor _view;
   late OrderRepository _orderRepository;
 
   OrderPresenter(this._view) {
@@ -29,10 +28,10 @@ class OrderPresenter {
     _orderRepository
         .payOrder(payOrderRequestModel: payOrderRequestModel)
         .then((value){
-      debugPrint("Success ----- $value}");
+      print("Success ----- $value}");
       _view.showSuccess(value);
     }).onError((error, stackTrace){
-      debugPrint("Errror ----- ${error.toString()}");
+      print("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }

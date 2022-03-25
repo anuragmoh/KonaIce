@@ -5,7 +5,7 @@ import '../../response_contractor.dart';
 import 'clock_in_out_repository.dart';
 
 class ClockInOutPresenter {
-  late final ClockInOutResponseContractor _view;
+  late ClockInOutResponseContractor _view;
   late ClockInOutRepository _clockInOutRepository;
 
   ClockInOutPresenter(this._view) {

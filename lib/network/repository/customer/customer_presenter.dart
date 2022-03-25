@@ -4,7 +4,7 @@ import '../../response_contractor.dart';
 import 'customer_repository.dart';
 
 class CustomerPresenter {
-  late final ResponseContractor _view;
+  late ResponseContractor _view;
   late CustomerRepository _customerRepository;
 
   CustomerPresenter(this._view) {
