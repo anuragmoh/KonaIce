@@ -1377,6 +1377,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       "card[cvc]": cardCvc,
       "card[exp_month]": expiryMonth,
       "card[exp_year]": expiryYear};
+
     paymentPresenter.getToken(body);
   }
 
