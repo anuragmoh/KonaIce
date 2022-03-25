@@ -336,14 +336,17 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                   ),
                 ),
                 // Button
-                buttonWidget(
-                    isPaymentDone == true
-                        ? StringConstants.newOrder
-                        : StringConstants.proceed,
-                    StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                Visibility(
+                  visible: paymentModeType==PaymentModeConstants.creditCard ? false : true,
+                  child: buttonWidget(
+                      isPaymentDone == true
+                          ? StringConstants.newOrder
+                          : StringConstants.proceed,
+                      StyleConstants.customTextStyle(
+                          fontSize: 12.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratBold)),
+                ),
               ]),
         ),
       );
