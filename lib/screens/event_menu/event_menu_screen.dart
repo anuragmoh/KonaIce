@@ -69,6 +69,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   bool isApiProcess = false;
+
   List<ItemCategories> itemCategoriesList = [];
   List<FoodExtraItems> foodExtraItemList = [];
 
