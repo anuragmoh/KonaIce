@@ -156,6 +156,7 @@ class _TopBarState extends State<TopBar> {
                   eventAddress,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
+
                   softWrap: false,
                   style: StyleConstants.customTextStyle(
                       fontSize: 12.0,
