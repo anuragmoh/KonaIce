@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -40,7 +39,7 @@ class BaseClient {
   Future<dynamic> post(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
-    debugPrint("paylaod-----$payload");
+    debugPrint("payLoad-----$payload");
     debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {

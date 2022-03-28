@@ -1,4 +1,3 @@
-import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 
 class Events {
