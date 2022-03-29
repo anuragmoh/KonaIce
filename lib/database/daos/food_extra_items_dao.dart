@@ -38,6 +38,7 @@ class FoodExtraItemsDAO {
     } catch (error) {
       debugPrint(error.toString());
     }
+    return null;
   }
 
   Future clearFoodExtraItemsByEventID({required String eventID}) async {
