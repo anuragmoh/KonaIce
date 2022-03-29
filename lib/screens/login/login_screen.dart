@@ -392,10 +392,11 @@ class _LoginScreenState extends State<LoginScreen>
     });
   }
 
-  onTapFromForgetPasswordView() {
+  onTapFromForgetPasswordView(String message) {
     setState(() {
       isLoginView = true;
     });
+    CommonWidgets().showSuccessSnackBar(message: message, context: context);
   }
 
   //API Calls
