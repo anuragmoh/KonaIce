@@ -11,7 +11,7 @@ class EventPresenter{
   }
 
   void deleteOrder({required String orderId}){
-    _eventRepository.deleteOrder(orderId: orderId).then((value) => _view.showSuccess(value)).onError((error, stackTrace) => _view.showError(FetchException(error.toString()).fetchErrorModel()));
+    _eventRepository.deleteOrder(orderId: orderId).then((value) => _view.showSuccess(value)).onError((error, stackTrace) => _view.showError(FetchException(error).fetchErrorModel()));
   }
 
 }

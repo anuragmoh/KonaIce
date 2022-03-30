@@ -18,7 +18,7 @@ class ClockInOutPresenter {
         .then((value){
       _view.showSuccessForUpdateClockIN(value);
     }).onError((error, stackTrace){
-      _view.showErrorForUpdateClockIN(FetchException(error.toString()).fetchErrorModel());
+      _view.showErrorForUpdateClockIN(FetchException(error).fetchErrorModel());
     });
   }
 
@@ -28,7 +28,7 @@ class ClockInOutPresenter {
         .then((value){
       _view.showSuccess(value);
     }).onError((error, stackTrace){
-      _view.showError(FetchException(error.toString()).fetchErrorModel());
+      _view.showError(FetchException(error).fetchErrorModel());
     });
   }
 }

@@ -396,7 +396,11 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       isLoginView = true;
     });
-    CommonWidgets().showSuccessSnackBar(message: message, context: context);
+    if(message != ""){
+      CommonWidgets().showSuccessSnackBar(message: message, context: context);
+    }
+
+
   }
 
   //API Calls

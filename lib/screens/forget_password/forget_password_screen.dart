@@ -200,7 +200,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
  }
 
  onTapSignIn() {
-   widget.navigateBackToLoginView();
+   widget.navigateBackToLoginView("");
  }
 
   @override

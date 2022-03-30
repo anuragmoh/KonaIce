@@ -30,7 +30,7 @@ class UserPresenter {
         .then((value){
       _view.showSuccess(value);
     }).onError((error, stackTrace){
-      _view.showError(FetchException(error.toString()).fetchErrorModel());
+      _view.showError(FetchException(error).fetchErrorModel());
     });
   }
 
