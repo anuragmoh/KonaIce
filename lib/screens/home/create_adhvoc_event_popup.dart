@@ -5,7 +5,6 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/app_exception.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_event_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -377,7 +376,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             child: SizedBox(
                 //width: MediaQuery.of(context).size.width * 0.35,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 250.0),
+                  padding: const EdgeInsets.only(right: 230.0),
                   child: Text(item.assetName!),
                 )),
             value: item.id.toString(),

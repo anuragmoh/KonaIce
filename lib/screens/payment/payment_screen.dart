@@ -21,7 +21,6 @@ import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_mo
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
-import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
@@ -71,8 +70,9 @@ class _PaymentScreenState extends State<PaymentScreen>
   String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
   String stripeTokenId="",stripePaymentMethodId="";
   String demoCardNumber = "";
-  String _fullDocumentFirstImageBase64 = "";
-  String _fullDocumentSecondImageBase64 = "";
+
+  // String _fullDocumentFirstImageBase64 = "";
+  // String _fullDocumentSecondImageBase64 = "";
 
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -1307,7 +1307,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     if (!mounted) return;
 
-    if (results.length == 0) return;
+    if (results.isEmpty) return;
     for (var result in results) {
       if (result is BlinkCardRecognizerResult) {
         debugPrint("Card Number : ${result.cardNumber}");
@@ -1334,10 +1334,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
         setState(() {
           _resultString = _resultString;
-          _fullDocumentFirstImageBase64 =
-              result.firstSideFullDocumentImage ?? "";
-          _fullDocumentSecondImageBase64 =
-              result.secondSideFullDocumentImage ?? "";
+          // _fullDocumentFirstImageBase64 =
+          //     result.firstSideFullDocumentImage ?? "";
+          // _fullDocumentSecondImageBase64 =
+          //     result.secondSideFullDocumentImage ?? "";
         });
 
         return;
