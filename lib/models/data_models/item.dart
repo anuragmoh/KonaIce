@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 
 import 'food_extra_items.dart';
 
