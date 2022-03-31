@@ -257,7 +257,7 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                                           color: getMaterialColor(
                                               AppColors.primaryColor2))),
                                   width: 80.0,
-                                  height: 42.0,
+                                  height: 45.0,
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -972,7 +972,14 @@ class _PaymentScreenState extends State<PaymentScreen> implements
                         padding: const EdgeInsets.only(left: 8.0),
                         child: subOrderItemView(orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].name ?? ''),
                       ),
-                      const Text(','),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: CommonWidgets().textWidget(
+                            "X "+orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].quantity.toString(), StyleConstants.customTextStyle(
+                            fontSize: 10.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium)),
+                      ),
                       const SizedBox(
                         width: 3.0,
                       )

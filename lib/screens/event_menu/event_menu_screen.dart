@@ -640,16 +640,23 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 color: getMaterialColor(AppColors.textColor4),
                 fontFamily: FontConstants.montserratMedium)),
           ),
-          Visibility(
-            visible: (menuObjet.selectedExtras).isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
-              child: CommonWidgets().textWidget(
-                  menuObjet.getExtraItemsName(), StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium)),
-            ),
+          Row(
+            children: [
+              Visibility(
+                visible: (menuObjet.selectedExtras).isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
+                  child: CommonWidgets().textWidget(
+                      menuObjet.getExtraItemsName(), StyleConstants.customTextStyle(
+                      fontSize: 9.0,
+                      color: getMaterialColor(AppColors.textColor2),
+                      fontFamily: FontConstants.montserratMedium)),
+                ),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+            ],
           ),
           Visibility(
             visible: menuObjet.isItemHasExtras(),

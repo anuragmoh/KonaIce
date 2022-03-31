@@ -1,3 +1,5 @@
+import 'package:flutter/widgets.dart';
+
 import 'food_extra_items.dart';
 
 class Item {
@@ -116,11 +118,12 @@ class Item {
     String extraNames = '';
     if (selectedExtras.isNotEmpty) {
       List<String> extrasNameList = List.generate(
-          selectedExtras.length, (index) => selectedExtras[index].itemName);
-       extraNames = extrasNameList.join('\n');
+          selectedExtras.length, (index) => selectedExtras[index].itemName + "\t\t\t"+"x " + selectedExtras[index].selectedItemQuantity.toString());
+      extraNames = extrasNameList.join('\n');
     }
-     return extraNames;
+    return extraNames;
   }
+
 
   removeAllExtraItems() {
     for (var element in foodExtraItemList) {
