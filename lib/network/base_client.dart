@@ -116,7 +116,10 @@ class BaseClient {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
     debugPrint("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
+      // GeneralErrorResponse response = errorList.general![0];
+      // response.message = response.message?.replaceAll(".", "");
       String value = errorList.general![0].toRawJson().toString();
+      //String value = response.toRawJson().toString();
       throw GeneralApiResponseErrorException(value);
     } else {
       throw GeneralApiResponseErrorException(getDefaultErrorResponse());

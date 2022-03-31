@@ -14,7 +14,7 @@ class SyncPresenter {
     _syncRepository.syncData(lastSyncTime).then((value) {
       _view.showSyncSuccess(value);
     }).onError((error, stackTrace) {
-      _view.showSyncError(FetchException(error.toString()).fetchErrorModel());
+      _view.showSyncError(FetchException(error).fetchErrorModel());
     });
   }
 }

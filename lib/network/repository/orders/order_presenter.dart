@@ -21,7 +21,7 @@ class OrderPresenter {
         .then((value){
       _view.showSuccessForPlaceOrder(value);
     }).onError((error, stackTrace){
-      _view.showErrorForPlaceOrder(FetchException(error.toString()).fetchErrorModel());
+      _view.showErrorForPlaceOrder(FetchException(error).fetchErrorModel());
     });
   }
 
