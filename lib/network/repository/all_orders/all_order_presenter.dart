@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/network/repository/all_orders/all_order_repository.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -24,7 +23,7 @@ class AllOrderPresenter {
             lastSync)
         .then((value) => _view.showSuccess(value))
         .onError((error, stackTrace){
-          _view.showError(FetchException(error.toString()).fetchErrorModel());
+          _view.showError(FetchException(error).fetchErrorModel());
     });
   }
 }

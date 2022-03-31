@@ -274,8 +274,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                                       border: Border.all(
                                           color: getMaterialColor(
                                               AppColors.primaryColor2))),
-                                  width: 70.0,
-                                  height: 42.0,
+                                  width: 80.0,
+                                  height: 45.0,
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
@@ -352,14 +352,17 @@ class _PaymentScreenState extends State<PaymentScreen>
                   ),
                 ),
                 // Button
-                buttonWidget(
-                    isPaymentDone == true
-                        ? StringConstants.newOrder
-                        : StringConstants.proceed,
-                    StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                Visibility(
+                  visible: paymentModeType==PaymentModeConstants.creditCard ? false : true,
+                  child: buttonWidget(
+                      isPaymentDone == true
+                          ? StringConstants.newOrder
+                          : StringConstants.proceed,
+                      StyleConstants.customTextStyle(
+                          fontSize: 12.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratBold)),
+                ),
               ]),
         ),
       );
@@ -998,7 +1001,14 @@ class _PaymentScreenState extends State<PaymentScreen>
                                 .orderFoodExtraItemDetailDto![innerIndex]
                                 .name ?? ''),
                       ),
-                      const Text(','),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: CommonWidgets().textWidget(
+                            "X "+orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].quantity.toString(), StyleConstants.customTextStyle(
+                            fontSize: 10.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium)),
+                      ),
                       const SizedBox(
                         width: 3.0,
                       )

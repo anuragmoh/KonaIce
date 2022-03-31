@@ -34,6 +34,8 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
+import '../../common/extensions/string_extension.dart';
+
 class HomeScreen extends StatefulWidget {
   var onCallback;
   HomeScreen({Key? key, this.onCallback}) : super(key: key);
@@ -648,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen>
     storeDataIntoDB();
   }
 
-  void storeDataIntoDB() {
+  void storeDataIntoDB() async {
     setState(() {
       pOsSyncEventDataDtoList
           .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
@@ -669,8 +671,47 @@ class _HomeScreenState extends State<HomeScreen>
               .pOsSyncDeletedEventItemExtrasDataDtoList);
     });
 
+    await deleteEventSync();
     insertEventSync();
   }
+
+  Future<void> deleteEventSync() async {
+    if (pOsSyncDeletedEventDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedEventDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedEventDataDtoList[i].eventId ?? StringExtension.empty();
+        await EventsDAO().clearEventsByEventID(eventID: eventID);
+        await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
+        await ItemDAO().clearItemsByEventID(eventID: eventID);
+        await FoodExtraItemsDAO().clearFoodExtraItemsByEventID(eventID: eventID);
+      }
+    }
+
+    if (pOsSyncDeletedItemCategoryDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedItemCategoryDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedItemCategoryDataDtoList[i].eventId ?? StringExtension.empty();
+        await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
+      }
+    }
+
+    if (pOsSyncDeletedEventItemDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedEventItemDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedEventItemDataDtoList[i].eventId ?? StringExtension.empty();
+        String itemID = pOsSyncDeletedEventItemDataDtoList[i].itemId ?? StringExtension.empty();
+        await ItemDAO().clearItemsByEventID(eventID: eventID);
+        await  FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(eventID: eventID, itemID: itemID);
+      }
+    }
+
+    if (pOsSyncDeletedEventItemExtrasDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedEventItemExtrasDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedEventItemExtrasDataDtoList[i].eventId ?? StringExtension.empty();
+        String itemID = pOsSyncDeletedEventItemExtrasDataDtoList[i].itemId ?? StringExtension.empty();
+        await FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(eventID: eventID, itemID: itemID);
+      }
+    }
+
+  }
+
 
   Future<void> insertEventSync() async {
     if (pOsSyncEventDataDtoList.isNotEmpty) {
