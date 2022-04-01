@@ -11,6 +11,7 @@ import 'package:kona_ice_pos/screens/order_complete/order_complete.dart';
 import 'package:kona_ice_pos/screens/payment_option/P2PCardDetailsModel.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
@@ -35,8 +36,13 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
   String stripeTokenId="",stripePaymentMethodId="";
   String demoCardNumber = "";
 
+  bool isApiProcess = false;
+
   @override
   Widget build(BuildContext context) {
+    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+  }
+  Widget mainUi(BuildContext context){
     return Scaffold(body: Container(color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
       child: Column(
         children: [
@@ -204,6 +210,9 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
     } else if (response.action == StaffActionConst.editOrderDetails) {
       showOrderDetailsScreen();
     } else if (response.action == StaffActionConst.paymentCompleted) {
+      setState(() {
+        isApiProcess = false;
+      });
       showPaymentSuccessScreen();
     } else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
@@ -368,5 +377,8 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
     model.cardExpiryMonth = cardExpiryMonth;
     P2PConnectionManager.shared.updateDataWithObject(action: StaffActionConst.customerCardScan, dataObject: model);
     Navigator.pop(context);
+    setState(() {
+      isApiProcess = true;
+    });
   }
 }
