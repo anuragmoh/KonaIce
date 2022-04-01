@@ -23,6 +23,7 @@ import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
+import 'package:kona_ice_pos/screens/payment_option/P2PCardDetailsModel.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
@@ -1277,11 +1278,14 @@ class _PaymentScreenState extends State<PaymentScreen>
         paymentModeType = int.parse(modeType);
       });
       if(paymentModeType == PaymentModeConstants.creditCard){
-        onTapPaymentMode(paymentModeType);
+        //onTapPaymentMode(paymentModeType);
       }
     }
     else if (response.action == CustomerActionConst.editOrderDetails) {
       showEventMenuScreen();
+    }else if(response.action == StaffActionConst.customerCardScan){
+      P2PCardDetailsModel cardDetailsModel = p2PCardDetailsModelFromJson(response.data);
+      getTokenCall(cardDetailsModel.cardNumber!, cardDetailsModel.cardCvc!, cardDetailsModel.cardExpiryMonth!, cardDetailsModel.cardExpiryYear!);
     }
   }
 

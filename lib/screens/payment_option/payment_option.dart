@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
@@ -7,6 +8,7 @@ import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/order_complete/order_complete.dart';
+import 'package:kona_ice_pos/screens/payment_option/P2PCardDetailsModel.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
@@ -27,6 +29,11 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
+
+  String _resultString = "";
+  String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
+  String stripeTokenId="",stripePaymentMethodId="";
+  String demoCardNumber = "";
 
   @override
   Widget build(BuildContext context) {
@@ -153,6 +160,9 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
       paymentModeType = index;
       updateSelectedPaymentMode();
     });
+    if (paymentModeType == PaymentModeConstants.creditCard) {
+      scan();
+    }
   }
 
   onTapBackButton() {
@@ -193,5 +203,165 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
     } else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
     }
+  }
+
+  // Microblink start from here
+  Future<void> scan() async {
+    String license;
+    if (Theme
+        .of(context)
+        .platform == TargetPlatform.iOS) {
+      license = BlinkConstants.blinkKey;
+    } else if (Theme
+        .of(context)
+        .platform == TargetPlatform.android) {
+      license = BlinkConstants.blinkKey;
+    } else {
+      license = "";
+    }
+
+    var cardRecognizer = BlinkCardRecognizer();
+    cardRecognizer.returnFullDocumentImage = true;
+
+    BlinkCardOverlaySettings settings = BlinkCardOverlaySettings();
+
+    var results = await MicroblinkScanner.scanWithCamera(
+        RecognizerCollection([cardRecognizer]), settings, license);
+
+    if (!mounted) return;
+
+    if (results.isEmpty) return;
+    for (var result in results) {
+      if (result is BlinkCardRecognizerResult) {
+        debugPrint("Card Number : ${result.cardNumber}");
+        _resultString = getCardResultString(result);
+
+        demoCardNumber = result.cardNumber.toString();
+
+        // cardNumber=result.cardNumber.toString();
+        // cardCvc=result.cvv.toString();
+        // cardExpiryMonth=result.expiryDate!.month.toString();
+        // cardExpiryYear=result.expiryDate!.year.toString();
+
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => _buildPopupDialog(context),
+        );
+
+
+
+        // CommonWidgets().showSuccessSnackBar(
+        //     message: 'Payment Done Successfully Card Number is ${result
+        //         .cardNumber}', context: context);
+        // debugPrint(_resultString.toString());
+
+        setState(() {
+          _resultString = _resultString;
+          // _fullDocumentFirstImageBase64 =
+          //     result.firstSideFullDocumentImage ?? "";
+          // _fullDocumentSecondImageBase64 =
+          //     result.secondSideFullDocumentImage ?? "";
+        });
+
+        return;
+      }
+    }
+  }
+
+  String getCardResultString(BlinkCardRecognizerResult result) {
+    return buildResult(result.cardNumber, 'Card Number') +
+        buildResult(result.cardNumberPrefix, 'Card Number Prefix') +
+        buildResult(result.iban, 'IBAN') +
+        buildResult(result.cvv, 'CVV') +
+        buildResult(result.owner, 'Owner') +
+        buildResult(result.cardNumberValid.toString(), 'Card Number Valid') +
+        buildDateResult(result.expiryDate, 'Expiry date');
+  }
+
+  String buildResult(String? result, String propertyName) {
+    if (result == null || result.isEmpty) {
+      return "";
+    }
+
+    return propertyName + ": " + result + "\n";
+  }
+
+  String buildDateResult(Date? result, String propertyName) {
+    if (result == null || result.year == 0) {
+      return "";
+    }
+
+    return buildResult(
+        "${result.day}.${result.month}.${result.year}", propertyName);
+  }
+
+  String buildIntResult(int? result, String propertyName) {
+    if (result == null || result < 0) {
+      return "";
+    }
+
+    return buildResult(result.toString(), propertyName);
+  }
+
+//Card Details Confirmation Popup
+  Widget _buildPopupDialog(BuildContext context) {
+    return AlertDialog(
+      title: Container(
+        alignment: Alignment.center,
+        child: CommonWidgets().textWidget(
+          StringConstants.confirmCardDetails,
+          StyleConstants.customTextStyle(
+              fontSize: 22.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratSemiBold),
+        ),
+      ),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
+              child: TextField(
+                // controller: textEditingController,
+                decoration: InputDecoration(
+                    filled: true,
+                    border: InputBorder.none,
+                    labelText: demoCardNumber,
+                    hintStyle: StyleConstants.customTextStyle(
+                        fontSize: 15.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratRegular)),
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 23.0,
+                    vertical: 3.90 * SizeConfig.heightSizeMultiplier),
+                child: CommonWidgets().buttonWidget(
+                  StringConstants.submit,
+                  onTapConfirmPayment,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  onTapConfirmPayment() {
+    //TokenMethodApi call
+    // getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
+    P2PCardDetailsModel model = P2PCardDetailsModel();
+    model.cardNumber = cardNumber;
+    model.cardCvc = cardCvc;
+    model.cardExpiryYear =  cardExpiryYear;
+    model.cardExpiryMonth = cardExpiryMonth;
+    P2PConnectionManager.shared.updateDataWithObject(action: StaffActionConst.customerCardScan, dataObject: model);
+    Navigator.pop(context);
   }
 }
