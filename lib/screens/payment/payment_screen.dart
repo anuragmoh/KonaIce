@@ -274,8 +274,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                                       border: Border.all(
                                           color: getMaterialColor(
                                               AppColors.primaryColor2))),
-                                  width: 80.0,
-                                  height: 45.0,
+                                  width: 85.0,
+                                  height: 47.0,
                                   child: Center(
                                     child: Padding(
                                       padding: const EdgeInsets.only(
