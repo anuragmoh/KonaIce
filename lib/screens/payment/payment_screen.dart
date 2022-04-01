@@ -1097,6 +1097,11 @@ class _PaymentScreenState extends State<PaymentScreen>
     });
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
+      Future.delayed(const Duration(seconds: 2),(){
+        setState(() {
+          paymentModeType =-1;
+        });
+      });
       scan();
     }
   }

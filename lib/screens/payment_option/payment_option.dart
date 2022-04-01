@@ -161,6 +161,11 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
       updateSelectedPaymentMode();
     });
     if (paymentModeType == PaymentModeConstants.creditCard) {
+      Future.delayed(const Duration(seconds: 2),(){
+        setState(() {
+          paymentModeType =-1;
+        });
+      });
       scan();
     }
   }
