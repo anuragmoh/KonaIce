@@ -1238,7 +1238,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       setState(() {
         updatePaymentSuccess();
         isPaymentDone = true;
-
+        paymentModeType = -1;
       });
       clearOderData();
     }
@@ -1384,6 +1384,9 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
       String expiryYear) {
+    setState(() {
+      isApiProcess = true;
+    });
     final body = {
       "card[number]": cardNumber,
       "card[cvc]": cardCvc,
@@ -1395,6 +1398,9 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   void getMethodPayment(String cardNumber, String cardCvc, String expiryMonth,
       String expiryYear) {
+    setState(() {
+      isApiProcess = true;
+    });
     final bodyPaymentMethod = {
       "type": "card",
       "card[number]": cardNumber,
