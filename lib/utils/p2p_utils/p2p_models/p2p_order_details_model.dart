@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
+import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 
 P2POrderDetailsModel p2POrderDetailsModelFromJson(String str) => P2POrderDetailsModel.fromJson(json.decode(str));
 

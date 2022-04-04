@@ -1,9 +1,9 @@
 
 import 'package:kona_ice_pos/constants/url_constants.dart';
-import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
-import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
-import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
-import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_response_model.dart';
+import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
+import 'package:kona_ice_pos/models/network_model/order_model/order_response_model.dart';
+import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
+import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_response_model.dart';
 
 import '../../base_client.dart';
 
