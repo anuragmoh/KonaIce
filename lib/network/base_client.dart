@@ -58,6 +58,8 @@ class BaseClient {
   Future<dynamic> put(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
+    debugPrint("payLoad-----$payload");
+    debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {
       var response = await http.put(uri, headers: header, body: payload)
@@ -98,7 +100,7 @@ class BaseClient {
   }
 
   dynamic _processResponse(http.Response response) {
-    debugPrint("response code ${response.statusCode}");
+    debugPrint("response code ${response.body}");
     if (response.isOkResponse()) {
       debugPrint("Ok");
       return response.body.toString();
