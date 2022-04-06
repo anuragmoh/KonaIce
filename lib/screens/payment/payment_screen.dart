@@ -1096,8 +1096,7 @@ class _PaymentScreenState extends State<PaymentScreen>
           paymentModeType = -1;
         });
       });
-      //scan();
-      onTapConfirmPayment();
+      scan();
     }
   }
 
@@ -1460,6 +1459,6 @@ class _PaymentScreenState extends State<PaymentScreen>
   onTapConfirmPayment() {
     //TokenMethodApi call
     getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
-    //Navigator.pop(context);
+    Navigator.pop(context);
   }
 }
