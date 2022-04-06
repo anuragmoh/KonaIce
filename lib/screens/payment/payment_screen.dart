@@ -13,6 +13,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
+import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_card_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
@@ -73,7 +74,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       cardCvc = "123",
       cardExpiryYear = "22",
       cardExpiryMonth = "12";
-  String stripeTokenId = "", stripePaymentMethodId = "";
+  String stripeTokenId = "", stripePaymentMethodId = "", transactionId = "";
   String demoCardNumber = "";
 
   // String _fullDocumentFirstImageBase64 = "";
@@ -415,7 +416,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               )),
           SingleChildScrollView(
               child:
-                  isPaymentDone ? paymentSuccess('35891456') : const Text('')),
+                  isPaymentDone ? paymentSuccess(transactionId) : const Text('')),
         ]),
       );
 
@@ -486,13 +487,13 @@ class _PaymentScreenState extends State<PaymentScreen>
           const SizedBox(height: 8.0),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             CommonWidgets().textWidget(
-                '${StringConstants.transactionId}:',
+                transactionId.isNotEmpty?'${StringConstants.transactionId} : ':"",
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratSemiBold)),
             CommonWidgets().textWidget(
-                transactionId,
+                transactionId ?? "",
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: getMaterialColor(AppColors.textColor1),
@@ -1095,7 +1096,8 @@ class _PaymentScreenState extends State<PaymentScreen>
           paymentModeType = -1;
         });
       });
-      scan();
+      //scan();
+      onTapConfirmPayment();
     }
   }
 
@@ -1214,18 +1216,23 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       isApiProcess = false;
     });
-
     if (response is StripTokenResponseModel) {
       //getting StripeTokenId
       stripeTokenId = response.id.toString();
-
       //PaymentMethodApi call
       getMethodPayment(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
     } else if (response is StripePaymentMethodRequestModel) {
       //getting StripePaymentMethodId
       stripePaymentMethodId = response.id.toString();
-
       callPayOrderCardMethodAPI();
+    } else if (response is PayOrderResponseCardModel) {
+      setState(() {
+        transactionId = response.orderItemsInvoiceDto.transactionId;
+        updatePaymentSuccess();
+        isPaymentDone = true;
+        paymentModeType = -1;
+      });
+      clearOderData();
     } else {
       setState(() {
         updatePaymentSuccess();
@@ -1453,7 +1460,6 @@ class _PaymentScreenState extends State<PaymentScreen>
   onTapConfirmPayment() {
     //TokenMethodApi call
     getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
-
-    Navigator.pop(context);
+    //Navigator.pop(context);
   }
 }
