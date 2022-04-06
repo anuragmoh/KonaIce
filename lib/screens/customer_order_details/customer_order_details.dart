@@ -6,7 +6,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
+import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/payment_option/payment_option.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';

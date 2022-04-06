@@ -22,7 +22,7 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/clock_in_out/clock_in_out_presenter.dart';
 import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
+import 'package:kona_ice_pos/models/network_model/clock_in_clock_out/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/create_adhvoc_event_popup.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';

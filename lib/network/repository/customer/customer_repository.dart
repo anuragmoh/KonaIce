@@ -1,5 +1,5 @@
 import 'package:kona_ice_pos/constants/url_constants.dart';
-import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
+import 'package:kona_ice_pos/models/network_model/search_customer/customer_model.dart';
 
 import '../../base_client.dart';
 

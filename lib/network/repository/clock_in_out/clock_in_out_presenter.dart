@@ -1,4 +1,4 @@
-import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
+import 'package:kona_ice_pos/models/network_model/clock_in_clock_out/clock_in_out_model.dart';
 
 import '../../exception.dart';
 import '../../response_contractor.dart';

@@ -1,6 +1,6 @@
 import 'package:kona_ice_pos/constants/url_constants.dart';
-import 'package:kona_ice_pos/screens/home/assest_model.dart';
-import 'package:kona_ice_pos/screens/home/create_event_model.dart';
+import 'package:kona_ice_pos/models/network_model/home/assest_model.dart';
+import 'package:kona_ice_pos/models/network_model/home/create_event_model.dart';
 
 import '../../base_client.dart';
 
