@@ -33,7 +33,7 @@ class _CustomAddTipDialogState extends State<CustomAddTipDialog> {
       scrollDirection: Axis.vertical,
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.3,
-          height: MediaQuery.of(context).size.height*0.2,
+          height: MediaQuery.of(context).size.height*0.23,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
