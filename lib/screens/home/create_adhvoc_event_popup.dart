@@ -19,6 +19,8 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
@@ -34,6 +36,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   TextEditingController cityController = TextEditingController();
   TextEditingController stateController = TextEditingController();
   TextEditingController zipCodeController = TextEditingController();
+
+  late Position _currentPosition;
+
   String selectedState = "",
       selectedCity = "",
       selectedZipcode = "",
@@ -82,11 +87,11 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   @override
   void initState() {
     super.initState();
-
     setState(() {
       eventNameController.text = StringConstants().getDefaultEventName();
     });
     getAssets();
+    getLocation();
   }
 
   @override
@@ -465,6 +470,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     setState(() {
       isApiProcess = false;
     });
+    onTapCloseButton();
    CommonWidgets().showErrorSnackBar(
        errorMessage: exception.message!,
        context: context);
@@ -675,4 +681,68 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       }
     }
   }
+
+
+  getLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.requestPermission();
+      debugPrint("Location services are disabled.");
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        debugPrint("Location permissions are denied");
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      debugPrint(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+    _getCurrentLocation();
+  }
+
+  _getCurrentLocation() {
+    debugPrint("Get current location call");
+    Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.low,
+        forceAndroidLocationManager: true)
+        .then((Position position) {
+          debugPrint("Position $position");
+      setState(() {
+        _currentPosition = position;
+        _getAddressFromLatLng();
+      });
+    }).catchError((e) {
+      debugPrint("Catch error $e");
+    });
+  }
+
+  _getAddressFromLatLng() async {
+    debugPrint("Get Address call");
+    try {
+      List<Placemark> placeMarks = await placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+      Placemark place = placeMarks[0];
+      // setState(() {
+      //   _currentCountry = "${place.country}";
+      // });
+      debugPrint(place.country);
+      debugPrint(place.locality);
+      debugPrint(place.subLocality);
+      debugPrint(place.administrativeArea);
+      debugPrint(place.postalCode);
+      debugPrint(place.name);
+      debugPrint(place.street);
+    } catch (e) {
+      debugPrint("$e");
+    }
+  }
+
+
+
 }
