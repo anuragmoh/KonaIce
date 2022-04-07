@@ -15,21 +15,23 @@ import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'custom_add_tip_dialog.dart';
 
 // ignore: must_be_immutable
 class CustomerOrderDetails extends StatefulWidget {
   P2POrderDetailsModel orderDetailsModel;
-   CustomerOrderDetails({required this.orderDetailsModel,Key? key}) : super(key: key);
+  CustomerOrderDetails({required this.orderDetailsModel, Key? key})
+      : super(key: key);
 
   @override
   _CustomerOrderDetailsState createState() => _CustomerOrderDetailsState();
 }
 
-class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements P2PContractor {
-
+class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
+    implements P2PContractor {
   P2POrderDetailsModel? orderDetailsModel;
   String currentDate =
-  Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDayhhmmaa);
+      Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDayhhmmaa);
 
   _CustomerOrderDetailsState() {
     P2PConnectionManager.shared.getP2PContractor(this);
@@ -47,19 +49,33 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       body: Container(
         color: getMaterialColor(AppColors.textColor3),
         child: Visibility(
-         // visible: orderDetailsModel != null,
+          // visible: orderDetailsModel != null,
           visible: true,
           child: Column(
             children: [
               CommonWidgets().topEmptyBar(),
               Expanded(child: bodyWidget()),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: CommonWidgets().buttonWidget(StringConstants.confirm, () {
-                  onTapConfirmButton();
-                }),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: CommonWidgets().buttonWidgetUnFilled(
+                      StringConstants.addTip,
+                      onAddTipButtonTap,
+                    ),
+                  ),
+                  const SizedBox(width: 40),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 230.0, bottom: 20.0),
+                    child: CommonWidgets().buttonWidget(StringConstants.confirm,
+                        () {
+                      onTapConfirmButton();
+                    }),
+                  ),
+                ],
               ),
-       //     CommonWidgets().bottomEmptyBar(),
+              //     CommonWidgets().bottomEmptyBar(),
             ],
           ),
         ),
@@ -68,101 +84,107 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
   }
 
   Widget bodyWidget() => Container(
-    color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
-    child: bodyWidgetComponent(),
-  );
+        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
+        child: bodyWidgetComponent(),
+      );
 
-  Widget splashIcon(){
-    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 100.0, height: 60.0);
+  Widget splashIcon() {
+    return CommonWidgets()
+        .image(image: AssetsConstants.konaIcon, width: 100.0, height: 60.0);
   }
 
   Widget bodyWidgetComponent() => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 237.0, vertical: 20.0),
-    child: Container(
-      decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          color: getMaterialColor(AppColors.whiteColor)),
-      child: Column(
-        children: [
-          const SizedBox(height: 20.0),
-          splashIcon(),
-          componentHead(currentDate),
-          componentCustomerDetails(orderDetailsModel!.orderRequestModel!.getCustomerName(),  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
-              orderDetailsModel!.orderRequestModel?.email ??
-                  StringExtension.empty()),
-          const Padding(
-            padding:
-            EdgeInsets.symmetric(vertical: 15.0, horizontal: 19.0),
-            child: Divider(
-              height: 1.0,
-              thickness: 1.0,
-            ),
+        padding: const EdgeInsets.symmetric(horizontal: 237.0, vertical: 20.0),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              color: getMaterialColor(AppColors.whiteColor)),
+          child: Column(
+            children: [
+              const SizedBox(height: 20.0),
+              splashIcon(),
+              componentHead(currentDate),
+              componentCustomerDetails(
+                  orderDetailsModel!.orderRequestModel!.getCustomerName(),
+                  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
+                  orderDetailsModel!.orderRequestModel?.email ??
+                      StringExtension.empty()),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 19.0),
+                child: Divider(
+                  height: 1.0,
+                  thickness: 1.0,
+                ),
+              ),
+              Expanded(
+                  child: SingleChildScrollView(child: componentOrderItem())),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Column(
+                  children: [
+                    DottedLine(
+                        height: 2.0,
+                        color: getMaterialColor(AppColors.textColor1)),
+                    componentBill(),
+                  ],
+                ),
+              )
+            ],
           ),
-          Expanded(child: SingleChildScrollView(child: componentOrderItem())),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                DottedLine(
-                    height: 2.0, color: getMaterialColor(AppColors.textColor1)),
-                componentBill(),
-              ],
-            ),
-          )
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 
   Widget componentHead(String orderDate) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        CommonWidgets().textView(
-            StringConstants.orderDetails,
-            StyleConstants.customTextStyle(
-                fontSize: 22.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratBold)),
-        CommonWidgets().textView(
-            orderDate,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratMedium)),
-      ],
-    ),
-  );
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CommonWidgets().textView(
+                StringConstants.orderDetails,
+                StyleConstants.customTextStyle(
+                    fontSize: 22.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratBold)),
+            CommonWidgets().textView(
+                orderDate,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratMedium)),
+          ],
+        ),
+      );
 
   Widget componentOrderItem() => Padding(
-    padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CommonWidgets().textView(
-            StringConstants.orderItem,
-            StyleConstants.customTextStyle(
-                fontSize: 16.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratBold)),
-        ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: orderDetailsModel!.orderRequestModel?.orderItemsList?.length ?? 0,
-            itemBuilder: (context, index) {
-              return orderItemView(orderItem:  orderDetailsModel!.orderRequestModel!.orderItemsList![index]);
-            }),
-        // DottedLine(
-        //     height: 2.0, color: getMaterialColor(AppColors.textColor1)),
-        // componentBill(),
-      ],
-    ),
-  );
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonWidgets().textView(
+                StringConstants.orderItem,
+                StyleConstants.customTextStyle(
+                    fontSize: 16.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratBold)),
+            ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: orderDetailsModel!
+                        .orderRequestModel?.orderItemsList?.length ??
+                    0,
+                itemBuilder: (context, index) {
+                  return orderItemView(
+                      orderItem: orderDetailsModel!
+                          .orderRequestModel!.orderItemsList![index]);
+                }),
+            // DottedLine(
+            //     height: 2.0, color: getMaterialColor(AppColors.textColor1)),
+            // componentBill(),
+          ],
+        ),
+      );
 
-
-  Widget orderItemView({required OrderItemsList orderItem}) =>
-      Column(
+  Widget orderItemView({required OrderItemsList orderItem}) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -212,21 +234,35 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
             child: ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty ? (orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto?.length ?? 0) : 0,
+                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
+                    ? (orderItem.foodExtraItemMappingList![0]
+                            .orderFoodExtraItemDetailDto?.length ??
+                        0)
+                    : 0,
                 itemBuilder: (context, innerIndex) {
                   return Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
-                        child: subOrderItemView(orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].name ?? ''),
+                        child: subOrderItemView(orderItem
+                                .foodExtraItemMappingList![0]
+                                .orderFoodExtraItemDetailDto![innerIndex]
+                                .name ??
+                            ''),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 5.0),
                         child: CommonWidgets().textWidget(
-                            "X "+orderItem.foodExtraItemMappingList![0].orderFoodExtraItemDetailDto![innerIndex].quantity.toString(), StyleConstants.customTextStyle(
-                            fontSize: 10.0,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium)),
+                            "X " +
+                                orderItem
+                                    .foodExtraItemMappingList![0]
+                                    .orderFoodExtraItemDetailDto![innerIndex]
+                                    .quantity
+                                    .toString(),
+                            StyleConstants.customTextStyle(
+                                fontSize: 10.0,
+                                color: getMaterialColor(AppColors.textColor2),
+                                fontFamily: FontConstants.montserratMedium)),
                       ),
                       const SizedBox(
                         width: 3.0,
@@ -240,7 +276,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       );
 
   Widget componentCustomerDetails(
-      String customerName, String phoneNumber, String email) =>
+          String customerName, String phoneNumber, String email) =>
       Padding(
         padding: const EdgeInsets.only(left: 20.0),
         child: Column(children: [
@@ -252,11 +288,11 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
                 Expanded(
                   flex: 2,
                   child: CommonWidgets().textView(
-                    "${StringConstants.customerName}:",
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                      "${StringConstants.customerName}:",
+                      StyleConstants.customTextStyle(
+                          fontSize: 14.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratMedium)),
                 ),
                 Expanded(
                   flex: 5,
@@ -266,7 +302,8 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
                           fontSize: 14.0,
                           color: getMaterialColor(AppColors.textColor1),
                           fontFamily: FontConstants.montserratMedium)),
-                )],
+                )
+              ],
             ),
           ),
           Visibility(
@@ -279,11 +316,11 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
                   Expanded(
                     flex: 2,
                     child: CommonWidgets().textView(
-                      '${StringConstants.phone}:',
-                      StyleConstants.customTextStyle(
-                          fontSize: 14.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratMedium)),
+                        '${StringConstants.phone}:',
+                        StyleConstants.customTextStyle(
+                            fontSize: 14.0,
+                            color: getMaterialColor(AppColors.textColor1),
+                            fontFamily: FontConstants.montserratMedium)),
                   ),
                   Expanded(
                     flex: 5,
@@ -329,53 +366,56 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
 
   Widget subOrderItemView(String subItem) => Text(subItem);
 
-
-  Widget componentBill() => Column(
-    children: [
-      const SizedBox(height: 14.0),
-      billTextView(StringConstants.foodCost, orderDetailsModel!.foodCost ?? 0.0),
-      billTextView(StringConstants.salesTax, orderDetailsModel!.salesTax ?? 0.0),
-      billTextView(StringConstants.subTotal, getSubTotal()),
-    //  billTextView(StringConstants.discount, orderDetailsModel!.discount ?? 0.0),
-      billTextView(StringConstants.tip, orderDetailsModel!.tip ?? 0.0),
-      Divider(
-        thickness: 1,
-        color: getMaterialColor(AppColors.textColor1),
-      ),
-      const SizedBox(height: 18.0),
-      totalBillView(orderDetailsModel?.totalAmount ?? 0.0),
-      const SizedBox(height: 22.0),
-    ],
-  );
-  Widget billTextView(String billTitle, double itemAmount) => Column(
-    children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        CommonWidgets().textView(
-            billTitle,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratMedium)),
-        Row(
+  Widget componentBill() => SingleChildScrollView(
+    child: Column(
           children: [
-            CommonWidgets().textView(
-                "\$",
-                StyleConstants.customTextStyle(
-                    fontSize: 14.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
-            CommonWidgets().textView(
-                itemAmount.toStringAsFixed(2),
-                StyleConstants.customTextStyle(
-                    fontSize: 14.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
+            const SizedBox(height: 14.0),
+            billTextView(
+                StringConstants.foodCost, orderDetailsModel!.foodCost ?? 0.0),
+            billTextView(
+                StringConstants.salesTax, orderDetailsModel!.salesTax ?? 0.0),
+            billTextView(StringConstants.subTotal, getSubTotal()),
+            //  billTextView(StringConstants.discount, orderDetailsModel!.discount ?? 0.0),
+            billTextView(StringConstants.tip, orderDetailsModel!.tip ?? 0.0),
+            Divider(
+              thickness: 1,
+              color: getMaterialColor(AppColors.textColor1),
+            ),
+            const SizedBox(height: 18.0),
+            totalBillView(orderDetailsModel?.totalAmount ?? 0.0),
+            const SizedBox(height: 22.0),
           ],
         ),
-      ]),
-      const SizedBox(height: 21.0),
-    ],
   );
+  Widget billTextView(String billTitle, double itemAmount) => Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            CommonWidgets().textView(
+                billTitle,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratMedium)),
+            Row(
+              children: [
+                CommonWidgets().textView(
+                    "\$",
+                    StyleConstants.customTextStyle(
+                        fontSize: 14.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratBold)),
+                CommonWidgets().textView(
+                    itemAmount.toStringAsFixed(2),
+                    StyleConstants.customTextStyle(
+                        fontSize: 14.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratBold)),
+              ],
+            ),
+          ]),
+          const SizedBox(height: 21.0),
+        ],
+      );
 
   Widget totalBillView(double totalAmount) =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -401,52 +441,65 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails> implements 
       ]);
 
   //Action Event
-   onTapConfirmButton() {
-     updateConfirmOrderToStaff();
+  onTapConfirmButton() {
+    updateConfirmOrderToStaff();
     showPaymentScreen();
-   }
+  }
 
-   double getSubTotal() {
-     return (orderDetailsModel!.foodCost ?? 0.0) + (orderDetailsModel!.salesTax ?? 0.0);
-   }
+  double getSubTotal() {
+    return (orderDetailsModel!.foodCost ?? 0.0) +
+        (orderDetailsModel!.salesTax ?? 0.0);
+  }
 
-   //Navigation
+  //Navigation
   showPaymentScreen() {
-    Navigator.of(context).push( MaterialPageRoute(builder: (context) => const PaymentOption())).then((value) =>
-    {
-    P2PConnectionManager.shared.getP2PContractor(this)
-    });
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const PaymentOption()))
+        .then((value) => {P2PConnectionManager.shared.getP2PContractor(this)});
   }
 
   showSplashScreen() {
-     Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   //data for p2pConnection
   updateConfirmOrderToStaff() {
-     P2PConnectionManager.shared.updateData(action: CustomerActionConst.orderConfirmed);
+    P2PConnectionManager.shared
+        .updateData(action: CustomerActionConst.orderConfirmed);
   }
-
 
   @override
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == StaffActionConst.orderModelUpdated) {
       orderDetailsModel = P2POrderDetailsModel();
-      P2POrderDetailsModel modelObjc = p2POrderDetailsModelFromJson(
-          response.data);
+      P2POrderDetailsModel modelObjc =
+          p2POrderDetailsModelFromJson(response.data);
       if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
-      setState(() {
-        orderDetailsModel = modelObjc;
-      });
+        setState(() {
+          orderDetailsModel = modelObjc;
+        });
       } else {
         showSplashScreen();
       }
-    }
-    else if (response.action == StaffActionConst.chargeOrderBill) {
+    } else if (response.action == StaffActionConst.chargeOrderBill) {
       showPaymentScreen();
-    }
-    else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+    } else if (response.action ==
+        StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       showSplashScreen();
     }
+  }
+
+  onAddTipButtonTap() {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return const CustomAddTipDialog();
+        });
+  }
+
+  Widget textWidget(String textTitle, TextStyle textStyle) {
+    return Text(textTitle, style: textStyle);
   }
 }
