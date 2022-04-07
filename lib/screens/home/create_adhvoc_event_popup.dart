@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -5,7 +6,6 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/app_exception.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_event_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -82,6 +82,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   @override
   void initState() {
     super.initState();
+
+    setState(() {
+      eventNameController.text = StringConstants().getDefaultEventName();
+    });
     getAssets();
   }
 
@@ -199,6 +203,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   hintText: StringConstants.enterAddress,
+                  errorStyle: const TextStyle(
+                    color: Colors.red
+                  ),
                   errorText:
                       isValidAddress ? null : StringConstants.emptyAddress,
                   border: const OutlineInputBorder(
@@ -234,6 +241,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
               decoration: InputDecoration(
                 enabled: false,
                 hintText: StringConstants.enterCity,
+                errorStyle: const TextStyle(
+                    color: Colors.red
+                ),
                 errorText: isValidCity ? null : StringConstants.emptyCity,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.textColor2),
@@ -266,6 +276,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
               decoration: InputDecoration(
                 enabled: false,
                 hintText: StringConstants.enterState,
+                errorStyle: const TextStyle(
+                    color: Colors.red
+                ),
                 errorText: isValidState ? null : StringConstants.emptyState,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.textColor2),
@@ -299,8 +312,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 FilteringTextInputFormatter.digitsOnly
               ],
               decoration: InputDecoration(
-                enabled: false,
                 hintText: StringConstants.enterZipCode,
+                errorStyle: const TextStyle(
+                    color: Colors.red
+                ),
                 errorText: isValidZipCode ? null : StringConstants.emptyZipCode,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.textColor2),
@@ -377,7 +392,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             child: SizedBox(
                 //width: MediaQuery.of(context).size.width * 0.35,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 250.0),
+                  padding: const EdgeInsets.only(right: 230.0),
                   child: Text(item.assetName!),
                 )),
             value: item.id.toString(),
@@ -552,8 +567,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       apiKey: GoogleMapKey.googleMapKey,
       onError: onError,
       mode: Mode.overlay,
-      region: "IN",
-      language: "en",
+      radius: 10000000,
+      //region: "US",
+      language: Platform.localeName,
       decoration: InputDecoration(
         hintText: 'search address',
         focusedBorder: OutlineInputBorder(
@@ -562,7 +578,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ),
       ),
       sessionToken: Uuid().generateV4(),
-      components: [Component(Component.country, "IN")],
+      components: [Component(Component.country, "US"),Component(Component.country, "IN"),Component(Component.country, "CA"),Component(Component.country, "AT")],
       types: [""],
       // types: ["(cities)"],
     );

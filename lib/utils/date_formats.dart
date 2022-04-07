@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateFormatsConstant {
@@ -5,6 +6,7 @@ class DateFormatsConstant {
   static const ddMMMYYY = 'dd MMM yyyy';
   static const hhmmaa = 'hh : mm aa';
   static const ddMMMYYYYDayhhmmaa = 'dd MMM yyyy, EEEE hh : mm aa';
+  static const YYYYMMddhhmm = 'yyyyMMdd_hhmm';
 }
 
 class Date {
@@ -14,6 +16,10 @@ class Date {
 
   static String getDateFrom({required DateTime date, required String formatValue}) {
     return DateFormat(formatValue).format(date);
+  }
+
+  static String getDateAndTime(){
+    return DateFormat(DateFormatsConstant.YYYYMMddhhmm).format(DateTime.now()).toString();
   }
 
 
