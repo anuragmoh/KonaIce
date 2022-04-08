@@ -46,37 +46,40 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: getMaterialColor(AppColors.textColor3),
-        child: Visibility(
-          // visible: orderDetailsModel != null,
-          visible: true,
-          child: Column(
-            children: [
-              CommonWidgets().topEmptyBar(),
-              Expanded(child: bodyWidget()),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: CommonWidgets().buttonWidgetUnFilled(
-                      StringConstants.addTip,
-                      onAddTipButtonTap,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height,
+          color: getMaterialColor(AppColors.textColor3),
+          child: Visibility(
+            // visible: orderDetailsModel != null,
+            visible: true,
+            child: Column(
+              children: [
+                CommonWidgets().topEmptyBar(),
+                Expanded(child: bodyWidget()),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20.0),
+                      child: CommonWidgets().buttonWidgetUnFilled(
+                        StringConstants.addTip,
+                        onAddTipButtonTap,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 40),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 230.0, bottom: 20.0),
-                    child: CommonWidgets().buttonWidget(StringConstants.confirm,
-                        () {
-                      onTapConfirmButton();
-                    }),
-                  ),
-                ],
-              ),
-              //     CommonWidgets().bottomEmptyBar(),
-            ],
+                    const SizedBox(width: 40),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 230.0, bottom: 20.0),
+                      child: CommonWidgets().buttonWidget(StringConstants.confirm,
+                          () {
+                        onTapConfirmButton();
+                      }),
+                    ),
+                  ],
+                ),
+                //     CommonWidgets().bottomEmptyBar(),
+              ],
+            ),
           ),
         ),
       ),
