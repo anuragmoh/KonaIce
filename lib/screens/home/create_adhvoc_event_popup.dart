@@ -172,13 +172,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
               errorText:
                   isValidEventName ? null : StringConstants.emptyEventName,
               border: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColor2),
+                borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
               enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColor2),
+                borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColor2),
+                borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
             ),
           ),
@@ -323,13 +323,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 ),
                 errorText: isValidZipCode ? null : StringConstants.emptyZipCode,
                 border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.textColor2),
+                  borderSide: BorderSide(color: AppColors.denotiveColor4),
                 ),
                 enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.textColor2),
+                  borderSide: BorderSide(color: AppColors.denotiveColor4),
                 ),
                 focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColors.textColor2),
+                  borderSide: BorderSide(color: AppColors.denotiveColor4),
                 ),
               ),
             )
@@ -344,7 +344,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 StringConstants.equipment,
                 StyleConstants.customTextStyle(
                     fontSize: 14.0,
-                    color: AppColors.textColor2,
+                    color: AppColors.denotiveColor4,
                     fontFamily: FontConstants.montserratRegular)),
             const SizedBox(height: 5.0),
             Container(
@@ -353,7 +353,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 decoration: BoxDecoration(
                     border: Border.all(
                         color: isAssetSelected
-                            ? AppColors.textColor2
+                            ? AppColors.denotiveColor4
                             : AppColors.textColor5,
                         width: 1.0),
                     borderRadius: BorderRadius.circular(5.0)),
