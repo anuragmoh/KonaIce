@@ -3,6 +3,7 @@ class CustomerActionConst {
   static const orderConfirmed = "orderConfirmed";
   static const paymentModeSelected = "paymentModeSelected";
   static const editOrderDetails = "editOrderDetails";
+  static const tip = "tip";
 }
 
 class StaffActionConst {

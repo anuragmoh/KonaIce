@@ -1485,6 +1485,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == CustomerActionConst.orderConfirmed) {
       showPaymentScreen();
+    }else if(response.action == CustomerActionConst.tip){
+      setState(() {
+        tip = double.parse(response.data);
+      });
+      addTipTextFieldController.text = response.data;
     }
   }
 

@@ -7,14 +7,19 @@ import '../../constants/style_constants.dart';
 import '../../utils/common_widgets.dart';
 import '../../utils/utils.dart';
 
-class CustomAddTipDialog extends StatefulWidget {
-  const CustomAddTipDialog({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class CustomerAddTipDialog extends StatefulWidget {
+  Function callBack;
+  CustomerAddTipDialog({Key? key, required this.callBack}) : super(key: key);
 
   @override
-  State<CustomAddTipDialog> createState() => _CustomAddTipDialogState();
+  State<CustomerAddTipDialog> createState() => _CustomerAddTipDialogState();
 }
 
-class _CustomAddTipDialogState extends State<CustomAddTipDialog> {
+class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
+
+  TextEditingController tipController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return showCustomAddTipDialog();
@@ -42,7 +47,7 @@ class _CustomAddTipDialogState extends State<CustomAddTipDialog> {
                   title: StringConstants.addTip,
                   onTapCloseButton: onTapCloseButton),
               amountTextFieldContainer(),
-              addFoodExtraPopUpButton(),
+              addTipButton(),
             ],
           ),
       ),
@@ -71,7 +76,7 @@ class _CustomAddTipDialogState extends State<CustomAddTipDialog> {
                     fontFamily: FontConstants.montserratMedium)),
           ),
           TextField(
-            // controller: amountTextFieldController,
+             controller: tipController,
             keyboardType: TextInputType.number,
             style: StyleConstants.customTextStyle(
                 fontSize: 22.0,
@@ -125,9 +130,9 @@ class _CustomAddTipDialogState extends State<CustomAddTipDialog> {
     );
   }
 
-  Widget addFoodExtraPopUpButton() {
+  Widget addTipButton() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {onTapAddButton();},
       child: Align(
         alignment: Alignment.center,
         child: Padding(
@@ -151,5 +156,13 @@ class _CustomAddTipDialogState extends State<CustomAddTipDialog> {
         ),
       ),
     );
+  }
+
+  onTapAddButton(){
+    //debugPrint("Tip from dialog ${tipController.text.toString()}");
+    if(tipController.text.isNotEmpty){
+      widget.callBack(double.parse(tipController.text.toString()));
+      Navigator.of(context).pop();
+    }
   }
 }
