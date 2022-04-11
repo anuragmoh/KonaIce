@@ -15,6 +15,7 @@ class FoodExtraItems {
   final String updatedBy;
   final int updatedAt;
   final bool deleted;
+  final int sequence;
   int selectedItemQuantity = 0;
   bool isItemSelected = false;
 
@@ -30,6 +31,7 @@ class FoodExtraItems {
       required this.minQtyAllowed,
       required this.maxQtyAllowed,
       required this.activated,
+      required this.sequence,
       required this.createdBy,
       required this.createdAt,
       required this.updatedBy,
@@ -49,6 +51,7 @@ class FoodExtraItems {
       "min_qty_allowed": minQtyAllowed,
       "max_qty_allowed": maxQtyAllowed,
       "activated": activated,
+      "sequence":sequence,
       "created_by": createdBy,
       "created_at": createdAt,
       "updated_by": updatedBy,
@@ -69,12 +72,13 @@ class FoodExtraItems {
         imageFileId: map["image_file_id"],
         minQtyAllowed: map["min_qty_allowed"],
         maxQtyAllowed: map["max_qty_allowed"],
-        activated: map["activated"]==1,
+        activated: map["activated"] == 1,
+        sequence:map["sequence"],
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"]==1);
+        deleted: map["deleted"] == 1);
   }
 
   @override
@@ -91,6 +95,7 @@ class FoodExtraItems {
     minQtyAllowed: $minQtyAllowed,
     maxQtyAllowed: $maxQtyAllowed,
     activated: $activated,
+    sequence:$sequence,
     createdBy: $createdBy,
     createdAt: $createdAt,
     updatedBy: $updatedBy,
@@ -100,11 +105,28 @@ class FoodExtraItems {
   }
 
   FoodExtraItems getCopy() {
-  //   return FoodExtraItems(id: this.id, foodExtraItemCategoryId: this.foodExtraItemCategoryId, itemId: this.itemId, eventId: this.eventId, itemName: itemName,
-  // sellingPrice: this.sellingPrice, selection: this.selection, imageFileId: this.imageFileId, minQtyAllowed: this.minQtyAllowed, maxQtyAllowed: this.maxQtyAllowed, activated: this.activated,
-  // createdBy: this.createdBy, createdAt: this.createdAt, updatedBy: this.updatedBy, updatedAt: this.updatedAt, deleted: this.deleted);
-    return FoodExtraItems(id: id, foodExtraItemCategoryId: foodExtraItemCategoryId, itemId: itemId, eventId: eventId, itemName: itemName, sellingPrice: sellingPrice, selection: selection, imageFileId: imageFileId, minQtyAllowed: minQtyAllowed, maxQtyAllowed: maxQtyAllowed, activated: activated, createdBy: createdBy, createdAt: createdAt, updatedBy: updatedBy, updatedAt: updatedAt, deleted: deleted);
-}
+    //   return FoodExtraItems(id: this.id, foodExtraItemCategoryId: this.foodExtraItemCategoryId, itemId: this.itemId, eventId: this.eventId, itemName: itemName,
+    // sellingPrice: this.sellingPrice, selection: this.selection, imageFileId: this.imageFileId, minQtyAllowed: this.minQtyAllowed, maxQtyAllowed: this.maxQtyAllowed, activated: this.activated,
+    // createdBy: this.createdBy, createdAt: this.createdAt, updatedBy: this.updatedBy, updatedAt: this.updatedAt, deleted: this.deleted);
+    return FoodExtraItems(
+        id: id,
+        foodExtraItemCategoryId: foodExtraItemCategoryId,
+        itemId: itemId,
+        eventId: eventId,
+        itemName: itemName,
+        sellingPrice: sellingPrice,
+        selection: selection,
+        imageFileId: imageFileId,
+        minQtyAllowed: minQtyAllowed,
+        maxQtyAllowed: maxQtyAllowed,
+        activated: activated,
+        sequence:sequence,
+        createdBy: createdBy,
+        createdAt: createdAt,
+        updatedBy: updatedBy,
+        updatedAt: updatedAt,
+        deleted: deleted);
+  }
 
   double getTotalPrice() {
     return selectedItemQuantity * sellingPrice.toDouble();

@@ -151,6 +151,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         dbItemList.clear();
         itemList.addAll(result);
         dbItemList.addAll(itemList);
+        debugPrint("=======$itemList");
       });
     } else {
       setState(() {

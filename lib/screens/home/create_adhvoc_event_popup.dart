@@ -731,6 +731,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       // setState(() {
       //   _currentCountry = "${place.country}";
       // });
+      cityController.text=place.country!;
+      addressController.text=place.locality!;
+      zipCodeController.text=place.postalCode!;
       debugPrint(place.country);
       debugPrint(place.locality);
       debugPrint(place.subLocality);
