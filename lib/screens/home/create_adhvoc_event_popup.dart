@@ -313,11 +313,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             TextField(
               controller: zipCodeController,
               keyboardType: TextInputType.number,
+              maxLength: 5,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+                FilteringTextInputFormatter.digitsOnly,
               ],
               decoration: InputDecoration(
                 hintText: StringConstants.enterZipCode,
+                counterText: "",
                 errorStyle: const TextStyle(
                     color: Colors.red
                 ),
@@ -470,7 +472,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     setState(() {
       isApiProcess = false;
     });
-    onTapCloseButton();
+    //onTapCloseButton();
    CommonWidgets().showErrorSnackBar(
        errorMessage: exception.message!,
        context: context);
