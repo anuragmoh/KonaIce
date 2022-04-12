@@ -15,4 +15,6 @@ class StaffActionConst {
   static const paymentCompleted = "paymentCompleted";
   static const newOrder = "newOrder";
   static const showSplashAtCustomerForHomeAndSettings = "showSplashAtCustomerForHomeAndSettings";
+  static const tip = "tip";
+
 }

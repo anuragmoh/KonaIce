@@ -492,6 +492,8 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       showSplashScreen();
+    } else if (response.action == StaffActionConst.tip) {
+      updateTip(double.parse(response.data));
     }
   }
 

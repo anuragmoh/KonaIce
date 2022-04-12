@@ -161,7 +161,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   onTapAddButton(){
     //debugPrint("Tip from dialog ${tipController.text.toString()}");
     if(tipController.text.isNotEmpty){
-      widget.callBack(double.parse(tipController.text.toString()));
+      widget.callBack(double.parse(tipController.text.isEmpty ? '0.0' : tipController.text.toString()));
       Navigator.of(context).pop();
     }
   }
