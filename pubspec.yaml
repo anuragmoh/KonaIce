@@ -57,7 +57,7 @@ dependencies:
 
 #  blinkcard_flutter: ^2.4.2
 
-  blinkcard_flutter: ^2.4.2
+#  blinkcard_flutter: ^2.4.2
 
 dev_dependencies:
   flutter_test:

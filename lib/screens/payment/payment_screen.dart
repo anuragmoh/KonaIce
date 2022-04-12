@@ -1,4 +1,4 @@
-import 'package:blinkcard_flutter/microblink_scanner.dart';
+// import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,10 +21,12 @@ import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_mo
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/order_model/order_response_model.dart';
+import 'package:kona_ice_pos/screens/home/create_adhvoc_event_popup.dart';
 import 'package:kona_ice_pos/screens/home/party_events.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
+import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
@@ -33,6 +35,8 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+
+import 'credit_card_details_popup.dart';
 
 class PaymentScreen extends StatefulWidget {
   final Events events;
@@ -66,6 +70,9 @@ class _PaymentScreenState extends State<PaymentScreen>
   bool isPaymentDone = false;
   int receiptMode = 1;
   String orderID = 'NA';
+  String cardNumberValidationMessage = "";
+  bool isCardNumberValid = true;
+  bool isCvcValid = true;
 
   String _resultString = "";
   String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
@@ -78,6 +85,8 @@ class _PaymentScreenState extends State<PaymentScreen>
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
   int currentIndex = 0;
+  TextEditingController cardNumberController = TextEditingController();
+  TextEditingController cvcController = TextEditingController();
 
   late OrderPresenter orderPresenter;
   bool isApiProcess = false;
@@ -1084,8 +1093,78 @@ class _PaymentScreenState extends State<PaymentScreen>
     });
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
-      scan();
+      // scan();
+      debugPrint('popipCallllll');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) =>    showCustomMenuPopup(),
+      );
     }
+
+  }
+
+  Widget showCustomMenuPopup() {
+    return Dialog(
+      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      child: customMenuPopUpComponent(),
+    );
+  }
+
+  Widget customMenuPopUpComponent() {
+    return SingleChildScrollView(
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.43,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonWidgets().popUpTopView(title: StringConstants.customMenu,
+                onTapCloseButton: onTapCloseButton),
+            Padding(
+              padding: const EdgeInsets.only(
+                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
+              child: profileDetailsComponent(StringConstants.cardNumber, "",
+                  StringConstants.cardNumber, cardNumberController,"",passwordValidation),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10.0, left: 23.0, right: 23.0, bottom: 10.0),
+                    child: profileDetailsComponent(StringConstants.cardCvc, "",
+                        StringConstants.cardCvc, cvcController,"",passwordValidation),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 10.0, left: 10.0, right: 23.0, bottom: 10.0),
+                    child: profileDetailsComponent(StringConstants.cardCvc, "",
+                        StringConstants.cardCvc, cvcController,"",passwordValidation),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CommonWidgets().buttonWidget(
+                  StringConstants.submit,
+                  onTapConfirmPayment,
+                ),
+              ],
+            ),
+            const SizedBox(height: 10.0,)
+          ],
+        ),
+      ),
+    );
+  }
+  onTapCloseButton() {
+    Navigator.of(context).pop();
   }
 
   onTapNewOrder() {
@@ -1273,7 +1352,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
   }
 
-  Future<void> scan() async {
+/*  Future<void> scan() async {
     String license;
     if (Theme
         .of(context)
@@ -1368,7 +1447,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
 
     return buildResult(result.toString(), propertyName);
-  }
+  }*/
 
   void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
       String expiryYear) {
@@ -1443,10 +1522,113 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   onTapConfirmPayment() {
+
+    setState(() {
+      cardNumberController.text.isEmpty
+          ? isCardNumberValid = false
+          : isCardNumberValid = true;
+    });
+
     //TokenMethodApi call
     getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
 
     Navigator.pop(context);
   }
 
-}
+
+  onTapConfirmManualCardPayment() {
+
+    setState(() {
+      cardNumberController.text.isEmpty
+          ? isCardNumberValid = false
+          : isCardNumberValid = true;
+    });
+
+    if (isCardNumberValid &&
+        isCvcValid
+    ) {
+      CheckConnection().connectionState().then((value) {
+        if (value == true) {
+          isApiProcess = true;
+          //TokenMethodApi call
+          getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
+        } else {
+          CommonWidgets().showErrorSnackBar(
+              errorMessage: StringConstants.noInternetConnection,
+              context: context);
+        }
+      });
+
+      Navigator.pop(context);
+
+  }}
+
+  Widget profileDetailsComponent(
+      String txtName,
+      String txtValue,
+      String txtHint,
+      TextEditingController textEditingController,
+      String validationMessage,
+      Function validationMethod,
+    ) =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommonWidgets().textWidget(
+              txtName,
+              StyleConstants.customTextStyle(
+                  fontSize: 14.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratRegular),
+              textAlign: TextAlign.left),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
+            child: Container(
+              height: 40.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6.0),
+                  border: Border.all(
+                      color: getMaterialColor(AppColors.textColor1)
+                          .withOpacity(0.2),
+                      width: 2)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: TextField(
+                  onChanged: (value) {
+                    validationMethod();
+                  },
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                      filled: true,
+                      hintText: txtHint,
+                      border: InputBorder.none,
+                      labelText: txtValue,
+                      hintStyle: StyleConstants.customTextStyle(
+                          fontSize: 15.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratRegular)),
+                ),
+              ),
+            ),
+          ),
+          Text(validationMessage,
+              style: StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor5),
+                  fontFamily: FontConstants.montserratRegular),
+              textAlign: TextAlign.left)
+        ],
+      );
+
+  passwordValidation() {
+
+    if (cardNumberController.text.isEmpty) {
+      setState(() {
+         cardNumberValidationMessage = "Please Enter Card Details";
+      });
+      return false;
+    }
+
+    return true;
+}}

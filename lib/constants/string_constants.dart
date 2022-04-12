@@ -116,6 +116,10 @@ class StringConstants {
   static const selectPaymentOption='Select Payment Option';
   static const confirmCardDetails='Please Confirm Details';
 
+  static const cardDetails='Card Details';
+  static const cardNumber='Please Enter Card Number';
+  static const cardCvc='Please Enter Card CVC';
+
   // Create adhoc event popup
   static const popHeading = "Create Adhoc Event";
   static const name = "Name";
