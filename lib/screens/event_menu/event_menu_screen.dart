@@ -1053,11 +1053,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   calculateTotal() {
-    if (selectedMenuItems.isNotEmpty) {
-      totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
-    } else {
-      totalAmount = 0.0;
-    }
+    setState(() {
+      if (selectedMenuItems.isNotEmpty) {
+        totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
+      } else {
+        totalAmount = 0.0;
+      }
+    });
+
   }
 
   clearCart() {
