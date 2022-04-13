@@ -559,8 +559,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     createEventRequestModel.city = cityController.text.toString();
     createEventRequestModel.state = stateController.text.toString();
     createEventRequestModel.zipCode = zipCodeController.text.toString();
-    createEventRequestModel.startDateTime =
-        int.parse(Date.getStartOfDateTimeStamp(date: DateTime.now()));
+    createEventRequestModel.startDateTime =int.parse(Date.getTimeStamp());
+        //int.parse(Date.getStartOfDateTimeStamp(date: DateTime.now()));
     createEventRequestModel.endDateTime =
         int.parse(Date.getEndOfDateTimeStamp(date: DateTime.now()));
     createEventRequestModel.addressLatitude = lat;
