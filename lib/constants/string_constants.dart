@@ -105,6 +105,7 @@ class StringConstants {
   static const proceed = 'Proceed';
   static const cash = 'Cash';
   static const creditCard = 'Credit Card';
+  static const creditCardManual = 'Credit Card(Manual)';
   static const qrCode = 'QR Code';
   static const paymentSuccessful = 'Payment Successful';
   static const howWouldYouLikeToReceiveTheReceipt =
@@ -118,7 +119,11 @@ class StringConstants {
 
   static const cardDetails='Card Details';
   static const cardNumber='Please Enter Card Number';
-  static const cardCvc='Please Enter Card CVC';
+  static const cardExpiry='Expiry Date';
+  static const cardExpiryMsg='Expiry Date';
+  static const cardCvc='CVC';
+  static const cardCvcMsg='Card CVC';
+  static const addCreditCardDetails = 'Add Credit Card Details';
 
   // Create adhoc event popup
   static const popHeading = "Create Adhoc Event";

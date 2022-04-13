@@ -11,28 +11,38 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreditCardDetailsPopup extends StatefulWidget {
-  const CreditCardDetailsPopup({Key? key}) : super(key: key);
+  String totalAmount;
+   CreditCardDetailsPopup({required this.totalAmount,Key? key}) : super(key: key);
 
   @override
   _CreditCardDetailsPopupState createState() => _CreditCardDetailsPopupState();
 }
 
-class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> implements ResponseContractor {
+class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
 
   String menuName = StringConstants.customMenuPackage;
   bool isEditingMenuName = false;
   var amountTextFieldController = TextEditingController();
   var menuNameTextFieldController = TextEditingController();
   String cardNumberValidationMessage = "";
+  String cardDateValidationMessage = "";
+  String cardCvvValidationMessage = "";
   String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
   String stripeTokenId="",stripePaymentMethodId="";
   String demoCardNumber = "";
   bool isCardNumberValid = true;
+  bool isExpiryValid = true;
   bool isCvcValid = true;
   bool isApiProcess = false;
   late PaymentPresenter paymentPresenter;
+  TextEditingController dateExpiryController = TextEditingController();
+  var maskFormatter = MaskTextInputFormatter(
+      mask: '##/##',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvcController = TextEditingController();
@@ -70,31 +80,49 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonWidgets().popUpTopView(title: StringConstants.customMenu,
+            CommonWidgets().popUpTopView(
+                title: StringConstants.addCreditCardDetails,
                 onTapCloseButton: onTapCloseButton),
             Padding(
               padding: const EdgeInsets.only(
-                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(StringConstants.cardNumber, "",
-                  StringConstants.cardNumber, cardNumberController,"",passwordValidation),
+                  top: 25.0, left: 23.0, bottom: 10.0),
+              child: profileDetailsComponent(
+                  StringConstants.cardNumber,
+                  "",
+                  StringConstants.cardNumber,
+                  cardNumberController,
+                  cardNumberValidationMessage,
+                  cardValidation,
+                  15),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-                    child: cvvAndDateComponent(StringConstants.cardCvc, "",
-                        StringConstants.cardCvc, cvcController,"",passwordValidation),
+                    padding: const EdgeInsets.only(left: 20.0,  bottom: 10.0),
+                    child: cardExpiryComponent(
+                        StringConstants.cardExpiry,
+                        "",
+                        StringConstants.cardExpiryMsg,
+                        dateExpiryController,
+                        cardDateValidationMessage,
+                        dateValidation,
+                        5),
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(
-                        top: 25.0, left: 10.0, right: 23.0, bottom: 10.0),
-                    child: cvvAndDateComponent(StringConstants.cardCvc, "",
-                        StringConstants.cardCvc, cvcController,"",passwordValidation),
+                        bottom: 10.0),
+                    child: profileDetailsComponent(
+                        StringConstants.cardCvc,
+                        "",
+                        StringConstants.cardCvcMsg,
+                        cvcController,
+                        cardCvvValidationMessage,
+                        cvvValidation,
+                        3),
                   ),
                 ),
               ],
@@ -103,10 +131,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CommonWidgets().buttonWidget(
-                  StringConstants.submit,
-                  onTapConfirmPayment,
+                  StringConstants.submit + " " + "\$ "+widget.totalAmount,
+                  onTapConfirmManualCardPayment,
                 ),
               ],
+            ),
+            const SizedBox(
+              height: 20.0,
             )
           ],
         ),
@@ -121,7 +152,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
       TextEditingController textEditingController,
       String validationMessage,
       Function validationMethod,
-      ) =>
+      int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -134,10 +165,9 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 0.0),
+                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
             child: Container(
               height: 40.0,
-              width: 500.0,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
@@ -147,11 +177,14 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
+                  maxLength: maxLength,
                   onChanged: (value) {
                     validationMethod();
+                    debugPrint('============>');
                   },
                   controller: textEditingController,
                   decoration: InputDecoration(
+                      counterText: "",
                       filled: true,
                       hintText: txtHint,
                       border: InputBorder.none,
@@ -172,14 +205,15 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               textAlign: TextAlign.left)
         ],
       );
-  Widget cvvAndDateComponent(
+
+  Widget cardExpiryComponent(
       String txtName,
       String txtValue,
       String txtHint,
       TextEditingController textEditingController,
       String validationMessage,
       Function validationMethod,
-      ) =>
+      int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -192,10 +226,9 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 0.0),
+                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
             child: Container(
               height: 40.0,
-              width: 200.0,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
@@ -205,11 +238,14 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
+                  maxLength: maxLength,
+                  inputFormatters: [maskFormatter],
                   onChanged: (value) {
                     validationMethod();
                   },
                   controller: textEditingController,
                   decoration: InputDecoration(
+                      counterText: "",
                       filled: true,
                       hintText: txtHint,
                       border: InputBorder.none,
@@ -230,71 +266,84 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> impleme
               textAlign: TextAlign.left)
         ],
       );
-  passwordValidation() {
+  //Action
+  onTapCloseButton() {
+    Navigator.of(context).pop(false);
+  }
 
+   cardValidation() {
+    debugPrint('validation');
     if (cardNumberController.text.isEmpty) {
       setState(() {
+        debugPrint('validation$cardNumberValidationMessage');
         cardNumberValidationMessage = "Please Enter Card Details";
+        isCardNumberValid=false;
       });
       return false;
     }
+    else{
+      setState(() {
+        debugPrint('validationFull$cardNumberValidationMessage');
+        cardNumberValidationMessage = "";
+        isCardNumberValid=true;
+      });
+    }
 
-    return true;
+  }
+  dateValidation() {
+    String s = dateExpiryController.text;
+    int idx = s.indexOf("/");
+    var date=int.parse(s.substring(0,idx).trim());
+    var year=int.parse(s.substring(idx+1).trim());
+
+    debugPrint('validation');
+    if (dateExpiryController.text.isEmpty) {
+      setState(() {
+        cardDateValidationMessage = "Please Enter Date";
+        isExpiryValid=false;
+      });
+      return false;
+    }
+    if(date>31){
+      setState(() {
+        cardDateValidationMessage = "Please Check Date";
+        isExpiryValid=false;
+      });
+    }
+    if(year>12){
+      setState(() {
+        cardDateValidationMessage = "Please Check Year";
+        isExpiryValid=false;
+      });
+    }
+    else{
+      setState(() {
+        cardDateValidationMessage = "";
+        isExpiryValid=true;
+      });
+    }
+  }
+  cvvValidation() {
+    if (cvcController.text.isEmpty) {
+      setState(() {
+        cardCvvValidationMessage = "Please Enter Card Details";
+        isCvcValid=false;
+      });
+      return false;
+    }else{
+      setState(() {
+        cardCvvValidationMessage = "";
+        isCvcValid=true;
+      });
+
+    }
+
   }
 
+  void onTapConfirmManualCardPayment() {
 
-  //Action
-  onTapCloseButton() {
-    Navigator.of(context).pop();
+    if (isCardNumberValid && isExpiryValid && isCvcValid) {
+      Navigator.of(context).pop(true);
+    }
   }
-
-  onTapConfirmPayment() {
-
-    setState(() {
-      cardNumberController.text.isEmpty
-          ? isCardNumberValid = false
-          : isCardNumberValid = true;
-    });
-
-    //TokenMethodApi call
-    getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
-
-    Navigator.pop(context);
-  }
-
-  void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
-      String expiryYear) {
-    final body = {
-      "card[number]": cardNumber,
-      "card[cvc]": cardCvc,
-      "card[exp_month]": expiryMonth,
-      "card[exp_year]": expiryYear};
-    paymentPresenter.getToken(body);
-  }
-  void getMethodPayment(String cardNumber, String cardCvc, String expiryMonth,
-      String expiryYear) {
-    final bodyPaymentMethod = {
-      "type": "card",
-      "card[number]": cardNumber,
-      "card[cvc]": cardCvc,
-      "card[exp_month]": expiryMonth,
-      "card[exp_year]": expiryYear};
-    paymentPresenter.getPaymentMethod(bodyPaymentMethod);
-  }
-
-  @override
-  void showError(GeneralErrorResponse exception) {
-    setState(() {
-      isApiProcess = false;
-    });
-    CommonWidgets().showErrorSnackBar(
-        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
-        context: context);
-  }
-
-  @override
-  void showSuccess(response) {
-    // TODO: implement showSuccess
-  }
-
 }

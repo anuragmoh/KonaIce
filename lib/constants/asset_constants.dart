@@ -47,6 +47,7 @@ class AssetsConstants {
   static const cash = assetsPath + 'ic_cash.png';
   static const popupCloseIcon = assetsPath + 'close.png';
   static const tabletIcon = assetsPath + 'tablet_icon.png';
+  static const creditCardScan = assetsPath + 'ic_credit_card_scan.png';
 
   static const defaultProfileImage = assetsPath + 'default_profile_icon.png';
 }
