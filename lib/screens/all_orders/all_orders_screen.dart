@@ -18,7 +18,7 @@ import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/all_orders/all_order_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/screens/all_orders/all_order_model.dart';
+import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';

@@ -13,9 +13,10 @@ import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
-import 'package:kona_ice_pos/screens/login/login_model.dart';
+import 'package:kona_ice_pos/models/network_model/login/login_model.dart';
 import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
+import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 
 class FunctionalUtils {
@@ -170,6 +171,8 @@ class FunctionalUtils {
   static clearSessionData() async {
     debugPrint("getting 401 in base client");
     CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.errorSessionExpire, context: navigatorKey.currentContext!);
+    final service = ServiceNotifier();
+    service.increment(0);
     Future.delayed(
         const Duration(seconds: 3),
             () async

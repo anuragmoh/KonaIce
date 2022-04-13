@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 import 'package:flutter/cupertino.dart';

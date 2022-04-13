@@ -1,8 +1,8 @@
 import 'package:kona_ice_pos/constants/url_constants.dart';
+import 'package:kona_ice_pos/models/network_model/my_profile_model/my_profile_response_model.dart';
 import 'package:kona_ice_pos/network/base_client.dart';
-import 'package:kona_ice_pos/screens/forget_password/forgot_password_model.dart';
-import 'package:kona_ice_pos/screens/login/login_model.dart';
-import 'package:kona_ice_pos/screens/my_profile/my_profile_model/my_profile_response_model.dart';
+import 'package:kona_ice_pos/models/network_model/forgot_password/forgot_password_model.dart';
+import 'package:kona_ice_pos/models/network_model/login/login_model.dart';
 
 class UserRepository {
   BaseClient baseClient = BaseClient();

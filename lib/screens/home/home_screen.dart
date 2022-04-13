@@ -22,7 +22,7 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/clock_in_out/clock_in_out_presenter.dart';
 import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/screens/dashboard/clock_in_out_model.dart';
+import 'package:kona_ice_pos/models/network_model/clock_in_clock_out/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/create_adhvoc_event_popup.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
@@ -33,6 +33,8 @@ import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+
+import '../../common/extensions/string_extension.dart';
 
 class HomeScreen extends StatefulWidget {
   var onCallback;
@@ -648,7 +650,7 @@ class _HomeScreenState extends State<HomeScreen>
     storeDataIntoDB();
   }
 
-  void storeDataIntoDB() {
+  void storeDataIntoDB() async {
     setState(() {
       pOsSyncEventDataDtoList
           .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
@@ -669,8 +671,47 @@ class _HomeScreenState extends State<HomeScreen>
               .pOsSyncDeletedEventItemExtrasDataDtoList);
     });
 
+    await deleteEventSync();
     insertEventSync();
   }
+
+  Future<void> deleteEventSync() async {
+    if (pOsSyncDeletedEventDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedEventDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedEventDataDtoList[i].eventId ?? StringExtension.empty();
+        await EventsDAO().clearEventsByEventID(eventID: eventID);
+        await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
+        await ItemDAO().clearItemsByEventID(eventID: eventID);
+        await FoodExtraItemsDAO().clearFoodExtraItemsByEventID(eventID: eventID);
+      }
+    }
+
+    if (pOsSyncDeletedItemCategoryDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedItemCategoryDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedItemCategoryDataDtoList[i].eventId ?? StringExtension.empty();
+        await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
+      }
+    }
+
+    if (pOsSyncDeletedEventItemDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedEventItemDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedEventItemDataDtoList[i].eventId ?? StringExtension.empty();
+        String itemID = pOsSyncDeletedEventItemDataDtoList[i].itemId ?? StringExtension.empty();
+        await ItemDAO().clearItemsByEventID(eventID: eventID);
+        await  FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(eventID: eventID, itemID: itemID);
+      }
+    }
+
+    if (pOsSyncDeletedEventItemExtrasDataDtoList.isNotEmpty) {
+      for (int i = 0; i < pOsSyncDeletedEventItemExtrasDataDtoList.length; i++) {
+        String eventID = pOsSyncDeletedEventItemExtrasDataDtoList[i].eventId ?? StringExtension.empty();
+        String itemID = pOsSyncDeletedEventItemExtrasDataDtoList[i].itemId ?? StringExtension.empty();
+        await FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(eventID: eventID, itemID: itemID);
+      }
+    }
+
+  }
+
 
   Future<void> insertEventSync() async {
     if (pOsSyncEventDataDtoList.isNotEmpty) {

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -40,7 +39,7 @@ class BaseClient {
   Future<dynamic> post(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
-    debugPrint("paylaod-----$payload");
+    debugPrint("payLoad-----$payload");
     debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {
@@ -59,6 +58,8 @@ class BaseClient {
   Future<dynamic> put(String api, dynamic payloadObj) async {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
+    debugPrint("payLoad-----$payload");
+    debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {
       var response = await http.put(uri, headers: header, body: payload)
@@ -99,7 +100,7 @@ class BaseClient {
   }
 
   dynamic _processResponse(http.Response response) {
-    debugPrint("response code ${response.statusCode}");
+    debugPrint("response code ${response.body}");
     if (response.isOkResponse()) {
       debugPrint("Ok");
       return response.body.toString();
@@ -117,7 +118,10 @@ class BaseClient {
     var errorList = GeneralErrorList.fromRawJson(response.body.toString());
     debugPrint("ErrorList--->${errorList.general![0].toRawJson().toString()}");
     if (errorList.general != null && errorList.general?[0] != null) {
+      // GeneralErrorResponse response = errorList.general![0];
+      // response.message = response.message?.replaceAll(".", "");
       String value = errorList.general![0].toRawJson().toString();
+      //String value = response.toRawJson().toString();
       throw GeneralApiResponseErrorException(value);
     } else {
       throw GeneralApiResponseErrorException(getDefaultErrorResponse());

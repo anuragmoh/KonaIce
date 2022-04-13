@@ -132,8 +132,8 @@ class SavedOrders {
 
   String getOrderDateTime() {
     DateTime date = Date.getDateFromTimeStamp(timestamp: orderDate);
-    String dateStr =
-        Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);
+/*    String dateStr =
+        Date.getDateFrom(date: date, formatValue: DateFormatsConstant.ddMMMYYY);*/
     String timeStr =
         Date.getDateFrom(date: date, formatValue: DateFormatsConstant.hhmmaa);
 

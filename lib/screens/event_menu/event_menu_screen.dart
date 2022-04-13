@@ -28,7 +28,7 @@ import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
-import 'package:kona_ice_pos/screens/event_menu/search_customer/customer_model.dart';
+import 'package:kona_ice_pos/models/network_model/search_customer/customer_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
@@ -44,8 +44,8 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
-import 'order_model/order_request_model.dart';
-import 'order_model/order_response_model.dart';
+import '../../models/network_model/order_model/order_request_model.dart';
+import '../../models/network_model/order_model/order_response_model.dart';
 
 class EventMenuScreen extends StatefulWidget {
   final Events events;
@@ -69,6 +69,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   bool isApiProcess = false;
+
   List<ItemCategories> itemCategoriesList = [];
   List<FoodExtraItems> foodExtraItemList = [];
 
@@ -639,16 +640,23 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 color: getMaterialColor(AppColors.textColor4),
                 fontFamily: FontConstants.montserratMedium)),
           ),
-          Visibility(
-            visible: (menuObjet.selectedExtras).isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
-              child: CommonWidgets().textWidget(
-                  menuObjet.getExtraItemsName(), StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium)),
-            ),
+          Row(
+            children: [
+              Visibility(
+                visible: (menuObjet.selectedExtras).isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
+                  child: CommonWidgets().textWidget(
+                      menuObjet.getExtraItemsName(), StyleConstants.customTextStyle(
+                      fontSize: 9.0,
+                      color: getMaterialColor(AppColors.textColor2),
+                      fontFamily: FontConstants.montserratMedium)),
+                ),
+              ),
+              const SizedBox(
+                width: 20.0,
+              ),
+            ],
           ),
           Visibility(
             visible: menuObjet.isItemHasExtras(),
@@ -1196,7 +1204,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       isProduct = true;
     });
     Future.delayed(
-        const Duration(milliseconds: 100),
+        const Duration(milliseconds: 500),
             () {
 
 
@@ -1241,7 +1249,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         }
       }
     }
-
     });
             }
     );

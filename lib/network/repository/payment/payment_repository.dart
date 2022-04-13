@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
 
 class PaymentRepository{
+
 PaymentBaseClient paymentBaseClient=PaymentBaseClient();
 
 Future<StripTokenResponseModel> getStripeToken(dynamic stripTokenRequestModel){

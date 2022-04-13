@@ -12,7 +12,7 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
-import 'customer_model.dart';
+import '../../../models/network_model/search_customer/customer_model.dart';
 
 class SearchCustomers extends StatefulWidget {
   Function onTapCustomer;

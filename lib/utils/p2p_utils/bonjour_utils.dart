@@ -8,6 +8,7 @@ import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
+import 'package:kona_ice_pos/screens/payment_option/P2PCardDetailsModel.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 
@@ -172,6 +173,9 @@ class P2PConnectionManager {
      if (action == StaffActionConst.orderModelUpdated) {
        P2POrderDetailsModel model = dataObject as P2POrderDetailsModel ;
        dataStr = p2POrderDetailsModelToJson(model);
+     }else if(action == StaffActionConst.customerCardScan){
+       P2PCardDetailsModel model = dataObject as P2PCardDetailsModel;
+       dataStr = p2PCardDetailsModelToJson(model);
      }
 
      updateData(action: action, data: dataStr);

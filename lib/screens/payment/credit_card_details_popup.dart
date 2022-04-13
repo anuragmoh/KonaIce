@@ -33,9 +33,9 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
   String stripeTokenId="",stripePaymentMethodId="";
   String demoCardNumber = "";
-  bool isCardNumberValid = true;
-  bool isExpiryValid = true;
-  bool isCvcValid = true;
+  bool isCardNumberValid = false;
+  bool isExpiryValid = false;
+  bool isCvcValid = false;
   bool isApiProcess = false;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();

@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import 'package:kona_ice_pos/network/base_client.dart';
-import 'package:kona_ice_pos/screens/all_orders/all_order_model.dart';
+import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart';
 
 class AllOrderRepository{
   BaseClient baseClient = BaseClient();
