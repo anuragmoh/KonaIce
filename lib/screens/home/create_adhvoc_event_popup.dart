@@ -602,6 +602,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     );
     if (p != null) {
       displayPrediction(p);
+      setState(() {
+        isApiProcess = true;
+      });
       //print("prediction: ${p}");
     }
   }
@@ -692,6 +695,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         // print("Error: $e");
       }
     }
+    setState(() {
+      isApiProcess = false;
+    });
   }
 
 

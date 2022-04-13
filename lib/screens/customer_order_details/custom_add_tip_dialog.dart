@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/font_constants.dart';
+import '../../constants/other_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../constants/style_constants.dart';
 import '../../utils/common_widgets.dart';
@@ -80,6 +81,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
           TextField(
             controller: tipController,
             keyboardType: TextInputType.number,
+            maxLength: TextFieldLengthConstant.addTip,
             style: StyleConstants.customTextStyle(
                 fontSize: 22.0,
                 color: getMaterialColor(AppColors.textColor6),
