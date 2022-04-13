@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   String currentDate =
-  Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
+      Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
   String clockInTime = StringConstants.defaultClockInTime;
   late DateTime startDateTime;
   Timer? clockInTimer;
@@ -209,22 +209,20 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-
-
   getAdhocEventDate() async {
     var result = await SessionDAO().getValueForKey(DatabaseKeys.adhocEvent);
-    if(result!=null){
+    if (result != null) {
       String lastValue = result.value;
-      if(lastValue==Date.getTimeStampFromDate()){
+      if (lastValue == Date.getTimeStampFromDate()) {
         setState(() {
           isCreateAdhocEventButtonEnable = false;
         });
-      }else{
+      } else {
         setState(() {
           isCreateAdhocEventButtonEnable = true;
         });
       }
-    }else{
+    } else {
       setState(() {
         isCreateAdhocEventButtonEnable = true;
       });
@@ -254,8 +252,6 @@ class _HomeScreenState extends State<HomeScreen>
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
   }
-
-
 
   @override
   void dispose() {
@@ -364,35 +360,32 @@ class _HomeScreenState extends State<HomeScreen>
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: Flexible(
-                                    child: Row(
-                                      children: [
-                                        CommonWidgets().image(
-                                            image:
-                                                AssetsConstants.locationPinIcon,
-                                            width: 2 *
-                                                SizeConfig.imageSizeMultiplier,
-                                            height: 2.47 *
-                                                SizeConfig.imageSizeMultiplier),
-                                        Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                left: 8.0),
-                                            child: CommonWidgets()
-                                                .textMultiLineWidget(
-                                                    eventDetails
-                                                        .getEventAddress(),
-                                                    StyleConstants.customTextStyle(
-                                                        fontSize: 12.0,
-                                                        color: getMaterialColor(
-                                                            AppColors
-                                                                .textColor4),
-                                                        fontFamily: FontConstants
-                                                            .montserratMedium)),
-                                          ),
+                                  child: Row(
+                                    children: [
+                                      CommonWidgets().image(
+                                          image:
+                                              AssetsConstants.locationPinIcon,
+                                          width: 2 *
+                                              SizeConfig.imageSizeMultiplier,
+                                          height: 2.47 *
+                                              SizeConfig.imageSizeMultiplier),
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0),
+                                          child: CommonWidgets()
+                                              .textMultiLineWidget(
+                                                  eventDetails
+                                                      .getEventAddress(),
+                                                  StyleConstants.customTextStyle(
+                                                      fontSize: 12.0,
+                                                      color: getMaterialColor(
+                                                          AppColors.textColor4),
+                                                      fontFamily: FontConstants
+                                                          .montserratMedium)),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Row(
@@ -455,10 +448,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget createEventButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
-      onTap: isCreateAdhocEventButtonEnable?onTapCreateEventButton:null,
+      onTap: isCreateAdhocEventButtonEnable ? onTapCreateEventButton : null,
       child: Container(
         decoration: BoxDecoration(
-            color: getMaterialColor(isCreateAdhocEventButtonEnable?AppColors.primaryColor2:AppColors.denotiveColor4),
+            color: getMaterialColor(isCreateAdhocEventButtonEnable
+                ? AppColors.primaryColor2
+                : AppColors.denotiveColor4),
             borderRadius: BorderRadius.circular(30.0)),
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -514,8 +509,8 @@ class _HomeScreenState extends State<HomeScreen>
   onTapCreateEventButton() async {
     await showDialog(
         barrierDismissible: false,
-        barrierLabel: MaterialLocalizations.of(context)
-            .modalBarrierDismissLabel,
+        barrierLabel:
+            MaterialLocalizations.of(context).modalBarrierDismissLabel,
         barrierColor: null,
         useRootNavigator: false,
         //barrierColor: AppColors.textColor1.withOpacity(0.7),
@@ -955,7 +950,5 @@ class _HomeScreenState extends State<HomeScreen>
         value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
-  eventCreatedCallBack(dynamic value){
-
-  }
+  eventCreatedCallBack(dynamic value) {}
 }
