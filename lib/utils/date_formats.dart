@@ -35,6 +35,12 @@ class Date {
     return DateTime.fromMillisecondsSinceEpoch(timestamp);
   }
 
+  static String getTimeStampFromDate() {
+    DateTime now = new DateTime.now();
+    DateTime date = new DateTime(now.year, now.month, now.day);
+    return date.millisecondsSinceEpoch.toString();
+  }
+
   static DateTime getStartOfDay({required DateTime date}) {
     return DateTime(date.year, date.month, date.day);
   }

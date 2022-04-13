@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
+import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_event_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -99,7 +102,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     return Loader(
         isCallInProgress: isApiProcess,
         child: Dialog(
-          backgroundColor: Colors.transparent,
+          //backgroundColor: Colors.transparent,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: mainUI(),
@@ -109,6 +112,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   Widget mainUI() {
     return SizedBox(
       width: 500.0,
+      height: MediaQuery.of(context).size.height*0.75,
       child: Column(
         children: [
           CommonWidgets().popUpTopView(
@@ -469,6 +473,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
 
   @override
   void showError(GeneralErrorResponse exception) {
+
     setState(() {
       isApiProcess = false;
     });
@@ -482,6 +487,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   @override
   void showSuccess(response) {
     CreateEventResponseModel responseModel = response;
+    updateDB();
     setState(() {
       isApiProcess = false;
       isEventCreated = true;
@@ -491,6 +497,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             StringConstants.eventCreatedSuccessfully,
         context: context);
     onTapCloseButton();
+  }
+
+  updateDB() async {
+    await SessionDAO().insert(Session(key: DatabaseKeys.adhocEvent, value: Date.getTimeStampFromDate()));
   }
 
   validateData() {

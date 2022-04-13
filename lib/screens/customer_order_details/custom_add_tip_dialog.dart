@@ -12,6 +12,7 @@ class CustomerAddTipDialog extends StatefulWidget {
   Function callBack;
   CustomerAddTipDialog({Key? key, required this.callBack}) : super(key: key);
 
+
   @override
   State<CustomerAddTipDialog> createState() => _CustomerAddTipDialogState();
 }
@@ -19,6 +20,7 @@ class CustomerAddTipDialog extends StatefulWidget {
 class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   bool isValidTip = true;
   TextEditingController tipController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +39,8 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.3,
-        height: MediaQuery.of(context).size.height * 0.23,
+        width: MediaQuery.of(context).size.width * 0.45,
+        height: MediaQuery.of(context).size.height * 0.3,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

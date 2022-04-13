@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen>
   Timer? clockInTimer;
   bool isClockIn = false;
   bool isApiProcess = false;
-
+  bool isCreateAdhocEventButtonEnable = false;
   List<Events> eventList = [];
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
   List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList = [];
@@ -209,10 +209,33 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
+
+
+  getAdhocEventDate() async {
+    var result = await SessionDAO().getValueForKey(DatabaseKeys.adhocEvent);
+    if(result!=null){
+      String lastValue = result.value;
+      if(lastValue==Date.getTimeStampFromDate()){
+        setState(() {
+          isCreateAdhocEventButtonEnable = false;
+        });
+      }else{
+        setState(() {
+          isCreateAdhocEventButtonEnable = true;
+        });
+      }
+    }else{
+      setState(() {
+        isCreateAdhocEventButtonEnable = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     refreshDataOnRequest();
+    getAdhocEventDate();
     if (FunctionalUtils.clockInTimestamp == 0) {
       callClockInOutDetailsAPI();
     } else {
@@ -231,6 +254,8 @@ class _HomeScreenState extends State<HomeScreen>
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
   }
+
+
 
   @override
   void dispose() {
@@ -430,10 +455,10 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget createEventButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
-      onTap: onTapCreateEventButton,
+      onTap: isCreateAdhocEventButtonEnable?onTapCreateEventButton:null,
       child: Container(
         decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor2),
+            color: getMaterialColor(isCreateAdhocEventButtonEnable?AppColors.primaryColor2:AppColors.denotiveColor4),
             borderRadius: BorderRadius.circular(30.0)),
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -489,14 +514,18 @@ class _HomeScreenState extends State<HomeScreen>
   onTapCreateEventButton() async {
     await showDialog(
         barrierDismissible: false,
+        barrierLabel: MaterialLocalizations.of(context)
+            .modalBarrierDismissLabel,
+        barrierColor: null,
         useRootNavigator: false,
-        barrierColor: AppColors.textColor1.withOpacity(0.7),
+        //barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
           return const CreateAdhocEvent();
         }).then((value) {
       if (value) {
         refreshDataOnRequest();
+        getAdhocEventDate();
       }
     });
   }
@@ -924,5 +953,9 @@ class _HomeScreenState extends State<HomeScreen>
     await SessionDAO().insert(Session(
         key: DatabaseKeys.itemExtras,
         value: DateTime.now().millisecondsSinceEpoch.toString()));
+  }
+
+  eventCreatedCallBack(dynamic value){
+
   }
 }
