@@ -739,12 +739,17 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       List<Placemark> placeMarks = await placemarkFromCoordinates(
           _currentPosition.latitude, _currentPosition.longitude);
       Placemark place = placeMarks[0];
+      debugPrint("Place data $place");
       // setState(() {
       //   _currentCountry = "${place.country}";
       // });
-      cityController.text = place.country!;
-      addressController.text = place.locality!;
+      cityController.text = place.locality!;
+      addressController.text = place.street! + place.subLocality!;
+      stateController.text = place.administrativeArea!;
       zipCodeController.text = place.postalCode!;
+      setState(() {
+        _currentCountry = place.country!;
+      });
       debugPrint(place.country);
       debugPrint(place.locality);
       debugPrint(place.subLocality);
