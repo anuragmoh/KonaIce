@@ -40,4 +40,10 @@ class P2POrderDetailsModel {
     "salesTax": salesTax,
     "orderRequestModel": orderRequestModel!.toJson(),
   };
+  setTip(double tipAmount){
+    tip = tipAmount;
+  }
+  double getTip(){
+    return tip!;
+  }
 }

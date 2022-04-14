@@ -15,7 +15,8 @@ class BaseClient {
   Map<String, String> header = {
     "Content-Type": "application/json",
     "Accept-Language": "en-US",
-    "X-Client-App": "POS-APP"
+    "X-Client-App": "POS-APP",
+    "Timezone":DateTime.now().timeZoneName.toString(),
   };
 
   //GET
@@ -40,6 +41,7 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     var payload = json.encode(payloadObj);
     debugPrint("payLoad-----$payload");
+    debugPrint("header $header");
     debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {

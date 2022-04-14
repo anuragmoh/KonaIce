@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/utils/date_formats.dart';
+
 class StringConstants {
   static const title = "Kona Ice";
   static const loginText = "Log In";
@@ -140,6 +143,7 @@ class StringConstants {
   static const equipment = "Equipment";
   static const selectEquipment = "Select Equipment";
   static const create = "Create";
+  static const defaultEventName = "POS_MiscSales_";
 
   //MyProfile
   static const myProfile = 'My Profile';
@@ -208,6 +212,8 @@ class StringConstants {
   static const confirmNewOrder = "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
 
+  //Enter Tip Amount
+  static const enterTip = "Enter Tip Amount.";
 
   //all Order status
   static const paymentStatusSuccess = "SUCCESS";
@@ -221,6 +227,10 @@ class StringConstants {
   static const allDeviceScreenHead = "Please select customer device from the list";
 
   static String noDeviceAvailableToConnect = "No device available to connect";
+
+  String getDefaultEventName(){
+    return defaultEventName+Date.getDateAndTime();
+  }
 
 
 }

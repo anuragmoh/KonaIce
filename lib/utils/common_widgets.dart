@@ -18,6 +18,11 @@ class CommonWidgets {
     return Text(textTitle, style: textStyle, textAlign: textAlign);
   }
 
+  Widget textMultiLineWidget(String textTitle, TextStyle textStyle,
+      {TextAlign textAlign = TextAlign.start}) {
+    return Text(textTitle, style: textStyle, textAlign: textAlign,maxLines: 5,);
+  }
+
   Widget dashboardTopBar(Widget child) {
     // print('check for height in orientation ${8.30*SizeConfig.heightSizeMultiplier}');
     return Container(

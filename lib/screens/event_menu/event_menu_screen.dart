@@ -77,8 +77,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool isSearchCustomer = false;
   TextEditingController addTipTextFieldController = TextEditingController();
-  TextEditingController addDiscountTextFieldController = TextEditingController();
-  TextEditingController applyCouponTextFieldController = TextEditingController();
+  TextEditingController addDiscountTextFieldController =
+      TextEditingController();
+  TextEditingController applyCouponTextFieldController =
+      TextEditingController();
 
   int selectedCategoryIndex = 1;
   int currentIndex = 0;
@@ -121,19 +123,18 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     });
   }
 
-
   // LocalDB call start from here.
 
   getItemCategoriesByEventId(String eventId) async {
     // Event Id need to pass
     var result = await ItemCategoriesDAO().getCategoriesByEventId(eventId);
     if (result != null) {
-        setState(() {
-          itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
-              eventId: eventId, name: StringConstants.customMenu));
-          itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
-              eventId: eventId, name: StringConstants.allCategories));
-          itemCategoriesList.addAll(result);
+      setState(() {
+        itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
+            eventId: eventId, name: StringConstants.customMenu));
+        itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
+            eventId: eventId, name: StringConstants.allCategories));
+        itemCategoriesList.addAll(result);
       });
     } else {
       setState(() {
@@ -151,6 +152,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         dbItemList.clear();
         itemList.addAll(result);
         dbItemList.addAll(itemList);
+        debugPrint("=======$itemList");
       });
     } else {
       setState(() {
@@ -174,8 +176,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   getExtraFoodItem() async {
-    var result = await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId(
-        "", "");
+    var result =
+        await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
     if (result != null) {
       setState(() {
         foodExtraItemList.addAll(result);
@@ -187,19 +189,18 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     }
   }
 
-
   @override
   void initState() {
     super.initState();
     getItemCategoriesByEventId(widget.events.id);
     getAllItems(widget.events.id);
     getUserName();
-   // setSalesTax();
+    // setSalesTax();
   }
+
   @override
   void dispose() {
     super.dispose();
-
   }
 
   @override
@@ -210,35 +211,46 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
+
   Widget mainUi(BuildContext context) {
     return WillPopScope(
-      onWillPop: ()async=>false,
+      onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
         backgroundColor: getMaterialColor(AppColors.textColor3),
-      //  endDrawer: const NotificationDrawer(),
+        //  endDrawer: const NotificationDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TopBar(userName: userName,
-              eventName: widget.events.getEventName(),
-              eventAddress: widget.events.getEventAddress(),
-              showCenterWidget: true,
-              onTapCallBack: onTapCallBack,
-              //onDrawerTap: onDrawerTap,
-               onProfileTap: onProfileChange,
-               isProduct: isProduct),
+            TopBar(
+                userName: userName,
+                eventName: widget.events.getEventName(),
+                eventAddress: widget.events.getEventAddress(),
+                showCenterWidget: true,
+                onTapCallBack: onTapCallBack,
+                //onDrawerTap: onDrawerTap,
+                onProfileTap: onProfileChange,
+                isProduct: isProduct),
             Expanded(
-              child: isProduct ? body() : AllOrdersScreen(onBackTap: (saveOrders, orderItemList, extraItemList ) {
-                onBackFromAllOrder(savedOrder: saveOrders, savedOrderItemList: orderItemList, savedOrderExtraItemList: extraItemList);
-              }, events: widget.events),
+              child: isProduct
+                  ? body()
+                  : AllOrdersScreen(
+                      onBackTap: (saveOrders, orderItemList, extraItemList) {
+                        onBackFromAllOrder(
+                            savedOrder: saveOrders,
+                            savedOrderItemList: orderItemList,
+                            savedOrderExtraItemList: extraItemList);
+                      },
+                      events: widget.events),
             ),
             Visibility(
-              visible: selectedMenuItems.isEmpty ? true :false,
-              child: BottomBarWidget(onTapCallBack: onTapBottomListItem,
+              visible: selectedMenuItems.isEmpty ? true : false,
+              child: BottomBarWidget(
+                onTapCallBack: onTapBottomListItem,
                 accountImageVisibility: false,
-                isFromDashboard: false,),
+                isFromDashboard: false,
+              ),
             )
           ],
         ),
@@ -247,22 +259,27 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   Widget body() {
-    return itemList.isNotEmpty ? Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Expanded(child: leftContainer()),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: rightContainer(),
-          ),
-        ],
-      ),
-    ) :
-     Align(
-        alignment: Alignment.center,
-        child: CommonWidgets().textWidget(StringConstants.noMenuItemsAvailable, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
-    );
+    return itemList.isNotEmpty
+        ? Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              children: [
+                Expanded(child: leftContainer()),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: rightContainer(),
+                ),
+              ],
+            ),
+          )
+        : Align(
+            alignment: Alignment.center,
+            child: CommonWidgets().textWidget(
+                StringConstants.noMenuItemsAvailable,
+                StyleConstants.customTextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratSemiBold)));
   }
 
   Widget leftContainer() {
@@ -292,26 +309,18 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   Widget rightContainer() {
     return SingleChildScrollView(
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.24,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height * 0.78,
+        width: MediaQuery.of(context).size.width * 0.24,
+        height: MediaQuery.of(context).size.height * 0.78,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: getMaterialColor(AppColors.textColor1).withOpacity(
-                      0.2),
+                  color:
+                      getMaterialColor(AppColors.textColor1).withOpacity(0.2),
                   blurRadius: 8.0,
-                  offset: const Offset(0, 2)
-              )
-            ]
-        ),
+                  offset: const Offset(0, 2))
+            ]),
         child: isSearchCustomer
             ? searchCustomerContainer()
             : rightCartViewContainer(),
@@ -324,25 +333,21 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Align(
-            alignment: Alignment.topRight,
-            child: clearButton()
-        ),
+        Align(alignment: Alignment.topRight, child: clearButton()),
         customerDetails(),
-        Expanded(child: selectedMenuItems.isNotEmpty ? CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-                child: selectedItemList()
-            ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              fillOverscroll: true,
-              child: couponContainer(),
-            )
-          ],
-
-        ) : emptyCartView()
-        ),
+        Expanded(
+            child: selectedMenuItems.isNotEmpty
+                ? CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(child: selectedItemList()),
+                      SliverFillRemaining(
+                        hasScrollBody: false,
+                        fillOverscroll: true,
+                        child: couponContainer(),
+                      )
+                    ],
+                  )
+                : emptyCartView()),
         chargeButton(),
         saveAndNewOrderButton()
       ],
@@ -350,7 +355,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   Widget searchCustomerContainer() {
-    return SearchCustomers(onTapCustomer: onTapCustomerName,);
+    return SearchCustomers(
+      onTapCustomer: onTapCustomerName,
+    );
   }
 
   Widget categoriesListContainer() {
@@ -362,10 +369,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           itemBuilder: (BuildContext context, int index) {
             return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: categoriesNameButton(index)
-            );
-          }
-      ),
+                child: categoriesNameButton(index));
+          }),
     );
   }
 
@@ -375,8 +380,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             crossAxisCount: 5,
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 8.0,
-            childAspectRatio: 139 / 80
-        ),
+            childAspectRatio: 139 / 80),
         itemCount: itemList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
@@ -395,16 +399,15 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: menuObject.isItemSelected ?
-              [
-                getMaterialColor(AppColors.gradientColor1),
-                getMaterialColor(AppColors.gradientColor2)
-              ]
+              colors: menuObject.isItemSelected
+                  ? [
+                      getMaterialColor(AppColors.gradientColor1),
+                      getMaterialColor(AppColors.gradientColor2)
+                    ]
                   : [
-                getMaterialColor(AppColors.whiteColor),
-                getMaterialColor(AppColors.whiteColor)
-              ]
-          ),
+                      getMaterialColor(AppColors.whiteColor),
+                      getMaterialColor(AppColors.whiteColor)
+                    ]),
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Padding(
@@ -423,31 +426,36 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                         flex: 5,
                         child: Column(
                           mainAxisAlignment: (menuObject.isItemHasExtras() &&
-                              menuObject.isItemSelected) ? MainAxisAlignment
-                              .start : MainAxisAlignment.end,
+                                  menuObject.isItemSelected)
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
                                   bottom: 3.0, right: 3.0),
-                              child: Text(menuObject.name,
+                              child: Text(
+                                menuObject.name,
                                 style: StyleConstants.customTextStyle(
                                     fontSize: 16.0,
                                     color: getMaterialColor(
-                                        menuObject.isItemSelected ? AppColors
-                                            .whiteColor : AppColors.textColor1),
-                                    fontFamily: FontConstants
-                                        .montserratSemiBold),
+                                        menuObject.isItemSelected
+                                            ? AppColors.whiteColor
+                                            : AppColors.textColor1),
+                                    fontFamily:
+                                        FontConstants.montserratSemiBold),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
-                            CommonWidgets().textWidget('\$${menuObject.price}',
+                            CommonWidgets().textWidget(
+                                '\$${menuObject.price}',
                                 StyleConstants.customTextStyle(
                                     fontSize: 12.0,
                                     color: getMaterialColor(
-                                        menuObject.isItemSelected ? AppColors
-                                            .whiteColor : AppColors.textColor2),
+                                        menuObject.isItemSelected
+                                            ? AppColors.whiteColor
+                                            : AppColors.textColor2),
                                     fontFamily: FontConstants.montserratMedium))
                           ],
                         ),
@@ -469,8 +477,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 ),
               ),
               Visibility(
-                visible: menuObject.isItemSelected &&
-                    menuObject.isItemHasExtras(),
+                visible:
+                    menuObject.isItemSelected && menuObject.isItemHasExtras(),
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4.0),
                   child: InkWell(
@@ -488,8 +496,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               )
             ],
           ),
-        )
-    );
+        ));
   }
 
   Widget addNewMenuItem() {
@@ -508,12 +515,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           SizedBox(
             width: 70.0,
             child: CommonWidgets().textWidget(
-                StringConstants.addNewMenuItem, StyleConstants.customTextStyle(
-                fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor2),
-                fontFamily: FontConstants.montserratMedium),
-                textAlign: TextAlign.center
-            ),
+                StringConstants.addNewMenuItem,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor2),
+                    fontFamily: FontConstants.montserratMedium),
+                textAlign: TextAlign.center),
           )
         ],
       ),
@@ -522,10 +529,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   Widget plusSymbolText() {
     return CommonWidgets().textWidget(
-        StringConstants.plusSymbol, StyleConstants.customTextStyle(
-        fontSize: 16.0, color: getMaterialColor(AppColors.primaryColor1),
-        fontFamily: FontConstants.montserratBold)
-    );
+        StringConstants.plusSymbol,
+        StyleConstants.customTextStyle(
+            fontSize: 16.0,
+            color: getMaterialColor(AppColors.primaryColor1),
+            fontFamily: FontConstants.montserratBold));
   }
 
   Widget customerDetails() {
@@ -535,27 +543,30 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 2.0),
         child: Row(
           children: [
-            CommonWidgets().image(image: AssetsConstants.addCustomerIcon,
+            CommonWidgets().image(
+                image: AssetsConstants.addCustomerIcon,
                 width: 25.0,
                 height: 25.0),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 5.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 child: CommonWidgets().textWidget(
-                    customerName, StyleConstants.customTextStyle(
-                    fontSize: 16.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
+                    customerName,
+                    StyleConstants.customTextStyle(
+                        fontSize: 16.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratBold)),
               ),
             ),
             Visibility(
               visible: invalidCustomerName(),
               child: CommonWidgets().textWidget(
-                  StringConstants.plusSymbol, StyleConstants.customTextStyle(
-                  fontSize: 16.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratBold)),
+                  StringConstants.plusSymbol,
+                  StyleConstants.customTextStyle(
+                      fontSize: 16.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratBold)),
             )
           ],
         ),
@@ -572,10 +583,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         Padding(
           padding: const EdgeInsets.only(top: 6.0),
           child: CommonWidgets().textWidget(
-              StringConstants.noItemsAdded, StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor2),
-              fontFamily: FontConstants.montserratSemiBold)),
+              StringConstants.noItemsAdded,
+              StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratSemiBold)),
         ),
       ],
     );
@@ -595,29 +607,27 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                      flex: 5,
-                      child: selectedItemDetailsComponent(index)),
+                  Expanded(flex: 5, child: selectedItemDetailsComponent(index)),
                   Expanded(
                     flex: 3,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: CommonWidgets().quantityIncrementDecrementContainer(
-                          quantity: selectedMenuItems[index].selectedItemQuantity,
-                          onTapPlus: () {
-                            onTapIncrementCountButton(index);
-                          },
-                          onTapMinus: () {
-                            onTapDecrementCountButton(index);
-                          }
-                      ),
+                      child: CommonWidgets()
+                          .quantityIncrementDecrementContainer(
+                              quantity:
+                                  selectedMenuItems[index].selectedItemQuantity,
+                              onTapPlus: () {
+                                onTapIncrementCountButton(index);
+                              },
+                              onTapMinus: () {
+                                onTapDecrementCountButton(index);
+                              }),
                     ),
                   ),
                 ],
               ),
             );
-          }
-      ),
+          }),
     );
   }
 
@@ -635,10 +645,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           Padding(
             padding: const EdgeInsets.only(bottom: 2.0),
             child: CommonWidgets().textWidget(
-                menuObjet.name, StyleConstants.customTextStyle(
-                fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor4),
-                fontFamily: FontConstants.montserratMedium)),
+                menuObjet.name,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor4),
+                    fontFamily: FontConstants.montserratMedium)),
           ),
           Row(
             children: [
@@ -647,10 +658,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 child: Padding(
                   padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
                   child: CommonWidgets().textWidget(
-                      menuObjet.getExtraItemsName(), StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.textColor2),
-                      fontFamily: FontConstants.montserratMedium)),
+                      menuObjet.getExtraItemsName(),
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: getMaterialColor(AppColors.textColor2),
+                          fontFamily: FontConstants.montserratMedium)),
                 ),
               ),
               const SizedBox(
@@ -699,14 +711,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                   hintText: StringConstants.applyCoupon,
                   imageName: AssetsConstants.couponIcon,
                   controller: applyCouponTextFieldController)),
-          commonTextFieldContainer(hintText: StringConstants.addTip,
+          commonTextFieldContainer(
+              hintText: StringConstants.addTip,
               imageName: AssetsConstants.dollarIcon,
               controller: addTipTextFieldController),
-     /*     commonTextFieldContainer(hintText: StringConstants.addDiscount,
+          /*     commonTextFieldContainer(hintText: StringConstants.addDiscount,
               imageName: AssetsConstants.dollarIcon,
               controller: addDiscountTextFieldController),*/
           orderBillDetailContainer(),
-
         ],
       ),
     );
@@ -719,7 +731,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          commonOrderBillComponents(text: StringConstants.foodCost,
+          commonOrderBillComponents(
+              text: StringConstants.foodCost,
               price: totalAmountOfSelectedItems),
           commonOrderBillComponents(
               text: StringConstants.salesTax, price: getSalesTax()),
@@ -744,22 +757,26 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CommonWidgets().textWidget(
-              text, StyleConstants.customTextStyle(fontSize: 12,
-              color: getMaterialColor(AppColors.textColor1),
-              fontFamily: FontConstants.montserratMedium)),
+              text,
+              StyleConstants.customTextStyle(
+                  fontSize: 12,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratMedium)),
           CommonWidgets().textWidget(
               StringConstants.symbolDollar + price.toStringAsFixed(2),
-              StyleConstants.customTextStyle(fontSize: 12,
+              StyleConstants.customTextStyle(
+                  fontSize: 12,
                   color: getMaterialColor(AppColors.textColor2),
                   fontFamily: FontConstants.montserratRegular)),
-
         ],
       ),
     );
   }
 
   Widget commonTextFieldContainer(
-      {required String hintText, required String imageName, required TextEditingController controller}) {
+      {required String hintText,
+      required String imageName,
+      required TextEditingController controller}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Container(
@@ -767,17 +784,16 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             border: Border.all(
-                color: getMaterialColor(AppColors.whiteBorderColor))
-        ),
+                color: getMaterialColor(AppColors.whiteBorderColor))),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
                 padding: const EdgeInsets.only(left: 12.0, right: 12.0),
-                child: CommonWidgets().image(image: imageName,
+                child: CommonWidgets().image(
+                    image: imageName,
                     width: 1.75 * SizeConfig.heightSizeMultiplier,
-                    height: 1.75 * SizeConfig.heightSizeMultiplier)
-            ),
+                    height: 1.75 * SizeConfig.heightSizeMultiplier)),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(1.0),
@@ -785,7 +801,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                   controller: controller,
                   maxLength: TextFieldLengthConstant.addTip,
                   keyboardType: TextInputType.number,
-                  style: StyleConstants.customTextStyle(fontSize: 12.0,
+                  style: StyleConstants.customTextStyle(
+                      fontSize: 12.0,
                       color: getMaterialColor(AppColors.textColor1),
                       fontFamily: FontConstants.montserratMedium),
                   decoration: InputDecoration(
@@ -793,7 +810,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                     counterText: "",
                     //  contentPadding: const EdgeInsets.only(bottom: 20),
                     hintText: hintText,
-                    hintStyle: StyleConstants.customTextStyle(fontSize: 12.0,
+                    hintStyle: StyleConstants.customTextStyle(
+                        fontSize: 12.0,
                         color: getMaterialColor(AppColors.textColor2),
                         fontFamily: FontConstants.montserratMedium),
                   ),
@@ -820,23 +838,23 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             color: getMaterialColor(index == selectedCategoryIndex
                 ? AppColors.primaryColor2
                 : AppColors.whiteColor),
-            border: Border.all(width: 1.0,
+            border: Border.all(
+                width: 1.0,
                 color: getMaterialColor(AppColors.whiteBorderColor)),
-            borderRadius: BorderRadius.circular(20.0)
-        ),
+            borderRadius: BorderRadius.circular(20.0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: CommonWidgets().textWidget(
               itemCategoriesList[index].categoryName,
-              index == selectedCategoryIndex ?
-              StyleConstants.customTextStyle(fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratBold)
-                  : StyleConstants.customTextStyle(fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor4),
-                  fontFamily: FontConstants.montserratMedium)
-
-          ),
+              index == selectedCategoryIndex
+                  ? StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratBold)
+                  : StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor4),
+                      fontFamily: FontConstants.montserratMedium)),
         ),
       ),
     );
@@ -871,11 +889,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
         child: CommonWidgets().textWidget(
-            StringConstants.clear, StyleConstants.customTextStyle(
-            fontSize: 9.0,
-            color: getMaterialColor(AppColors.textColor5),
-            fontFamily: FontConstants.montserratSemiBold)
-        ),
+            StringConstants.clear,
+            StyleConstants.customTextStyle(
+                fontSize: 9.0,
+                color: getMaterialColor(AppColors.textColor5),
+                fontFamily: FontConstants.montserratSemiBold)),
       ),
     );
   }
@@ -886,7 +904,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         if (selectedMenuItems.isNotEmpty) {
           onTapChargeButton();
         }
-      } ,
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 15.0),
         child: Container(
@@ -895,8 +913,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               color: getMaterialColor(selectedMenuItems.isEmpty
                   ? AppColors.denotiveColor5
                   : AppColors.primaryColor2),
-              borderRadius: BorderRadius.circular(20.0)
-          ),
+              borderRadius: BorderRadius.circular(20.0)),
           child: Padding(
             padding: const EdgeInsets.only(left: 15.0, right: 15.0),
             child: Row(
@@ -906,24 +923,25 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 Padding(
                   padding: const EdgeInsets.only(top: 12.0, bottom: 10.0),
                   child: CommonWidgets().textWidget(
-                      StringConstants.charge, StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(selectedMenuItems.isEmpty
-                          ? AppColors.textColor4
-                          : AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold),
+                      StringConstants.charge,
+                      StyleConstants.customTextStyle(
+                          fontSize: 16.0,
+                          color: getMaterialColor(selectedMenuItems.isEmpty
+                              ? AppColors.textColor4
+                              : AppColors.textColor1),
+                          fontFamily: FontConstants.montserratBold),
                       textAlign: TextAlign.center),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 7.0, bottom: 7.0),
                   child: CommonWidgets().textWidget(
-                      '${StringConstants.symbolDollar}${totalAmount
-                          .toStringAsFixed(2)}', StyleConstants.customTextStyle(
-                      fontSize: 23.3,
-                      color: getMaterialColor(selectedMenuItems.isEmpty
-                          ? AppColors.textColor4
-                          : AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold),
+                      '${StringConstants.symbolDollar}${totalAmount.toStringAsFixed(2)}',
+                      StyleConstants.customTextStyle(
+                          fontSize: 23.3,
+                          color: getMaterialColor(selectedMenuItems.isEmpty
+                              ? AppColors.textColor4
+                              : AppColors.textColor1),
+                          fontFamily: FontConstants.montserratBold),
                       textAlign: TextAlign.center),
                 )
               ],
@@ -945,14 +963,15 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               if (selectedMenuItems.isNotEmpty) {
                 onTapSaveButton();
               }
-            } ,
+            },
             child: CommonWidgets().textWidget(
-                StringConstants.saveOrder, StyleConstants.customTextStyle(
-                fontSize: 12.0,
-                color: getMaterialColor(selectedMenuItems.isEmpty
-                    ? AppColors.denotiveColor4
-                    : AppColors.textColor6),
-                fontFamily: FontConstants.montserratSemiBold)),
+                StringConstants.saveOrder,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(selectedMenuItems.isEmpty
+                        ? AppColors.denotiveColor4
+                        : AppColors.textColor6),
+                    fontFamily: FontConstants.montserratSemiBold)),
           ),
           InkWell(
             onTap: () {
@@ -961,12 +980,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               }
             },
             child: CommonWidgets().textWidget(
-                StringConstants.newOrder, StyleConstants.customTextStyle(
-                fontSize: 12.0,
-                color: getMaterialColor(selectedMenuItems.isEmpty
-                    ? AppColors.denotiveColor4
-                    : AppColors.textColor7),
-                fontFamily: FontConstants.montserratSemiBold)),
+                StringConstants.newOrder,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(selectedMenuItems.isEmpty
+                        ? AppColors.denotiveColor4
+                        : AppColors.textColor7),
+                    fontFamily: FontConstants.montserratSemiBold)),
           )
         ],
       ),
@@ -980,11 +1000,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
         context: context,
         builder: (context) {
-          return FoodExtraPopup(item: selectedFromMenu ? itemList[index] : selectedMenuItems[index]);
+          return FoodExtraPopup(
+              item: selectedFromMenu
+                  ? itemList[index]
+                  : selectedMenuItems[index]);
         });
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   //Custom Menu popup
@@ -1007,7 +1028,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   double getSalesTax() {
-    salesTax = (widget.events.salesTax.toDouble()/100) * totalAmountOfSelectedItems;
+    salesTax =
+        (widget.events.salesTax.toDouble() / 100) * totalAmountOfSelectedItems;
     return salesTax;
   }
 
@@ -1031,11 +1053,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   calculateTotal() {
-    if (selectedMenuItems.isNotEmpty) {
-      totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
-    } else {
-      totalAmount = 0.0;
-    }
+    setState(() {
+      if (selectedMenuItems.isNotEmpty) {
+        totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
+      } else {
+        totalAmount = 0.0;
+      }
+    });
+
   }
 
   clearCart() {
@@ -1048,14 +1073,13 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       addDiscountTextFieldController.clear();
       customerName = StringConstants.addCustomer;
       orderID = '';
-      customer  = null;
-     getAllItems(widget.events.id);
+      customer = null;
+      getAllItems(widget.events.id);
     });
   }
 
   //Action Event
-  onTapAddCategoryButton() {
-  }
+  onTapAddCategoryButton() {}
 
   onTapCategoriesButton({required int index}) {
     if (index != selectedCategoryIndex) {
@@ -1068,7 +1092,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           itemList.addAll(dbItemList);
         } else {
           itemList.clear();
-          var list = dbItemList.where((element) => element.itemCategoryId == itemCategoriesList[index].id).toList();
+          var list = dbItemList
+              .where((element) =>
+                  element.itemCategoryId == itemCategoriesList[index].id)
+              .toList();
           itemList.addAll(list);
         }
       });
@@ -1078,18 +1105,19 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   onTapClearButton() {
     DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo);
   }
-  onConfirmTapYes(){
-    if(orderID == ""){
+
+  onConfirmTapYes() {
+    if (orderID == "") {
       clearCart();
-    }else{
+    } else {
       deleteOrder();
     }
-  onConfirmTapNo();
-  }
-  onConfirmTapNo(){
-    Navigator.of(context).pop();
+    onConfirmTapNo();
   }
 
+  onConfirmTapNo() {
+    Navigator.of(context).pop();
+  }
 
   onTapChargeButton() {
     moveCustomerToPaymentScreen();
@@ -1100,19 +1128,21 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     if (orderID.isEmpty) {
       callPlaceOrderAPI();
     } else {
-      saveOrderIntoLocalDB(orderID,orderCode);
+      saveOrderIntoLocalDB(orderID, orderCode);
     }
   }
 
   onTapNewOrderButton() {
-
-    DialogHelper.newOrderConfirmationDialog(context, onTapDialogSave, onTapDialogCancel);
+    DialogHelper.newOrderConfirmationDialog(
+        context, onTapDialogSave, onTapDialogCancel);
   }
-  onTapDialogSave(){
+
+  onTapDialogSave() {
     Navigator.of(context).pop();
     callPlaceOrderAPI();
   }
-  onTapDialogCancel(){
+
+  onTapDialogCancel() {
     Navigator.of(context).pop();
     clearCart();
   }
@@ -1144,7 +1174,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     //   print('add New Item');
     // } else {
     setState(() {
-
       if (itemList[index].isItemSelected) {
         itemList[index].selectedItemQuantity = 0;
         selectedMenuItems.remove(itemList[index]);
@@ -1180,12 +1209,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   onCompleteTextFieldEditing() {
     String tipText = addTipTextFieldController.text;
+    updateTipToCustomer(tipText.toString());
     String discountText = addDiscountTextFieldController.text;
     setState(() {
       tip = double.parse(tipText.isEmpty ? '0.0' : tipText);
       discount = double.parse(discountText.isEmpty ? '0.0' : discountText);
     });
-
     FocusScope.of(context).unfocus();
   }
 
@@ -1193,132 +1222,137 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     _scaffoldKey.currentState!.openEndDrawer();
     // Scaffold.of(context).openDrawer();
   }
+
   onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
 
-  onBackFromAllOrder({required SavedOrders savedOrder, required List<SavedOrdersItem> savedOrderItemList, required List<SavedOrdersExtraItems> savedOrderExtraItemList}) async {
+  onBackFromAllOrder(
+      {required SavedOrders savedOrder,
+      required List<SavedOrdersItem> savedOrderItemList,
+      required List<SavedOrdersExtraItems> savedOrderExtraItemList}) async {
     await clearCart();
     setState(() {
       isProduct = true;
     });
-    Future.delayed(
-        const Duration(milliseconds: 500),
-            () {
-
-
-    setState(() {
-    tip = savedOrder.tip.toDouble();
-    addTipTextFieldController.text = savedOrder.tip.toString();
-    discount = savedOrder.discount.toDouble();
-    addDiscountTextFieldController.text = savedOrder.discount.toString();
-    customerName = savedOrder.customerName;
-    orderID = savedOrder.orderId;
-  //  salesTax = setSalesTax();
-    if (savedOrder.customerName != StringConstants.guestCustomer) {
-      customer = CustomerDetails();
-      List<String> names = customerName.split(' ');
-      if (names.length > 1) {
-        customer!.firstName = names[0];
-        customer!.lastName = names[1];
-      }
-      customer!.email = savedOrder.email;
-      customer!.phoneNum = savedOrder.phoneNumber;
-      customer!.numCountryCode = savedOrder.phoneCountryCode;
-    }
-    for (var itemSaveOrder in savedOrderItemList) {
-      for (var item in itemList) {
-        if (item.id == itemSaveOrder.itemId) {
-          item.selectedItemQuantity = itemSaveOrder.quantity;
-          item.isItemSelected = true;
-          for (var extraSaveOrder in savedOrderExtraItemList) {
-            if (item.foodExtraItemList.isEmpty) {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      setState(() {
+        tip = savedOrder.tip.toDouble();
+        addTipTextFieldController.text = savedOrder.tip.toString();
+        discount = savedOrder.discount.toDouble();
+        addDiscountTextFieldController.text = savedOrder.discount.toString();
+        customerName = savedOrder.customerName;
+        orderID = savedOrder.orderId;
+        //  salesTax = setSalesTax();
+        if (savedOrder.customerName != StringConstants.guestCustomer) {
+          customer = CustomerDetails();
+          List<String> names = customerName.split(' ');
+          if (names.length > 1) {
+            customer!.firstName = names[0];
+            customer!.lastName = names[1];
+          }
+          customer!.email = savedOrder.email;
+          customer!.phoneNum = savedOrder.phoneNumber;
+          customer!.numCountryCode = savedOrder.phoneCountryCode;
+        }
+        for (var itemSaveOrder in savedOrderItemList) {
+          for (var item in itemList) {
+            if (item.id == itemSaveOrder.itemId) {
+              item.selectedItemQuantity = itemSaveOrder.quantity;
+              item.isItemSelected = true;
+              for (var extraSaveOrder in savedOrderExtraItemList) {
+                if (item.foodExtraItemList.isEmpty) {
+                  break;
+                }
+                for (var extraItem in item.foodExtraItemList) {
+                  if (extraItem.id == extraSaveOrder.extraFoodItemId &&
+                      item.id == extraSaveOrder.itemId) {
+                    extraItem.selectedItemQuantity = extraSaveOrder.quantity;
+                    extraItem.isItemSelected = true;
+                    item.selectedExtras.add(extraItem);
+                  }
+                }
+              }
+              selectedMenuItems.add(item);
               break;
             }
-            for (var extraItem in item.foodExtraItemList) {
-              if (extraItem.id == extraSaveOrder.extraFoodItemId && item.id == extraSaveOrder.itemId) {
-                extraItem.selectedItemQuantity = extraSaveOrder.quantity;
-                extraItem.isItemSelected = true;
-                item.selectedExtras.add(extraItem);
-              }
-            }
           }
-          selectedMenuItems.add(item);
-          break;
         }
-      }
-    }
+      });
     });
-            }
-    );
   }
 
   //data for p2pConnection
-  showOrderScreenToCustomer(){
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.eventSelected);
+  showOrderScreenToCustomer() {
+    P2PConnectionManager.shared
+        .updateData(action: StaffActionConst.eventSelected);
   }
+
   updateOrderDataToCustomer() {
     P2POrderDetailsModel dataModel = P2POrderDetailsModel();
-        dataModel.orderRequestModel = getOrderRequestModel();
-        dataModel.orderRequestModel!.addressLongitude = 0.0;
-        dataModel.orderRequestModel!.addressLatitude = 0.0;
-        dataModel.discount = discount;
-        dataModel.tip = tip;
-        dataModel.totalAmount = totalAmount;
-        dataModel.foodCost = totalAmountOfSelectedItems;
-        dataModel.salesTax = getSalesTax();
-        P2PConnectionManager.shared.updateDataWithObject(action: StaffActionConst.orderModelUpdated, dataObject: dataModel);
+    dataModel.orderRequestModel = getOrderRequestModel();
+    dataModel.orderRequestModel!.addressLongitude = 0.0;
+    dataModel.orderRequestModel!.addressLatitude = 0.0;
+    dataModel.discount = discount;
+    dataModel.tip = tip;
+    dataModel.totalAmount = totalAmount;
+    dataModel.foodCost = totalAmountOfSelectedItems;
+    dataModel.salesTax = getSalesTax();
+    P2PConnectionManager.shared.updateDataWithObject(
+        action: StaffActionConst.orderModelUpdated, dataObject: dataModel);
   }
-  moveCustomerToPaymentScreen(){
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.chargeOrderBill);
+
+  moveCustomerToPaymentScreen() {
+    P2PConnectionManager.shared
+        .updateData(action: StaffActionConst.chargeOrderBill);
   }
 
   //data required for next screen
   PlaceOrderRequestModel getOrderRequestModel() {
     PlaceOrderRequestModel orderRequestModel = PlaceOrderRequestModel();
-     orderRequestModel.eventId = widget.events.id;
-     orderRequestModel.cardId = "9db195092bc44d9db117f03a5a541025";
-     orderRequestModel.campaignId = "";
+    orderRequestModel.eventId = widget.events.id;
+    orderRequestModel.cardId = "9db195092bc44d9db117f03a5a541025";
+    orderRequestModel.campaignId = "";
 
-     if (orderID.isNotEmpty) {
-       orderRequestModel.id = orderID;
-     }
+    if (orderID.isNotEmpty) {
+      orderRequestModel.id = orderID;
+    }
 
-     //addCustomer Details
-     if (customer != null) {
-       orderRequestModel.firstName = customer!.firstName;
-       orderRequestModel.lastName = customer!.lastName;
-       orderRequestModel.email = customer!.email;
-       orderRequestModel.phoneNumCountryCode = customer!.numCountryCode;
-       orderRequestModel.phoneNumber = customer!.phoneNum;
-       orderRequestModel.addressLine1 = "";
-       orderRequestModel.addressLine2 = "";
-       orderRequestModel.country = "";
-       orderRequestModel.state = "";
-       orderRequestModel.city = "";
-       orderRequestModel.zipCode = "";
-       orderRequestModel.anonymous = false;
-       orderRequestModel.donation = 0;
-       orderRequestModel.gratuity = 0;
-       orderRequestModel.addressLatitude = 0.0;
-       orderRequestModel.addressLongitude = 0.0;
-     } else {
-       orderRequestModel.anonymous = true;
-     }
+    //addCustomer Details
+    if (customer != null) {
+      orderRequestModel.firstName = customer!.firstName;
+      orderRequestModel.lastName = customer!.lastName;
+      orderRequestModel.email = customer!.email;
+      orderRequestModel.phoneNumCountryCode = customer!.numCountryCode;
+      orderRequestModel.phoneNumber = customer!.phoneNum;
+      orderRequestModel.addressLine1 = "";
+      orderRequestModel.addressLine2 = "";
+      orderRequestModel.country = "";
+      orderRequestModel.state = "";
+      orderRequestModel.city = "";
+      orderRequestModel.zipCode = "";
+      orderRequestModel.anonymous = false;
+      orderRequestModel.donation = 0;
+      orderRequestModel.gratuity = 0;
+      orderRequestModel.addressLatitude = 0.0;
+      orderRequestModel.addressLongitude = 0.0;
+    } else {
+      orderRequestModel.anonymous = true;
+    }
 
-     orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
+    orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
 
-     orderRequestModel.allowPromoNotifications = false;
-     orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
-     orderRequestModel.orderItemsList = getOrderItemList();
+    orderRequestModel.allowPromoNotifications = false;
+    orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
+    orderRequestModel.orderItemsList = getOrderItemList();
 
     return orderRequestModel;
   }
 
   List<OrderItemsList> getOrderItemList() {
     List<OrderItemsList> orderList = [];
-    for(var item in selectedMenuItems) {
+    for (var item in selectedMenuItems) {
       OrderItemsList orderItem = OrderItemsList();
       orderItem.name = item.name;
       orderItem.itemId = item.id;
@@ -1329,7 +1363,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       orderItem.recipientName = "";
       orderItem.key = "";
       orderItem.values = "";
-      orderItem.foodExtraItemMappingList = item.selectedExtras.isNotEmpty ? getExtraItemsList(item.selectedExtras) : [];
+      orderItem.foodExtraItemMappingList = item.selectedExtras.isNotEmpty
+          ? getExtraItemsList(item.selectedExtras)
+          : [];
 
       orderList.add(orderItem);
     }
@@ -1337,13 +1373,15 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     return orderList;
   }
 
-  List<FoodExtraItemMappingList> getExtraItemsList(List<FoodExtraItems> selectedExtras) {
+  List<FoodExtraItemMappingList> getExtraItemsList(
+      List<FoodExtraItems> selectedExtras) {
     List<FoodExtraItemMappingList> extrasList = [];
     FoodExtraItemMappingList mappingObj = FoodExtraItemMappingList();
     List<OrderFoodExtraItemDetailDto> orderFoodExtraList = [];
     mappingObj.foodExtraCategoryId = selectedExtras[0].foodExtraItemCategoryId;
-    for(var extraItem in selectedExtras) {
-      OrderFoodExtraItemDetailDto orderExtraItem = OrderFoodExtraItemDetailDto();
+    for (var extraItem in selectedExtras) {
+      OrderFoodExtraItemDetailDto orderExtraItem =
+          OrderFoodExtraItemDetailDto();
       orderExtraItem.id = extraItem.id;
       orderExtraItem.quantity = extraItem.selectedItemQuantity;
       orderExtraItem.unitPrice = extraItem.sellingPrice.toDouble();
@@ -1358,26 +1396,38 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
     extrasList.add(mappingObj);
 
-
     return extrasList;
   }
 
   //Navigation
   showPaymentScreen() {
     PlaceOrderRequestModel requestModel = getOrderRequestModel();
-    Map billDetails = {'tip': tip, "discount": discount, 'totalAmount': totalAmount, 'foodCost': totalAmountOfSelectedItems, 'salesTax': getSalesTax()};
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PaymentScreen(events: widget.events, placeOrderRequestModel: requestModel, selectedMenuItems: selectedMenuItems, billDetails: billDetails,userName: userName,))
-    ).then((value) => {
-      P2PConnectionManager.shared.getP2PContractor(this),
-      if (value != null) {
-         if (value["isOrderComplete"] == "True"){
-           clearCart()
-         } else if (value["orderID"] != "NA") {
-           orderID = value["orderID"]
-         }
-      }
-    });
+    Map billDetails = {
+      'tip': tip,
+      "discount": discount,
+      'totalAmount': totalAmount,
+      'foodCost': totalAmountOfSelectedItems,
+      'salesTax': getSalesTax()
+    };
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+            builder: (context) => PaymentScreen(
+                  events: widget.events,
+                  placeOrderRequestModel: requestModel,
+                  selectedMenuItems: selectedMenuItems,
+                  billDetails: billDetails,
+                  userName: userName,
+                )))
+        .then((value) => {
+              P2PConnectionManager.shared.getP2PContractor(this),
+              if (value != null)
+                {
+                  if (value["isOrderComplete"] == "True")
+                    {clearCart()}
+                  else if (value["orderID"] != "NA")
+                    {orderID = value["orderID"]}
+                }
+            });
   }
 
   //API Call
@@ -1395,28 +1445,31 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     setState(() {
       isApiProcess = false;
     });
-    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    CommonWidgets().showErrorSnackBar(
+        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+        context: context);
   }
 
   @override
   void showSuccess(response) {
     GeneralSuccessModel responseModel = response;
-   setState(() {
-     isApiProcess = false;
-   });
-   CommonWidgets().showSuccessSnackBar(
-       message: responseModel.general![0].message ??
-           StringConstants.eventCreatedSuccessfully,
-       context: context);
-   clearCart();
+    setState(() {
+      isApiProcess = false;
+    });
+    CommonWidgets().showSuccessSnackBar(
+        message: responseModel.general![0].message ??
+            StringConstants.eventCreatedSuccessfully,
+        context: context);
+    clearCart();
   }
 
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
-
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+          context: context);
     });
   }
 
@@ -1429,29 +1482,51 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         isApiProcess = false;
         orderID = placeOrderResponseModel.id!;
         orderCode = placeOrderResponseModel.orderCode!;
-        saveOrderIntoLocalDB(orderID,orderCode);
+        saveOrderIntoLocalDB(orderID, orderCode);
       });
     }
   }
 
-
-  saveOrderIntoLocalDB(String orderId,String orderCode)async{
+  saveOrderIntoLocalDB(String orderId, String orderCode) async {
     var result = await SavedOrdersDAO().getOrder(orderId);
-    if(result != null){
+    if (result != null) {
       await SavedOrdersDAO().clearEventDataByOrderID(orderID);
-      insertSavedOrderData(orderId,orderCode);
-    }else{
-      insertSavedOrderData(orderId,orderCode);
+      insertSavedOrderData(orderId, orderCode);
+    } else {
+      insertSavedOrderData(orderId, orderCode);
     }
-
   }
-  insertSavedOrderData(String orderId,String orderCode)async{
 
+  insertSavedOrderData(String orderId, String orderCode) async {
     PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
-    String customerName = orderRequestModel.firstName !=null ? "${orderRequestModel.firstName} " + orderRequestModel.lastName! : StringConstants.guestCustomer;
+    String customerName = orderRequestModel.firstName != null
+        ? "${orderRequestModel.firstName} " + orderRequestModel.lastName!
+        : StringConstants.guestCustomer;
 
     // Insert Order into DB
-    await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderCode:orderCode,orderId:orderId,customerName:customerName,email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString(),country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
+    await SavedOrdersDAO().insert(SavedOrders(
+        eventId: orderRequestModel.eventId!,
+        cardId: orderRequestModel.cardId!,
+        orderCode: orderCode,
+        orderId: orderId,
+        customerName: customerName,
+        email: orderRequestModel.email.toString(),
+        phoneNumber: orderRequestModel.phoneNumber.toString(),
+        phoneCountryCode: orderRequestModel.phoneNumCountryCode.toString(),
+        address1: orderRequestModel.addressLine1.toString(),
+        address2: orderRequestModel.addressLine2.toString(),
+        country: orderRequestModel.country.toString(),
+        state: orderRequestModel.state.toString(),
+        city: orderRequestModel.city.toString(),
+        zipCode: orderRequestModel.zipCode.toString(),
+        orderDate: orderRequestModel.orderDate!,
+        tip: tip,
+        discount: discount,
+        foodCost: totalAmountOfSelectedItems,
+        totalAmount: totalAmount,
+        payment: "NA",
+        orderStatus: "saved",
+        deleted: false));
     // await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,
     //     email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),
     //     phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),
@@ -1463,20 +1538,38 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();
-    for(var items in orderItem) {
-      await SavedOrdersItemsDAO().insert(SavedOrdersItem(orderId:orderId,itemId:items.itemId.toString(),itemName:items.name.toString(),quantity:items.quantity!,unitPrice:items.unitPrice!,totalPrice:items.totalAmount!,itemCategoryId:items.itemCategoryId.toString(),deleted:false));
+    for (var items in orderItem) {
+      await SavedOrdersItemsDAO().insert(SavedOrdersItem(
+          orderId: orderId,
+          itemId: items.itemId.toString(),
+          itemName: items.name.toString(),
+          quantity: items.quantity!,
+          unitPrice: items.unitPrice!,
+          totalPrice: items.totalAmount!,
+          itemCategoryId: items.itemCategoryId.toString(),
+          deleted: false));
     }
 
     // Insert extra item into DB
-    for(var items in selectedMenuItems) {
-      if(items.selectedExtras.isNotEmpty){
-        for(var extra in items.selectedExtras){
-          await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(orderId:orderId,itemId:items.id,extraFoodItemId:extra.id,extraFoodItemName:extra.itemName,extraFoodItemCategoryId:extra.foodExtraItemCategoryId,quantity:extra.selectedItemQuantity,unitPrice:extra.sellingPrice,totalPrice:extra.getTotalPrice(),deleted:false));
+    for (var items in selectedMenuItems) {
+      if (items.selectedExtras.isNotEmpty) {
+        for (var extra in items.selectedExtras) {
+          await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(
+              orderId: orderId,
+              itemId: items.id,
+              extraFoodItemId: extra.id,
+              extraFoodItemName: extra.itemName,
+              extraFoodItemCategoryId: extra.foodExtraItemCategoryId,
+              quantity: extra.selectedItemQuantity,
+              unitPrice: extra.sellingPrice,
+              totalPrice: extra.getTotalPrice(),
+              deleted: false));
         }
       }
     }
     clearCart();
-    CommonWidgets().showSuccessSnackBar(message: StringConstants.savedOrderSuccess, context: context);
+    CommonWidgets().showSuccessSnackBar(
+        message: StringConstants.savedOrderSuccess, context: context);
   }
 
   //P2P Implemented Method
@@ -1484,15 +1577,25 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == CustomerActionConst.orderConfirmed) {
       showPaymentScreen();
+    } else if (response.action == CustomerActionConst.tip) {
+      setState(() {
+        tip = double.parse(response.data);
+      });
+      addTipTextFieldController.text = response.data;
     }
   }
 
+  updateTipToCustomer(String tip) {
+    P2PConnectionManager.shared
+        .notifyChangeToStaff(action: StaffActionConst.tip, data: tip);
+  }
+
   // Delete Order function start from here
-  deleteOrder()async{
+  deleteOrder() async {
     setState(() {
       isApiProcess = true;
     });
-    await SavedOrdersDAO().clearEventDataByOrderID(orderID).then((value){
+    await SavedOrdersDAO().clearEventDataByOrderID(orderID).then((value) {
       eventPresenter.deleteOrder(orderId: orderID);
     });
   }
