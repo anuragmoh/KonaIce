@@ -72,7 +72,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
     CheckConnection().connectionState().then((value){
       if(value!){
         getLastSync().then((value){
-          getSyncOrders(lastSync: value,orderStatus: StringConstants.orderStatusNew,eventId: widget.events.id,offset: countOffSet);
+          getSyncOrders(lastSync: value,orderStatus: "",eventId: widget.events.id,offset: countOffSet);
         });
       }else{
         CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.noInternetConnection, context: context);
@@ -995,6 +995,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen> implements ResponseCo
       }else if(status == StringConstants.orderStatusPreparing){
         return preparingView();
       }else if(status== StringConstants.orderStatusNew){
+        return completedView();
+      }else if(status == StringConstants.orderStatusCompleted){
         return completedView();
       }else{
         return inProgressView() ;

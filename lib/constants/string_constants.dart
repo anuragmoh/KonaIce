@@ -219,7 +219,7 @@ class StringConstants {
   static const paymentStatusSuccess = "SUCCESS";
   static const paymentStatusPending = "PENDING";
   static const orderStatusSaved = "saved";
-  static const orderStatusCompleted = "completed";
+  static const orderStatusCompleted = "COMPLETED";
   static const orderStatusPreparing = "preparing";
   static const orderStatusNew = "NEW";
 
