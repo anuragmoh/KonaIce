@@ -10,6 +10,7 @@ class StringConstants {
   static const signIn = 'Sign In';
   static const rememberPassword = 'Remember Password ?';
   static const submit = 'Submit';
+  static const pay = 'Pay';
   static const okay='Okay';
   static const signOut = 'Sign Out';
 

@@ -133,7 +133,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CommonWidgets().buttonWidget(
-                  StringConstants.submit + " " + "\$ " + widget.totalAmount,
+                  StringConstants.pay + " " + "\$" + widget.totalAmount,
                   onTapConfirmManualCardPayment,
                 ),
               ],
