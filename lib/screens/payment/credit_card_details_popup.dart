@@ -15,14 +15,15 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreditCardDetailsPopup extends StatefulWidget {
   String totalAmount;
-   CreditCardDetailsPopup({required this.totalAmount,Key? key}) : super(key: key);
+
+  CreditCardDetailsPopup({required this.totalAmount, Key? key})
+      : super(key: key);
 
   @override
   _CreditCardDetailsPopupState createState() => _CreditCardDetailsPopupState();
 }
 
 class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
-
   String menuName = StringConstants.customMenuPackage;
   bool isEditingMenuName = false;
   var amountTextFieldController = TextEditingController();
@@ -30,8 +31,11 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String cardNumberValidationMessage = "";
   String cardDateValidationMessage = "";
   String cardCvvValidationMessage = "";
-  String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
-  String stripeTokenId="",stripePaymentMethodId="";
+  String cardNumber = "4111111111111111",
+      cardCvc = "123",
+      cardExpiryYear = "22",
+      cardExpiryMonth = "12";
+  String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
   bool isExpiryValid = false;
@@ -47,7 +51,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvcController = TextEditingController();
 
-  _CreditCardDetailsPopupState(){
+  _CreditCardDetailsPopupState() {
     // paymentPresenter = PaymentPresenter(this);
   }
 
@@ -58,11 +62,10 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         child: Dialog(
           backgroundColor: Colors.transparent,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: showCustomMenuPopup(),
         ));
   }
-
 
   Widget showCustomMenuPopup() {
     return Dialog(
@@ -84,8 +87,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 title: StringConstants.addCreditCardDetails,
                 onTapCloseButton: onTapCloseButton),
             Padding(
-              padding: const EdgeInsets.only(
-                  top: 25.0, left: 23.0, bottom: 10.0),
+              padding:
+                  const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
               child: profileDetailsComponent(
                   StringConstants.cardNumber,
                   "",
@@ -100,7 +103,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0,  bottom: 10.0),
+                    padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
                     child: cardExpiryComponent(
                         StringConstants.cardExpiry,
                         "",
@@ -113,8 +116,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        bottom: 10.0),
+                    padding: const EdgeInsets.only(bottom: 10.0),
                     child: profileDetailsComponent(
                         StringConstants.cardCvc,
                         "",
@@ -131,7 +133,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CommonWidgets().buttonWidget(
-                  StringConstants.submit + " " + "\$ "+widget.totalAmount,
+                  StringConstants.submit + " " + "\$ " + widget.totalAmount,
                   onTapConfirmManualCardPayment,
                 ),
               ],
@@ -146,13 +148,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   Widget profileDetailsComponent(
-      String txtName,
-      String txtValue,
-      String txtHint,
-      TextEditingController textEditingController,
-      String validationMessage,
-      Function validationMethod,
-      int maxLength) =>
+          String txtName,
+          String txtValue,
+          String txtHint,
+          TextEditingController textEditingController,
+          String validationMessage,
+          Function validationMethod,
+          int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -207,13 +209,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       );
 
   Widget cardExpiryComponent(
-      String txtName,
-      String txtValue,
-      String txtHint,
-      TextEditingController textEditingController,
-      String validationMessage,
-      Function validationMethod,
-      int maxLength) =>
+          String txtName,
+          String txtValue,
+          String txtHint,
+          TextEditingController textEditingController,
+          String validationMessage,
+          Function validationMethod,
+          int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -266,82 +268,82 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               textAlign: TextAlign.left)
         ],
       );
+
   //Action
   onTapCloseButton() {
     Navigator.of(context).pop(false);
   }
 
-   cardValidation() {
+  cardValidation() {
     debugPrint('validation');
     if (cardNumberController.text.isEmpty) {
       setState(() {
         debugPrint('validation$cardNumberValidationMessage');
         cardNumberValidationMessage = "Please Enter Card Details";
-        isCardNumberValid=false;
+        isCardNumberValid = false;
       });
       return false;
-    }
-    else{
+    } else {
       setState(() {
         debugPrint('validationFull$cardNumberValidationMessage');
         cardNumberValidationMessage = "";
-        isCardNumberValid=true;
+        isCardNumberValid = true;
       });
     }
-
   }
+
   dateValidation() {
-    String s = dateExpiryController.text;
-    int idx = s.indexOf("/");
-    var date=int.parse(s.substring(0,idx).trim());
-    var year=int.parse(s.substring(idx+1).trim());
+    var date, year;
+    try {
+      String s = dateExpiryController.text;
+      int idx = s.indexOf("/");
+      date = int.parse(s.substring(0, idx).trim());
+      year = int.parse(s.substring(idx + 1).trim());
+    } catch (error) {
+      debugPrint(error.toString());
+    }
 
     debugPrint('validation');
     if (dateExpiryController.text.isEmpty) {
       setState(() {
         cardDateValidationMessage = "Please Enter Date";
-        isExpiryValid=false;
+        isExpiryValid = false;
       });
-      return false;
-    }
-    if(date>31){
+    } else if (date > 31) {
       setState(() {
         cardDateValidationMessage = "Please Check Date";
-        isExpiryValid=false;
+        isExpiryValid = false;
       });
     }
-    if(year>12){
+    if (year > 12) {
       setState(() {
         cardDateValidationMessage = "Please Check Year";
-        isExpiryValid=false;
+        isExpiryValid = false;
       });
-    }
-    else{
+    } else {
       setState(() {
         cardDateValidationMessage = "";
-        isExpiryValid=true;
+        isExpiryValid = true;
       });
     }
   }
+
   cvvValidation() {
     if (cvcController.text.isEmpty) {
       setState(() {
         cardCvvValidationMessage = "Please Enter Card Details";
-        isCvcValid=false;
+        isCvcValid = false;
       });
       return false;
-    }else{
+    } else {
       setState(() {
         cardCvvValidationMessage = "";
-        isCvcValid=true;
+        isCvcValid = true;
       });
-
     }
-
   }
 
   void onTapConfirmManualCardPayment() {
-
     if (isCardNumberValid && isExpiryValid && isCvcValid) {
       Navigator.of(context).pop(true);
     }
