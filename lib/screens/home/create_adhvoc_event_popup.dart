@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
-
+import 'package:http/http.dart' as http;
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
 
@@ -725,6 +726,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       setState(() {
         _currentPosition = position;
         _getAddressFromLatLng();
+        getAddressFromLatLng(context,_currentPosition.latitude,_currentPosition.longitude);
       });
     }).catchError((e) {
       debugPrint("Catch error $e");
@@ -754,4 +756,23 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       debugPrint("$e");
     }
   }
+
 }
+
+getAddressFromLatLng(context, double lat, double lng) async {
+  String _host = 'https://maps.google.com/maps/api/geocode/json';
+  final url = '$_host?key=${GoogleMapKey.googleMapKey}&language=en&latlng=$lat,$lng';
+  if(lat != null && lng != null){
+    var response = await http.get(Uri.parse(url));
+    if(response.statusCode == 200) {
+      Map data = jsonDecode(response.body);
+      String _formattedAddress = data["results"][0]["formatted_address"];
+      print("response ==== $data");
+      debugPrint('URL===>$url');
+      debugPrint(data["results"][0]["address_components"][6]['long_name']);
+      return _formattedAddress;
+    } else return null;
+  } else return null;
+}
+
+
