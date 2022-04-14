@@ -75,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   bool isCvcValid = true;
 
   String _resultString = "";
-  String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
+  String cardNumber="4111111111111111",cardCvc="124",cardExpiryYear="22",cardExpiryMonth="12";
   String stripeTokenId="",stripePaymentMethodId="";
   String demoCardNumber = "";
   String _fullDocumentFirstImageBase64 = "";
@@ -433,11 +433,12 @@ class _PaymentScreenState extends State<PaymentScreen>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            paymentModeView(
-                StringConstants.creditCard, PaymentModeConstants.creditCard,
-                AssetsConstants.creditCard),
+
             paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
                 AssetsConstants.cash),
+            paymentModeView(
+                StringConstants.creditCard, PaymentModeConstants.creditCard,
+                AssetsConstants.creditCardScan),
             /*paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode,
                 AssetsConstants.qrCode),*/
             paymentModeView(StringConstants.creditCardManual, PaymentModeConstants.creditCardManual,

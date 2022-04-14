@@ -114,9 +114,9 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
+        paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
         paymentModeView(
             StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCard),
-        paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
         // paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
         paymentModeView(StringConstants.creditCardManual, PaymentModeConstants.creditCardManual, AssetsConstants.creditCardScan),
       ],

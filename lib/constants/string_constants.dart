@@ -104,7 +104,7 @@ class StringConstants {
   static const amountToReturn = 'Amount To Return';
   static const proceed = 'Proceed';
   static const cash = 'Cash';
-  static const creditCard = 'Credit Card';
+  static const creditCard = 'Credit Card(Scan)';
   static const creditCardManual = 'Credit Card(Manual)';
   static const qrCode = 'QR Code';
   static const paymentSuccessful = 'Payment Successful';
