@@ -14,9 +14,9 @@ class FoodExtraItemsDAO {
     try {
       final db = await _db;
       var result = await db.rawInsert(
-          "INSERT OR REPLACE INTO $tableName (id, food_extra_item_category_id,item_id,event_id, item_name, selling_price, selection, image_file_id, min_qty_allowed, max_qty_allowed, activated, created_by, created_at, updated_by, updated_at, deleted)"
-              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?)",
-          [foodExtraItems.id, foodExtraItems.foodExtraItemCategoryId,foodExtraItems.itemId,foodExtraItems.eventId, foodExtraItems.itemName, foodExtraItems.sellingPrice, foodExtraItems.selection, foodExtraItems.imageFileId, foodExtraItems.minQtyAllowed, foodExtraItems.maxQtyAllowed, foodExtraItems.activated, foodExtraItems.createdBy, foodExtraItems.createdAt, foodExtraItems.updatedBy, foodExtraItems.updatedAt, foodExtraItems.deleted]);
+          "INSERT OR REPLACE INTO $tableName (id, food_extra_item_category_id,item_id,event_id, item_name, selling_price, selection, sequence, image_file_id, min_qty_allowed, max_qty_allowed, activated, created_by, created_at, updated_by, updated_at, deleted)"
+              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?,?)",
+          [foodExtraItems.id, foodExtraItems.foodExtraItemCategoryId,foodExtraItems.itemId,foodExtraItems.eventId, foodExtraItems.itemName, foodExtraItems.sellingPrice, foodExtraItems.selection, foodExtraItems.sequence,foodExtraItems.imageFileId, foodExtraItems.minQtyAllowed, foodExtraItems.maxQtyAllowed, foodExtraItems.activated, foodExtraItems.createdBy, foodExtraItems.createdAt, foodExtraItems.updatedBy, foodExtraItems.updatedAt, foodExtraItems.deleted]);
       return result;
     } catch (error) {
       debugPrint(error.toString());

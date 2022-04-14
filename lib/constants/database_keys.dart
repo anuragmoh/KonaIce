@@ -24,6 +24,7 @@ class DatabaseKeys {
   static const categories = "categories";
   static const itemExtras = "itemextras";
   static const allOrders = "allOrders";
+  static const adhocEvent = "adhocEvent";
 
 //End
 }

@@ -18,9 +18,9 @@ Future insert(Item item) async {
   try {
     final db = await _db;
     var result = await db.rawInsert(
-        "INSERT OR REPLACE INTO $tableName (id, event_id ,item_category_id, image_file_id, item_code, name, description, price, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
-        [item.id, item.eventId,item.itemCategoryId, item.imageFileId, item.itemCode, item.name, item.description, item.price, item.activated, item.createdBy, item.createdAt, item.updatedBy, item.updatedAt, item.deleted, item.franchiseId]);
+        "INSERT OR REPLACE INTO $tableName (id, event_id ,item_category_id, image_file_id, item_code, name, description, price, activated,sequence, created_by, created_at, updated_by, updated_at, deleted, franchise_id) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)",
+        [item.id, item.eventId,item.itemCategoryId, item.imageFileId, item.itemCode, item.name, item.description, item.price, item.activated,item.sequence, item.createdBy, item.createdAt, item.updatedBy, item.updatedAt, item.deleted, item.franchiseId]);
     return result;
   } catch (error) {
     debugPrint(error.toString());
@@ -31,7 +31,7 @@ Future insert(Item item) async {
   try {
     final db = await _db;
     var result =
-    await db.rawQuery("SELECT * from $tableName where event_id=?",[eventId]);
+    await db.rawQuery("SELECT * from $tableName where event_id=? ORDER BY sequence ASC",[eventId]);
     if (result.isNotEmpty) {
       return getItemList(result);
     } else {
@@ -69,7 +69,7 @@ Future<List<Item>?>getAllItemsByCategories(String categoryId) async {
   try {
     final db = await _db;
     var result =
-    await db.rawQuery("SELECT * from $tableName where item_category_id=?",[categoryId]);
+    await db.rawQuery("SELECT * from $tableName where item_category_id=? ORDER BY sequence ASC",[categoryId]);
     if (result.isNotEmpty) {
       return List.generate(result.length, (index) => Item.fromMap(result[index]));
     } else {

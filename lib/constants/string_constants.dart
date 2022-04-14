@@ -202,6 +202,8 @@ class StringConstants {
   static const confirmNewOrder = "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
 
+  //Enter Tip Amount
+  static const enterTip = "Enter Tip Amount.";
 
   //all Order status
   static const paymentStatusSuccess = "SUCCESS";

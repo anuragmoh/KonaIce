@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/font_constants.dart';
+import '../../constants/other_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../constants/style_constants.dart';
 import '../../utils/common_widgets.dart';
@@ -12,13 +13,15 @@ class CustomerAddTipDialog extends StatefulWidget {
   Function callBack;
   CustomerAddTipDialog({Key? key, required this.callBack}) : super(key: key);
 
+
   @override
   State<CustomerAddTipDialog> createState() => _CustomerAddTipDialogState();
 }
 
 class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
-
+  bool isValidTip = true;
   TextEditingController tipController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,19 +40,19 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.3,
-          height: MediaQuery.of(context).size.height*0.23,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonWidgets().popUpTopView(
-                  title: StringConstants.addTip,
-                  onTapCloseButton: onTapCloseButton),
-              amountTextFieldContainer(),
-              addTipButton(),
-            ],
-          ),
+        width: MediaQuery.of(context).size.width * 0.45,
+        height: MediaQuery.of(context).size.height * 0.3,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonWidgets().popUpTopView(
+                title: StringConstants.addTip,
+                onTapCloseButton: onTapCloseButton),
+            amountTextFieldContainer(),
+            addTipButton(),
+          ],
+        ),
       ),
     );
   }
@@ -67,7 +70,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top:10,bottom: 8),
+            padding: const EdgeInsets.only(top: 10, bottom: 8),
             child: CommonWidgets().textWidget(
                 StringConstants.amount,
                 StyleConstants.customTextStyle(
@@ -76,8 +79,9 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                     fontFamily: FontConstants.montserratMedium)),
           ),
           TextField(
-             controller: tipController,
+            controller: tipController,
             keyboardType: TextInputType.number,
+            maxLength: TextFieldLengthConstant.addTip,
             style: StyleConstants.customTextStyle(
                 fontSize: 22.0,
                 color: getMaterialColor(AppColors.textColor6),
@@ -85,6 +89,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               hintText: StringConstants.enterAmount,
+              errorText: isValidTip ? "" : StringConstants.enterTip,
               hintStyle: StyleConstants.customTextStyle(
                   fontSize: 12,
                   color: getMaterialColor(AppColors.textColor2),
@@ -92,6 +97,11 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: getMaterialColor(AppColors.textColor5)),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
@@ -132,7 +142,9 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
 
   Widget addTipButton() {
     return GestureDetector(
-      onTap: () {onTapAddButton();},
+      onTap: () {
+        onTapAddButton();
+      },
       child: Align(
         alignment: Alignment.center,
         child: Padding(
@@ -158,11 +170,19 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
     );
   }
 
-  onTapAddButton(){
+  onTapAddButton() {
     //debugPrint("Tip from dialog ${tipController.text.toString()}");
-    if(tipController.text.isNotEmpty){
-      widget.callBack(double.parse(tipController.text.toString()));
+    setState(() {
+      isValidTip = tipController.text.isEmpty ? false : true;
+    });
+    if (tipController.text.isNotEmpty) {
+      widget.callBack(double.parse(
+          tipController.text.isEmpty ? '0.0' : tipController.text.toString()));
       Navigator.of(context).pop();
+    } else {
+      setState(() {
+        isValidTip = false;
+      });
     }
   }
 }

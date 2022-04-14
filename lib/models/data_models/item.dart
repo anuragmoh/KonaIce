@@ -1,4 +1,3 @@
-
 import 'food_extra_items.dart';
 
 class Item {
@@ -13,6 +12,7 @@ class Item {
   final bool activated;
   final String createdBy;
   final int createdAt;
+  final int sequence;
   final String updatedBy;
   final int updatedAt;
   final bool deleted;
@@ -24,7 +24,7 @@ class Item {
 
   Item(
       {required this.id,
-        required this.eventId,
+      required this.eventId,
       required this.itemCategoryId,
       required this.imageFileId,
       required this.itemCode,
@@ -35,6 +35,7 @@ class Item {
       required this.createdBy,
       required this.createdAt,
       required this.updatedBy,
+      required this.sequence,
       required this.updatedAt,
       required this.deleted,
       required this.franchiseId});
@@ -42,7 +43,7 @@ class Item {
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "event_id":eventId,
+      "event_id": eventId,
       "item_category_id": itemCategoryId,
       "image_file_id": imageFileId,
       "item_code": itemCode,
@@ -51,6 +52,7 @@ class Item {
       "price": price,
       "activated": activated,
       "created_by": createdBy,
+      "sequence":sequence,
       "created_at": createdAt,
       "updated_by": updatedBy,
       "updated_at": updatedAt,
@@ -62,19 +64,20 @@ class Item {
   factory Item.fromMap(Map<String, dynamic> map) {
     return Item(
         id: map["id"],
-        eventId:map["event_id"],
+        eventId: map["event_id"],
         itemCategoryId: map["item_category_id"],
         imageFileId: map["image_file_id"],
         itemCode: map["item_code"],
         name: map["name"],
         description: map["description"],
         price: map["price"],
-        activated: map["activated"]==1,
+        activated: map["activated"] == 1,
+        sequence:map["sequence"],
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"]==1,
+        deleted: map["deleted"] == 1,
         franchiseId: map["franchise_id"]);
   }
 
@@ -95,17 +98,20 @@ class Item {
     updatedBy: $updatedBy,
     updatedAt: $updatedAt,
     deleted: $deleted,
+    sequence:$sequence,
     franchiseId: $franchiseId
     """;
   }
 
   bool isItemHasExtras() => foodExtraItemList.isNotEmpty;
+
   double getTotalPrice() {
     double totalExtraItemPrice = 0;
     if (selectedExtras.isNotEmpty) {
       for (var element in selectedExtras) {
         totalExtraItemPrice += element.getTotalPrice();
-      }}
+      }
+    }
     return selectedItemQuantity * price.toDouble() + totalExtraItemPrice;
   }
 
@@ -117,12 +123,16 @@ class Item {
     String extraNames = '';
     if (selectedExtras.isNotEmpty) {
       List<String> extrasNameList = List.generate(
-          selectedExtras.length, (index) => selectedExtras[index].itemName + "\t\t\t"+"x " + selectedExtras[index].selectedItemQuantity.toString());
+          selectedExtras.length,
+          (index) =>
+              selectedExtras[index].itemName +
+              "\t\t\t" +
+              "x " +
+              selectedExtras[index].selectedItemQuantity.toString());
       extraNames = extrasNameList.join('\n');
     }
     return extraNames;
   }
-
 
   removeAllExtraItems() {
     for (var element in foodExtraItemList) {
