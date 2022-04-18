@@ -10,6 +10,7 @@ class StringConstants {
   static const signIn = 'Sign In';
   static const rememberPassword = 'Remember Password ?';
   static const submit = 'Submit';
+  static const pay = 'Pay';
   static const okay='Okay';
   static const signOut = 'Sign Out';
 
@@ -219,7 +220,7 @@ class StringConstants {
   static const paymentStatusSuccess = "SUCCESS";
   static const paymentStatusPending = "PENDING";
   static const orderStatusSaved = "saved";
-  static const orderStatusCompleted = "completed";
+  static const orderStatusCompleted = "COMPLETED";
   static const orderStatusPreparing = "preparing";
   static const orderStatusNew = "NEW";
 
