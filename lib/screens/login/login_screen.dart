@@ -326,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen>
     }
     if (!passwordController.text.isValidPassword()) {
       setState(() {
-        passwordValidationMessage = StringConstants.enterValidPassword;
+        passwordValidationMessage = "";
       });
       return false;
     }
