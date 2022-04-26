@@ -23,6 +23,7 @@
 		EEF2C4062817FFF700CB0893 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF2C4052817FFF700CB0893 /* UIViewControllerExtension.swift */; };
 		EEF2C4082818011A00CB0893 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF2C4072818011A00CB0893 /* PaymentViewController.swift */; };
 		EEF2C40B2818050000CB0893 /* PaymentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF2C40A2818050000CB0893 /* PaymentModel.swift */; };
+		EEF2C40D281806BA00CB0893 /* ShowAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF2C40C281806BA00CB0893 /* ShowAlert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +67,7 @@
 		EEF2C4052817FFF700CB0893 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		EEF2C4072818011A00CB0893 /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		EEF2C40A2818050000CB0893 /* PaymentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModel.swift; sourceTree = "<group>"; };
+		EEF2C40C281806BA00CB0893 /* ShowAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,7 +149,6 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
-				EEF2C40A2818050000CB0893 /* PaymentModel.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -172,6 +173,7 @@
 		EEF2C4042817FFCB00CB0893 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				EEF2C40C281806BA00CB0893 /* ShowAlert.swift */,
 				EEF2C4052817FFF700CB0893 /* UIViewControllerExtension.swift */,
 			);
 			path = Extensions;
@@ -181,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				EEF2C4072818011A00CB0893 /* PaymentViewController.swift */,
+				EEF2C40A2818050000CB0893 /* PaymentModel.swift */,
 			);
 			path = PaymentController;
 			sourceTree = "<group>";
@@ -335,6 +338,7 @@
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				EEF2C4082818011A00CB0893 /* PaymentViewController.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
+				EEF2C40D281806BA00CB0893 /* ShowAlert.swift in Sources */,
 				EEF2C4062817FFF700CB0893 /* UIViewControllerExtension.swift in Sources */,
 				EEF2C40B2818050000CB0893 /* PaymentModel.swift in Sources */,
 				EEF2C3FF2817FDD300CB0893 /* FinixHelper.swift in Sources */,
