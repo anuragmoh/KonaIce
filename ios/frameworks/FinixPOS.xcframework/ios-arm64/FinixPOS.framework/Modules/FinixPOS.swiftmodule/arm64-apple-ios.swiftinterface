@@ -1,0 +1,523 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name FinixPOS
+@_exported import FinixPOS
+import Foundation
+import Swift
+import _Concurrency
+import triPOSMobileSDK
+public typealias AuthorizationId = Swift.String
+public struct AuthorizationResponse : FinixPOS.TransferResponse {
+  public let id: FinixPOS.TransferId
+  public let traceId: FinixPOS.TraceId
+  public let state: FinixPOS.Transfer.State
+  public let amount: FinixPOS.Currency
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let card: FinixPOS.CardInfo
+  public let verification: FinixPOS.CardVerificationData?
+  public let tags: FinixPOS.ResourceTags?
+  public let emv: FinixPOS.EmvData
+  public let hostResponse: FinixPOS.HostResponseData?
+}
+extension FinixPOS.AuthorizationResponse : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct CaptureResponse : FinixPOS.TransferResponse {
+  public let id: FinixPOS.TransferId
+  public let traceId: FinixPOS.TraceId
+  public let amount: FinixPOS.Currency
+  public let state: FinixPOS.Transfer.State
+  public let deviceId: Swift.String
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let tags: FinixPOS.ResourceTags?
+}
+extension FinixPOS.CaptureResponse : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public enum CardPresentHolder {
+  case `default`
+  case unknown
+  case present
+  case notPresent
+  case mailOrder
+  case phoneOrder
+  case standingAuthorization
+  case eCommerce
+  case other(Swift.Int)
+}
+extension FinixPOS.CardPresentHolder : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct CardRefundResponse : FinixPOS.TransferResponse {
+  public let id: FinixPOS.TransferId
+  public let balance: FinixPOS.Currency?
+  public let tipAmount: FinixPOS.Currency?
+  public let card: FinixPOS.CardInfo
+  public let verification: FinixPOS.CardVerificationData?
+  public let emv: FinixPOS.EmvData
+  public let hostResponse: FinixPOS.HostResponseData?
+  public let traceId: FinixPOS.TraceId
+  public let state: FinixPOS.Transfer.State
+  public let amount: FinixPOS.Currency
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let tags: FinixPOS.ResourceTags?
+}
+extension FinixPOS.CardRefundResponse : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct CardInfo {
+  public let entryMode: FinixPOS.CardInfo.CardEntryMode?
+  public let maskedAccountNumber: Swift.String?
+  public let cardLogo: FinixPOS.CardInfo.CardLogo?
+  public let cardHolderName: Swift.String?
+  public let expirationMonth: Swift.String?
+  public let expirationYear: Swift.String?
+  public let applicationIdentifier: Swift.String?
+}
+extension FinixPOS.CardInfo {
+  public enum CardEntryMode {
+    case Keyed
+    case Swiped
+    case ContactlessMagneticStripe
+    case Icc
+    case ContactlessIcc
+    public var display: Swift.String {
+      get
+    }
+    public static func == (a: FinixPOS.CardInfo.CardEntryMode, b: FinixPOS.CardInfo.CardEntryMode) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum CardLogo {
+    case Visa
+    case Mastercard
+    case Discover
+    case Amex
+    case DinersClub
+    case JCB
+    case CarteBlanche
+    case Other
+    public var display: Swift.String {
+      get
+    }
+    public static func == (a: FinixPOS.CardInfo.CardLogo, b: FinixPOS.CardInfo.CardLogo) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension FinixPOS.CardInfo : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct CardVerificationData {
+}
+extension FinixPOS.CardVerificationData : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct EmvData {
+}
+extension FinixPOS.EmvData : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct HostResponseData {
+}
+extension FinixPOS.HostResponseData : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public struct Currency {
+  public let amount: Swift.Int
+  public var decimal: Foundation.Decimal {
+    get
+  }
+  public let code: FinixPOS.CurrencyCode
+  public init(decimal: Foundation.Decimal, code: FinixPOS.CurrencyCode)
+  public init(amount: Swift.Int, code: FinixPOS.CurrencyCode)
+}
+extension FinixPOS.Currency : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+public enum CurrencyCode {
+  case USD
+  public static func == (a: FinixPOS.CurrencyCode, b: FinixPOS.CurrencyCode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension FinixPOS.FinixClient : FinixPOS.FinixClientDeviceInteractionDelegate {
+  public func onDisplayText(_ text: Swift.String)
+  public func onRemoveCard()
+}
+extension FinixPOS.FinixClient {
+  public typealias AuthorizationHandler = (_ response: FinixPOS.AuthorizationResponse?, _ error: Swift.Error?) -> Swift.Void
+  public func cardAuthorization(_ auth: FinixPOS.TransferRequest, completion: @escaping FinixPOS.FinixClient.AuthorizationHandler)
+  public typealias CaptureResponseHandler = (FinixPOS.CaptureResponse?, Swift.Error?) -> Swift.Void
+  public func capture(authorizationId: FinixPOS.AuthorizationId, amount: FinixPOS.Currency, tags: FinixPOS.ResourceTags? = nil, completion: @escaping FinixPOS.FinixClient.CaptureResponseHandler)
+  public typealias VoidAuthorizationResponseHandler = (FinixPOS.VoidAuthorizationResponse?, Swift.Error?) -> Swift.Void
+  public func voidAuthorization(authorizationId: Swift.String, completion: @escaping FinixPOS.FinixClient.VoidAuthorizationResponseHandler)
+}
+extension FinixPOS.FinixClient {
+  public func receipt(for sale: FinixPOS.SaleResponse) -> FinixPOS.SaleReceipt
+  public func receipt(for authorization: FinixPOS.AuthorizationResponse) -> FinixPOS.SaleReceipt
+  public func receipt(for refund: FinixPOS.CardRefundResponse) -> FinixPOS.RefundReceipt
+}
+extension FinixPOS.FinixClient {
+  public typealias RefundHandler = (FinixPOS.RefundResponse?, Swift.Error?) -> Swift.Void
+  public func refund(_ refund: FinixPOS.RefundRequest, completion: @escaping FinixPOS.FinixClient.RefundHandler)
+  public typealias CardRefundHandler = (FinixPOS.CardRefundResponse?, Swift.Error?) -> Swift.Void
+  public func cardUnreferencedRefund(_ transfer: FinixPOS.TransferRequest, completion: @escaping FinixPOS.FinixClient.CardRefundHandler)
+}
+extension FinixPOS.FinixClient {
+  public typealias SaleHandler = (_ response: FinixPOS.SaleResponse?, _ error: Swift.Error?) -> Swift.Void
+  public func cardSale(_ transfer: FinixPOS.TransferRequest, completion: @escaping FinixPOS.FinixClient.SaleHandler)
+}
+public struct TransfersResponse : Swift.Decodable {
+  public init(from decoder: Swift.Decoder) throws
+}
+public class FinixClient {
+  public static let shared: FinixPOS.FinixClient
+  weak public var delegate: FinixPOS.FinixDelegate?
+  weak public var interactionDelegate: FinixPOS.FinixClientDeviceInteractionDelegate?
+  public init()
+  public func isInitialized() -> Swift.Bool
+  public func isReaderConnected() -> Swift.Bool
+  public func unsyncSDK(completion: (Swift.Error?) -> Swift.Void)
+  public typealias SyncSDKCompletion = (_ success: Swift.Bool, _ error: Swift.Error?) -> Swift.Void
+  public func syncSDK(config: FinixPOS.FinixConfig, completion: @escaping FinixPOS.FinixClient.SyncSDKCompletion)
+  @objc deinit
+}
+extension FinixPOS.FinixClient {
+  public func stopCurrentOperation() -> Swift.Bool
+}
+public struct FinixConfig {
+  public init(environment: FinixPOS.Finix.Environment, credentials: FinixPOS.Finix.APICredentials, application: Swift.String, version: Swift.String, merchantId: Swift.String, marketCode: FinixPOS.Finix.MarketCode, deviceType: FinixPOS.Finix.Device, deviceId: Swift.String, serialNumber: Swift.String? = nil)
+}
+public enum Finix {
+  public enum Device {
+    case BBPOS
+    case IngenicoRBA
+    public static func == (a: FinixPOS.Finix.Device, b: FinixPOS.Finix.Device) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public enum Environment {
+    case Production
+    case TestCertification
+    public static func == (a: FinixPOS.Finix.Environment, b: FinixPOS.Finix.Environment) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public struct APICredentials {
+    public init(username: Swift.String, password: Swift.String)
+  }
+  public enum MarketCode {
+    case autoRental
+    case directMarketing
+    case eCommerce
+    case restaurant
+    case hotel
+    case gas
+    case retail
+    case qsr
+    public static func == (a: FinixPOS.Finix.MarketCode, b: FinixPOS.Finix.MarketCode) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+public protocol FinixDelegate : AnyObject {
+  func deviceDidConnect(_ description: Swift.String, model: Swift.String, serialNumber: Swift.String)
+  func deviceDidDisconnect()
+  func deviceInitialization(inProgress currentProgress: Swift.Double, description: Swift.String, model: Swift.String, serialNumber: Swift.String)
+  func deviceDidError(_ error: Swift.Error)
+  func statusDidChange(_ status: FinixPOS.DeviceStatus, description: Swift.String)
+  func onBatteryLow()
+  func prereadTimedOut()
+}
+public enum DeviceStatus {
+  case None
+  case Initializing
+  case Deinitializing
+  case Getting
+  case Running
+  case Finalizing
+  case Other(Swift.Int)
+}
+public protocol FinixClientDeviceInteractionDelegate : AnyObject {
+  func onDisplayText(_ text: Swift.String)
+  func onRemoveCard()
+}
+public enum TransactionStatus : Swift.Int {
+  case unknown
+  case approved
+  case partiallyApproved
+  case approvedExceptCashback
+  case approvedByMerchant
+  case callIssuer
+  case declined
+  case needsToBeReversed
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+public struct FinixError : Swift.Error {
+  public enum Code {
+    case Unknown
+    case SDKNotInitialized
+    case CardReaderNotConnected
+    case CannotEncodeParameters
+    case CannotDecodeResponse
+    case MalformedRequest
+    case RequestFailed(_: Swift.Int)
+    case TransactionError(FinixPOS.TransactionStatus)
+    case InitializationError
+    case FailedToParseAuthorizationResponse
+    case AuthorizationFailure(_: Swift.Error)
+    case AuthorizationFailureMissingResponse
+    case RefundRequestFailed
+    case RefundRequestFailedWithError(_: Swift.Error)
+    case CardInputError
+    case InvalidCurrencyCode
+    case NoCardData
+    case TransferError(status: FinixPOS.TransactionStatus, response: FinixPOS.TransferResponse)
+  }
+}
+public protocol ReceiptProtocol {
+  var merchantName: Swift.String { get }
+  var merchantAddress: Swift.String { get }
+  var date: Foundation.Date { get }
+  var applicationLabel: Swift.String { get }
+  var applicationIdentifier: Swift.String { get }
+  var merchantId: Swift.String { get }
+  var referenceNumber: Swift.String { get }
+  var accountNumber: Swift.String { get }
+  var cardBrand: Swift.String { get }
+  var entryMode: Swift.String { get }
+  var transactionId: Swift.String { get }
+  var approvalCode: Swift.String { get }
+  var responseCode: Swift.String { get }
+  var responseMessage: Swift.String { get }
+  var cryptogram: Swift.String { get }
+  var transactionType: Swift.String { get }
+}
+extension FinixPOS.ReceiptProtocol {
+  public func text() -> Swift.String
+}
+public struct SaleReceipt : FinixPOS.ReceiptProtocol {
+  public let merchantName: Swift.String
+  public let merchantAddress: Swift.String
+  public let date: Foundation.Date
+  public let applicationLabel: Swift.String
+  public let applicationIdentifier: Swift.String
+  public let merchantId: Swift.String
+  public let referenceNumber: Swift.String
+  public let accountNumber: Swift.String
+  public let cardBrand: Swift.String
+  public let entryMode: Swift.String
+  public let transactionId: Swift.String
+  public let approvalCode: Swift.String
+  public let responseCode: Swift.String
+  public let responseMessage: Swift.String
+  public let cryptogram: Swift.String
+  public let transactionType: Swift.String
+}
+public struct RefundReceipt : FinixPOS.ReceiptProtocol {
+  public let merchantName: Swift.String
+  public let merchantAddress: Swift.String
+  public let date: Foundation.Date
+  public let applicationLabel: Swift.String
+  public let applicationIdentifier: Swift.String
+  public let merchantId: Swift.String
+  public let referenceNumber: Swift.String
+  public let accountNumber: Swift.String
+  public let cardBrand: Swift.String
+  public let entryMode: Swift.String
+  public let transactionId: Swift.String
+  public let approvalCode: Swift.String
+  public let responseCode: Swift.String
+  public let responseMessage: Swift.String
+  public let cryptogram: Swift.String
+  public let transactionType: Swift.String
+}
+public struct RefundResponse : FinixPOS.TransferResponse {
+  public let id: FinixPOS.TransferId
+  public let traceId: FinixPOS.TraceId
+  public let state: FinixPOS.Transfer.State
+  public let amount: FinixPOS.Currency
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let tags: FinixPOS.ResourceTags?
+}
+extension FinixPOS.RefundResponse : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public typealias TraceId = Swift.String
+public typealias TransferId = Swift.String
+public typealias ResourceTags = [Swift.String : Swift.String]
+public struct DebitResponse : FinixPOS.TransferResponse {
+  public let id: FinixPOS.TransferId
+  public let state: FinixPOS.Transfer.State
+  public let traceId: FinixPOS.TraceId
+  public let amount: FinixPOS.Currency
+  public let tags: FinixPOS.ResourceTags?
+}
+public struct TransferRequest {
+  public init(deviceId: Swift.String, amount: FinixPOS.Currency, tags: FinixPOS.ResourceTags? = nil)
+}
+public enum PaymentType {
+  case Unknown
+  case Credit
+  case Debit
+  case GiftCard
+  case EBT
+  public static func == (a: FinixPOS.PaymentType, b: FinixPOS.PaymentType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public enum EBTType {
+  case NotSet
+  case FoodStamps
+  case CashBenefits
+  public static func == (a: FinixPOS.EBTType, b: FinixPOS.EBTType) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public protocol ResponseState {
+  var state: FinixPOS.Transfer.State { get }
+  var success: Swift.Bool { get }
+  var pending: Swift.Bool { get }
+}
+extension FinixPOS.ResponseState {
+  public var success: Swift.Bool {
+    get
+  }
+  public var pending: Swift.Bool {
+    get
+  }
+}
+public protocol TransferResponse : FinixPOS.ResponseState {
+  var id: FinixPOS.TransferId { get }
+  var traceId: FinixPOS.TraceId { get }
+}
+public struct SaleResponse : FinixPOS.TransferResponse {
+  public let id: FinixPOS.TransferId
+  public let traceId: FinixPOS.TraceId
+  public let state: FinixPOS.Transfer.State
+  public let amount: FinixPOS.Currency
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let tags: FinixPOS.ResourceTags?
+  public let card: FinixPOS.CardInfo
+}
+extension FinixPOS.SaleResponse : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+public enum Transfer {
+  public enum State : Swift.Decodable, Swift.Equatable {
+    case pending
+    case failed
+    case succeeded
+    case canceled
+    case unknown(value: Swift.String)
+    public init(from decoder: Swift.Decoder) throws
+    public static func == (a: FinixPOS.Transfer.State, b: FinixPOS.Transfer.State) -> Swift.Bool
+  }
+}
+public protocol CertificationOutput {
+}
+extension FinixPOS.AuthorizationResponse : FinixPOS.CertificationOutput {
+}
+extension FinixPOS.CaptureResponse : FinixPOS.CertificationOutput {
+}
+extension FinixPOS.RefundResponse : FinixPOS.CertificationOutput {
+}
+extension FinixPOS.CardRefundResponse : FinixPOS.CertificationOutput {
+}
+extension FinixPOS.SaleResponse : FinixPOS.CertificationOutput {
+}
+extension FinixPOS.VoidAuthorizationResponse : FinixPOS.CertificationOutput {
+}
+public struct VoidAPIResponse : Swift.Decodable, FinixPOS.TransferResponse {
+  public var traceId: FinixPOS.TraceId
+  public let id: Swift.String
+  public let state: FinixPOS.Transfer.State
+  public let amount: Swift.Int
+  public let currencyCode: Swift.String
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let tags: FinixPOS.ResourceTags?
+  public init(from decoder: Swift.Decoder) throws
+}
+public struct VoidAuthorizationResponse : FinixPOS.TransferResponse {
+  public let id: Swift.String
+  public let traceId: FinixPOS.TraceId
+  public let amount: FinixPOS.Currency
+  public let state: FinixPOS.Transfer.State
+  public let created: Foundation.Date
+  public let updated: Foundation.Date
+  public let tags: FinixPOS.ResourceTags?
+}
+public struct RefundRequest {
+  public let transferId: FinixPOS.TransferId
+  public let amount: FinixPOS.Currency
+  public let deviceId: Swift.String
+  public init(transferId: FinixPOS.TransferId, amount: FinixPOS.Currency, deviceId: Swift.String)
+}
+extension FinixPOS.CardInfo.CardEntryMode : Swift.Equatable {}
+extension FinixPOS.CardInfo.CardEntryMode : Swift.Hashable {}
+extension FinixPOS.CardInfo.CardLogo : Swift.Equatable {}
+extension FinixPOS.CardInfo.CardLogo : Swift.Hashable {}
+extension FinixPOS.CurrencyCode : Swift.Equatable {}
+extension FinixPOS.CurrencyCode : Swift.Hashable {}
+extension FinixPOS.Finix.Device : Swift.Equatable {}
+extension FinixPOS.Finix.Device : Swift.Hashable {}
+extension FinixPOS.Finix.Environment : Swift.Equatable {}
+extension FinixPOS.Finix.Environment : Swift.Hashable {}
+extension FinixPOS.Finix.MarketCode : Swift.Equatable {}
+extension FinixPOS.Finix.MarketCode : Swift.Hashable {}
+extension FinixPOS.TransactionStatus : Swift.Equatable {}
+extension FinixPOS.TransactionStatus : Swift.Hashable {}
+extension FinixPOS.TransactionStatus : Swift.RawRepresentable {}
+extension FinixPOS.PaymentType : Swift.Equatable {}
+extension FinixPOS.PaymentType : Swift.Hashable {}
+extension FinixPOS.EBTType : Swift.Equatable {}
+extension FinixPOS.EBTType : Swift.Hashable {}
