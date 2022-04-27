@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-MyProfileUpdateRequestModel myProfileUpdateRequestModelFromJson(String str) => MyProfileUpdateRequestModel.fromJson(json.decode(str));
+MyProfileUpdateRequestModel myProfileUpdateRequestModelFromJson(String str) =>
+    MyProfileUpdateRequestModel.fromJson(json.decode(str));
 
-String myProfileUpdateRequestModelToJson(MyProfileUpdateRequestModel data) => json.encode(data.toJson());
+String myProfileUpdateRequestModelToJson(MyProfileUpdateRequestModel data) =>
+    json.encode(data.toJson());
 
 class MyProfileUpdateRequestModel {
   MyProfileUpdateRequestModel({
@@ -37,33 +39,34 @@ class MyProfileUpdateRequestModel {
   String? profileImageFileId;
   String? defaultTimezone;
 
-  factory MyProfileUpdateRequestModel.fromJson(Map<String, dynamic> json) => MyProfileUpdateRequestModel(
-    firstName: json["firstName"],
-    lastName: json["lastName"],
-    email: json["email"],
-    phoneNum: json["phoneNum"],
-    numCountryCode: json["numCountryCode"],
-    password: json["password"],
-    franchiseName: json["franchiseName"],
-    franchiseEmail: json["franchiseEmail"],
-    franchisePhoneNumber: json["franchisePhoneNumber"],
-    franchisePhoneNumCountryCode: json["franchisePhoneNumCountryCode"],
-    profileImageFileId: json["profileImageFileId"],
-    defaultTimezone: json["defaultTimezone"],
-  );
+  factory MyProfileUpdateRequestModel.fromJson(Map<String, dynamic> json) =>
+      MyProfileUpdateRequestModel(
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        email: json["email"],
+        phoneNum: json["phoneNum"],
+        numCountryCode: json["numCountryCode"],
+        password: json["password"],
+        franchiseName: json["franchiseName"],
+        franchiseEmail: json["franchiseEmail"],
+        franchisePhoneNumber: json["franchisePhoneNumber"],
+        franchisePhoneNumCountryCode: json["franchisePhoneNumCountryCode"],
+        profileImageFileId: json["profileImageFileId"],
+        defaultTimezone: json["defaultTimezone"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "firstName": firstName,
-    "lastName": lastName,
-    "email": email,
-    "phoneNum": phoneNum,
-    "numCountryCode": numCountryCode,
-    "password": password,
-    "franchiseName": franchiseName,
-    "franchiseEmail": franchiseEmail,
-    "franchisePhoneNumber": franchisePhoneNumber,
-    "franchisePhoneNumCountryCode": franchisePhoneNumCountryCode,
-    "profileImageFileId": profileImageFileId,
-    "defaultTimezone": defaultTimezone,
-  };
+        "firstName": firstName,
+        "lastName": lastName,
+        "email": email,
+        "phoneNum": phoneNum,
+        "numCountryCode": numCountryCode,
+        "password": password,
+        "franchiseName": franchiseName,
+        "franchiseEmail": franchiseEmail,
+        "franchisePhoneNumber": franchisePhoneNumber,
+        "franchisePhoneNumCountryCode": franchisePhoneNumCountryCode,
+        "profileImageFileId": profileImageFileId,
+        "defaultTimezone": defaultTimezone,
+      };
 }

@@ -1,6 +1,6 @@
-
 class DBScheme {
-  static const sessionTable = 'CREATE TABLE session_data(key TEXT PRIMARY KEY, value TEXT)';
+  static const sessionTable =
+      'CREATE TABLE session_data(key TEXT PRIMARY KEY, value TEXT)';
 
   static const eventsTable = ''' CREATE TABLE events (
     id character varying(32) PRIMARY KEY NOT NULL,
@@ -121,8 +121,6 @@ class DBScheme {
   comp_qty integer DEFAULT 0
   )''';
 
-
-
   static const foodExtraItemsTable = '''CREATE TABLE food_extra_items (
     id character varying(32) NOT NULL,
     food_extra_item_category_id character varying(32) NOT NULL,
@@ -160,8 +158,6 @@ class DBScheme {
     PRIMARY KEY (id, event_id)
 )''';
 
-
-
   static const itemsTable = '''CREATE TABLE items (
     id character varying(32) NOT NULL,
     event_id character varying(50) NOT NULL,
@@ -181,7 +177,6 @@ class DBScheme {
     franchise_id character varying(32),
     PRIMARY KEY (id, event_id)
 )''';
-
 
   static const orderItemsTable = '''CREATE TABLE order_items (
     id character varying(32) NOT NULL,
@@ -286,7 +281,8 @@ class DBScheme {
    PRIMARY KEY (order_id, item_id)
 )''';
 
-  static const savedOrdersExtraItems = '''CREATE TABLE saved_orders_extra_items (
+  static const savedOrdersExtraItems =
+      '''CREATE TABLE saved_orders_extra_items (
    order_id character varying(50),
    item_id character varying(100),
    extra_food_item_id character varying(15),
@@ -300,7 +296,8 @@ class DBScheme {
 )''';
 
   //Not in USE
-  static const eventFoodExtraItemMappingTable = '''CREATE TABLE event_food_extra_item_mappings (
+  static const eventFoodExtraItemMappingTable =
+      '''CREATE TABLE event_food_extra_item_mappings (
     id character varying(32) NOT NULL,
     event_item_id character varying(32) NOT NULL,
     event_id character varying(32) NOT NULL,
@@ -319,7 +316,8 @@ class DBScheme {
 )''';
 
   //Not in USE
-  static const foodExtraItemsCategoriesTable = '''CREATE TABLE food_extra_item_categories (
+  static const foodExtraItemsCategoriesTable =
+      '''CREATE TABLE food_extra_item_categories (
     id character varying(32) NOT NULL,
     category_name character varying(100) NOT NULL,
     type character varying(50) NOT NULL,
@@ -335,7 +333,8 @@ class DBScheme {
 )''';
 
   //Not in USE
-  static const itemFoodExtraMappingMasterTable = '''CREATE TABLE item_food_extra_mapping_masters (
+  static const itemFoodExtraMappingMasterTable =
+      '''CREATE TABLE item_food_extra_mapping_masters (
     id character varying(32) NOT NULL,
     item_category_id character varying(32),
     item_id character varying(32) NOT NULL,
@@ -352,7 +351,8 @@ class DBScheme {
 )''';
 
   //Not in USE
-  static const orderFoodExtraItemMappingTable = '''CREATE TABLE order_food_extra_item_mappings (
+  static const orderFoodExtraItemMappingTable =
+      '''CREATE TABLE order_food_extra_item_mappings (
     id character varying(32) NOT NULL,
     order_id character varying(32) NOT NULL,
     order_item_id character varying(32) NOT NULL,
@@ -369,6 +369,4 @@ class DBScheme {
     updated_at bigint,
     deleted boolean DEFAULT false
 )''';
-
-
 }

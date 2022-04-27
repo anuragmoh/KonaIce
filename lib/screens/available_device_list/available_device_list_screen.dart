@@ -19,21 +19,21 @@ class AvailableDeviceListScreen extends StatefulWidget {
   const AvailableDeviceListScreen({Key? key}) : super(key: key);
 
   @override
-  _AvailableDeviceListScreenState createState() => _AvailableDeviceListScreenState();
+  _AvailableDeviceListScreenState createState() =>
+      _AvailableDeviceListScreenState();
 }
 
 class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   List<Device> deviceList = [];
 
-  getAvailableDevice(){
+  getAvailableDevice() {
     P2PConnectionManager.shared.startService(isStaffView: true);
     P2PConnectionManager.shared.getDeviceList(getBackValue);
-
   }
 
   bool isConnectionProcess = false;
 
-  getBackValue(dynamic value){
+  getBackValue(dynamic value) {
     setState(() {
       deviceList.clear();
       deviceList.addAll(value);
@@ -49,8 +49,10 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isConnectionProcess, child: mainUi(context));
+    return Loader(
+        isCallInProgress: isConnectionProcess, child: mainUi(context));
   }
+
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -73,42 +75,53 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       ),
     );
   }
-  Widget bodyContainer()=> Container(
-    width: 360,
-    height: MediaQuery.of(context).size.height * 0.65,
-    color: Colors.white,
-    child:  Column(
-      children: [
-         Padding(
-          padding:  const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
-          child: Text(StringConstants.allDeviceScreenHead,
-            textAlign: TextAlign.center,
-            style: StyleConstants.customTextStyle(
-              fontSize: 22.0,
-              color: AppColors.textColor1,
-              fontFamily: FontConstants.montserratSemiBold),),
-        ),
-        Expanded(
-          child: deviceList.isNotEmpty ? ListView.builder(
-            itemCount: deviceList.length,
-            itemBuilder: (context,index){
-              final device = deviceList[index];
-            return listView(device);
-            }) : Align(
-            alignment: Alignment.center,
-            child: CommonWidgets().textWidget(StringConstants.noDeviceAvailableToConnect, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
+
+  Widget bodyContainer() => Container(
+        width: 360,
+        height: MediaQuery.of(context).size.height * 0.65,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
+              child: Text(
+                StringConstants.allDeviceScreenHead,
+                textAlign: TextAlign.center,
+                style: StyleConstants.customTextStyle(
+                    fontSize: 22.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratSemiBold),
+              ),
             ),
+            Expanded(
+              child: deviceList.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: deviceList.length,
+                      itemBuilder: (context, index) {
+                        final device = deviceList[index];
+                        return listView(device);
+                      })
+                  : Align(
+                      alignment: Alignment.center,
+                      child: CommonWidgets().textWidget(
+                          StringConstants.noDeviceAvailableToConnect,
+                          StyleConstants.customTextStyle(
+                              fontSize: 20.0,
+                              color: AppColors.textColor1,
+                              fontFamily: FontConstants.montserratSemiBold))),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: proceedButton(
+                  StringConstants.proceed,
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratBold)),
+            )
+          ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: proceedButton(StringConstants.proceed, StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
-              fontFamily: FontConstants.montserratBold)),
-        )
-      ],
-    ) ,
-  );
+      );
   Widget icon() {
     return CommonWidgets().image(
         image: AssetsConstants.konaIcon,
@@ -116,67 +129,67 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         height: 15.62 * SizeConfig.imageSizeMultiplier);
   }
 
-  Widget listView(Device device)=> Column(
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-              child:  CommonWidgets().image(
-                  image: AssetsConstants.tabletIcon,
-                  width:  1.56 * SizeConfig.imageSizeMultiplier,
-                  height: 2.08 * SizeConfig.imageSizeMultiplier) ,),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  device.deviceName,
-                  textAlign: TextAlign.left,
-                  style: StyleConstants.customTextStyle(fontSize: 15,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratMedium),
-                ),
-                Text(
-                  '(${getStateName(device.state)})',
-                  textAlign: TextAlign.left,
-                  style: StyleConstants.customTextStyle(fontSize: 13,
-                  color: getStateColor(device.state),
-                      fontFamily: FontConstants.montserratMedium)),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () => _onButtonClicked(device),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              padding: const EdgeInsets.all(8.0),
-              height: 35,
-              width: 100,
-              decoration: BoxDecoration(
-                color: getButtonColor(device.state),
-                borderRadius: BorderRadius.circular(20.0),
+  Widget listView(Device device) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: CommonWidgets().image(
+                    image: AssetsConstants.tabletIcon,
+                    width: 1.56 * SizeConfig.imageSizeMultiplier,
+                    height: 2.08 * SizeConfig.imageSizeMultiplier),
               ),
-              child: Center(
-                child: Text(
-                  getButtonStateName(device.state),
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      device.deviceName,
+                      textAlign: TextAlign.left,
+                      style: StyleConstants.customTextStyle(
+                          fontSize: 15,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratMedium),
+                    ),
+                    Text('(${getStateName(device.state)})',
+                        textAlign: TextAlign.left,
+                        style: StyleConstants.customTextStyle(
+                            fontSize: 13,
+                            color: getStateColor(device.state),
+                            fontFamily: FontConstants.montserratMedium)),
+                  ],
                 ),
               ),
-            ),
+              GestureDetector(
+                onTap: () => _onButtonClicked(device),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                  padding: const EdgeInsets.all(8.0),
+                  height: 35,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: getButtonColor(device.state),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Center(
+                    child: Text(
+                      getButtonStateName(device.state),
+                      style: const TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
           ),
-        ]),
-      ),
-      const Padding(
-        padding: EdgeInsets.only(top: 15),
-        child: Divider(),
-      ),
-    ],
-  );
+          const Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Divider(),
+          ),
+        ],
+      );
   Widget proceedButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
       onTap: () {
@@ -189,13 +202,10 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 70.0),
-          child: Align (
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 70.0),
+          child: Align(
               alignment: Alignment.center,
-              child: CommonWidgets().textWidget(buttonText, textStyle)
-          ),
+              child: CommonWidgets().textWidget(buttonText, textStyle)),
         ),
       ),
     );
@@ -204,7 +214,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   //Action Event
   onTapProceedButton() {
     Navigator.of(context).pushReplacement(
-    MaterialPageRoute(builder: (context) => const Dashboard()));
+        MaterialPageRoute(builder: (context) => const Dashboard()));
   }
 
   String getStateName(SessionState state) {
@@ -221,6 +231,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         return "connected";
     }
   }
+
   Color getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -248,6 +259,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         break;
     }
   }
+
   Color getButtonColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -257,6 +269,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         return getMaterialColor(AppColors.denotiveColor1);
     }
   }
+
   String getButtonStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:

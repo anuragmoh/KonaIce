@@ -16,14 +16,10 @@ class AllOrderPresenter {
       required int offset,
       required int lastSync}) {
     _repository
-        .getOrderSync(
-             orderStatus,
-             eventId,
-             offset,
-            lastSync)
+        .getOrderSync(orderStatus, eventId, offset, lastSync)
         .then((value) => _view.showSuccess(value))
-        .onError((error, stackTrace){
-          _view.showError(FetchException(error).fetchErrorModel());
+        .onError((error, stackTrace) {
+      _view.showError(FetchException(error).fetchErrorModel());
     });
   }
 }

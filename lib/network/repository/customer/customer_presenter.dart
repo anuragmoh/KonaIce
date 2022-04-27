@@ -1,4 +1,3 @@
-
 import '../../exception.dart';
 import '../../response_contractor.dart';
 import 'customer_repository.dart';
@@ -12,11 +11,9 @@ class CustomerPresenter {
   }
 
   void customerList(String searchText) {
-    _customerRepository
-        .customerList(searchText)
-        .then((value){
+    _customerRepository.customerList(searchText).then((value) {
       _view.showSuccess(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       _view.showError(FetchException(error).fetchErrorModel());
     });
   }

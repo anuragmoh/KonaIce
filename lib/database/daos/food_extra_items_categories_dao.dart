@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/models/data_models/food_extra_items_categories.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
@@ -15,8 +14,21 @@ class FoodExtraItemsCategoriesDAO {
       final db = await _db;
       var result = await db.rawInsert(
           "INSERT OR REPLACE INTO $tableName (id, category_name, type, min_qty_allowed, max_qty_allowed, activated, created_by, created_at, updated_by, updated_at, deleted, franchise_id)"
-              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [foodExtraItemsCategories.id, foodExtraItemsCategories.categoryName, foodExtraItemsCategories.type, foodExtraItemsCategories.minQtyAllowed, foodExtraItemsCategories.maxQtyAllowed, foodExtraItemsCategories.activated, foodExtraItemsCategories.createdBy, foodExtraItemsCategories.createdAt, foodExtraItemsCategories.updatedBy, foodExtraItemsCategories.updatedAt, foodExtraItemsCategories.deleted, foodExtraItemsCategories.franchiseId]);
+          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            foodExtraItemsCategories.id,
+            foodExtraItemsCategories.categoryName,
+            foodExtraItemsCategories.type,
+            foodExtraItemsCategories.minQtyAllowed,
+            foodExtraItemsCategories.maxQtyAllowed,
+            foodExtraItemsCategories.activated,
+            foodExtraItemsCategories.createdBy,
+            foodExtraItemsCategories.createdAt,
+            foodExtraItemsCategories.updatedBy,
+            foodExtraItemsCategories.updatedAt,
+            foodExtraItemsCategories.deleted,
+            foodExtraItemsCategories.franchiseId
+          ]);
       return result;
     } catch (error) {
       debugPrint(error.toString());
@@ -26,8 +38,7 @@ class FoodExtraItemsCategoriesDAO {
   Future<FoodExtraItemsCategories?> getValues() async {
     try {
       final db = await _db;
-      var result =
-      await db.rawQuery("SELECT * from $tableName");
+      var result = await db.rawQuery("SELECT * from $tableName");
       if (result.isNotEmpty) {
         return FoodExtraItemsCategories.fromMap(result.first);
       } else {

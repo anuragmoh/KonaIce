@@ -24,7 +24,8 @@ class PaymentOption extends StatefulWidget {
   _PaymentOptionState createState() => _PaymentOptionState();
 }
 
-class _PaymentOptionState extends State<PaymentOption> implements P2PContractor {
+class _PaymentOptionState extends State<PaymentOption>
+    implements P2PContractor {
   int paymentModeType = -1;
 
   _PaymentOptionState() {
@@ -32,8 +33,11 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
   }
 
   String _resultString = "";
-  String cardNumber="4111111111111111",cardCvc="123",cardExpiryYear="22",cardExpiryMonth="12";
-  String stripeTokenId="",stripePaymentMethodId="";
+  String cardNumber = "4111111111111111",
+      cardCvc = "123",
+      cardExpiryYear = "22",
+      cardExpiryMonth = "12";
+  String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
 
   bool isApiProcess = false;
@@ -42,60 +46,68 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
   Widget build(BuildContext context) {
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
-  Widget mainUi(BuildContext context){
-    return Scaffold(body: Container(color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+
+  Widget mainUi(BuildContext context) {
+    return Scaffold(
+        body: Container(
+      color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
       child: Column(
         children: [
           CommonWidgets().topEmptyBar(),
-          Expanded(child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                paymentOption(0.0),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Divider(
-                    color:
-                    getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-                    thickness: 1,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Column(
+                children: [
+                  paymentOption(0.0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Divider(
+                      color: getMaterialColor(AppColors.gradientColor1)
+                          .withOpacity(0.2),
+                      thickness: 1,
+                    ),
                   ),
-                ),
-                paymentModeWidget(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Divider(
-                    color:
-                    getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-                    thickness: 1,
+                  paymentModeWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Divider(
+                      color: getMaterialColor(AppColors.gradientColor1)
+                          .withOpacity(0.2),
+                      thickness: 1,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),),
+          ),
           CommonWidgets().bottomEmptyBar(),
         ],
-      ),));
+      ),
+    ));
   }
 
   Widget paymentOption(double totalAmount) => Padding(
-    padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30, top: 20),
-    child: SizedBox(
-      height: 25.0,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        padding:
+            const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30, top: 20),
+        child: SizedBox(
+          height: 25.0,
+          child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     onTapBackButton();
-
                   },
-                  child:  CommonWidgets().image(
-                      image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+                  child: CommonWidgets().image(
+                      image: AssetsConstants.backArrow,
+                      width: 25.0,
+                      height: 25.0),
                 ),
-                const SizedBox(width: 22.0,),
+                const SizedBox(
+                  width: 22.0,
+                ),
                 CommonWidgets().textWidget(
                     StringConstants.selectPaymentOption,
                     StyleConstants.customTextStyle(
@@ -106,22 +118,26 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
             ),
             // Amount to return field
           ]),
-    ),
-  );
+        ),
+      );
 
   Widget paymentModeWidget() => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 19.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
-        paymentModeView(
-            StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCard),
-        // paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
-        paymentModeView(StringConstants.creditCardManual, PaymentModeConstants.creditCardManual, AssetsConstants.creditCardScan),
-      ],
-    ),
-  );
+        padding: const EdgeInsets.symmetric(vertical: 19.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
+                AssetsConstants.cash),
+            paymentModeView(StringConstants.creditCard,
+                PaymentModeConstants.creditCard, AssetsConstants.creditCard),
+            // paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
+            paymentModeView(
+                StringConstants.creditCardManual,
+                PaymentModeConstants.creditCardManual,
+                AssetsConstants.creditCardScan),
+          ],
+        ),
+      );
 
   Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
@@ -140,11 +156,11 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
-                child: CommonWidgets()
-                    .image(image: icon,
-                    width:4.25*SizeConfig.imageSizeMultiplier ,
-                    height: 4.25*SizeConfig.imageSizeMultiplier),
+                    const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
+                child: CommonWidgets().image(
+                    image: icon,
+                    width: 4.25 * SizeConfig.imageSizeMultiplier,
+                    height: 4.25 * SizeConfig.imageSizeMultiplier),
               ),
             ),
             const SizedBox(width: 10.0),
@@ -159,18 +175,16 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
       );
 
   //Action Event
-  onTapCashMode() {
-
-  }
+  onTapCashMode() {}
   onTapPaymentMode(int index) {
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
     });
     if (paymentModeType == PaymentModeConstants.creditCard) {
-      Future.delayed(const Duration(seconds: 2),(){
+      Future.delayed(const Duration(seconds: 2), () {
         setState(() {
-          paymentModeType =-1;
+          paymentModeType = -1;
         });
       });
       // scan();
@@ -184,7 +198,8 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
 
   //Navigation
   showPaymentSuccessScreen() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OrderComplete()));
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const OrderComplete()));
   }
 
   showOrderDetailsScreen() {
@@ -193,12 +208,14 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
 
   //data for p2pConnection to Staff
   updateSelectedPaymentMode() {
-    P2PConnectionManager.shared.updateData(action: CustomerActionConst.paymentModeSelected,
+    P2PConnectionManager.shared.updateData(
+        action: CustomerActionConst.paymentModeSelected,
         data: paymentModeType.toString());
   }
 
   editAndUpdateOrder() {
-    P2PConnectionManager.shared.updateData(action: CustomerActionConst.editOrderDetails);
+    P2PConnectionManager.shared
+        .updateData(action: CustomerActionConst.editOrderDetails);
   }
 
   @override
@@ -215,7 +232,8 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
         isApiProcess = false;
       });
       showPaymentSuccessScreen();
-    } else if (response.action == StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+    } else if (response.action ==
+        StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
     }
   }
@@ -374,9 +392,10 @@ class _PaymentOptionState extends State<PaymentOption> implements P2PContractor 
     P2PCardDetailsModel model = P2PCardDetailsModel();
     model.cardNumber = cardNumber;
     model.cardCvc = cardCvc;
-    model.cardExpiryYear =  cardExpiryYear;
+    model.cardExpiryYear = cardExpiryYear;
     model.cardExpiryMonth = cardExpiryMonth;
-    P2PConnectionManager.shared.updateDataWithObject(action: StaffActionConst.customerCardScan, dataObject: model);
+    P2PConnectionManager.shared.updateDataWithObject(
+        action: StaffActionConst.customerCardScan, dataObject: model);
     Navigator.pop(context);
     setState(() {
       isApiProcess = true;

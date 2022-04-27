@@ -14,6 +14,7 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		C88906B4DF30390D8956815E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E3AFACCDE9FE87F6A1273A /* Pods_Runner.framework */; };
+		EED58D9A281956DF00D9E91A /* FinixConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED58D99281956DF00D9E91A /* FinixConstants.swift */; };
 		EEF2C3F92817FD3400CB0893 /* FinixPOS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEF2C3F62817FD2000CB0893 /* FinixPOS.xcframework */; };
 		EEF2C3FA2817FD3400CB0893 /* FinixPOS.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEF2C3F62817FD2000CB0893 /* FinixPOS.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		EEF2C3FB2817FD3600CB0893 /* triPOSMobileSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEF2C3F52817FD2000CB0893 /* triPOSMobileSDK.xcframework */; };
@@ -59,6 +60,7 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EED58D99281956DF00D9E91A /* FinixConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinixConstants.swift; sourceTree = "<group>"; };
 		EEF2C3F52817FD2000CB0893 /* triPOSMobileSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = triPOSMobileSDK.xcframework; path = frameworks/triPOSMobileSDK.xcframework; sourceTree = "<group>"; };
 		EEF2C3F62817FD2000CB0893 /* FinixPOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FinixPOS.xcframework; path = frameworks/FinixPOS.xcframework; sourceTree = "<group>"; };
 		EEF2C3FE2817FDD300CB0893 /* FinixHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinixHelper.swift; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				EEF2C3FE2817FDD300CB0893 /* FinixHelper.swift */,
+				EED58D99281956DF00D9E91A /* FinixConstants.swift */,
 			);
 			path = Finix;
 			sourceTree = "<group>";
@@ -287,7 +290,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build\n";
 		};
 		CF8C672C0EDC71FFFA524F66 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -342,6 +345,7 @@
 				EEF2C4062817FFF700CB0893 /* UIViewControllerExtension.swift in Sources */,
 				EEF2C40B2818050000CB0893 /* PaymentModel.swift in Sources */,
 				EEF2C3FF2817FDD300CB0893 /* FinixHelper.swift in Sources */,
+				EED58D9A281956DF00D9E91A /* FinixConstants.swift in Sources */,
 				EEF2C4022817FF9C00CB0893 /* MBProgressHUD.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

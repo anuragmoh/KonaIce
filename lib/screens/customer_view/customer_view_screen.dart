@@ -33,7 +33,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 eventAddress: "Wachington",
                 showCenterWidget: false,
                 onTapCallBack: onTapCallBack,
-              //  onDrawerTap: onDrawerTap,
+                //  onDrawerTap: onDrawerTap,
                 onProfileTap: onProfileChange),
             Expanded(child: bodyWidget()),
             bottomWidget(),
@@ -100,7 +100,8 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   onDrawerTap() {
     Scaffold.of(context).openDrawer();
   }
-   onProfileChange() {
+
+  onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
@@ -370,7 +371,9 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   Widget componentBottomWidget() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 35.0),
         child: InkWell(
-          onTap: (){Navigator.of(context).pop();},
+            onTap: () {
+              Navigator.of(context).pop();
+            },
             child: Image.asset(AssetsConstants.switchAccount,
                 width: 30.0, height: 30.0)),
       );

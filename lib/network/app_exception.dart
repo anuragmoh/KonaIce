@@ -12,25 +12,28 @@ class AppException implements Exception {
 class AppException1 implements Exception {
   final String? errorModel;
   AppException1([this.errorModel]);
-
 }
 
 class BadRequestException extends AppException {
-  BadRequestException([String? message, String? url]) : super(message, 'Bad Request', url);
+  BadRequestException([String? message, String? url])
+      : super(message, 'Bad Request', url);
 }
 
 class FetchDataException extends AppException {
-  FetchDataException([String? message, String? url]) : super(message, 'Unable to process', url);
+  FetchDataException([String? message, String? url])
+      : super(message, 'Unable to process', url);
 }
 
 class ApiNotRespondingException extends AppException {
-  ApiNotRespondingException([String? message, String? url]) : super(message, 'Api not responded in time', url);
+  ApiNotRespondingException([String? message, String? url])
+      : super(message, 'Api not responded in time', url);
 }
 
 class UnAuthorizedException extends AppException {
-  UnAuthorizedException([String? message, String? url]) : super(message, 'UnAuthorized request', url);
+  UnAuthorizedException([String? message, String? url])
+      : super(message, 'UnAuthorized request', url);
 }
 
 class GeneralApiResponseErrorException extends AppException1 {
-  GeneralApiResponseErrorException([String? errorModel]): super(errorModel);
+  GeneralApiResponseErrorException([String? errorModel]) : super(errorModel);
 }

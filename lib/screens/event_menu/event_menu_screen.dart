@@ -55,9 +55,8 @@ class EventMenuScreen extends StatefulWidget {
   _EventMenuScreenState createState() => _EventMenuScreenState();
 }
 
-class _EventMenuScreenState extends State<EventMenuScreen> implements
-    OrderResponseContractor, P2PContractor {
-
+class _EventMenuScreenState extends State<EventMenuScreen>
+    implements OrderResponseContractor, P2PContractor {
   late OrderPresenter orderPresenter;
   late EventPresenter eventPresenter;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
@@ -1055,12 +1054,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   calculateTotal() {
     setState(() {
       if (selectedMenuItems.isNotEmpty) {
-        totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
+        totalAmount =
+            totalAmountOfSelectedItems + tip + getSalesTax() - discount;
       } else {
         totalAmount = 0.0;
       }
     });
-
   }
 
   clearCart() {

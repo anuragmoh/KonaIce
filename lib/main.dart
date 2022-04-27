@@ -16,27 +16,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints){
-        return OrientationBuilder(builder: (context,orientation){
-          SizeConfig().init(constraints, orientation);
-          return MaterialApp(
-            navigatorKey: FunctionalUtils.navigatorKey,
-            title: StringConstants.title,
-            theme: ThemeData(
-              primarySwatch: getMaterialColor(AppColors.primaryColor2),
-            ),
-            debugShowCheckedModeBanner: false,
-            home: SplashScreen(),
-          );
-        });
-      }
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      return OrientationBuilder(builder: (context, orientation) {
+        SizeConfig().init(constraints, orientation);
+        return MaterialApp(
+          navigatorKey: FunctionalUtils.navigatorKey,
+          title: StringConstants.title,
+          theme: ThemeData(
+            primarySwatch: getMaterialColor(AppColors.primaryColor2),
+          ),
+          debugShowCheckedModeBanner: false,
+          home: SplashScreen(),
+        );
+      });
+    });
   }
 }
 
 class App {
-  static GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
-

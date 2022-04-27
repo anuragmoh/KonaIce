@@ -15,7 +15,6 @@ import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class SettingScreen extends StatefulWidget {
-
   const SettingScreen({Key? key}) : super(key: key);
 
   @override
@@ -24,7 +23,6 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen>
     implements ResponseContractor {
-
   late UserPresenter userPresenter;
 
   _SettingScreenState() {
@@ -36,7 +34,8 @@ class _SettingScreenState extends State<SettingScreen>
   @override
   void initState() {
     super.initState();
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
   }
 
   @override
@@ -45,10 +44,10 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget mainUi(BuildContext context) {
-     return Scaffold(
+    return Scaffold(
       body: Container(
-          color: getMaterialColor(AppColors.textColor3),
-          child: Center(child: body()),
+        color: getMaterialColor(AppColors.textColor3),
+        child: Center(child: body()),
       ),
     );
   }
@@ -64,7 +63,6 @@ class _SettingScreenState extends State<SettingScreen>
     callLogoutApi();
   }
 
-
   //API Call
   callLogoutApi() {
     setState(() {
@@ -78,7 +76,9 @@ class _SettingScreenState extends State<SettingScreen>
   void showError(GeneralErrorResponse exception) {
     setState(() {
       isApiProcess = false;
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+          context: context);
     });
   }
 

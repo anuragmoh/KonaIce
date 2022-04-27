@@ -7,17 +7,24 @@ class GeneralErrorList {
 
   List<GeneralErrorResponse>? general;
 
-  factory GeneralErrorList.fromRawJson(String str) => GeneralErrorList.fromJson(json.decode(str));
+  factory GeneralErrorList.fromRawJson(String str) =>
+      GeneralErrorList.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory GeneralErrorList.fromJson(Map<String, dynamic> json) => GeneralErrorList(
-    general: json["general"] == null ? null : List<GeneralErrorResponse>.from(json["general"].map((x) => GeneralErrorResponse.fromJson(x))),
-  );
+  factory GeneralErrorList.fromJson(Map<String, dynamic> json) =>
+      GeneralErrorList(
+        general: json["general"] == null
+            ? null
+            : List<GeneralErrorResponse>.from(
+                json["general"].map((x) => GeneralErrorResponse.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "general": general == null ? null : List<dynamic>.from(general!.map((x) => x.toJson())),
-  };
+        "general": general == null
+            ? null
+            : List<dynamic>.from(general!.map((x) => x.toJson())),
+      };
 }
 
 class GeneralErrorResponse {
@@ -29,17 +36,19 @@ class GeneralErrorResponse {
   String? messageCode;
   String? message;
 
-  factory GeneralErrorResponse.fromRawJson(String str) => GeneralErrorResponse.fromJson(json.decode(str));
+  factory GeneralErrorResponse.fromRawJson(String str) =>
+      GeneralErrorResponse.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory GeneralErrorResponse.fromJson(Map<String, dynamic> json) => GeneralErrorResponse(
-    messageCode: json["messageCode"],
-    message: json["message"],
-  );
+  factory GeneralErrorResponse.fromJson(Map<String, dynamic> json) =>
+      GeneralErrorResponse(
+        messageCode: json["messageCode"],
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "messageCode": messageCode,
-    "message": message,
-  };
+        "messageCode": messageCode,
+        "message": message,
+      };
 }

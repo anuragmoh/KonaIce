@@ -16,7 +16,7 @@ class ItemCategories {
 
   ItemCategories(
       {required this.id,
-        required this.eventId,
+      required this.eventId,
       required this.categoryCode,
       required this.categoryName,
       required this.description,
@@ -28,12 +28,10 @@ class ItemCategories {
       required this.deleted,
       required this.franchiseId});
 
-
-
   Map<String, dynamic> toMap() {
     return {
       "id": id,
-      "event_id":eventId,
+      "event_id": eventId,
       "category_code": categoryCode,
       "category_name": categoryName,
       "description": description,
@@ -50,18 +48,17 @@ class ItemCategories {
   factory ItemCategories.fromMap(Map<String, dynamic> map) {
     return ItemCategories(
         id: map["id"],
-        eventId:map["event_id"],
+        eventId: map["event_id"],
         categoryCode: map["category_code"],
-        categoryName:map["category_name"],
+        categoryName: map["category_name"],
         description: map["description"],
-        activated: map["activated"]==1,
+        activated: map["activated"] == 1,
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"]==1,
-        franchiseId: map["franchise_id"]
-    );
+        deleted: map["deleted"] == 1,
+        franchiseId: map["franchise_id"]);
   }
 
   @override
@@ -81,10 +78,21 @@ class ItemCategories {
     franchiseId: $franchiseId
     """;
   }
-  
-  static ItemCategories getCustomMenuCategory({required String eventId, required String name}) {
-    return ItemCategories(id: "1", eventId: eventId, categoryCode: "0", categoryName: name, description: StringExtension.empty(), activated: false, createdBy: StringExtension.empty(), createdAt: 0, updatedBy: StringExtension.empty(), updatedAt: 0, deleted: false, franchiseId: StringExtension.empty());
+
+  static ItemCategories getCustomMenuCategory(
+      {required String eventId, required String name}) {
+    return ItemCategories(
+        id: "1",
+        eventId: eventId,
+        categoryCode: "0",
+        categoryName: name,
+        description: StringExtension.empty(),
+        activated: false,
+        createdBy: StringExtension.empty(),
+        createdAt: 0,
+        updatedBy: StringExtension.empty(),
+        updatedAt: 0,
+        deleted: false,
+        franchiseId: StringExtension.empty());
   }
-
-
 }

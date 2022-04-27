@@ -245,8 +245,7 @@ class _LoginScreenState extends State<LoginScreen>
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.only(
-                  right: 21.0,
-                  bottom: 2.60 * SizeConfig.imageSizeMultiplier),
+                  right: 21.0, bottom: 2.60 * SizeConfig.imageSizeMultiplier),
               child: InkWell(
                 onTap: onTapForgotPassword,
                 child: textWidget(
@@ -360,7 +359,7 @@ class _LoginScreenState extends State<LoginScreen>
       });
       return false;
     }*/
-  /*  if (passwordController.text.isEmpty) {
+    /*  if (passwordController.text.isEmpty) {
       setState(() {
         passwordValidationMessage = StringConstants.emptyValidPassword;
       });
@@ -396,11 +395,9 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       isLoginView = true;
     });
-    if(message != ""){
+    if (message != "") {
       CommonWidgets().showSuccessSnackBar(message: message, context: context);
     }
-
-
   }
 
   //API Calls

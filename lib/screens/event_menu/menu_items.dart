@@ -1,4 +1,3 @@
-
 class MenuItems {
   String itemName;
   double price;
@@ -8,11 +7,16 @@ class MenuItems {
   List<FoodExtras> selectedExtras = [];
   List<FoodExtras>? extraContents;
 
-  MenuItems({required this.itemName, required this.price, this.isItemSelected = false,
-             this.isItemHasExtras = false, this.selectedItemQuantity = 0, this.extraContents});
+  MenuItems(
+      {required this.itemName,
+      required this.price,
+      this.isItemSelected = false,
+      this.isItemHasExtras = false,
+      this.selectedItemQuantity = 0,
+      this.extraContents});
 
-   double get totalPrice => price * selectedItemQuantity;
- }
+  double get totalPrice => price * selectedItemQuantity;
+}
 
 class FoodExtras {
   String contentName;
@@ -20,9 +24,11 @@ class FoodExtras {
   int selectedItemQuantity;
   bool isItemSelected;
 
-
-  FoodExtras({required this.contentName, required this.price, this.selectedItemQuantity = 0, this.isItemSelected = false});
+  FoodExtras(
+      {required this.contentName,
+      required this.price,
+      this.selectedItemQuantity = 0,
+      this.isItemSelected = false});
 
   double get totalPrice => price * selectedItemQuantity;
-
 }

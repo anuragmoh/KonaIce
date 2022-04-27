@@ -1,8 +1,10 @@
 import 'dart:convert';
 
-ForgotPasswordRequestModel forgotPasswordRequestModelFromJson(String str) => ForgotPasswordRequestModel.fromJson(json.decode(str));
+ForgotPasswordRequestModel forgotPasswordRequestModelFromJson(String str) =>
+    ForgotPasswordRequestModel.fromJson(json.decode(str));
 
-String forgotPasswordRequestModelToJson(ForgotPasswordRequestModel data) => json.encode(data.toJson());
+String forgotPasswordRequestModelToJson(ForgotPasswordRequestModel data) =>
+    json.encode(data.toJson());
 
 class ForgotPasswordRequestModel {
   ForgotPasswordRequestModel({
@@ -11,18 +13,21 @@ class ForgotPasswordRequestModel {
 
   String? email;
 
-  factory ForgotPasswordRequestModel.fromJson(Map<String, dynamic> json) => ForgotPasswordRequestModel(
-    email: json["email"],
-  );
+  factory ForgotPasswordRequestModel.fromJson(Map<String, dynamic> json) =>
+      ForgotPasswordRequestModel(
+        email: json["email"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "email": email,
-  };
+        "email": email,
+      };
 }
 
-ForgotPasswordResponseModel forgotPasswordResponseModelFromJson(String str) => ForgotPasswordResponseModel.fromJson(json.decode(str));
+ForgotPasswordResponseModel forgotPasswordResponseModelFromJson(String str) =>
+    ForgotPasswordResponseModel.fromJson(json.decode(str));
 
-String forgotPasswordResponseModelToJson(ForgotPasswordResponseModel data) => json.encode(data.toJson());
+String forgotPasswordResponseModelToJson(ForgotPasswordResponseModel data) =>
+    json.encode(data.toJson());
 
 class ForgotPasswordResponseModel {
   ForgotPasswordResponseModel({
@@ -31,17 +36,19 @@ class ForgotPasswordResponseModel {
 
   List<General>? general;
 
-  factory ForgotPasswordResponseModel.fromJson(Map<String, dynamic> json) => ForgotPasswordResponseModel(
-    general: List<General>.from(json["general"].map((x) => General.fromJson(x))),
-  );
+  factory ForgotPasswordResponseModel.fromJson(Map<String, dynamic> json) =>
+      ForgotPasswordResponseModel(
+        general:
+            List<General>.from(json["general"].map((x) => General.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "general": List<dynamic>.from(general!.map((x) => x.toJson())),
-  };
+        "general": List<dynamic>.from(general!.map((x) => x.toJson())),
+      };
 }
 
-General generalResponseModelFromJson(String str) => General.fromJson(json.decode(str));
-
+General generalResponseModelFromJson(String str) =>
+    General.fromJson(json.decode(str));
 
 class General {
   General({
@@ -53,12 +60,12 @@ class General {
   String? message;
 
   factory General.fromJson(Map<String, dynamic> json) => General(
-    messageCode: json["messageCode"],
-    message: json["message"],
-  );
+        messageCode: json["messageCode"],
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "messageCode": messageCode,
-    "message": message,
-  };
+        "messageCode": messageCode,
+        "message": message,
+      };
 }

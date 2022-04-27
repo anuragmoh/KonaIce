@@ -8,7 +8,9 @@
 import UIKit
 import FinixPOS
 
-class PaymentViewController: UIViewController {
+class PaymentViewController: UIViewController, ShowAlert {
+    
+    var payment: PaymentModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +21,8 @@ class PaymentViewController: UIViewController {
     }
     
     func performPayment() {
+        self.showHUD(message: "Initializing")
+        
         if FINIXHELPER.isSDKInitialized() {
             
             self.performSale()
@@ -34,8 +38,8 @@ class PaymentViewController: UIViewController {
         let serialNumber: String? = nil
         
         FINIXHELPER.initializeFinixSDK(environment: FinixPOS.Finix.Environment.TestCertification,
-                                       userName: "US5XSPK8w4W8dCHT9t7fUUYz",
-                                       password: "9cb05bbf-b768-4bb5-a680-48fee02e570c",
+                                       userName: FinixConstants.userName,
+                                       password: FinixConstants.password,
                                        application: "Test",
                                        version: "1.0",
                                        merchantId: "MUuGRWnvvg62MxAmMpzGcXxq",
@@ -50,6 +54,17 @@ class PaymentViewController: UIViewController {
                                            "order_number": "21DFASJSAKAS"])
     }
     
+    func showAlert(title: String, message: String) {
+        
+        let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
+            self.dismissView()
+        }
+        displayAlert(with: title, message: message, type: .alert, actions: [okAction])
+    }
+    
+    func dismissView() {
+        dismiss(animated: true)
+    }
     
     /*
      // MARK: - Navigation
@@ -66,12 +81,12 @@ class PaymentViewController: UIViewController {
 extension PaymentViewController: FinixHelperDelegate {
     
     func sdkInitialzed(error: Error?) {
-        
+        dismissHUD(isAnimated: true)
         print("==========SDK Initialized: \(error.debugDescription)==========")
     }
     
     func sdkDeinitialzed(error: Error?) {
-        
+        dismissHUD(isAnimated: true)
         print("==========SDK Deinitialized: \(error.debugDescription)==========")
     }
     
@@ -93,12 +108,13 @@ extension PaymentViewController: FinixHelperDelegate {
     }
     
     func deviceDidError(_ error: Error) {
+        dismissHUD(isAnimated: true)
         
+        showAlert(title: "Error", message: error.localizedDescription)
         print("==========Device Did Error: \(error.localizedDescription)==========")
     }
     
     func statusDidChange(_ status: FinixPOS.DeviceStatus, description: String) {
-        
         print("==========Device Status change:\(status), description:\(description)==========")
     }
     
@@ -125,8 +141,9 @@ extension PaymentViewController: FinixHelperDelegate {
     func saleResponseFailed(error: Error) {
         
         print("==========Sale Response Failed with error : \(error)==========")
-        
         FINIXHELPER.deinitializeFinixSDK()
+        dismissHUD(isAnimated: true)
+        showAlert(title: "Error", message: error.localizedDescription)
     }
     
     func saleResponseSuccess(response: String) {
@@ -134,5 +151,8 @@ extension PaymentViewController: FinixHelperDelegate {
         print("==========Sale Response Success With Receipt: \(response)==========")
         
         FINIXHELPER.deinitializeFinixSDK()
+        dismissHUD(isAnimated: true)
+        showAlert(title: "Success", message: response)
     }
+    
 }

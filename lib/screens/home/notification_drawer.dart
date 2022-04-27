@@ -20,19 +20,23 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
   List<NotificationItem> notificationList = [
     NotificationItem(
         notificationStatus: 'Yes',
-        notificationTitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+        notificationTitle:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
         notificationDate: 'Today, 12.45 PM'),
     NotificationItem(
         notificationStatus: 'Yes',
-        notificationTitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+        notificationTitle:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
         notificationDate: '03 Jan 2022 - 09 Jan 2022 '),
     NotificationItem(
         notificationStatus: 'KONA DAYS',
-        notificationTitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+        notificationTitle:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
         notificationDate: 'Today, 12.45 PM '),
     NotificationItem(
         notificationStatus: 'Yes',
-        notificationTitle: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
+        notificationTitle:
+            'Lorem Ipsum is simply dummy text of the printing and typesetting industry. ',
         notificationDate: 'Today, 12.45 PM '),
   ];
 
@@ -45,7 +49,8 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 17.0,right: 15.0,top: 20.0,bottom: 24.0),
+                padding: const EdgeInsets.only(
+                    left: 17.0, right: 15.0, top: 20.0, bottom: 24.0),
                 child: Row(
                   children: [
                     CommonWidgets().textWidget(
@@ -56,11 +61,12 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
                             fontFamily: FontConstants.montserratBold)),
                     const Spacer(),
                     CommonWidgets().textWidget(
-                        StringConstants.markAllAsRead,
-                        StyleConstants.customTextStyle(
-                            fontSize: 10.0,
-                            color: getMaterialColor(AppColors.textColor6),
-                            fontFamily: FontConstants.montserratMedium),),
+                      StringConstants.markAllAsRead,
+                      StyleConstants.customTextStyle(
+                          fontSize: 10.0,
+                          color: getMaterialColor(AppColors.textColor6),
+                          fontFamily: FontConstants.montserratMedium),
+                    ),
                   ],
                 ),
               ),
@@ -74,7 +80,7 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
 
   Widget listViewNotificationContainer() {
     return ListView.builder(
-      shrinkWrap: true,
+        shrinkWrap: true,
         itemCount: notificationList.length,
         itemBuilder: (BuildContext context, int index) {
           var notificationDetails = notificationList[index];
@@ -97,8 +103,8 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
                               height: 8,
                               width: 8,
                               decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.denotiveColor1,
+                                shape: BoxShape.circle,
+                                color: AppColors.denotiveColor1,
                               ),
                             ),
                             Expanded(
