@@ -67,9 +67,8 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     func performSale() {
         
-        FINIXHELPER.performSale(billAmount: payment.amount,
-                                testTags: ["Test": "Test",
-                                           "order_number": "21DFASJSAKAS"])
+        FINIXHELPER.performSale(billAmount: Decimal(payment.amount),
+                                testTags: payment.tags)
     }
     
     func showAlert(title: String, message: String, paymentSuccess: Bool, response: String? = "") {
@@ -94,7 +93,9 @@ class PaymentViewController: UIViewController, ShowAlert {
     }
     
     func updateStatus(msg: String) {
-        self.statusLabel.text = msg
+        DispatchQueue.main.async {
+            self.statusLabel.text = msg
+        }
     }
     /*
      // MARK: - Navigation
@@ -172,15 +173,12 @@ extension PaymentViewController: FinixHelperDelegate {
     func saleResponseFailed(error: Error) {
         
         print("==========Sale Response Failed with error : \(error)==========")
-        FINIXHELPER.deinitializeFinixSDK()
         showAlert(title: "Error", message: error.localizedDescription, paymentSuccess: false)
     }
     
     func saleResponseSuccess(response: String) {
         
         print("==========Sale Response Success With Receipt: \(response)==========")
-        
-        FINIXHELPER.deinitializeFinixSDK()
         showAlert(title: "Success", message: response, paymentSuccess: true, response: response)
     }
     

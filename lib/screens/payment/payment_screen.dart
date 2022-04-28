@@ -1125,17 +1125,22 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   Future performCardPayment() async {
+    const String username = "US5XSPK8w4W8dCHT9t7fUUYz";
+    const String password = "9cb05bbf-b768-4bb5-a680-48fee02e570c";
     const String application = "Test";
     const String version = "1.0";
     const String merchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
     const String deviceID = "DV9jHr66AG5bc5qorHDRPpMK";
-
+    final tags = {"Test": "Test", "order_number": "21DFASJSAKAS"};
     final values = {
+      "username": username,
+      "password": password,
       "application": application,
       "version": version,
       "merchantId": merchantId,
       "deviceID": deviceID,
-      "amount": totalAmount
+      "amount": totalAmount,
+      "tags": tags
     };
     await cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }

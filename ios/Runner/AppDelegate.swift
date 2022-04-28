@@ -5,7 +5,7 @@ import Flutter
 @objc class AppDelegate: FlutterAppDelegate {
     
     var cardPaymentChannel: FlutterMethodChannel!
-
+    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -20,18 +20,24 @@ import Flutter
             switch call.method {
             case "performCardPayment":
                 guard let args = call.arguments as? [String: Any] else { return }
+                let username = args["username"] as? String ?? ""
+                let password = args["password"] as? String ?? ""
                 let application = args["application"] as? String ?? ""
                 let version = args["version"] as? String ?? ""
                 let merchantId = args["merchantId"] as? String ?? ""
                 let deviceID = args["deviceID"] as? String ?? ""
-                let amount = args["amount"] as? Decimal ?? 0.0
+                let amount = args["amount"] as? Double ?? 0.0
+                let tags = args["tags"] as? [String: String] ?? [:]
                 
-                let paymentModel =  PaymentModel(application: application,
+                let paymentModel =  PaymentModel(username: username,
+                                                 password: password,
+                                                 application: application,
                                                  version: version,
                                                  deviceID: deviceID,
                                                  merchantID: merchantId,
                                                  serialNumber: nil,
-                                                 amount: amount)
+                                                 amount: amount,
+                                                 tags:tags )
                 self.loadPaymentView(paymentModel)
                 result("")
             default: result(FlutterMethodNotImplemented)
@@ -53,7 +59,7 @@ import Flutter
 }
 
 extension AppDelegate {
-
+    
     static var delegate: AppDelegate? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             return nil

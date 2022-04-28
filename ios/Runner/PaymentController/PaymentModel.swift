@@ -8,10 +8,13 @@
 import Foundation
 
 struct PaymentModel {
+    let username: String
+    let password: String
     let application: String
     let version: String
     let deviceID: String
     let merchantID: String
     let serialNumber: String?
-    let amount: Decimal
+    let amount: Double
+    let tags: [String: String]
 }
