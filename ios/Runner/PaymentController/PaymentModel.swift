@@ -13,5 +13,5 @@ struct PaymentModel {
     let deviceID: String
     let merchantID: String
     let serialNumber: String?
-    let amount: Double
+    let amount: Decimal
 }

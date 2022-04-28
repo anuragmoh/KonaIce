@@ -124,6 +124,23 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
 
     callPlaceOrderAPI();
+
+    cardPaymentChannel.setMethodCallHandler((call) async {
+      debugPrint("init state setMethodCallHandler ${call.method}");
+      if (call.method == "paymentSuccess") {
+        _paymentSuccess(call.arguments.toString());
+      } else if (call.method == "paymentFailed") {
+        _paymentFailed();
+      }
+    });
+  }
+
+  _paymentSuccess(msg) async {
+    debugPrint("Payment Success: $msg");
+  }
+
+  _paymentFailed() async {
+    debugPrint("Payment Failure");
   }
 
   @override

@@ -4,7 +4,8 @@ import Flutter
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
     
-    
+    var cardPaymentChannel: FlutterMethodChannel!
+
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -13,7 +14,7 @@ import Flutter
         
         let methodChannelName = "com.mobisoft.konaicepos/cardPayment"
         
-        let cardPaymentChannel = FlutterMethodChannel(name: methodChannelName, binaryMessenger: controller.binaryMessenger)
+        cardPaymentChannel = FlutterMethodChannel(name: methodChannelName, binaryMessenger: controller.binaryMessenger)
         
         cardPaymentChannel.setMethodCallHandler ({ (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
             switch call.method {
@@ -23,7 +24,7 @@ import Flutter
                 let version = args["version"] as? String ?? ""
                 let merchantId = args["merchantId"] as? String ?? ""
                 let deviceID = args["deviceID"] as? String ?? ""
-                let amount = args["amount"] as? Double ?? 0.0
+                let amount = args["amount"] as? Decimal ?? 0.0
                 
                 let paymentModel =  PaymentModel(application: application,
                                                  version: version,
@@ -48,5 +49,15 @@ import Flutter
         paymentViewController.view.backgroundColor = UIColor.clear
         paymentViewController.modalPresentationStyle = .overCurrentContext
         window.rootViewController?.present(paymentViewController, animated: true)
+    }
+}
+
+extension AppDelegate {
+
+    static var delegate: AppDelegate? {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return nil
+        }
+        return appDelegate
     }
 }
