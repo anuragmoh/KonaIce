@@ -206,13 +206,11 @@ class _PaymentScreenState extends State<PaymentScreen>
         child: SizedBox(
           height: 80.0,
           child: Row(
-            //crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     InkWell(
                       onTap: () {
                         onTapBackButton();
@@ -229,19 +227,16 @@ class _PaymentScreenState extends State<PaymentScreen>
                       children: [
                         CommonWidgets().textWidget(
                             StringConstants.totalAmount,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
+                            StyleConstants.customTextStyle12MonsterMedium(
                                 color: getMaterialColor(AppColors.textColor2),
-                                fontFamily: FontConstants.montserratMedium)),
+                               )),
                         const SizedBox(
                           height: 2.0,
                         ),
                         CommonWidgets().textWidget(
                             '\$${totalAmount.toStringAsFixed(2)}',
-                            StyleConstants.customTextStyle(
-                                fontSize: 34.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold))
+                            StyleConstants.customTextStyle34MontserratBold(
+                                color: getMaterialColor(AppColors.textColor1)))
                       ],
                     ),
                   ],
@@ -260,10 +255,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                         children: [
                           CommonWidgets().textWidget(
                               StringConstants.amountReceived,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 12.0,
-                                  color: getMaterialColor(AppColors.textColor2),
-                                  fontFamily: FontConstants.montserratMedium)),
+                              StyleConstants.customTextStyle12MonsterMedium(
+                                  color: getMaterialColor(AppColors.textColor2))),
                           const SizedBox(
                             height: 5.0,
                           ),
@@ -272,12 +265,9 @@ class _PaymentScreenState extends State<PaymentScreen>
                             children: [
                               CommonWidgets().textWidget(
                                   '\$',
-                                  StyleConstants.customTextStyle(
-                                      fontSize: 22.0,
+                                  StyleConstants.customTextStyle22MonsterMedium(
                                       color: getMaterialColor(
-                                          AppColors.textColor1),
-                                      fontFamily:
-                                      FontConstants.montserratMedium)),
+                                          AppColors.textColor1))),
                               const SizedBox(
                                 width: 10.0,
                               ),
@@ -298,12 +288,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                                           left: 8.0, bottom: 2.0),
                                       child: TextField(
                                         controller: amountReceivedController,
-                                        style: StyleConstants.customTextStyle(
-                                            fontSize: 22.0,
-                                            color: getMaterialColor(
-                                                AppColors.textColor1),
-                                            fontFamily:
-                                            FontConstants.montserratMedium),
+                                        style: StyleConstants.customTextStyle22MonsterMedium(
+                                            color: getMaterialColor(AppColors.textColor1)),
                                         keyboardType: TextInputType.number,
                                         inputFormatters: <TextInputFormatter>[
                                           FilteringTextInputFormatter.digitsOnly
@@ -338,32 +324,21 @@ class _PaymentScreenState extends State<PaymentScreen>
                         children: [
                           CommonWidgets().textWidget(
                               StringConstants.amountToReturn,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 12.0,
-                                  color: getMaterialColor(AppColors.textColor2),
-                                  fontFamily: FontConstants.montserratMedium)),
+                              StyleConstants.customTextStyle12MonsterMedium(
+                                  color: getMaterialColor(AppColors.textColor2))),
                           const SizedBox(height: 10.0),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CommonWidgets().textWidget(
                                   '\$',
-                                  StyleConstants.customTextStyle(
-                                      fontSize: 22.0,
-                                      color: getMaterialColor(
-                                          AppColors.textColor1),
-                                      fontFamily:
-                                      FontConstants.montserratMedium)),
+                                  StyleConstants.customTextStyle22MonsterMedium(
+                                      color: getMaterialColor(AppColors.textColor1))),
                               CommonWidgets().textWidget(
                                   returnAmount.toStringAsFixed(2),
-                                  StyleConstants.customTextStyle(
-                                      fontSize: 22.0,
+                                  StyleConstants.customTextStyle22MonsterMedium(
                                       color: getMaterialColor(
-                                          AppColors.textColor1),
-                                      fontFamily:
-                                      FontConstants.montserratMedium)),
-                            ],
-                          )
+                                          AppColors.textColor1)))])
                         ]),
                   ),
                 ),
@@ -372,10 +347,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                     isPaymentDone == true
                         ? StringConstants.newOrder
                         : StringConstants.proceed,
-                    StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle12MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
               ]),
         ),
       );
@@ -474,10 +447,8 @@ class _PaymentScreenState extends State<PaymentScreen>
             const SizedBox(width: 10.0),
             CommonWidgets().textWidget(
                 title,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratMedium)),
+                StyleConstants.customTextStyle12MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor1))),
           ],
         ),
       );
@@ -494,24 +465,18 @@ class _PaymentScreenState extends State<PaymentScreen>
           const SizedBox(height: 21.0),
           CommonWidgets().textWidget(
               StringConstants.paymentSuccessful,
-              StyleConstants.customTextStyle(
-                  fontSize: 22.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratMedium)),
+              StyleConstants.customTextStyle22MonsterMedium(
+                  color: getMaterialColor(AppColors.textColor1))),
           const SizedBox(height: 8.0),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             CommonWidgets().textWidget(
                 '${StringConstants.transactionId}:',
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratSemiBold)),
+                StyleConstants.customTextStyle12MontserratSemiBold(
+                    color: getMaterialColor(AppColors.textColor1))),
             CommonWidgets().textWidget(
                 transactionId,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratSemiBold)),
+                StyleConstants.customTextStyle12MontserratSemiBold(
+                    color: getMaterialColor(AppColors.textColor1))),
           ]),
           const SizedBox(height: 38.0),
           Padding(
@@ -525,10 +490,8 @@ class _PaymentScreenState extends State<PaymentScreen>
           const SizedBox(height: 28.0),
           CommonWidgets().textWidget(
               StringConstants.howWouldYouLikeToReceiveTheReceipt,
-              StyleConstants.customTextStyle(
-                  fontSize: 16.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratMedium)),
+              StyleConstants.customTextStyle16MonsterMedium(
+                  color: getMaterialColor(AppColors.textColor1))),
           const SizedBox(height: 12.0),
           Container(
             width: 203.0,
@@ -557,10 +520,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                           horizontal: 38.0, vertical: 9.0),
                       child: CommonWidgets().textWidget(
                           StringConstants.email,
-                          StyleConstants.customTextStyle(
-                              fontSize: 9.0,
-                              color: getMaterialColor(AppColors.textColor1),
-                              fontFamily: FontConstants.montserratRegular)),
+                          StyleConstants.customTextStyle09MonsterRegular(
+                              color: getMaterialColor(AppColors.textColor1))),
                     ),
                   ),
                 ),
@@ -583,10 +544,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                             horizontal: 19.0, vertical: 9.0),
                         child: CommonWidgets().textWidget(
                             StringConstants.textMessage,
-                            StyleConstants.customTextStyle(
-                                fontSize: 9.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratRegular)),
+                            StyleConstants.customTextStyle09MonsterRegular(
+                                color: getMaterialColor(AppColors.textColor1))),
                       )),
                 ),
               ],
@@ -624,10 +583,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                       padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
                       child: TextField(
                         controller: emailController,
-                        style: StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratSemiBold),
+                        style: StyleConstants.customTextStyle12MontserratSemiBold(
+                            color: getMaterialColor(AppColors.textColor1)),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
@@ -683,10 +640,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        style: StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratSemiBold),
+                        style: StyleConstants.customTextStyle12MontserratSemiBold(
+                            color: getMaterialColor(AppColors.textColor1)),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                         ),
@@ -710,10 +665,8 @@ class _PaymentScreenState extends State<PaymentScreen>
       CountryCodePicker(
         onChanged: (value) {},
         padding: EdgeInsets.zero,
-        textStyle: StyleConstants.customTextStyle(
-            fontSize: 12.0,
-            color: getMaterialColor(AppColors.textColor1),
-            fontFamily: FontConstants.montserratMedium),
+        textStyle: StyleConstants.customTextStyle12MonsterMedium(
+            color: getMaterialColor(AppColors.textColor1)),
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
         initialSelection: '+91',
         showFlag: false,
@@ -766,10 +719,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                         padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
                         child: CommonWidgets().textView(
                             StringConstants.orderDetails,
-                            StyleConstants.customTextStyle(
-                                fontSize: 22.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold))),
+                            StyleConstants.customTextStyle22MontserratBold(
+                                color: getMaterialColor(AppColors.textColor1)))),
                     customerNameWidget(
                         customerName: widget.placeOrderRequestModel
                             .getCustomerName()),
@@ -809,17 +760,13 @@ class _PaymentScreenState extends State<PaymentScreen>
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         CommonWidgets().textView(
             '${StringConstants.customerName} - ',
-            StyleConstants.customTextStyle(
-                fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratRegular)),
+            StyleConstants.customTextStyle12MonsterRegular(
+                color: getMaterialColor(AppColors.textColor1))),
         Expanded(
             child: CommonWidgets().textView(
                 customerName,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold))),
+                StyleConstants.customTextStyle12MontserratBold(
+                    color: getMaterialColor(AppColors.textColor1)))),
       ]);
 
   // customer Details
@@ -837,17 +784,13 @@ class _PaymentScreenState extends State<PaymentScreen>
                   crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.eventName}: ',
-                    StyleConstants.customTextStyle(
-                        fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratRegular)),
+                    StyleConstants.customTextStyle09MonsterRegular(
+                        color: getMaterialColor(AppColors.textColor1))),
                 Expanded(
                     child: CommonWidgets().textView(
                         eventName,
-                        StyleConstants.customTextStyle(
-                            fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium))),
+                        StyleConstants.customTextStyle09MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor2)))),
               ]),
             ),
           ),
@@ -859,17 +802,13 @@ class _PaymentScreenState extends State<PaymentScreen>
                   crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.email}: ',
-                    StyleConstants.customTextStyle(
-                        fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratRegular)),
+                    StyleConstants.customTextStyle09MonsterRegular(
+                        color: getMaterialColor(AppColors.textColor1))),
                 Expanded(
                     child: CommonWidgets().textView(
                         email,
-                        StyleConstants.customTextStyle(
-                            fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium))),
+                        StyleConstants.customTextStyle09MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor2)))),
               ]),
             ),
           ),
@@ -881,34 +820,26 @@ class _PaymentScreenState extends State<PaymentScreen>
                   crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.phone}: ',
-                    StyleConstants.customTextStyle(
-                        fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratRegular)),
+                    StyleConstants.customTextStyle09MonsterRegular(
+                        color: getMaterialColor(AppColors.textColor1))),
                 Expanded(
                     child: CommonWidgets().textView(
                         phone,
-                        StyleConstants.customTextStyle(
-                            fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium))),
+                        StyleConstants.customTextStyle09MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor2)))),
               ]),
             ),
           ),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             CommonWidgets().textView(
                 '${StringConstants.storeAddress}: ',
-                StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
+                StyleConstants.customTextStyle09MonsterRegular(
+                    color: getMaterialColor(AppColors.textColor1))),
             Expanded(
                 child: CommonWidgets().textView(
                     storeAddress,
-                    StyleConstants.customTextStyle(
-                        fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor2),
-                        fontFamily: FontConstants.montserratMedium))),
+                    StyleConstants.customTextStyle09MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor2)))),
           ]),
         ],
       );
@@ -920,31 +851,23 @@ class _PaymentScreenState extends State<PaymentScreen>
         Row(children: [
           CommonWidgets().textView(
               StringConstants.orderId,
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratRegular)),
+              StyleConstants.customTextStyle09MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor1))),
           CommonWidgets().textView(
               ' #$orderId',
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium)),
+              StyleConstants.customTextStyle09MonsterMedium(
+                  color: getMaterialColor(AppColors.textColor2))),
         ]),
         const SizedBox(height: 8.0),
         Row(children: [
           CommonWidgets().textView(
               StringConstants.orderDate,
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratRegular)),
+              StyleConstants.customTextStyle09MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor1))),
           CommonWidgets().textView(
               ' $orderDate',
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium)),
+              StyleConstants.customTextStyle09MonsterMedium(
+                  color: getMaterialColor(AppColors.textColor2))),
         ]),
       ]);
 
@@ -970,10 +893,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                   flex: 6,
                   child: CommonWidgets().textView(
                       orderItem.name!,
-                      StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratRegular)),
+                      StyleConstants.customTextStyle12MonsterRegular(
+                          color: getMaterialColor(AppColors.textColor1))),
                 ),
                 Expanded(
                   flex: 2,
@@ -981,20 +902,16 @@ class _PaymentScreenState extends State<PaymentScreen>
                     alignment: Alignment.centerLeft,
                     child: CommonWidgets().textView(
                         "${StringConstants.qty} - ${orderItem.quantity!}",
-                        StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratRegular)),
+                        StyleConstants.customTextStyle12MonsterRegular(
+                            color: getMaterialColor(AppColors.textColor1))),
                   ),
                 ),
                 Expanded(
                   flex: 2,
                   child: CommonWidgets().textView(
                       "\$${orderItem.getTotalPrice().toStringAsFixed(2)}",
-                      StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratSemiBold)),
+                      StyleConstants.customTextStyle12MontserratSemiBold(
+                          color: getMaterialColor(AppColors.textColor1))),
                 ),
               ]),
           Visibility(
@@ -1052,24 +969,18 @@ class _PaymentScreenState extends State<PaymentScreen>
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             CommonWidgets().textView(
                 billTitle,
-                StyleConstants.customTextStyle(
-                    fontSize: 14.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratMedium)),
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor1))),
             Row(
               children: [
                 CommonWidgets().textView(
                     "\$",
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
                 CommonWidgets().textView(
                     itemAmount.toStringAsFixed(2),
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
               ],
             ),
           ]),
@@ -1081,16 +992,12 @@ class _PaymentScreenState extends State<PaymentScreen>
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         CommonWidgets().textView(
             '${StringConstants.billTotal}:',
-            StyleConstants.customTextStyle(
-                fontSize: 20.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratBold)),
+            StyleConstants.customTextStyle20MontserratBold(
+                color: getMaterialColor(AppColors.textColor1))),
         CommonWidgets().textView(
             '\$${totalAmount.toStringAsFixed(2)}',
-            StyleConstants.customTextStyle(
-                fontSize: 24.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratBold)),
+            StyleConstants.customTextStyle24MontserratBold(
+                color: getMaterialColor(AppColors.textColor1))),
       ]);
 
   //Action Event
@@ -1517,12 +1424,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         alignment: Alignment.center,
         child: CommonWidgets().textWidget(
           StringConstants.confirmCardDetails,
-          StyleConstants.customTextStyle(
-              fontSize: 22.0,
-              color: getMaterialColor(AppColors.textColor1),
-              fontFamily: FontConstants.montserratSemiBold),
-        ),
-      ),
+          StyleConstants.customTextStyle22MontserratSemiBold(
+              color: getMaterialColor(AppColors.textColor1)),),),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1536,10 +1439,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                     filled: true,
                     border: InputBorder.none,
                     labelText: demoCardNumber,
-                    hintStyle: StyleConstants.customTextStyle(
-                        fontSize: 15.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratRegular)),
+                    hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                        color: getMaterialColor(AppColors.textColor1))),
               ),
             ),
             Container(
@@ -1566,5 +1467,4 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     // Navigator.pop(context);
   }
-
 }
