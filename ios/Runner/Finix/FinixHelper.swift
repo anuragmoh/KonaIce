@@ -58,7 +58,7 @@ public protocol FinixHelperDelegate : AnyObject {
     func saleResponseFailed(error: Error)
     
     /// Sale Performed with Success, but check for any error
-    func saleResponseSuccess(response: String)
+    func saleResponseSuccess(response: String, saleResponseReceipt: SaleResponseReceipt?)
 }
 
 let FINIXHELPER = FinixHelper.sharedFinixHelper
@@ -139,6 +139,28 @@ class FinixHelper {
         }
     }
     
+    func convertSaleResponseToSaleReceipt(receipt: SaleReceipt) -> SaleResponseReceipt {
+        
+        var saleReceipt = SaleResponseReceipt(merchantName: receipt.merchantName,
+                                      merchantAddress: receipt.merchantAddress,
+                                              date: receipt.date,
+                                              applicationLabel: receipt.applicationLabel,
+                                              applicationIdentifier: receipt.applicationIdentifier,
+                                              merchantId: receipt.merchantId,
+                                              referenceNumber: receipt.referenceNumber,
+                                              accountNumber: receipt.accountNumber,
+                                              cardBrand: receipt.cardBrand,
+                                              entryMode: receipt.entryMode,
+                                              transactionId: receipt.transactionId,
+                                              approvalCode: receipt.approvalCode,
+                                              responseCode: receipt.responseCode,
+                                              responseMessage: receipt.responseMessage,
+                                              cryptogram: receipt.cryptogram,
+                                              transactionType: receipt.transactionType)
+        
+        return saleReceipt
+    }
+    
     func performSale(billAmount: Decimal, testTags: ResourceTags) {
         
         // before performing sale, present the user an ActionSheet to adjust the amount.
@@ -164,18 +186,21 @@ class FinixHelper {
             }
             
             let responseText = String(describing: response)
-            
+                        
             if response.success {
                 
                 let receipt = FinixClient.shared.receipt(for: response)
+                
                 let receiptText = String(describing: receipt)
+                
+                let saleResponseReceipt = self.convertSaleResponseToSaleReceipt(receipt: receipt)
                 
                 // print("==========Success response: \(responseText), Transfer Id: \(response.id)==========")
                 // print("==========Sale Receipt: \(receiptText)==========")
                 
                 if let delegate = self.finixHelperDelegate {
                     
-                    delegate.saleResponseSuccess(response: receiptText)
+                    delegate.saleResponseSuccess(response: receiptText, saleResponseReceipt: saleResponseReceipt)
                 }
                 
             } else {
@@ -184,7 +209,7 @@ class FinixHelper {
                 
                 if let delegate = self.finixHelperDelegate {
                     
-                    delegate.saleResponseSuccess(response: responseText)
+                    delegate.saleResponseSuccess(response: responseText, saleResponseReceipt: nil)
                 }
             }
         }
