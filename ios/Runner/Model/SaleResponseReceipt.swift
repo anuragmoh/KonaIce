@@ -8,35 +8,190 @@
 import Foundation
 import FinixPOS
 
-struct SaleResponseReceipt: Codable {
+public struct SaleResponseReceipt: Codable {
     
-    let merchantName, merchantAddress, date, applicationLabel, applicationIdentifier, merchantId, referenceNumber, accountNumber, cardBrand, entryMode, transactionId, approvalCode, responseCode, responseMessage, cryptogram, transactionType: String?
+    let success, pending: Bool?
     
-    let transferId, traceId, transferState : String?
-    let amount: Decimal?
-    let created, updated: Date?
-    let resourceTags: [String: String]?
+    let finixSaleReceipt: FinixSaleReceipt?
+    
+    let finixSaleResponse: FinixSaleResponse
+    
+    init(success: Bool?,
+         pending: Bool?,
+         finixSaleReceipt: FinixSaleReceipt?,
+         finixSaleResponse: FinixSaleResponse) {
+        
+        self.success = success
+        self.pending = pending
+        self.finixSaleReceipt = finixSaleReceipt
+        self.finixSaleResponse = finixSaleResponse
+    }
+}
+
+struct FinixSaleReceipt: Codable {
+    
+    let merchantName, merchantAddress, applicationLabel, applicationIdentifier, merchantId, referenceNumber, accountNumber, cardBrand, entryMode, transactionId, approvalCode, responseCode, responseMessage, cryptogram, transactionType: String?
+    
+    let date: Date?
+    
+    init(receipt: SaleReceipt?) {
+        
+        merchantName = receipt?.merchantName ?? ""
+        merchantAddress = receipt?.merchantAddress ?? ""
+        date = receipt?.date
+        applicationLabel = receipt?.applicationLabel ?? ""
+        applicationIdentifier = receipt?.applicationIdentifier ?? ""
+        merchantId = receipt?.merchantId ?? ""
+        referenceNumber = receipt?.referenceNumber ?? ""
+        accountNumber = receipt?.accountNumber ?? ""
+        cardBrand = receipt?.cardBrand ?? ""
+        entryMode = receipt?.entryMode ?? ""
+        transactionId = receipt?.transactionId ?? ""
+        approvalCode = receipt?.approvalCode ?? ""
+        responseCode = receipt?.responseCode ?? ""
+        responseMessage = receipt?.responseMessage ?? ""
+        cryptogram = receipt?.cryptogram ?? ""
+        transactionType = receipt?.transactionType ?? ""
+    }
+}
+
+struct FinixSaleResponse: Codable {
+    
+    var transferId, traceId: String?
+    var transferState: String?
+    var amount: Double?
+    var created, updated: Date?
+    var resourceTags: [String: String]?
     
     /// the entry mode
-   let entryMode: FinixCardEntryMode?
-
-    /// the masked account number
-    let maskedAccountNumber: String?
-
-    /// the card logo, e.g.
-    let cardLogo: FinixCardLogo?
-
-    /// the card holder's name
-    let cardHolderName: String?
-
-    /// the expiry month
-    let expirationMonth: String?
-
-    /// the expiry year
-    let expirationYear: String?
-
-    /// AID from a Magstripe-Mode contactless transaction
-    let applicationIdentifier: String?
+    var entryMode: String?
     
-    let responseSuccess, responsePending: Bool?
+    /// the masked account number
+    var maskedAccountNumber: String?
+    
+    /// the card logo, e.g.
+    var cardLogo: String?
+    
+    /// the card holder's name
+    var cardHolderName: String?
+    
+    /// the expiry month
+    var expirationMonth: String?
+    
+    /// the expiry year
+    var expirationYear: String?
+    
+    /// AID from a Magstripe-Mode contactless transaction
+    var applicationIdentifier: String?
+    
+    init(response: SaleResponse) {
+        
+        transferId = response.id
+        traceId = response.traceId
+        transferState = self.getFinixTransferState(state: response.state)
+        amount = Double(truncating: response.amount.decimal as NSNumber)
+        created = response.created
+        updated = response.updated
+        resourceTags = response.tags
+        entryMode = self.getFinixCardEntryMode(entryMode: response.card.entryMode!)
+        maskedAccountNumber = response.card.maskedAccountNumber
+        cardLogo = self.getFinixCardLogo(logo: response.card.cardLogo!)
+        cardHolderName = response.card.cardHolderName
+        expirationMonth = response.card.expirationMonth
+        expirationYear = response.card.expirationYear
+        applicationIdentifier = response.card.applicationIdentifier
+    }
+    
+    func getFinixTransferState(state: Transfer.State) -> String? {
+        
+        var finixTransferState: String = ""
+        
+        switch state {
+            
+        case .pending:
+            finixTransferState = FinixTransferState.pending.rawValue
+            
+        case .canceled:
+            finixTransferState = FinixTransferState.canceled.rawValue
+            
+        case .failed:
+            finixTransferState = FinixTransferState.failed.rawValue
+            
+        case .succeeded:
+            finixTransferState = FinixTransferState.succeeded.rawValue
+            
+        case .unknown:
+            finixTransferState = FinixTransferState.unknown.rawValue
+            
+        @unknown default:
+            finixTransferState = FinixTransferState.unknown.rawValue
+        }
+        
+        return finixTransferState
+    }
+    
+    func getFinixCardEntryMode(entryMode: CardInfo.CardEntryMode) -> String {
+        
+        var cardEntryMode: String
+        
+        switch entryMode {
+            
+        case .Keyed:
+            cardEntryMode = FinixCardEntryMode.Keyed.rawValue
+            
+        case .Swiped:
+            cardEntryMode = FinixCardEntryMode.Swiped.rawValue
+            
+        case .ContactlessIcc:
+            cardEntryMode = FinixCardEntryMode.ContactlessIcc.rawValue
+            
+        case .ContactlessMagneticStripe:
+            cardEntryMode = FinixCardEntryMode.ContactlessMagneticStripe.rawValue
+            
+        case .Icc:
+            cardEntryMode = FinixCardEntryMode.Icc.rawValue
+            
+        @unknown default:
+            cardEntryMode = FinixCardEntryMode.Other.rawValue
+        }
+        
+        return cardEntryMode
+    }
+    
+    func getFinixCardLogo(logo: CardInfo.CardLogo) -> String {
+        
+        var cardLogo: String
+        
+        switch logo {
+            
+        case .Amex:
+            cardLogo = FinixCardLogo.Amex.rawValue
+            
+        case .CarteBlanche:
+            cardLogo = FinixCardLogo.CarteBlanche.rawValue
+            
+        case .DinersClub:
+            cardLogo = FinixCardLogo.DinersClub.rawValue
+            
+        case .Discover:
+            cardLogo = FinixCardLogo.Discover.rawValue
+            
+        case .JCB:
+            cardLogo = FinixCardLogo.JCB.rawValue
+            
+        case .Mastercard:
+            cardLogo = FinixCardLogo.Mastercard.rawValue
+            
+        case .Visa:
+            cardLogo = FinixCardLogo.Visa.rawValue
+            
+        case .Other:
+            cardLogo = FinixCardLogo.Other.rawValue
+            
+        @unknown default:
+            cardLogo = FinixCardLogo.Other.rawValue
+        }
+        
+        return cardLogo
+    }
 }

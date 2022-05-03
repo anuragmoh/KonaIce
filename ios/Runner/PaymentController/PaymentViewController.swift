@@ -176,10 +176,10 @@ extension PaymentViewController: FinixHelperDelegate {
         showAlert(title: "Error", message: error.localizedDescription, paymentSuccess: false)
     }
     
-    func saleResponseSuccess(response: String) {
+    func saleResponseSuccess(saleResponseReceipt: SaleResponseReceipt?) {
         
-        print("==========Sale Response Success With Receipt: \(response)==========")
-        showAlert(title: "Success", message: response, paymentSuccess: true, response: response)
+        print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
+        showAlert(title: "Success", message: saleResponseReceipt.debugDescription, paymentSuccess: true, response: saleResponseReceipt.debugDescription)
     }
     
 }

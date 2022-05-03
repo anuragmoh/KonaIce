@@ -8,48 +8,63 @@
 import Foundation
 
 /// encodes the type of card entry
-public enum FinixCardEntryMode {
+public enum FinixCardEntryMode: String {
 
     /// Manually keyed in
-    case Keyed
+    case Keyed = "Keyed"
 
     /// Swiped with magstripe
-    case Swiped
+    case Swiped = "Swiped"
 
     /// Near field magstripe read
-    case ContactlessMagneticStripe
+    case ContactlessMagneticStripe = "ContactlessMagneticStripe"
 
     /// Integrated Circuit Card read
-    case Icc
+    case Icc = "Icc"
 
     /// Integrated Circuit Card contactless read (i.e. tap)
-    case ContactlessIcc
+    case ContactlessIcc = "ContactlessIcc"
+    
+    case Other = "Other"
 }
 
 /// encodes the card logo. Unknown values are `Other`
-public enum FinixCardLogo {
+public enum FinixCardLogo: String {
 
     /// Visa
-    case Visa
+    case Visa = "Visa"
 
     /// Mastercard
-    case Mastercard
+    case Mastercard = "Mastercard"
 
     /// Discover
-    case Discover
+    case Discover = "Discover"
 
     /// American Express
-    case Amex
+    case Amex = "Amex"
 
     /// Diners Club
-    case DinersClub
+    case DinersClub = "DinersClub"
 
     /// JCB
-    case JCB
+    case JCB = "JCB"
 
     /// Carte Blanche
-    case CarteBlanche
+    case CarteBlanche = "CarteBlanche"
 
     /// Other card brand
-    case Other
+    case Other = "Other"
+}
+
+public enum FinixTransferState: String {
+
+    case pending = "pending"
+
+    case failed = "failed"
+
+    case succeeded = "succeeded"
+
+    case canceled = "canceled"
+
+    case unknown = "unknown"
 }
