@@ -58,7 +58,7 @@ public protocol FinixHelperDelegate : AnyObject {
     func saleResponseFailed(error: Error)
     
     /// Sale Performed with Success, but check for any error
-    func saleResponseSuccess(response: String, saleResponseReceipt: SaleResponseReceipt?)
+    func saleResponseSuccess(saleResponseReceipt: SaleResponseReceipt?)
 }
 
 let FINIXHELPER = FinixHelper.sharedFinixHelper
@@ -139,24 +139,99 @@ class FinixHelper {
         }
     }
     
-    func convertSaleResponseToSaleReceipt(receipt: SaleReceipt) -> SaleResponseReceipt {
+    func getFinixCardEntryMode(entryMode: CardInfo.CardEntryMode) -> FinixCardEntryMode {
         
-        var saleReceipt = SaleResponseReceipt(merchantName: receipt.merchantName,
-                                      merchantAddress: receipt.merchantAddress,
-                                              date: receipt.date,
-                                              applicationLabel: receipt.applicationLabel,
-                                              applicationIdentifier: receipt.applicationIdentifier,
-                                              merchantId: receipt.merchantId,
-                                              referenceNumber: receipt.referenceNumber,
-                                              accountNumber: receipt.accountNumber,
-                                              cardBrand: receipt.cardBrand,
-                                              entryMode: receipt.entryMode,
-                                              transactionId: receipt.transactionId,
-                                              approvalCode: receipt.approvalCode,
-                                              responseCode: receipt.responseCode,
-                                              responseMessage: receipt.responseMessage,
-                                              cryptogram: receipt.cryptogram,
-                                              transactionType: receipt.transactionType)
+        var cardEntryMode: FinixCardEntryMode?
+        
+        switch entryMode {
+            
+        case .Keyed:
+            cardEntryMode = FinixCardEntryMode.Keyed
+            
+        case .Swiped:
+            cardEntryMode = FinixCardEntryMode.Swiped
+            
+        case .ContactlessIcc:
+            cardEntryMode = FinixCardEntryMode.ContactlessIcc
+            
+        case .ContactlessMagneticStripe:
+            cardEntryMode = FinixCardEntryMode.ContactlessMagneticStripe
+            
+        case .Icc:
+            cardEntryMode = FinixCardEntryMode.Icc
+        }
+        
+        return cardEntryMode
+    }
+    
+    func getFinixCardLogo(cardLogo: CardInfo.CardLogo) -> FinixCardLogo {
+        
+        var cardLogo: FinixCardLogo?
+        
+        switch cardLogo {
+            
+        case .Amex:
+            cardLogo = FinixCardLogo.Amex
+            
+        case .CarteBlanche:
+            cardLogo = FinixCardLogo.CarteBlanche
+            
+        case .DinersClub:
+            cardLogo = FinixCardLogo.DinersClub
+            
+        case .Discover:
+            cardLogo = FinixCardLogo.Discover
+            
+        case .JCB:
+            cardLogo = FinixCardLogo.JCB
+            
+        case .Mastercard:
+            cardLogo = FinixCardLogo.Mastercard
+            
+        case .Visa:
+            cardLogo = FinixCardLogo.Visa
+            
+        case .Other:
+            cardLogo = FinixCardLogo.Other
+        }
+        
+        return cardLogo
+    }
+    
+    func convertSaleReceiptToSaleResponseReceipt(receipt: SaleReceipt?, response: SaleResponse) -> SaleResponseReceipt {
+        
+        var saleReceipt = SaleResponseReceipt(merchantName: receipt.merchantName ?? String.empty,
+                                      merchantAddress: receipt.merchantAddress ?? String.empty,
+                                              date: receipt.date ?? String.empty,
+                                              applicationLabel: receipt.applicationLabel ?? String.empty,
+                                              applicationIdentifier: receipt.applicationIdentifier ?? String.empty,
+                                              merchantId: receipt.merchantId ?? String.empty,
+                                              referenceNumber: receipt.referenceNumber ?? String.empty,
+                                              accountNumber: receipt.accountNumber ?? String.empty,
+                                              cardBrand: receipt.cardBrand ?? String.empty,
+                                              entryMode: receipt.entryMode ?? String.empty,
+                                              transactionId: receipt.transactionId ?? String.empty,
+                                              approvalCode: receipt.approvalCode ?? String.empty,
+                                              responseCode: receipt.responseCode ?? String.empty,
+                                              responseMessage: receipt.responseMessage ?? String.empty,
+                                              cryptogram: receipt.cryptogram ?? String.empty,
+                                              transactionType: receipt.transactionType ?? String.empty,
+                                              transferId: response.id,
+                                              traceId: response.traceId,
+                                              transferState: response.state,
+                                              amount: response.amount.decimal,
+                                              created: response.created,
+                                              updated: response.updated,
+                                              resourceTags: response.tags,
+                                              entryMode: self.getFinixCardEntryMode(entryMode: response.card.entryMode),
+                                              maskedAccountNumber: response.card.maskedAccountNumber,
+                                              cardLogo: self.getFinixCardLogo(cardLogo: response.card.cardLogo),
+                                              cardHolderName: response.card.cardHolderName,
+                                              expirationMonth: response.card.expirationMonth,
+                                              expirationYear: response.card.expirationYear,
+                                              applicationIdentifier: response.card.applicationIdentifier,
+                                              responseSuccess: response.success,
+                                              responsePending: response.pending)
         
         return saleReceipt
     }
@@ -191,25 +266,27 @@ class FinixHelper {
                 
                 let receipt = FinixClient.shared.receipt(for: response)
                 
-                let receiptText = String(describing: receipt)
+                // let receiptText = String(describing: receipt)
                 
-                let saleResponseReceipt = self.convertSaleResponseToSaleReceipt(receipt: receipt)
+                let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: receipt, response: response)
                 
                 // print("==========Success response: \(responseText), Transfer Id: \(response.id)==========")
                 // print("==========Sale Receipt: \(receiptText)==========")
                 
                 if let delegate = self.finixHelperDelegate {
                     
-                    delegate.saleResponseSuccess(response: receiptText, saleResponseReceipt: saleResponseReceipt)
+                    delegate.saleResponseSuccess(saleResponseReceipt: saleResponseReceipt)
                 }
                 
             } else {
                 
                 // print("==========Not Successful response: \(responseText)==========")
                 
+                let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: nil, response: response)
+                
                 if let delegate = self.finixHelperDelegate {
                     
-                    delegate.saleResponseSuccess(response: responseText, saleResponseReceipt: nil)
+                    delegate.saleResponseSuccess(saleResponseReceipt: saleResponseReceipt)
                 }
             }
         }
