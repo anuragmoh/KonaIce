@@ -109,13 +109,13 @@ class FinixHelper {
             }
             
             guard success == true else {
-                
-                // print("==========FinixSDK: failed to initalize with error \(error!)==========")
+                                
+                print(items:"==========FinixSDK: failed to initalize with error \(error!)==========")
                 
                 return
             }
             
-            // print("==========FinixSDK: initialized successfully.==========")
+            print(items:"==========FinixSDK: initialized successfully.==========")
         }
     }
     
@@ -130,11 +130,11 @@ class FinixHelper {
                 delegate.sdkDeinitialzed(error: error)
             }
             
-            // print("==========FinixSDK: deinitialized==========")
+            print(items:"==========FinixSDK: deinitialized==========")
             
             if error != nil {
                 
-                // print("==========Error Deinitializing SDK: \(error.localizedDescription)==========")
+                print(items:"==========Error Deinitializing SDK: \(String(describing: error?.localizedDescription))==========")
             }
         }
     }
@@ -161,13 +161,13 @@ class FinixHelper {
         
         let transfer = TransferRequest(deviceId: self.deviceId, amount: saleAmount, tags: testTags)
         
-        // print("==========Transfer Request: \(transfer)==========")
+        print(items:"==========Transfer Request: \(transfer)==========")
         
         FinixClient.shared.cardSale(transfer) { response, error in
             
             guard let response = response else {
                 
-                // print("==========Failed with error : \(error!)==========")
+                print(items:"==========Failed with error : \(error!)==========")
                 
                 if let delegate = self.finixHelperDelegate {
                     
@@ -183,12 +183,12 @@ class FinixHelper {
                 
                 let receipt = FinixClient.shared.receipt(for: response)
                 
-                // let receiptText = String(describing: receipt)
+                let receiptText = String(describing: receipt)
                 
                 let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: receipt, response: response)
                 
-                // print("==========Success response: \(responseText), Transfer Id: \(response.id)==========")
-                // print("==========Sale Receipt: \(receiptText)==========")
+                print(items:"==========Success response: \(responseText), Transfer Id: \(response.id)==========")
+                print(items:"==========Sale Receipt: \(receiptText)==========")
                 
                 if let delegate = self.finixHelperDelegate {
                     
@@ -197,7 +197,7 @@ class FinixHelper {
                 
             } else {
                 
-                // print("==========Not Successful response: \(responseText)==========")
+                print(items:"==========Not Successful response: \(responseText)==========")
                 
                 let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: nil, response: response)
                 
@@ -229,7 +229,7 @@ extension FinixHelper: FinixDelegate {
     
     func deviceDidConnect(_ description: String, model: String, serialNumber: String) {
         
-        // print("==========Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
+        print(items:"==========Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -239,7 +239,7 @@ extension FinixHelper: FinixDelegate {
     
     func deviceDidDisconnect() {
         
-        // print("==========Device Did Disconnect==========")
+        print(items:"==========Device Did Disconnect==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -249,7 +249,7 @@ extension FinixHelper: FinixDelegate {
     
     func deviceInitialization(inProgress currentProgress: Double, description: String, model: String, serialNumber: String) {
         
-        // print("==========Device Initialization:\nProgress:\(currentProgress)\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
+        print(items:"==========Device Initialization:\nProgress:\(currentProgress)\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -259,7 +259,7 @@ extension FinixHelper: FinixDelegate {
     
     func deviceDidError(_ error: Error) {
         
-        // print("==========Device Did Error: \(error.localizedDescription)==========")
+        print(items:"==========Device Did Error: \(error.localizedDescription)==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -269,7 +269,7 @@ extension FinixHelper: FinixDelegate {
     
     func statusDidChange(_ status: DeviceStatus, description: String) {
         
-        // print("==========Device Status change:\(status), description:\(description)==========")
+        print(items:"==========Device Status change:\(status), description:\(description)==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -279,7 +279,7 @@ extension FinixHelper: FinixDelegate {
     
     func onBatteryLow() {
         
-        // print("==========Device Battery Low==========")
+        print(items:"==========Device Battery Low==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -289,7 +289,7 @@ extension FinixHelper: FinixDelegate {
     
     func prereadTimedOut() {
         
-        // print("==========Device Preread Time Out==========")
+        print(items:"==========Device Preread Time Out==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -302,7 +302,7 @@ extension FinixHelper: FinixClientDeviceInteractionDelegate {
     
     func onDisplayText(_ text: String) {
         
-        // print("==========On display text: \(text)==========")
+        print(items:"==========On display text: \(text)==========")
         
         if let delegate = self.finixHelperDelegate {
             
@@ -312,7 +312,7 @@ extension FinixHelper: FinixClientDeviceInteractionDelegate {
     
     func onRemoveCard() {
         
-        // print("==========Card removed==========")
+        print(items:"==========Card removed==========")
         
         if let delegate = self.finixHelperDelegate {
             
