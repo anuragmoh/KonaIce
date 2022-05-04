@@ -6,7 +6,6 @@ import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
-import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
@@ -42,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen>
   _LoginScreenState() {
     userPresenter = UserPresenter(this);
   }
-
   bool isEmailValid = true;
   bool isPasswordValid = true;
   bool isPasswordVisible = true;
@@ -86,8 +84,7 @@ class _LoginScreenState extends State<LoginScreen>
                   : ForgetPasswordScreen(
                       navigateBackToLoginView: onTapFromForgetPasswordView,
                       forgotPasswordLoader: onForgotPasswordScreenLoader,
-                    ),
-              // loginContainer(),
+                    ), // loginContainer(),
             ],
           ),
         ),
@@ -121,10 +118,8 @@ class _LoginScreenState extends State<LoginScreen>
                 horizontal: 141.0),
             child: textWidget(
                 StringConstants.loginText,
-                StyleConstants.customTextStyle(
-                    fontSize: 22.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
+                StyleConstants.customTextStyle22MontserratBold(
+                    color: getMaterialColor(AppColors.textColor1))),
           ),
           Align(
             alignment: Alignment.topLeft,
@@ -132,10 +127,8 @@ class _LoginScreenState extends State<LoginScreen>
               padding: const EdgeInsets.only(left: 23.0),
               child: textWidget(
                   StringConstants.emailId,
-                  StyleConstants.customTextStyle(
-                      fontSize: 14.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular)),
+                  StyleConstants.customTextStyle14MonsterRegular(
+                      color: getMaterialColor(AppColors.textColor1))),
             ),
           ),
           Padding(
@@ -162,10 +155,8 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                   hintText: 'abc@gmail.com',
                   errorText: emailValidationMessage,
-                  hintStyle: StyleConstants.customTextStyle(
-                      fontSize: 15.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular),
+                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                      color: getMaterialColor(AppColors.textColor1)),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
@@ -184,10 +175,8 @@ class _LoginScreenState extends State<LoginScreen>
               padding: const EdgeInsets.only(left: 23.0),
               child: textWidget(
                   StringConstants.password,
-                  StyleConstants.customTextStyle(
-                      fontSize: 14.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular)),
+                  StyleConstants.customTextStyle14MonsterRegular(
+                      color: getMaterialColor(AppColors.textColor1))),
             ),
           ),
           Padding(
@@ -220,15 +209,8 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                   hintText: 'Password',
                   errorText: passwordValidationMessage,
-/*                  errorText: (isPasswordValid = true)
-                      ? null
-                      : (isPasswordValid = false)
-                          ? StringConstants.emptyValidPassword
-                          : StringConstants.enterValidPassword,*/
-                  hintStyle: StyleConstants.customTextStyle(
-                      fontSize: 15.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular),
+                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                      color: getMaterialColor(AppColors.textColor1)),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
@@ -251,19 +233,14 @@ class _LoginScreenState extends State<LoginScreen>
                 onTap: onTapForgotPassword,
                 child: textWidget(
                     StringConstants.forgotPassword,
-                    StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.denotiveColor4),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle12MontserratBold(
+                        color: getMaterialColor(AppColors.denotiveColor4))),
               ),
             ),
           ),
           signInButton(
               StringConstants.signIn,
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratBold)),
+              StyleConstants.customTextStyle12MontserratBold(color: getMaterialColor(AppColors.textColor1))),
         ],
       ),
     );
@@ -348,30 +325,6 @@ class _LoginScreenState extends State<LoginScreen>
     });
     emailValidation();
     passwordValidation();
-    /* if(emailController.text.isEmpty){
-      setState(() {
-        emailValidationMessage = StringConstants.emptyValidEmail;
-      });
-      return false;
-    }
-    if(!emailController.text.isValidEmail()){
-      setState(() {
-        emailValidationMessage = StringConstants.enterValidEmail;
-      });
-      return false;
-    }*/
-  /*  if (passwordController.text.isEmpty) {
-      setState(() {
-        passwordValidationMessage = StringConstants.emptyValidPassword;
-      });
-      return false;
-    }
-    if (!passwordController.text.isValidPassword()) {
-      setState(() {
-        passwordValidationMessage = StringConstants.emptyValidPassword;
-      });
-      return false;
-    }*/
 
     if (isEmailValid && isPasswordValid) {
       CheckConnection().connectionState().then((value) {
@@ -399,12 +352,9 @@ class _LoginScreenState extends State<LoginScreen>
     if(message != ""){
       CommonWidgets().showSuccessSnackBar(message: message, context: context);
     }
-
-
   }
 
   //API Calls
-
   callLoginApi() {
     setState(() {
       isApiProcess = true;
@@ -424,7 +374,6 @@ class _LoginScreenState extends State<LoginScreen>
   getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-
     osVersion = iosInfo.systemVersion;
     deviceName = iosInfo.localizedModel;
   }
@@ -447,7 +396,6 @@ class _LoginScreenState extends State<LoginScreen>
     LoginResponseModel loginResponseModel = response;
     checkUserDataAvailableINDB(loginResponseModel);
   }
-
   //DB Operations
   checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
     var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
