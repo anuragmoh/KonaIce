@@ -58,7 +58,7 @@ public protocol FinixHelperDelegate : AnyObject {
     func saleResponseFailed(error: Error)
     
     /// Sale Performed with Success, but check for any error
-    func saleResponseSuccess(saleResponseReceipt: SaleResponseReceipt?)
+    func saleResponseSuccess(saleResponseReceipt: TransactionResponseModel?)
 }
 
 let FINIXHELPER = FinixHelper.sharedFinixHelper
@@ -139,15 +139,13 @@ class FinixHelper {
         }
     }
     
-    func convertSaleReceiptToSaleResponseReceipt(receipt: SaleReceipt?, response: SaleResponse) -> SaleResponseReceipt {
+    func convertSaleReceiptToSaleResponseReceipt(receipt: SaleReceipt?, response: SaleResponse) -> TransactionResponseModel {
         
         let finixSaleReceipt = FinixSaleReceipt.init(receipt: receipt)
         
         let finixSaleResponse = FinixSaleResponse.init(response: response)
         
-        let saleResponseReceipt = SaleResponseReceipt.init(success: response.success,
-                                                           pending: response.pending,
-                                                           finixSaleReceipt: finixSaleReceipt,
+        let saleResponseReceipt = TransactionResponseModel.init(finixSaleReceipt: finixSaleReceipt,
                                                            finixSaleResponse: finixSaleResponse)
         
         return saleResponseReceipt
@@ -229,7 +227,7 @@ extension FinixHelper: FinixDelegate {
     
     func deviceDidConnect(_ description: String, model: String, serialNumber: String) {
         
-        print(items:"==========Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
+        print(items:"==========Device Did Connect:Description:\(description)model:\(model)serial:\(serialNumber)==========")
         
         if let delegate = self.finixHelperDelegate {
             

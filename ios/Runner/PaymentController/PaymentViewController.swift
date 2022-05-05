@@ -7,6 +7,7 @@
 
 import UIKit
 import FinixPOS
+import Lottie
 
 class PaymentViewController: UIViewController, ShowAlert {
     
@@ -18,6 +19,8 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     var payment: PaymentModel!
     
+    var transactionAnimationView: AnimationView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,16 +31,20 @@ class PaymentViewController: UIViewController, ShowAlert {
     }
     
     func setupView() {
+        
         progressView.layer.cornerRadius = 10
         
-        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        /*self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         let blurEffect = UIBlurEffect(style: .dark)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = self.view.frame
-        self.view.insertSubview(blurEffectView, at: 0)
+        self.view.insertSubview(blurEffectView, at: 0)*/
+        
+        showTransactionAnimationView(with: TransactionAnimationName.progress)
     }
     
     func performPayment() {
+        
         activityIndicator.startAnimating()
         updateStatus(msg: "Initializing")
         
@@ -97,6 +104,38 @@ class PaymentViewController: UIViewController, ShowAlert {
             self.statusLabel.text = msg
         }
     }
+    
+    func stopAnimationView() {
+        
+        if let transactionAnimation = self.transactionAnimationView {
+            
+            transactionAnimation.stop()
+            transactionAnimation.removeFromSuperview()
+        }
+    }
+    
+    func showTransactionAnimationView(with animationName: TransactionAnimationName) {
+        
+        DispatchQueue.main.async {
+            
+            self.stopAnimationView()
+            
+            self.transactionAnimationView = AnimationView(name: animationName.rawValue)
+            self.transactionAnimationView.contentMode = .scaleAspectFit
+            self.transactionAnimationView.backgroundColor = .white.withAlphaComponent(0.5)
+            self.transactionAnimationView.animationSpeed = 0.75
+            self.transactionAnimationView.play(fromProgress: AnimationProgressTime(0.0),
+                                               toProgress: AnimationProgressTime(1.0),
+                                               loopMode: .loop,
+                                               completion: nil)
+            
+            self.transactionAnimationView.frame = self.view.frame
+            self.transactionAnimationView.center = self.view.center
+            self.view.addSubview(self.transactionAnimationView)
+            self.view.backgroundColor = .clear
+        }
+    }
+    
     /*
      // MARK: - Navigation
      
@@ -162,12 +201,29 @@ extension PaymentViewController: FinixHelperDelegate {
     }
     
     func onDisplayText(_ text: String) {
+        
         updateStatus(msg: text)
+        
         print("==========On display text: \(text)==========")
+        
+        switch FinixDisplayText(rawValue: text) {
+            
+        case .insertTapSwipeCard:
+            showTransactionAnimationView(with: TransactionAnimationName.insertSwipeTapCard)
+            
+        case .removeCard:
+            showTransactionAnimationView(with: TransactionAnimationName.removeCard)
+            
+        default:
+            showTransactionAnimationView(with: TransactionAnimationName.progress)
+        }
     }
     
     func onRemoveCard() {
+        
         print("==========Card removed==========")
+        
+        showTransactionAnimationView(with: TransactionAnimationName.removeCard)
     }
     
     func saleResponseFailed(error: Error) {
@@ -176,10 +232,9 @@ extension PaymentViewController: FinixHelperDelegate {
         showAlert(title: "Error", message: error.localizedDescription, paymentSuccess: false)
     }
     
-    func saleResponseSuccess(saleResponseReceipt: SaleResponseReceipt?) {
+    func saleResponseSuccess(saleResponseReceipt: TransactionResponseModel?) {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
         showAlert(title: "Success", message: saleResponseReceipt.debugDescription, paymentSuccess: true, response: saleResponseReceipt.debugDescription)
     }
-    
 }

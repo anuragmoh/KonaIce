@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
@@ -17,7 +17,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
@@ -35,7 +35,7 @@
                         <viewControllerLayoutGuide type="bottom" id="t4r-aN-nlY"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ap9-QG-C6v">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CSB-6v-k4U">
@@ -72,6 +72,11 @@
                             <constraint firstItem="CSB-6v-k4U" firstAttribute="centerX" secondItem="ap9-QG-C6v" secondAttribute="centerX" id="h45-xh-yfn"/>
                             <constraint firstItem="CSB-6v-k4U" firstAttribute="centerY" secondItem="ap9-QG-C6v" secondAttribute="centerY" id="nvf-jW-eB9"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="CSB-6v-k4U"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="activityIndicator" destination="0l5-BW-RBU" id="yDK-fd-KLd"/>

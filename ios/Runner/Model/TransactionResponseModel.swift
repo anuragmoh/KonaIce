@@ -8,21 +8,19 @@
 import Foundation
 import FinixPOS
 
-public struct SaleResponseReceipt: Codable {
+public struct TransactionResponseModel: Codable {
     
-    let success, pending: Bool?
+    // let success, pending: Bool?
     
     let finixSaleReceipt: FinixSaleReceipt?
     
     let finixSaleResponse: FinixSaleResponse
     
-    init(success: Bool?,
-         pending: Bool?,
-         finixSaleReceipt: FinixSaleReceipt?,
+    init(finixSaleReceipt: FinixSaleReceipt?,
          finixSaleResponse: FinixSaleResponse) {
         
-        self.success = success
-        self.pending = pending
+        // self.success = success
+        // self.pending = pending
         self.finixSaleReceipt = finixSaleReceipt
         self.finixSaleResponse = finixSaleResponse
     }
