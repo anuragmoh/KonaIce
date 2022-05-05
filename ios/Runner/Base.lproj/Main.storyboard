@@ -38,50 +38,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CSB-6v-k4U">
-                                <rect key="frame" x="259" y="412" width="250" height="200"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="57" translatesAutoresizingMaskIntoConstraints="NO" id="hYK-Yy-gmf">
-                                        <rect key="frame" x="10" y="38" width="230" height="124"/>
-                                        <subviews>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="0l5-BW-RBU">
-                                                <rect key="frame" x="0.0" y="0.0" width="230" height="37"/>
-                                            </activityIndicatorView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Initializing" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hOG-6I-IQB">
-                                                <rect key="frame" x="0.0" y="94" width="230" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xhm-vA-a9f">
+                                <rect key="frame" x="256" y="191.5" width="512" height="385"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="hYK-Yy-gmf" secondAttribute="trailing" constant="10" id="Ada-yL-MpL"/>
-                                    <constraint firstItem="hYK-Yy-gmf" firstAttribute="centerY" secondItem="CSB-6v-k4U" secondAttribute="centerY" id="SuJ-1i-Jda"/>
-                                    <constraint firstAttribute="width" constant="250" id="Wuk-9H-uhs"/>
-                                    <constraint firstAttribute="height" constant="200" id="bHW-Ly-ZKD"/>
-                                    <constraint firstItem="hYK-Yy-gmf" firstAttribute="centerX" secondItem="CSB-6v-k4U" secondAttribute="centerX" id="jLl-qf-U48"/>
-                                    <constraint firstItem="hYK-Yy-gmf" firstAttribute="leading" secondItem="CSB-6v-k4U" secondAttribute="leading" constant="10" id="qN2-ty-XzB"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="CSB-6v-k4U" firstAttribute="centerX" secondItem="ap9-QG-C6v" secondAttribute="centerX" id="h45-xh-yfn"/>
-                            <constraint firstItem="CSB-6v-k4U" firstAttribute="centerY" secondItem="ap9-QG-C6v" secondAttribute="centerY" id="nvf-jW-eB9"/>
+                            <constraint firstItem="Xhm-vA-a9f" firstAttribute="height" secondItem="ap9-QG-C6v" secondAttribute="height" multiplier="0.5" constant="1" id="ZMd-o6-7GO"/>
+                            <constraint firstItem="Xhm-vA-a9f" firstAttribute="width" secondItem="ap9-QG-C6v" secondAttribute="width" multiplier="0.5" id="gYq-Ke-Frs"/>
+                            <constraint firstItem="Xhm-vA-a9f" firstAttribute="centerX" secondItem="ap9-QG-C6v" secondAttribute="centerX" id="lcA-8e-irG"/>
+                            <constraint firstItem="Xhm-vA-a9f" firstAttribute="centerY" secondItem="ap9-QG-C6v" secondAttribute="centerY" id="okr-XD-gG5"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="CSB-6v-k4U"/>
-                            </mask>
-                        </variation>
                     </view>
                     <connections>
-                        <outlet property="activityIndicator" destination="0l5-BW-RBU" id="yDK-fd-KLd"/>
-                        <outlet property="progressView" destination="CSB-6v-k4U" id="0di-Zp-DlE"/>
-                        <outlet property="statusLabel" destination="hOG-6I-IQB" id="jro-ie-6Rn"/>
+                        <outlet property="containerView" destination="Xhm-vA-a9f" id="e1m-0u-VNO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ze-ut-ybd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

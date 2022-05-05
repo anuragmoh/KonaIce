@@ -11,11 +11,7 @@ import Lottie
 
 class PaymentViewController: UIViewController, ShowAlert {
     
-    @IBOutlet weak var progressView: UIView!
-    
-    @IBOutlet weak var statusLabel: UILabel!
-    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var containerView: UIView!
     
     var payment: PaymentModel!
     
@@ -32,21 +28,12 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     func setupView() {
         
-        progressView.layer.cornerRadius = 10
-        
-        /*self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
-        let blurEffect = UIBlurEffect(style: .dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = self.view.frame
-        self.view.insertSubview(blurEffectView, at: 0)*/
+        addVisualEffectBlurrView()
         
         showTransactionAnimationView(with: TransactionAnimationName.progress)
     }
     
     func performPayment() {
-        
-        activityIndicator.startAnimating()
-        updateStatus(msg: "Initializing")
         
         if FINIXHELPER.isSDKInitialized() {
             
@@ -78,31 +65,28 @@ class PaymentViewController: UIViewController, ShowAlert {
                                 testTags: payment.tags)
     }
     
-    func showAlert(title: String, message: String, paymentSuccess: Bool, response: String? = "") {
+    func showAlert(title: String, message: String) {
         
         DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
-            self.progressView.isHidden = true
+            
+            self.stopAnimationView()
+            
             let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
-                if(paymentSuccess) {
-                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [response])
-                } else {
-                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentFailed", arguments: [""])
-                }
-                self.dismissView()
+                
+                AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentFailed", arguments: [""])
             }
+            
             self.displayAlert(with: title, message: message, type: .alert, actions: [okAction])
         }
     }
     
-    func dismissView() {
-        dismiss(animated: true)
-    }
-    
-    func updateStatus(msg: String) {
-        DispatchQueue.main.async {
-            self.statusLabel.text = msg
-        }
+    func addVisualEffectBlurrView() {
+        
+        self.view.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = self.view.frame
+        self.view.insertSubview(blurEffectView, at: 0)
     }
     
     func stopAnimationView() {
@@ -122,87 +106,91 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             self.transactionAnimationView = AnimationView(name: animationName.rawValue)
             self.transactionAnimationView.contentMode = .scaleAspectFit
-            self.transactionAnimationView.backgroundColor = .white.withAlphaComponent(0.5)
-            self.transactionAnimationView.animationSpeed = 0.75
+            self.transactionAnimationView.backgroundColor = .clear
+            self.transactionAnimationView.animationSpeed = 1
             self.transactionAnimationView.play(fromProgress: AnimationProgressTime(0.0),
                                                toProgress: AnimationProgressTime(1.0),
                                                loopMode: .loop,
                                                completion: nil)
             
-            self.transactionAnimationView.frame = self.view.frame
-            self.transactionAnimationView.center = self.view.center
-            self.view.addSubview(self.transactionAnimationView)
+            self.containerView.addSubview(self.transactionAnimationView)
             self.view.backgroundColor = .clear
+            self.containerView.backgroundColor = .clear
+            
+            self.transactionAnimationView.translatesAutoresizingMaskIntoConstraints = false
+            
+            NSLayoutConstraint.activate([
+                self.transactionAnimationView.centerXAnchor.constraint(equalTo: self.containerView.centerXAnchor),
+                self.transactionAnimationView.centerYAnchor.constraint(equalTo: self.containerView.centerYAnchor),
+                self.transactionAnimationView.widthAnchor.constraint(equalTo: self.containerView.widthAnchor),
+                self.transactionAnimationView.heightAnchor.constraint(equalTo: self.containerView.heightAnchor)
+            ])
         }
     }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 
 extension PaymentViewController: FinixHelperDelegate {
     
     func sdkInitialzed(error: Error?) {
-        if (error != nil){
-            showAlert(title: "Error", message: error!.localizedDescription, paymentSuccess: false)
+        
+        if (error != nil) {
+            
+            showAlert(title: "Error", message: error!.localizedDescription)
         }
+        
         print("==========SDK Initialized: \(error.debugDescription)==========")
     }
     
     func sdkDeinitialzed(error: Error?) {
-        if (error != nil){
-            showAlert(title: "Error", message: error!.localizedDescription, paymentSuccess: false)
+        
+        if (error != nil) {
+            
+            showAlert(title: "Error", message: error!.localizedDescription)
         }
+        
         print("==========SDK Deinitialized: \(error.debugDescription)==========")
     }
     
     func deviceDidConnect(_ description: String, model: String, serialNumber: String) {
-        updateStatus(msg: "Device Connected")
         
         print("==========Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
         
         self.performSale()
-        
-        updateStatus(msg: "Performing Transaction")
     }
     
     func deviceDidDisconnect() {
+        
         print("==========Device Did Disconnect==========")
     }
     
     func deviceInitialization(inProgress currentProgress: Double, description: String, model: String, serialNumber: String) {
+        
         print("==========Device Initialization:\nProgress:\(currentProgress)\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
     }
     
     func deviceDidError(_ error: Error) {
-        showAlert(title: "Error", message: error.localizedDescription, paymentSuccess: false)
+        
+        showAlert(title: "Error", message: error.localizedDescription)
+        
         print("==========Device Did Error: \(error.localizedDescription)==========")
     }
     
     func statusDidChange(_ status: FinixPOS.DeviceStatus, description: String) {
-        updateStatus(msg: description)
+        
         print("==========Device Status change:\(status), description:\(description)==========")
     }
     
     func onBatteryLow() {
+        
         print("==========Device Battery Low==========")
     }
     
     func prereadTimedOut() {
+        
         print("==========Device Preread Time Out==========")
     }
     
     func onDisplayText(_ text: String) {
-        
-        updateStatus(msg: text)
         
         print("==========On display text: \(text)==========")
         
@@ -211,7 +199,7 @@ extension PaymentViewController: FinixHelperDelegate {
         case .insertTapSwipeCard:
             showTransactionAnimationView(with: TransactionAnimationName.insertSwipeTapCard)
             
-        case .removeCard:
+        case .removeCard, .processing:
             showTransactionAnimationView(with: TransactionAnimationName.removeCard)
             
         default:
@@ -229,12 +217,13 @@ extension PaymentViewController: FinixHelperDelegate {
     func saleResponseFailed(error: Error) {
         
         print("==========Sale Response Failed with error : \(error)==========")
-        showAlert(title: "Error", message: error.localizedDescription, paymentSuccess: false)
+        showAlert(title: "Error", message: error.localizedDescription)
     }
     
     func saleResponseSuccess(saleResponseReceipt: TransactionResponseModel?) {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
-        showAlert(title: "Success", message: saleResponseReceipt.debugDescription, paymentSuccess: true, response: saleResponseReceipt.debugDescription)
+        
+        AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [saleResponseReceipt.debugDescription])        
     }
 }

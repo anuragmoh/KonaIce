@@ -72,14 +72,14 @@ public enum FinixTransferState: String {
 public enum FinixDisplayText: String {
 
     case insertTapSwipeCard = "Insert, Swipe or Tap Card"
-
     case removeCard = "Card removed"
+    case processing = "Processing"
 }
 
 public enum TransactionAnimationName: String {
     
-    case insertSwipeTapCard = "InsertCard"
-    case removeCard = "RemoveCard"
-    case progress = "Progress"
+    case insertSwipeTapCard = "insertCard"
+    case removeCard = "removeCard"
+    case progress = "progress"
 }
 
