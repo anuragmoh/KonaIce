@@ -74,10 +74,17 @@ class PaymentViewController: UIViewController, ShowAlert {
             let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
                 
                 AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentFailed", arguments: [""])
+                
+                self.dismissView()
             }
             
             self.displayAlert(with: title, message: message, type: .alert, actions: [okAction])
         }
+    }
+    
+    func dismissView() {
+        
+        dismiss(animated: true)
     }
     
     func addVisualEffectBlurrView() {
@@ -202,6 +209,12 @@ extension PaymentViewController: FinixHelperDelegate {
         case .removeCard, .processing:
             showTransactionAnimationView(with: TransactionAnimationName.removeCard)
             
+        case .thankYou:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                
+                self.showTransactionAnimationView(with: TransactionAnimationName.progress)
+            })
+            
         default:
             showTransactionAnimationView(with: TransactionAnimationName.progress)
         }
@@ -217,6 +230,7 @@ extension PaymentViewController: FinixHelperDelegate {
     func saleResponseFailed(error: Error) {
         
         print("==========Sale Response Failed with error : \(error)==========")
+        
         showAlert(title: "Error", message: error.localizedDescription)
     }
     
@@ -224,6 +238,8 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
         
-        AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [saleResponseReceipt.debugDescription])        
+        AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [saleResponseReceipt.debugDescription])
+        
+        self.dismissView()
     }
 }

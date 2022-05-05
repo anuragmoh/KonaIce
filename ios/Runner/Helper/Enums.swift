@@ -73,7 +73,8 @@ public enum FinixDisplayText: String {
 
     case insertTapSwipeCard = "Insert, Swipe or Tap Card"
     case removeCard = "Card removed"
-    case processing = "Processing"
+    case processing = "Processing\nPlease wait..."
+    case thankYou = "Thank You"
 }
 
 public enum TransactionAnimationName: String {

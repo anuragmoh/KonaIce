@@ -9,9 +9,7 @@ import Foundation
 import FinixPOS
 
 public struct TransactionResponseModel: Codable {
-    
-    // let success, pending: Bool?
-    
+        
     let finixSaleReceipt: FinixSaleReceipt?
     
     let finixSaleResponse: FinixSaleResponse
@@ -19,8 +17,6 @@ public struct TransactionResponseModel: Codable {
     init(finixSaleReceipt: FinixSaleReceipt?,
          finixSaleResponse: FinixSaleResponse) {
         
-        // self.success = success
-        // self.pending = pending
         self.finixSaleReceipt = finixSaleReceipt
         self.finixSaleResponse = finixSaleResponse
     }
