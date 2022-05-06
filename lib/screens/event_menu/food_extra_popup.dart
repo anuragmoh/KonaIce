@@ -7,9 +7,6 @@ import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-
-import 'menu_items.dart';
-
 //ignore: must_be_immutable
 class FoodExtraPopup extends StatefulWidget {
   Item item;
@@ -110,10 +107,8 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
       ),
       CommonWidgets().textWidget(
         foodExtraObject.itemName,
-        StyleConstants.customTextStyle(
-            fontSize: 12,
-            color: getMaterialColor(AppColors.textColor4),
-            fontFamily: FontConstants.montserratMedium),
+        StyleConstants.customTextStyle12MonsterMedium(
+            color: getMaterialColor(AppColors.textColor4)),
       ),
       Center(
         child: CommonWidgets().quantityIncrementDecrementContainer(
@@ -132,12 +127,10 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
       Center(
         child: CommonWidgets().textWidget(
             '${StringConstants.symbolDollar}${foodExtraObject.getTotalPrice().toStringAsFixed(2)}',
-            StyleConstants.customTextStyle(
-                fontSize: 12,
+            StyleConstants.customTextStyle12MontserratBold(
                 color: getMaterialColor(foodExtraObject.selectedItemQuantity > 0
                     ? AppColors.textColor4
-                    : AppColors.textColor2),
-                fontFamily: FontConstants.montserratBold)),
+                    : AppColors.textColor2))),
       )
     ]);
   }

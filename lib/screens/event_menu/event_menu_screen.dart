@@ -43,21 +43,20 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-
 import '../../models/network_model/order_model/order_request_model.dart';
 import '../../models/network_model/order_model/order_response_model.dart';
 
 class EventMenuScreen extends StatefulWidget {
   final Events events;
+
   const EventMenuScreen({Key? key, required this.events}) : super(key: key);
 
   @override
   _EventMenuScreenState createState() => _EventMenuScreenState();
 }
 
-class _EventMenuScreenState extends State<EventMenuScreen> implements
-    OrderResponseContractor, P2PContractor {
-
+class _EventMenuScreenState extends State<EventMenuScreen>
+    implements OrderResponseContractor, P2PContractor {
   late OrderPresenter orderPresenter;
   late EventPresenter eventPresenter;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
@@ -124,7 +123,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   // LocalDB call start from here.
-
   getItemCategoriesByEventId(String eventId) async {
     // Event Id need to pass
     var result = await ItemCategoriesDAO().getCategoriesByEventId(eventId);
@@ -276,10 +274,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             alignment: Alignment.center,
             child: CommonWidgets().textWidget(
                 StringConstants.noMenuItemsAvailable,
-                StyleConstants.customTextStyle(
-                    fontSize: 20.0,
-                    color: AppColors.textColor1,
-                    fontFamily: FontConstants.montserratSemiBold)));
+                StyleConstants.customTextStyle20MontserratSemiBold(
+                    color: AppColors.textColor1)));
   }
 
   Widget leftContainer() {
@@ -388,7 +384,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                 onTapGridItem(index);
               },
               child: menuItem(index));
-          //index == 0 ? addNewMenuItem() : menuItem(index));
         });
   }
 
@@ -436,27 +431,23 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                                   bottom: 3.0, right: 3.0),
                               child: Text(
                                 menuObject.name,
-                                style: StyleConstants.customTextStyle(
-                                    fontSize: 16.0,
-                                    color: getMaterialColor(
-                                        menuObject.isItemSelected
-                                            ? AppColors.whiteColor
-                                            : AppColors.textColor1),
-                                    fontFamily:
-                                        FontConstants.montserratSemiBold),
+                                style: StyleConstants
+                                    .customTextStyle16MontserratSemiBold(
+                                        color: getMaterialColor(
+                                            menuObject.isItemSelected
+                                                ? AppColors.whiteColor
+                                                : AppColors.textColor1)),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
                             CommonWidgets().textWidget(
                                 '\$${menuObject.price}',
-                                StyleConstants.customTextStyle(
-                                    fontSize: 12.0,
+                                StyleConstants.customTextStyle12MonsterMedium(
                                     color: getMaterialColor(
                                         menuObject.isItemSelected
                                             ? AppColors.whiteColor
-                                            : AppColors.textColor2),
-                                    fontFamily: FontConstants.montserratMedium))
+                                            : AppColors.textColor2)))
                           ],
                         ),
                       ),
@@ -466,10 +457,9 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                           visible: menuObject.isItemSelected,
                           child: CommonWidgets().textWidget(
                               '${menuObject.selectedItemQuantity}',
-                              StyleConstants.customTextStyle(
-                                  fontSize: 16.0,
-                                  color: getMaterialColor(AppColors.whiteColor),
-                                  fontFamily: FontConstants.montserratRegular)),
+                              StyleConstants.customTextStyle16MonsterRegular(
+                                  color:
+                                      getMaterialColor(AppColors.whiteColor))),
                         ),
                       ),
                     ],
@@ -487,10 +477,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                     },
                     child: CommonWidgets().textWidget(
                         StringConstants.addFoodItems,
-                        StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor3),
-                            fontFamily: FontConstants.montserratMedium)),
+                        StyleConstants.customTextStyle12MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor3))),
                   ),
                 ),
               )
@@ -530,10 +518,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   Widget plusSymbolText() {
     return CommonWidgets().textWidget(
         StringConstants.plusSymbol,
-        StyleConstants.customTextStyle(
-            fontSize: 16.0,
-            color: getMaterialColor(AppColors.primaryColor1),
-            fontFamily: FontConstants.montserratBold));
+        StyleConstants.customTextStyle16MontserratBold(
+            color: getMaterialColor(AppColors.primaryColor1)));
   }
 
   Widget customerDetails() {
@@ -553,20 +539,16 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 child: CommonWidgets().textWidget(
                     customerName,
-                    StyleConstants.customTextStyle(
-                        fontSize: 16.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle16MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
               ),
             ),
             Visibility(
               visible: invalidCustomerName(),
               child: CommonWidgets().textWidget(
                   StringConstants.plusSymbol,
-                  StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold)),
+                  StyleConstants.customTextStyle16MontserratBold(
+                      color: getMaterialColor(AppColors.textColor1))),
             )
           ],
         ),
@@ -584,10 +566,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           padding: const EdgeInsets.only(top: 6.0),
           child: CommonWidgets().textWidget(
               StringConstants.noItemsAdded,
-              StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratSemiBold)),
+              StyleConstants.customTextStyle12MontserratSemiBold(
+                  color: getMaterialColor(AppColors.textColor2))),
         ),
       ],
     );
@@ -646,10 +626,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             padding: const EdgeInsets.only(bottom: 2.0),
             child: CommonWidgets().textWidget(
                 menuObjet.name,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor4),
-                    fontFamily: FontConstants.montserratMedium)),
+                StyleConstants.customTextStyle12MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor4))),
           ),
           Row(
             children: [
@@ -659,10 +637,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                   padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
                   child: CommonWidgets().textWidget(
                       menuObjet.getExtraItemsName(),
-                      StyleConstants.customTextStyle(
-                          fontSize: 9.0,
-                          color: getMaterialColor(AppColors.textColor2),
-                          fontFamily: FontConstants.montserratMedium)),
+                      StyleConstants.customTextStyle09MonsterMedium(
+                          color: getMaterialColor(AppColors.textColor2))),
                 ),
               ),
               const SizedBox(
@@ -676,18 +652,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               padding: const EdgeInsets.only(bottom: 2.0),
               child: CommonWidgets().textWidget(
                   StringConstants.addFoodItemsExtras,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.primaryColor1),
-                      fontFamily: FontConstants.montserratMedium)),
+                  StyleConstants.customTextStyle09MonsterMedium(
+                      color: getMaterialColor(AppColors.primaryColor1))),
             ),
           ),
           CommonWidgets().textWidget(
               '${StringConstants.symbolDollar}${menuObjet.getTotalPrice().toStringAsFixed(2)}',
-              StyleConstants.customTextStyle(
-                  fontSize: 16.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratBold)),
+              StyleConstants.customTextStyle16MontserratBold(
+                  color: getMaterialColor(AppColors.textColor1))),
         ],
       ),
     );
@@ -715,9 +687,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
               hintText: StringConstants.addTip,
               imageName: AssetsConstants.dollarIcon,
               controller: addTipTextFieldController),
-          /*     commonTextFieldContainer(hintText: StringConstants.addDiscount,
-              imageName: AssetsConstants.dollarIcon,
-              controller: addDiscountTextFieldController),*/
+
           orderBillDetailContainer(),
         ],
       ),
@@ -758,16 +728,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         children: [
           CommonWidgets().textWidget(
               text,
-              StyleConstants.customTextStyle(
-                  fontSize: 12,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratMedium)),
+              StyleConstants.customTextStyle12MonsterMedium(
+                  color: getMaterialColor(AppColors.textColor1))),
           CommonWidgets().textWidget(
               StringConstants.symbolDollar + price.toStringAsFixed(2),
-              StyleConstants.customTextStyle(
-                  fontSize: 12,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratRegular)),
+              StyleConstants.customTextStyle12MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor2))),
         ],
       ),
     );
@@ -801,19 +767,14 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
                   controller: controller,
                   maxLength: TextFieldLengthConstant.addTip,
                   keyboardType: TextInputType.number,
-                  style: StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratMedium),
+                  style: StyleConstants.customTextStyle12MonsterMedium(
+                      color: getMaterialColor(AppColors.textColor1)),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     counterText: "",
-                    //  contentPadding: const EdgeInsets.only(bottom: 20),
                     hintText: hintText,
-                    hintStyle: StyleConstants.customTextStyle(
-                        fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor2),
-                        fontFamily: FontConstants.montserratMedium),
+                    hintStyle: StyleConstants.customTextStyle12MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor2)),
                   ),
                   onEditingComplete: () {
                     onCompleteTextFieldEditing();
@@ -847,14 +808,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
           child: CommonWidgets().textWidget(
               itemCategoriesList[index].categoryName,
               index == selectedCategoryIndex
-                  ? StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold)
-                  : StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor4),
-                      fontFamily: FontConstants.montserratMedium)),
+                  ? StyleConstants.customTextStyle12MontserratBold(
+                      color: getMaterialColor(AppColors.textColor1))
+                  : StyleConstants.customTextStyle12MonsterMedium(
+                      color: getMaterialColor(AppColors.textColor4))),
         ),
       ),
     );
@@ -890,10 +847,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
         child: CommonWidgets().textWidget(
             StringConstants.clear,
-            StyleConstants.customTextStyle(
-                fontSize: 9.0,
-                color: getMaterialColor(AppColors.textColor5),
-                fontFamily: FontConstants.montserratSemiBold)),
+            StyleConstants.customTextStyle09MontserratBold(
+                color: getMaterialColor(AppColors.textColor5))),
       ),
     );
   }
@@ -966,12 +921,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             },
             child: CommonWidgets().textWidget(
                 StringConstants.saveOrder,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
+                StyleConstants.customTextStyle12MontserratSemiBold(
                     color: getMaterialColor(selectedMenuItems.isEmpty
                         ? AppColors.denotiveColor4
-                        : AppColors.textColor6),
-                    fontFamily: FontConstants.montserratSemiBold)),
+                        : AppColors.textColor6))),
           ),
           InkWell(
             onTap: () {
@@ -981,12 +934,10 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
             },
             child: CommonWidgets().textWidget(
                 StringConstants.newOrder,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
+                StyleConstants.customTextStyle12MontserratSemiBold(
                     color: getMaterialColor(selectedMenuItems.isEmpty
                         ? AppColors.denotiveColor4
-                        : AppColors.textColor7),
-                    fontFamily: FontConstants.montserratSemiBold)),
+                        : AppColors.textColor7))),
           )
         ],
       ),
@@ -1055,12 +1006,12 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   calculateTotal() {
     setState(() {
       if (selectedMenuItems.isNotEmpty) {
-        totalAmount = totalAmountOfSelectedItems + tip + getSalesTax() - discount;
+        totalAmount =
+            totalAmountOfSelectedItems + tip + getSalesTax() - discount;
       } else {
         totalAmount = 0.0;
       }
     });
-
   }
 
   clearCart() {
@@ -1170,9 +1121,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onTapGridItem(int index) {
-    // if (index == 0) {
-    //   print('add New Item');
-    // } else {
     setState(() {
       if (itemList[index].isItemSelected) {
         itemList[index].selectedItemQuantity = 0;
@@ -1220,7 +1168,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
   onDrawerTap() {
     _scaffoldKey.currentState!.openEndDrawer();
-    // Scaffold.of(context).openDrawer();
   }
 
   onProfileChange() {
@@ -1340,9 +1287,7 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
     } else {
       orderRequestModel.anonymous = true;
     }
-
     orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
-
     orderRequestModel.allowPromoNotifications = false;
     orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
     orderRequestModel.orderItemsList = getOrderItemList();
@@ -1366,10 +1311,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
       orderItem.foodExtraItemMappingList = item.selectedExtras.isNotEmpty
           ? getExtraItemsList(item.selectedExtras)
           : [];
-
       orderList.add(orderItem);
     }
-
     return orderList;
   }
 
@@ -1391,11 +1334,8 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
 
       orderFoodExtraList.add(orderExtraItem);
     }
-
     mappingObj.orderFoodExtraItemDetailDto = orderFoodExtraList;
-
     extrasList.add(mappingObj);
-
     return extrasList;
   }
 
@@ -1431,7 +1371,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   //API Call
-
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
     PlaceOrderRequestModel requestModel = getOrderRequestModel();
     orderPresenter.placeOrder(requestModel);
@@ -1527,14 +1466,6 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
         payment: "NA",
         orderStatus: "saved",
         deleted: false));
-    // await SavedOrdersDAO().insert(SavedOrders(eventId:orderRequestModel.eventId!,cardId:orderRequestModel.cardId!,orderId:orderId,customerName:customerName,
-    //     email:orderRequestModel.email.toString(),phoneNumber:orderRequestModel.phoneNumber.toString(),
-    //     phoneCountryCode:orderRequestModel.phoneNumCountryCode.toString(),
-    // address1:orderRequestModel.addressLine1.toString(),address2:orderRequestModel.addressLine2.toString()
-    // ,country:orderRequestModel.country.toString(),state:orderRequestModel.state.toString(),
-    // city:orderRequestModel.city.toString(),zipCode:orderRequestModel.zipCode.toString(),
-    // orderDate:orderRequestModel.orderDate!,tip:tip,discount:discount,foodCost:totalAmountOfSelectedItems,
-    // totalAmount:totalAmount,payment:"NA",orderStatus:"saved",deleted:false));
 
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();

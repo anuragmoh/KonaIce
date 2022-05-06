@@ -31,11 +31,8 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
-
-
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
-
   @override
   _DashboardState createState() => _DashboardState();
 }
@@ -47,18 +44,15 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
   List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
   List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
-  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
-  [];
+  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList = [];
   List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
-  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
-  [];
+  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList = [];
   List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList>
   pOsSyncDeletedEventItemExtrasDataDtoList = [];
   bool isApiProcess = false;
   int currentIndex = 0;
   String userName = StringExtension.empty();
-  // List<Widget> bodyWidgets = [HomeScreen(onCallback:onCallBackDashboard), const SettingScreen()];
   List<BottomItems> bottomItemList = [
     BottomItems(
         title: StringConstants.home,
@@ -99,12 +93,10 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
   @override
   Widget build(BuildContext context) {
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
-
   }
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
-
       backgroundColor: getMaterialColor(AppColors.textColor3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -112,11 +104,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
           CommonWidgets().dashboardTopBar(topBarComponent()),
           Expanded(
             child: currentIndex==0?HomeScreen(onCallback: onReloadDashboardScreen):const SettingScreen(),
-            // child: bodyWidgets[currentIndex],
-            //   child: CommonWidgets().bodyWidgets[],
-            //   child: body(),
           ),
-          // CommonWidgets().bottomBar(true, onTapBottomListItem),
           BottomBarWidget(
             onTapCallBack: onTapBottomListItem,
             accountImageVisibility: false,
@@ -139,10 +127,8 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
               padding: const EdgeInsets.only(left: 18),
               child: CommonWidgets().textWidget(
                   StringConstants.dashboard,
-                  StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.whiteColor),
-                      fontFamily: FontConstants.montserratBold)),
+                  StyleConstants.customTextStyle16MontserratBold(
+                      color: getMaterialColor(AppColors.whiteColor))),
             ),
           ),
           GestureDetector(
@@ -204,7 +190,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
     setState(() {
 
       currentIndex = index;
-      print('dasssss$index');
     });
   }
 
@@ -453,13 +438,9 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
       debugPrint('Dashboard$index');
     });
   }
-
   void onReloadDashboardScreen(dynamic value){
-    print('onReloadDashboardScreen');
     setState(() {
       currentIndex=ServiceNotifier.count;
     });
   }
-
-
 }

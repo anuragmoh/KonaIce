@@ -59,10 +59,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
             padding:  EdgeInsets.only(top: 3.25*SizeConfig.imageSizeMultiplier, bottom: 3.25*SizeConfig.imageSizeMultiplier),
             child: CommonWidgets().textWidget(
                 StringConstants.forgotPassword,
-                StyleConstants.customTextStyle(
-                    fontSize: 22.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratSemiBold)),
+                StyleConstants.customTextStyle22MontserratSemiBold(
+                    color: getMaterialColor(AppColors.textColor1))),
           ),
           Align(
             alignment: Alignment.topLeft,
@@ -70,10 +68,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               padding: const EdgeInsets.only(left: 23),
               child: CommonWidgets().textWidget(
                   StringConstants.emailId,
-                  StyleConstants.customTextStyle(
-                      fontSize: 14.0,
-                      color: getMaterialColor(AppColors.textColor2),
-                      fontFamily: FontConstants.montserratRegular)),
+                  StyleConstants.customTextStyle14MonsterRegular(
+                      color: getMaterialColor(AppColors.textColor2))),
             ),
           ),
           Padding(
@@ -98,10 +94,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
                   ),
                   hintText: 'abc@gmail.com',
                   errorText: emailValidationMessage,
-                  hintStyle: StyleConstants.customTextStyle(
-                      fontSize: 15.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular),
+                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                      color: getMaterialColor(AppColors.textColor1)),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: AppColors.textColor2, width: 1.0),
@@ -121,8 +115,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               child: RichText(
                   text: TextSpan(
                     children: [
-                      TextSpan(text: StringConstants.rememberPassword, style: StyleConstants.customTextStyle(
-                          fontSize: 12.0, color: getMaterialColor(AppColors.denotiveColor4), fontFamily: FontConstants.montserratSemiBold)),
+                      TextSpan(text: StringConstants.rememberPassword, style: StyleConstants.customTextStyle12MontserratSemiBold(
+                          color: getMaterialColor(AppColors.denotiveColor4))),
                       TextSpan(text: ' ${StringConstants.signIn}', style: TextStyle(
                         color: getMaterialColor(AppColors.gradientColor2),
                         fontSize: 12.0, fontFamily: FontConstants.montserratSemiBold,
@@ -133,8 +127,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               ),
             )
           ),
-          submitButton(StringConstants.submit, StyleConstants.customTextStyle(
-              fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold)),
+          submitButton(StringConstants.submit, StyleConstants.customTextStyle12MontserratBold(color: getMaterialColor(AppColors.textColor1))),
         ],
       ),
     );

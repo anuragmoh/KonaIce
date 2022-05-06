@@ -36,6 +36,12 @@ class StyleConstants {
         fontSize: 15.0,
         fontFamily: FontConstants.montserratRegular);
   }
+  static customTextStyle16MonsterRegular({required Color color}) {
+    return TextStyle(
+        color: color,
+        fontSize: 16.0,
+        fontFamily: FontConstants.montserratRegular);
+  }
 
   //MonsterRatMedium
   static customTextStyle09MonsterMedium({required Color color}) {
@@ -70,6 +76,12 @@ class StyleConstants {
   }
 
   //MonsterBold
+  static customTextStyle09MontserratBold({required Color color}) {
+    return TextStyle(
+        color: color,
+        fontSize: 9.0,
+        fontFamily: FontConstants.montserratBold);
+  }
   static customTextStyle12MontserratBold({required Color color}) {
     return TextStyle(
         color: color,
@@ -100,6 +112,7 @@ class StyleConstants {
         fontSize: 22.0,
         fontFamily: FontConstants.montserratBold);
   }
+
   static customTextStyle24MontserratBold({required Color color}) {
     return TextStyle(
         color: color,
@@ -118,6 +131,18 @@ class StyleConstants {
     return TextStyle(
         color: color,
         fontSize: 12.0,
+        fontFamily: FontConstants.montserratSemiBold);
+  }
+  static customTextStyle16MontserratSemiBold({required Color color}) {
+    return TextStyle(
+        color: color,
+        fontSize: 16.0,
+        fontFamily: FontConstants.montserratSemiBold);
+  }
+  static customTextStyle20MontserratSemiBold({required Color color}) {
+    return TextStyle(
+        color: color,
+        fontSize: 20.0,
         fontFamily: FontConstants.montserratSemiBold);
   }
   static customTextStyle22MontserratSemiBold({required Color color}) {
