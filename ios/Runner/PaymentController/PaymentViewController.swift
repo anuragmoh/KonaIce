@@ -30,7 +30,7 @@ class PaymentViewController: UIViewController, ShowAlert {
         
         addVisualEffectBlurrView()
         
-        showTransactionAnimationView(with: TransactionAnimationName.progress)
+        showTransactionAnimationView(with: .progress)
     }
     
     func performPayment() {
@@ -105,7 +105,7 @@ class PaymentViewController: UIViewController, ShowAlert {
         }
     }
     
-    func showTransactionAnimationView(with animationName: TransactionAnimationName) {
+    func showTransactionAnimationView(with animationName: TransactionAnimationName, displayText: String = "") {
         
         DispatchQueue.main.async {
             
@@ -115,10 +115,26 @@ class PaymentViewController: UIViewController, ShowAlert {
             self.transactionAnimationView.contentMode = .scaleAspectFit
             self.transactionAnimationView.backgroundColor = .clear
             self.transactionAnimationView.animationSpeed = 1
+            
+            var lottieLoopMode: LottieLoopMode = .loop
+            
+            if animationName == .removeCard &&
+                displayText == FinixDisplayText.thankYou.rawValue {
+                
+                lottieLoopMode = .playOnce
+            }
+            
             self.transactionAnimationView.play(fromProgress: AnimationProgressTime(0.0),
                                                toProgress: AnimationProgressTime(1.0),
-                                               loopMode: .loop,
-                                               completion: nil)
+                                               loopMode: lottieLoopMode) { finished in
+                
+                if finished &&
+                    animationName == .removeCard &&
+                    displayText == FinixDisplayText.thankYou.rawValue {
+                    
+                    self.showTransactionAnimationView(with: .progress)
+                }
+            }
             
             self.containerView.addSubview(self.transactionAnimationView)
             self.view.backgroundColor = .clear
@@ -204,19 +220,13 @@ extension PaymentViewController: FinixHelperDelegate {
         switch FinixDisplayText(rawValue: text) {
             
         case .insertTapSwipeCard:
-            showTransactionAnimationView(with: TransactionAnimationName.insertSwipeTapCard)
+            showTransactionAnimationView(with: .insertSwipeTapCard)
             
-        case .removeCard, .processing:
-            showTransactionAnimationView(with: TransactionAnimationName.removeCard)
-            
-        case .thankYou:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-                
-                self.showTransactionAnimationView(with: TransactionAnimationName.progress)
-            })
+        case .removeCard, .processing, .thankYou:
+            showTransactionAnimationView(with: .removeCard, displayText: text)
             
         default:
-            showTransactionAnimationView(with: TransactionAnimationName.progress)
+            showTransactionAnimationView(with: .progress)
         }
     }
     
@@ -224,7 +234,7 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Card removed==========")
         
-        showTransactionAnimationView(with: TransactionAnimationName.removeCard)
+        showTransactionAnimationView(with: .removeCard)
     }
     
     func saleResponseFailed(error: Error) {
