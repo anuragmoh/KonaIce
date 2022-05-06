@@ -1130,7 +1130,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     const String application = "Test";
     const String version = "1.0";
     const String merchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
-    const String deviceID = "DV9jHr66AG5bc5qorHDRPpMK";
+    const String deviceID = "DVtQTgPQYgJVcnA4p8KE89gm";   // "DV9jHr66AG5bc5qorHDRPpMK";
     final tags = {"Test": "Test", "order_number": "21DFASJSAKAS"};
     final values = {
       "username": username,

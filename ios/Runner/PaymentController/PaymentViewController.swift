@@ -49,9 +49,11 @@ class PaymentViewController: UIViewController, ShowAlert {
         
         let serialNumber: String? = nil
         
+        print("==========Payment Model: \(payment.debugDescription)==========")
+        
         FINIXHELPER.initializeFinixSDK(environment: FinixPOS.Finix.Environment.TestCertification,
-                                       userName: FinixConstants.userName,
-                                       password: FinixConstants.password,
+                                       userName: payment.username,
+                                       password: payment.password,
                                        application: payment.application,
                                        version: payment.version,
                                        merchantId: payment.merchantID,
