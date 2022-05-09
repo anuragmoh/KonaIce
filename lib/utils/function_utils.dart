@@ -60,7 +60,26 @@ class FunctionalUtils {
       SessionDAO()
           .insert(Session(key: DatabaseKeys.profileImageFileId, value: userModel.profileImageFileId!));
     }
-
+    if (userModel.merchantId != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.merchantId, value: userModel.merchantId!));
+    }
+    if (userModel.deviceId != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.deviceId, value: userModel.deviceId!));
+    }
+    if (userModel.finixSerialNumber != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.finixSerialNumber, value: userModel.finixSerialNumber!));
+    }
+    if (userModel.finixUsername != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.finixUsername, value: userModel.finixUsername!));
+    }
+    if (userModel.finixPassword != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.finixPassword, value: userModel.finixPassword!));
+    }
     if (userModel.franchiseId != null) {
       SessionDAO()
           .insert(Session(key: DatabaseKeys.franchiseId, value: userModel.franchiseId!));
