@@ -19,22 +19,25 @@ import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 
 class FunctionalUtils {
+
   static int clockInTimestamp = 0;
 
+
   static saveUserDetailInDB({required LoginResponseModel userModel}) {
+
     if (userModel.id != null) {
-      SessionDAO()
-          .insert(Session(key: DatabaseKeys.userID, value: userModel.id!));
+    SessionDAO()
+        .insert(Session(key: DatabaseKeys.userID, value: userModel.id!));
     }
 
     if (userModel.firstName != null) {
-      SessionDAO().insert(
-          Session(key: DatabaseKeys.firstName, value: userModel.firstName!));
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.firstName, value: userModel.firstName!));
     }
 
     if (userModel.lastName != null) {
-      SessionDAO().insert(
-          Session(key: DatabaseKeys.lastName, value: userModel.lastName!));
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.lastName, value: userModel.lastName!));
     }
 
     if (userModel.email != null) {
@@ -57,7 +60,26 @@ class FunctionalUtils {
           key: DatabaseKeys.profileImageFileId,
           value: userModel.profileImageFileId!));
     }
-
+    if (userModel.merchantId != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.merchantId, value: userModel.merchantId!));
+    }
+    if (userModel.deviceId != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.deviceId, value: userModel.deviceId!));
+    }
+    if (userModel.finixSerialNumber != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.finixSerialNumber, value: userModel.finixSerialNumber!));
+    }
+    if (userModel.finixUsername != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.finixUsername, value: userModel.finixUsername!));
+    }
+    if (userModel.finixPassword != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.finixPassword, value: userModel.finixPassword!));
+    }
     if (userModel.franchiseId != null) {
       SessionDAO().insert(Session(
           key: DatabaseKeys.franchiseId, value: userModel.franchiseId!));
@@ -139,6 +161,46 @@ class FunctionalUtils {
 
     return userName.toTitleCase();
   }
+  static Future<String> getFinixMerchantId() async {
+    String merchantId = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.merchantId);
+    if (idObj != null) {
+      merchantId = idObj.value ;
+    }
+    return merchantId;
+  }
+  static Future<String> getFinixDeviceId() async {
+    String deviceId = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.deviceId);
+    if (idObj != null) {
+      deviceId = idObj.value ;
+    }
+    return deviceId;
+  }
+  static Future<String> getFinixSerialNumber() async {
+    String finixSerialNumber = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.finixSerialNumber);
+    if (idObj != null) {
+      finixSerialNumber = idObj.value ;
+    }
+    return finixSerialNumber;
+  }
+  static Future<String> getFinixUserName() async {
+    String finixUsername = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.finixUsername);
+    if (idObj != null) {
+      finixUsername = idObj.value ;
+    }
+    return finixUsername;
+  }
+  static Future<String> getFinixPassword() async {
+    String finixPassword = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.finixPassword);
+    if (idObj != null) {
+      finixPassword = idObj.value ;
+    }
+    return finixPassword;
+  }
 
   static Future<String> getUserID() async {
     String userID = StringExtension.empty();
@@ -202,7 +264,7 @@ class FunctionalUtils {
     SavedOrdersItemsDAO().clearEventsData();
   }
 
-  static hideKeyboard() {
+  static hideKeyboard(){
     return FocusScope.of(navigatorKey.currentContext!).unfocus();
     //return  FocusScope.of(navigatorKey.currentContext!).requestFocus(FocusNode());
   }
