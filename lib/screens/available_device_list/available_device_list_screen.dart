@@ -83,10 +83,8 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
           padding:  const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
           child: Text(StringConstants.allDeviceScreenHead,
             textAlign: TextAlign.center,
-            style: StyleConstants.customTextStyle(
-              fontSize: 22.0,
-              color: AppColors.textColor1,
-              fontFamily: FontConstants.montserratSemiBold),),
+            style: StyleConstants.customTextStyle22MontserratSemiBold(
+              color: AppColors.textColor1),),
         ),
         Expanded(
           child: deviceList.isNotEmpty ? ListView.builder(
@@ -96,15 +94,13 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
             return listView(device);
             }) : Align(
             alignment: Alignment.center,
-            child: CommonWidgets().textWidget(StringConstants.noDeviceAvailableToConnect, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
+            child: CommonWidgets().textWidget(StringConstants.noDeviceAvailableToConnect, StyleConstants.customTextStyle20MontserratSemiBold(color: AppColors.textColor1))
             ),
         ),
         Padding(
           padding: const EdgeInsets.all(40.0),
-          child: proceedButton(StringConstants.proceed, StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
-              fontFamily: FontConstants.montserratBold)),
+          child: proceedButton(StringConstants.proceed, StyleConstants.customTextStyle12MontserratBold(
+              color: getMaterialColor(AppColors.textColor1))),
         )
       ],
     ) ,
@@ -135,16 +131,14 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
                 Text(
                   device.deviceName,
                   textAlign: TextAlign.left,
-                  style: StyleConstants.customTextStyle(fontSize: 15,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratMedium),
+                  style: StyleConstants.customTextStyle15MonsterMedium(
+                      color: getMaterialColor(AppColors.textColor1)),
                 ),
                 Text(
                   '(${getStateName(device.state)})',
                   textAlign: TextAlign.left,
-                  style: StyleConstants.customTextStyle(fontSize: 13,
-                  color: getStateColor(device.state),
-                      fontFamily: FontConstants.montserratMedium)),
+                  style: StyleConstants.customTextStyle15MonsterMedium(
+                  color: getStateColor(device.state))),
               ],
             ),
           ),

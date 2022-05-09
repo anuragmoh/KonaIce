@@ -50,6 +50,12 @@ class StyleConstants {
         fontSize: 9.0,
         fontFamily: FontConstants.montserratMedium);
   }
+  static customTextStyle10MonsterMedium({required Color color}) {
+    return TextStyle(
+        color: color,
+        fontSize: 10.0,
+        fontFamily: FontConstants.montserratMedium);
+  }
   static customTextStyle12MonsterMedium({required Color color}) {
     return TextStyle(
         color: color,
@@ -57,6 +63,12 @@ class StyleConstants {
         fontFamily: FontConstants.montserratMedium);
   }
   static customTextStyle14MonsterMedium({required Color color}) {
+    return TextStyle(
+        color: color,
+        fontSize: 14.0,
+        fontFamily: FontConstants.montserratMedium);
+  }
+  static customTextStyle15MonsterMedium({required Color color}) {
     return TextStyle(
         color: color,
         fontSize: 14.0,

@@ -11,8 +11,8 @@ import '../../utils/utils.dart';
 // ignore: must_be_immutable
 class CustomerAddTipDialog extends StatefulWidget {
   Function callBack;
-  CustomerAddTipDialog({Key? key, required this.callBack}) : super(key: key);
 
+  CustomerAddTipDialog({Key? key, required this.callBack}) : super(key: key);
 
   @override
   State<CustomerAddTipDialog> createState() => _CustomerAddTipDialogState();
@@ -21,7 +21,6 @@ class CustomerAddTipDialog extends StatefulWidget {
 class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   bool isValidTip = true;
   TextEditingController tipController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -73,35 +72,29 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
             padding: const EdgeInsets.only(top: 10, bottom: 8),
             child: CommonWidgets().textWidget(
                 StringConstants.amount,
-                StyleConstants.customTextStyle(
-                    fontSize: 12,
-                    color: getMaterialColor(AppColors.textColor2),
-                    fontFamily: FontConstants.montserratMedium)),
+                StyleConstants.customTextStyle12MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor2))),
           ),
           TextField(
             controller: tipController,
             keyboardType: TextInputType.number,
             maxLength: TextFieldLengthConstant.addTip,
-            style: StyleConstants.customTextStyle(
-                fontSize: 22.0,
-                color: getMaterialColor(AppColors.textColor6),
-                fontFamily: FontConstants.montserratMedium),
+            style: StyleConstants.customTextStyle22MonsterMedium(
+                color: getMaterialColor(AppColors.textColor6)),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               hintText: StringConstants.enterAmount,
               errorText: isValidTip ? "" : StringConstants.enterTip,
-              hintStyle: StyleConstants.customTextStyle(
-                  fontSize: 12,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratRegular),
+              hintStyle: StyleConstants.customTextStyle12MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor2)),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     color: getMaterialColor(AppColors.skyBlueBorderColor)),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.textColor5)),
+                borderSide:
+                    BorderSide(color: getMaterialColor(AppColors.textColor5)),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
@@ -116,10 +109,8 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                     padding: const EdgeInsets.only(left: 15),
                     child: CommonWidgets().textWidget(
                         StringConstants.symbolDollar,
-                        StyleConstants.customTextStyle(
-                            fontSize: 22,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium)),
+                        StyleConstants.customTextStyle22MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor2))),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -132,7 +123,6 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                   )
                 ],
               ),
-              // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             ),
           )
         ],
