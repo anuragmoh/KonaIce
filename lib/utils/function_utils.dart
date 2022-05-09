@@ -156,6 +156,46 @@ class FunctionalUtils {
 
     return userName.toTitleCase();
   }
+  static Future<String> getFinixMerchantId() async {
+    String merchantId = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.merchantId);
+    if (idObj != null) {
+      merchantId = idObj.value ;
+    }
+    return merchantId;
+  }
+  static Future<String> getFinixDeviceId() async {
+    String deviceId = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.deviceId);
+    if (idObj != null) {
+      deviceId = idObj.value ;
+    }
+    return deviceId;
+  }
+  static Future<String> getFinixSerialNumber() async {
+    String finixSerialNumber = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.finixSerialNumber);
+    if (idObj != null) {
+      finixSerialNumber = idObj.value ;
+    }
+    return finixSerialNumber;
+  }
+  static Future<String> getFinixUserName() async {
+    String finixUsername = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.finixUsername);
+    if (idObj != null) {
+      finixUsername = idObj.value ;
+    }
+    return finixUsername;
+  }
+  static Future<String> getFinixPassword() async {
+    String finixPassword = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.finixPassword);
+    if (idObj != null) {
+      finixPassword = idObj.value ;
+    }
+    return finixPassword;
+  }
 
   static Future<String> getUserID() async {
     String userID = StringExtension.empty();
@@ -208,8 +248,6 @@ class FunctionalUtils {
         MaterialPageRoute(builder: (context) =>  SplashScreen()));
   }
 
-
-
   static clearAllDBData() {
      SessionDAO().clearSessionData();
      EventItemDAO().clearEventItemData;
@@ -222,9 +260,7 @@ class FunctionalUtils {
      SavedOrdersItemsDAO().clearEventsData();
   }
 
-
   static hideKeyboard(){
     return FocusScope.of(navigatorKey.currentContext!).unfocus();
-    //return  FocusScope.of(navigatorKey.currentContext!).requestFocus(FocusNode());
   }
 }
