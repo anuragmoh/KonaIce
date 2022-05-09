@@ -79,6 +79,11 @@ class LoginResponseModel {
    // this.files,
     this.sessionKey,
     this.projectConfigs,
+    this.merchantId,
+    this.deviceId,
+    this.finixSerialNumber,
+    this.finixUsername,
+    this.finixPassword,
   });
 
   String? id;
@@ -102,6 +107,11 @@ class LoginResponseModel {
   //Files? files;
   String? sessionKey;
   ProjectConfigs? projectConfigs;
+  String? merchantId;
+  String? deviceId;
+  String? finixSerialNumber;
+  String? finixUsername;
+  String? finixPassword;
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) => LoginResponseModel(
     id: json["id"],
@@ -125,6 +135,11 @@ class LoginResponseModel {
    // files: Files.fromJson(json["files"]),
     sessionKey: json["sessionKey"],
     projectConfigs: ProjectConfigs.fromJson(json["projectConfigs"]),
+    merchantId: json["merchantId"],
+    deviceId: json["deviceId"],
+    finixSerialNumber: json["finixSerialNumber"],
+    finixUsername: json["finixUsername"],
+    finixPassword: json["finixPassword"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -149,6 +164,11 @@ class LoginResponseModel {
     //"files": files?.toJson(),
     "sessionKey": sessionKey,
     "projectConfigs": projectConfigs!.toJson(),
+    "merchantId": merchantId,
+    "deviceId": deviceId,
+    "finixSerialNumber": finixSerialNumber,
+    "finixUsername": finixUsername,
+    "finixPassword": finixPassword,
   };
 }
 
