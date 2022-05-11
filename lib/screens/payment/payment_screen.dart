@@ -1136,23 +1136,24 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
+    debugPrint('>>>>>>>>>$finixMerchantId');
   }
 
   Future performCardPayment() async {
-    const String username = "US5XSPK8w4W8dCHT9t7fUUYz";
-    const String password = "9cb05bbf-b768-4bb5-a680-48fee02e570c";
+    // const String username = "US5XSPK8w4W8dCHT9t7fUUYz";
+    // const String password = "9cb05bbf-b768-4bb5-a680-48fee02e570c";
     const String application = "Test";
     const String version = "1.0";
-    const String merchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
-    const String deviceID = "DVtQTgPQYgJVcnA4p8KE89gm";   // "DV9jHr66AG5bc5qorHDRPpMK";
+    // const String merchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
+    // const String deviceID = "DVtQTgPQYgJVcnA4p8KE89gm";   // "DV9jHr66AG5bc5qorHDRPpMK";
     final tags = {"Test": "Test", "order_number": "21DFASJSAKAS"};
     final values = {
-      "username": username,
-      "password": password,
+      "username": finixUsername,
+      "password": finixPassword,
       "application": application,
       "version": version,
-      "merchantId": merchantId,
-      "deviceID": deviceID,
+      "merchantId": finixMerchantId,
+      "deviceID": finixdeviceId,
       "amount": totalAmount,
       "tags": tags
     };
