@@ -1154,11 +1154,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     // const String deviceID = "DVtQTgPQYgJVcnA4p8KE89gm";   // "DV9jHr66AG5bc5qorHDRPpMK";
     final tags = {"Test": "Test", "order_number": "21DFASJSAKAS"};
 
-    // finixMerchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
-    // finixdeviceId = "DVtQTgPQYgJVcnA4p8KE89gm";
-    // finixUsername = "US5XSPK8w4W8dCHT9t7fUUYz";
-    // finixPassword = "9cb05bbf-b768-4bb5-a680-48fee02e570c";
-
     final values = {
       "username": finixUsername,
       "password": finixPassword,
