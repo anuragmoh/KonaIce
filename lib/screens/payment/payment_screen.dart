@@ -142,6 +142,10 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   _paymentSuccess(msg) async {
+/*    setState(() {
+      updatePaymentSuccess();
+      isPaymentDone = true;
+    });*/
     debugPrint("Payment Success: $msg");
   }
 
