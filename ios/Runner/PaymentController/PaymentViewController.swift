@@ -46,9 +46,7 @@ class PaymentViewController: UIViewController, ShowAlert {
     }
     
     func initializeSDK() {
-        
-        let serialNumber: String? = nil
-        
+                
         print("==========Payment Model: \(payment.debugDescription)==========")
         
         FINIXHELPER.initializeFinixSDK(environment: FinixPOS.Finix.Environment.TestCertification,
@@ -58,7 +56,7 @@ class PaymentViewController: UIViewController, ShowAlert {
                                        version: payment.version,
                                        merchantId: payment.merchantID,
                                        deviceID: payment.deviceID,
-                                       serialNumber: serialNumber)
+                                       serialNumber: payment.serialNumber)
     }
     
     func performSale() {
@@ -67,7 +65,7 @@ class PaymentViewController: UIViewController, ShowAlert {
                                 testTags: payment.tags)
     }
     
-    func showAlert(title: String, message: String) {
+    func showAlert(title: String, message: String, transactionModel: TransactionResponseModel? = nil) {
         
         DispatchQueue.main.async {
             
@@ -75,7 +73,14 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
                 
-                AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentFailed", arguments: [""])
+                if let transactionModel = transactionModel {
+                    
+                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [transactionModel])
+                    
+                } else {
+                    
+                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentFailed", arguments: [""])
+                }
                 
                 self.dismissView()
             }
@@ -250,8 +255,6 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
         
-        AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [saleResponseReceipt.debugDescription])
-        
-        self.dismissView()
+        showAlert(title: "Payment Success", message: saleResponseReceipt.debugDescription, transactionModel: saleResponseReceipt)
     }
 }
