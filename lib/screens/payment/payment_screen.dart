@@ -33,6 +33,7 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -72,6 +73,11 @@ class _PaymentScreenState extends State<PaymentScreen>
   bool isCardNumberValid = true;
   bool isExpiryValid = true;
   bool isCvcValid = true;
+  String finixMerchantId = StringExtension.empty();
+  String finixdeviceId = StringExtension.empty();
+  String finixerialNumber = StringExtension.empty();
+  String finixUsername = StringExtension.empty();
+  String finixPassword = StringExtension.empty();
 
   String _resultString = "";
   String cardNumber = "4111111111111111",
@@ -1120,8 +1126,16 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
       // scan();
+      getFinixdetailsValues();
       performCardPayment();
     }
+  }
+  Future<void> getFinixdetailsValues() async {
+    finixMerchantId = await FunctionalUtils.getFinixMerchantId();
+    finixdeviceId = await FunctionalUtils.getFinixDeviceId();
+    finixerialNumber = await FunctionalUtils.getFinixSerialNumber();
+    finixUsername = await FunctionalUtils.getFinixUserName();
+    finixPassword = await FunctionalUtils.getFinixPassword();
   }
 
   Future performCardPayment() async {
