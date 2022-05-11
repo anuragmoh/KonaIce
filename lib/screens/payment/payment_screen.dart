@@ -75,7 +75,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   bool isCvcValid = true;
   String finixMerchantId = StringExtension.empty();
   String finixdeviceId = StringExtension.empty();
-  String finixerialNumber = StringExtension.empty();
+  String finixSerialNumber = StringExtension.empty();
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
 
@@ -139,6 +139,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         _paymentFailed();
       }
     });
+
+    getFinixdetailsValues();
   }
 
   _paymentSuccess(msg) async {
@@ -1130,17 +1132,17 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
       // scan();
-      getFinixdetailsValues();
+      // getFinixdetailsValues();
       performCardPayment();
     }
   }
   Future<void> getFinixdetailsValues() async {
     finixMerchantId = await FunctionalUtils.getFinixMerchantId();
     finixdeviceId = await FunctionalUtils.getFinixDeviceId();
-    finixerialNumber = await FunctionalUtils.getFinixSerialNumber();
+    finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
-    debugPrint('>>>>>>>>>$finixMerchantId');
+    debugPrint('>>>>>>>>>$finixMerchantId, $finixdeviceId, $finixSerialNumber, $finixUsername, $finixPassword');
   }
 
   Future performCardPayment() async {
@@ -1151,6 +1153,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     // const String merchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
     // const String deviceID = "DVtQTgPQYgJVcnA4p8KE89gm";   // "DV9jHr66AG5bc5qorHDRPpMK";
     final tags = {"Test": "Test", "order_number": "21DFASJSAKAS"};
+
     final values = {
       "username": finixUsername,
       "password": finixPassword,
@@ -1159,6 +1162,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       "merchantId": finixMerchantId,
       "deviceID": finixdeviceId,
       "amount": totalAmount,
+      "serialNumber": finixSerialNumber,
       "tags": tags
     };
     await cardPaymentChannel.invokeListMethod('performCardPayment', values);

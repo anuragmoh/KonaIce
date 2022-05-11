@@ -26,6 +26,7 @@ import Flutter
                 let version = args["version"] as? String ?? ""
                 let merchantId = args["merchantId"] as? String ?? ""
                 let deviceID = args["deviceID"] as? String ?? ""
+                let serialNumber = args["serialNumber"] as? String ?? ""
                 let amount = args["amount"] as? Double ?? 0.0
                 let tags = args["tags"] as? [String: String] ?? [:]
                 
@@ -35,7 +36,7 @@ import Flutter
                                                  version: version,
                                                  deviceID: deviceID,
                                                  merchantID: merchantId,
-                                                 serialNumber: nil,
+                                                 serialNumber: serialNumber,
                                                  amount: amount,
                                                  tags:tags )
                 self.loadPaymentView(paymentModel)
