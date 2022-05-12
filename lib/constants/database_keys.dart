@@ -25,11 +25,11 @@ class DatabaseKeys {
   static const itemExtras = "itemextras";
   static const allOrders = "allOrders";
   static const adhocEvent = "adhocEvent";
-  static const merchantId="merchantId";
-  static const deviceId="deviceId";
-  static const finixSerialNumber="finixSerialNumber";
-  static const finixUsername="finixUsername";
-  static const finixPassword="finixPassword";
+  static const merchantId = "merchantId";
+  static const deviceId = "deviceId";
+  static const finixSerialNumber = "finixSerialNumber";
+  static const finixUsername = "finixUsername";
+  static const finixPassword = "finixPassword";
 
 //End
 }

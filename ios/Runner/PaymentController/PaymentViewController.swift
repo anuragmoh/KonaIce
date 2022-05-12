@@ -123,6 +123,8 @@ class PaymentViewController: UIViewController, ShowAlert {
         
         DispatchQueue.main.async {
             
+            AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentStatus", arguments: [animationName.rawValue])
+
             self.stopAnimationView()
             
             self.transactionAnimationView = AnimationView(name: animationName.rawValue)

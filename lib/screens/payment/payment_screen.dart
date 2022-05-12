@@ -137,6 +137,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         _paymentSuccess(call.arguments.toString());
       } else if (call.method == "paymentFailed") {
         _paymentFailed();
+      } else if (call.method == "paymentStatus") {
+        _paymentStatus(call.arguments.toString());
       }
     });
 
@@ -153,6 +155,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentFailed() async {
     debugPrint("Payment Failure");
+  }
+
+  _paymentStatus(status) async {
+    debugPrint("Payment Status: $status");
   }
 
   @override
@@ -1136,13 +1142,15 @@ class _PaymentScreenState extends State<PaymentScreen>
       performCardPayment();
     }
   }
+
   Future<void> getFinixdetailsValues() async {
     finixMerchantId = await FunctionalUtils.getFinixMerchantId();
     finixdeviceId = await FunctionalUtils.getFinixDeviceId();
     finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
-    debugPrint('>>>>>>>>>$finixMerchantId, $finixdeviceId, $finixSerialNumber, $finixUsername, $finixPassword');
+    debugPrint(
+        '>>>>>>>>>$finixMerchantId, $finixdeviceId, $finixSerialNumber, $finixUsername, $finixPassword');
   }
 
   Future performCardPayment() async {
