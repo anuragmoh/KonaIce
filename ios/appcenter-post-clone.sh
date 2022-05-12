@@ -12,7 +12,6 @@ export PATH=`pwd`/flutter/bin:$PATH
 
 flutter channel stable
 flutter doctor
-flutter clean
 
 echo "Installed flutter to `pwd`/flutter"
 
