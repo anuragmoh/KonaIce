@@ -23,6 +23,7 @@ import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
+import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
@@ -78,6 +79,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String finixSerialNumber = StringExtension.empty();
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
+  String paymentFailMessage=StringExtension.empty();
 
   String _resultString = "";
   String cardNumber = "4111111111111111",
@@ -155,6 +157,12 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentFailed() async {
     debugPrint("Payment Failure");
+    showDialog(
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return PaymentFailPopup(paymentFailMessage: paymentFailMessage);
+        });
   }
 
   _paymentStatus(status) async {
