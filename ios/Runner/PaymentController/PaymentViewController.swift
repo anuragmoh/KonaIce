@@ -49,6 +49,13 @@ class PaymentViewController: UIViewController, ShowAlert {
                 
         print("==========Payment Model: \(payment.debugDescription)==========")
         
+        var deviceSerialNumber: String? = nil
+        
+        if let serialNumber = payment.serialNumber, !serialNumber.isEmpty, serialNumber != "null" {
+            
+            deviceSerialNumber = serialNumber
+        }
+        
         FINIXHELPER.initializeFinixSDK(environment: FinixPOS.Finix.Environment.TestCertification,
                                        userName: payment.username,
                                        password: payment.password,
@@ -56,7 +63,7 @@ class PaymentViewController: UIViewController, ShowAlert {
                                        version: payment.version,
                                        merchantId: payment.merchantID,
                                        deviceID: payment.deviceID,
-                                       serialNumber: payment.serialNumber)
+                                       serialNumber: deviceSerialNumber)
     }
     
     func performSale() {
@@ -65,7 +72,7 @@ class PaymentViewController: UIViewController, ShowAlert {
                                 testTags: payment.tags)
     }
     
-    func showAlert(title: String, message: String, transactionModel: TransactionResponseModel? = nil) {
+    func showAlert(title: String, message: String, transactionModelString: String? = nil) {
         
         DispatchQueue.main.async {
             
@@ -73,9 +80,9 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             let okAction = UIAlertAction(title: "Ok", style: .default) { _ in
                 
-                if let transactionModel = transactionModel {
+                if let transactionModelString = transactionModelString {
                     
-                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [transactionModel])
+                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [transactionModelString])
                     
                 } else {
                     
@@ -116,6 +123,8 @@ class PaymentViewController: UIViewController, ShowAlert {
         
         DispatchQueue.main.async {
             
+            AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentStatus", arguments: [animationName.rawValue])
+
             self.stopAnimationView()
             
             self.transactionAnimationView = AnimationView(name: animationName.rawValue)
@@ -255,6 +264,6 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
         
-        showAlert(title: "Payment Success", message: saleResponseReceipt.debugDescription, transactionModel: saleResponseReceipt)
+        showAlert(title: "Payment Success", message: saleResponseReceipt.debugDescription, transactionModelString: saleResponseReceipt.debugDescription)
     }
 }
