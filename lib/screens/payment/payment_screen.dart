@@ -1284,6 +1284,14 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     return payOrderCardRequestModel;
   }
+  PayOrderRequestModel getPayOrderPosRequestModel() {
+    PayOrderRequestModel payOrderRequestModel = PayOrderRequestModel();
+    payOrderRequestModel.orderId = orderID;
+    payOrderRequestModel.paymentMethod = "CASH";
+    payOrderRequestModel.cardId = StringExtension.empty();
+
+    return payOrderRequestModel;
+  }
 
   //API call
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
