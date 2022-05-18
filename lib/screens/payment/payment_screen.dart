@@ -152,13 +152,16 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   _paymentSuccess(msg) async {
+
+    debugPrint("Payment Success: $msg");
+    
       setState(() {
       updatePaymentSuccess();
       isPaymentDone = true;
     });
+
       FinixResponse finixResponse=msg;
 
-    debugPrint("Payment Success: $msg");
       debugPrint("Payment Success: ${finixResponse.toString()}");
   }
 

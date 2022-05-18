@@ -26,13 +26,13 @@ struct FinixSaleReceipt: Codable {
     
     let merchantName, merchantAddress, applicationLabel, applicationIdentifier, merchantId, referenceNumber, accountNumber, cardBrand, entryMode, transactionId, approvalCode, responseCode, responseMessage, cryptogram, transactionType: String?
     
-    let date: Date?
+    let date: Double?
     
     init(receipt: SaleReceipt?) {
         
         merchantName = receipt?.merchantName ?? ""
         merchantAddress = receipt?.merchantAddress ?? ""
-        date = receipt?.date
+        date = receipt?.date.timeIntervalSince1970
         applicationLabel = receipt?.applicationLabel ?? ""
         applicationIdentifier = receipt?.applicationIdentifier ?? ""
         merchantId = receipt?.merchantId ?? ""
@@ -54,7 +54,7 @@ struct FinixSaleResponse: Codable {
     var transferId, traceId: String?
     var transferState: String?
     var amount: Double?
-    var created, updated: Date?
+    var created, updated: Double?
     var resourceTags: [String: String]?
     
     /// the entry mode
@@ -84,8 +84,8 @@ struct FinixSaleResponse: Codable {
         traceId = response.traceId
         transferState = self.getFinixTransferState(state: response.state)
         amount = Double(truncating: response.amount.decimal as NSNumber)
-        created = response.created
-        updated = response.updated
+        created = response.created.timeIntervalSince1970
+        updated = response.updated.timeIntervalSince1970
         resourceTags = response.tags
         entryMode = self.getFinixCardEntryMode(entryMode: response.card.entryMode!)
         maskedAccountNumber = response.card.maskedAccountNumber
