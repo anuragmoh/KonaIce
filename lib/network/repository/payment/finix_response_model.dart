@@ -10,144 +10,180 @@ String finixResponseToJson(FinixResponse data) => json.encode(data.toJson());
 
 class FinixResponse {
   FinixResponse({
+    this.finixSaleResponse,
+    this.finixSaleReceipt,
+  });
+
+  FinixSaleResponse? finixSaleResponse;
+  FinixSaleReceipt? finixSaleReceipt;
+
+  factory FinixResponse.fromJson(Map<String, dynamic> json) => FinixResponse(
+    finixSaleResponse: FinixSaleResponse.fromJson(json["finixSaleResponse"]),
+    finixSaleReceipt: FinixSaleReceipt.fromJson(json["finixSaleReceipt"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "finixSaleResponse": finixSaleResponse!.toJson(),
+    "finixSaleReceipt": finixSaleReceipt!.toJson(),
+  };
+}
+
+class FinixSaleReceipt {
+  FinixSaleReceipt({
+    this.cryptogram,
+    this.merchantId,
+    this.accountNumber,
+    this.referenceNumber,
+    this.applicationLabel,
+    this.entryMode,
+    this.approvalCode,
+    this.transactionId,
+    this.cardBrand,
     this.merchantName,
     this.merchantAddress,
-    this.applicationLabel,
-    this.applicationIdentifier,
-    this.merchantId,
-    this.referenceNumber,
-    this.accountNumber,
-    this.cardBrand,
-    this.entryMode,
-    this.transactionId,
-    this.approvalCode,
     this.responseCode,
-    this.responseMessage,
-    this.cryptogram,
     this.transactionType,
+    this.responseMessage,
+    this.applicationIdentifier,
     this.date,
+  });
+
+  String? cryptogram;
+  String? merchantId;
+  String? accountNumber;
+  String? referenceNumber;
+  String? applicationLabel;
+  String? entryMode;
+  String? approvalCode;
+  String? transactionId;
+  String? cardBrand;
+  String? merchantName;
+  String? merchantAddress;
+  String? responseCode;
+  String? transactionType;
+  String? responseMessage;
+  String? applicationIdentifier;
+  double? date;
+
+  factory FinixSaleReceipt.fromJson(Map<String, dynamic> json) => FinixSaleReceipt(
+    cryptogram: json["cryptogram"],
+    merchantId: json["merchantId"],
+    accountNumber: json["accountNumber"],
+    referenceNumber: json["referenceNumber"],
+    applicationLabel: json["applicationLabel"],
+    entryMode: json["entryMode"],
+    approvalCode: json["approvalCode"],
+    transactionId: json["transactionId"],
+    cardBrand: json["cardBrand"],
+    merchantName: json["merchantName"],
+    merchantAddress: json["merchantAddress"],
+    responseCode: json["responseCode"],
+    transactionType: json["transactionType"],
+    responseMessage: json["responseMessage"],
+    applicationIdentifier: json["applicationIdentifier"],
+    date: json["date"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "cryptogram": cryptogram,
+    "merchantId": merchantId,
+    "accountNumber": accountNumber,
+    "referenceNumber": referenceNumber,
+    "applicationLabel": applicationLabel,
+    "entryMode": entryMode,
+    "approvalCode": approvalCode,
+    "transactionId": transactionId,
+    "cardBrand": cardBrand,
+    "merchantName": merchantName,
+    "merchantAddress": merchantAddress,
+    "responseCode": responseCode,
+    "transactionType": transactionType,
+    "responseMessage": responseMessage,
+    "applicationIdentifier": applicationIdentifier,
+    "date": date,
+  };
+}
+
+class FinixSaleResponse {
+  FinixSaleResponse({
     this.transferId,
-    this.traceId,
-    this.transferState,
-    this.amount,
-    this.created,
     this.updated,
-    this.resourceTags,
-    this.maskedAccountNumber,
+    this.amount,
     this.cardLogo,
     this.cardHolderName,
     this.expirationMonth,
+    this.resourceTags,
+    this.entryMode,
+    this.maskedAccountNumber,
+    this.created,
+    this.traceId,
+    this.transferState,
     this.expirationYear,
   });
 
-  String? merchantName;
-  String? merchantAddress;
-  String? applicationLabel;
-  String? applicationIdentifier;
-  String? merchantId;
-  String? referenceNumber;
-  String? accountNumber;
-  String? cardBrand;
-  String? entryMode;
-  String? transactionId;
-  String? approvalCode;
-  String? responseCode;
-  String? responseMessage;
-  String? cryptogram;
-  String? transactionType;
-  String? date;
   String? transferId;
-  String? traceId;
-  String? transferState;
+  double? updated;
   double? amount;
-  String? created;
-  String? updated;
-  List<ResourceTag>? resourceTags;
-  String? maskedAccountNumber;
   String? cardLogo;
   String? cardHolderName;
   String? expirationMonth;
+  ResourceTags? resourceTags;
+  String? entryMode;
+  String? maskedAccountNumber;
+  double? created;
+  String? traceId;
+  String? transferState;
   String? expirationYear;
 
-  factory FinixResponse.fromJson(Map<String, dynamic> json) => FinixResponse(
-    merchantName: json["merchantName"],
-    merchantAddress: json["merchantAddress"],
-    applicationLabel: json["applicationLabel"],
-    applicationIdentifier: json["applicationIdentifier"],
-    merchantId: json["merchantId"],
-    referenceNumber: json["referenceNumber"],
-    accountNumber: json["accountNumber"],
-    cardBrand: json["cardBrand"],
-    entryMode: json["entryMode"],
-    transactionId: json["transactionId"],
-    approvalCode: json["approvalCode"],
-    responseCode: json["responseCode"],
-    responseMessage: json["responseMessage"],
-    cryptogram: json["cryptogram"],
-    transactionType: json["transactionType"],
-    date: json["date"].toString(),
+  factory FinixSaleResponse.fromJson(Map<String, dynamic> json) => FinixSaleResponse(
     transferId: json["transferId"],
-    traceId: json["traceId"],
-    transferState: json["transferState"],
+    updated: json["updated"].toDouble(),
     amount: json["amount"],
-    created: json["created"].toString(),
-    updated: json["updated"].toString(),
-    resourceTags: List<ResourceTag>.from(json["resourceTags"].map((x) => ResourceTag.fromJson(x))),
-    maskedAccountNumber: json["maskedAccountNumber"],
     cardLogo: json["cardLogo"],
     cardHolderName: json["cardHolderName"],
     expirationMonth: json["expirationMonth"],
+    resourceTags: ResourceTags.fromJson(json["resourceTags"]),
+    entryMode: json["entryMode"],
+    maskedAccountNumber: json["maskedAccountNumber"],
+    created: json["created"].toDouble(),
+    traceId: json["traceId"],
+    transferState: json["transferState"],
     expirationYear: json["expirationYear"],
   );
 
   Map<String, dynamic> toJson() => {
-    "merchantName": merchantName,
-    "merchantAddress": merchantAddress,
-    "applicationLabel": applicationLabel,
-    "applicationIdentifier": applicationIdentifier,
-    "merchantId": merchantId,
-    "referenceNumber": referenceNumber,
-    "accountNumber": accountNumber,
-    "cardBrand": cardBrand,
-    "entryMode": entryMode,
-    "transactionId": transactionId,
-    "approvalCode": approvalCode,
-    "responseCode": responseCode,
-    "responseMessage": responseMessage,
-    "cryptogram": cryptogram,
-    "transactionType": transactionType,
-    "date": date,
     "transferId": transferId,
-    "traceId": traceId,
-    "transferState": transferState,
-    "amount": amount,
-    "created": created,
     "updated": updated,
-    "resourceTags": List<dynamic>.from(resourceTags!.map((x) => x.toJson())),
-    "maskedAccountNumber": maskedAccountNumber,
+    "amount": amount,
     "cardLogo": cardLogo,
     "cardHolderName": cardHolderName,
     "expirationMonth": expirationMonth,
+    "resourceTags": resourceTags!.toJson(),
+    "entryMode": entryMode,
+    "maskedAccountNumber": maskedAccountNumber,
+    "created": created,
+    "traceId": traceId,
+    "transferState": transferState,
     "expirationYear": expirationYear,
   };
 }
 
-class ResourceTag {
-  ResourceTag({
-    this.orderNumber,
+class ResourceTags {
+  ResourceTags({
     this.test,
+    this.orderNumber,
   });
 
-  String? orderNumber;
   String? test;
+  String? orderNumber;
 
-  factory ResourceTag.fromJson(Map<String, dynamic> json) => ResourceTag(
-    orderNumber: json["order_number"],
+  factory ResourceTags.fromJson(Map<String, dynamic> json) => ResourceTags(
     test: json["Test"],
+    orderNumber: json["order_number"],
   );
 
   Map<String, dynamic> toJson() => {
-    "order_number": orderNumber,
     "Test": test,
+    "order_number": orderNumber,
   };
 }
