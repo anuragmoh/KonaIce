@@ -160,8 +160,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       isPaymentDone = true;
     });
 
-      FinixResponse finixResponse=msg;
-
+      FinixResponse finixResponse=finixResponseFromJson(msg);
       debugPrint("Payment Success: ${finixResponse.toString()}");
   }
 

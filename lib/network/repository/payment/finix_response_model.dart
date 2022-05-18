@@ -63,7 +63,7 @@ class FinixSaleReceipt {
   String? transactionType;
   String? responseMessage;
   String? applicationIdentifier;
-  double? date;
+  dynamic date;
 
   factory FinixSaleReceipt.fromJson(Map<String, dynamic> json) => FinixSaleReceipt(
     cryptogram: json["cryptogram"],
@@ -123,7 +123,7 @@ class FinixSaleResponse {
 
   String? transferId;
   double? updated;
-  double? amount;
+  dynamic amount;
   String? cardLogo;
   String? cardHolderName;
   String? expirationMonth;
@@ -187,3 +187,4 @@ class ResourceTags {
     "order_number": orderNumber,
   };
 }
+
