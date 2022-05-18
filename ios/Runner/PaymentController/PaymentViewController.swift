@@ -257,7 +257,7 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Sale Response Failed with error : \(error)==========")
         
-        showAlert(title: "Error", message: error.localizedDescription)
+        showAlert(title: "Error", message: "\(error)")
     }
     
     func saleResponseSuccess(saleResponseReceipt: TransactionResponseModel?) {
