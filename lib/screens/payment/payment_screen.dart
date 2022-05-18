@@ -18,6 +18,7 @@ import 'package:kona_ice_pos/models/network_model/order_model/order_response_mod
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
+import 'package:kona_ice_pos/network/repository/payment/finix_response_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
@@ -152,7 +153,10 @@ class _PaymentScreenState extends State<PaymentScreen>
       updatePaymentSuccess();
       isPaymentDone = true;
     });
+      FinixResponse finixResponse=msg;
+
     debugPrint("Payment Success: $msg");
+      debugPrint("Payment Success: ${finixResponse.toString()}");
   }
 
   _paymentFailed() async {
