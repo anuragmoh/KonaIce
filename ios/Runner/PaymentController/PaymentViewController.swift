@@ -82,7 +82,7 @@ class PaymentViewController: UIViewController, ShowAlert {
                 
                 if let transactionModelString = transactionModelString {
                     
-                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: [transactionModelString])
+                    AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: transactionModelString)
                     
                 } else {
                     
