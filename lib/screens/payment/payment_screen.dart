@@ -26,6 +26,7 @@ import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
+import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
@@ -80,6 +81,8 @@ class _PaymentScreenState extends State<PaymentScreen>
   String demoCardNumber = "";
   String _fullDocumentFirstImageBase64 = "";
   String _fullDocumentSecondImageBase64 = "";
+  String userEmail=StringExtension.empty();
+  String userMobileNumber=StringExtension.empty();
 
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -1096,6 +1099,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   //Action Event
 
   onTapPaymentMode(int index) {
+    getEmailIdPhoneNumber();
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
@@ -1118,6 +1122,13 @@ class _PaymentScreenState extends State<PaymentScreen>
     if (paymentModeType == PaymentModeConstants.creditCard) {
       // scan();
     }
+  }
+  getEmailIdPhoneNumber() async {
+    userEmail = await FunctionalUtils.getUserEmailId();
+    userMobileNumber=await FunctionalUtils.getUserPhoneNumber();
+    emailController.text = userEmail;
+    phoneNumberController.text = userMobileNumber;
+
   }
 
 /*  Widget showCustomMenuPopup() {
