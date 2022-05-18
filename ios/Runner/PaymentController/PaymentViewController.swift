@@ -264,6 +264,16 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
         
-        showAlert(title: "Payment Success", message: saleResponseReceipt.debugDescription, transactionModelString: saleResponseReceipt.debugDescription)
+        let jsonEncoder = JSONEncoder()
+        
+        if let jsonData = try? jsonEncoder.encode(saleResponseReceipt) {
+            
+            if let content = String(data: jsonData, encoding: String.Encoding.utf8) {
+                
+                print("==========Sale Response Json String: \(content)")
+                
+                showAlert(title: "Payment Success", message: content, transactionModelString: content)
+            }
+        }
     }
 }
