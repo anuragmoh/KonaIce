@@ -48,11 +48,11 @@ class PaymentScreen extends StatefulWidget {
 
   const PaymentScreen(
       {Key? key,
-      required this.events,
-      required this.selectedMenuItems,
-      required this.placeOrderRequestModel,
-      required this.billDetails,
-      required this.userName})
+        required this.events,
+        required this.selectedMenuItems,
+        required this.placeOrderRequestModel,
+        required this.billDetails,
+        required this.userName})
       : super(key: key);
 
   @override
@@ -500,6 +500,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
+
         onTap: () {
           onTapPaymentMode(index);
         },
@@ -1135,7 +1136,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   //Action Event
 
   onTapPaymentMode(int index) {
-    getEmailIdPhoneNumber();
+
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
@@ -1159,12 +1160,17 @@ class _PaymentScreenState extends State<PaymentScreen>
       // getFinixdetailsValues();
       performCardPayment();
     }
+    getEmailIdPhoneNumber();
   }
-  getEmailIdPhoneNumber() async {
-    userEmail = await FunctionalUtils.getUserEmailId();
-    userMobileNumber=await FunctionalUtils.getUserPhoneNumber();
-    emailController.text = userEmail;
-    phoneNumberController.text = userMobileNumber;
+  getEmailIdPhoneNumber()  {
+    setState(() {
+      emailController.text=widget.placeOrderRequestModel.email ??
+          StringExtension.empty();
+      debugPrint("?????????????????${widget.placeOrderRequestModel.email}");
+      phoneNumberController.text = widget.placeOrderRequestModel.getPhoneNumber();
+      debugPrint("?????????????????${widget.placeOrderRequestModel.email}");
+    });
+
 
   }
 
