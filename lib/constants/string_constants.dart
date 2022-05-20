@@ -215,7 +215,6 @@ class StringConstants {
 
   //Enter Tip Amount
   static const enterTip = "Enter Tip Amount.";
-  static const enterValidTip = "Enter Valid Tip Amount.";
 
   //all Order status
   static const paymentStatusSuccess = "SUCCESS";

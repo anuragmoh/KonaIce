@@ -89,7 +89,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               hintText: StringConstants.enterAmount,
-              errorText: isValidTip ? "" : StringConstants.enterValidTip,
+              errorText: isValidTip ? "" : StringConstants.enterTip,
               hintStyle: StyleConstants.customTextStyle(
                   fontSize: 12,
                   color: getMaterialColor(AppColors.textColor2),
@@ -173,11 +173,11 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   onTapAddButton() {
     //debugPrint("Tip from dialog ${tipController.text.toString()}");
     setState(() {
-      isValidTip = tipController.text.isEmpty && int.parse(tipController.text.toString()) < 0 ? false : true;
+      isValidTip = tipController.text.isEmpty ? false : true;
     });
-    if (tipController.text.isNotEmpty && int.parse(tipController.text.toString()) > 0) {
+    if (tipController.text.isNotEmpty) {
       widget.callBack(double.parse(
-          tipController.text.isEmpty && int.parse(tipController.text.toString()) < 0 ? '0.0' : tipController.text.toString()));
+          tipController.text.isEmpty ? '0.0' : tipController.text.toString()));
       Navigator.of(context).pop();
     } else {
       setState(() {
