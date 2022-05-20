@@ -1208,11 +1208,11 @@ class _EventMenuScreenState extends State<EventMenuScreen> implements
   }
 
   onCompleteTextFieldEditing() {
-    String tipText = addTipTextFieldController.text;
-    updateTipToCustomer(tipText.toString());
+    String tipText = int.parse(addTipTextFieldController.text.toString()) < 0 ? '0.0':addTipTextFieldController.text;
+    updateTipToCustomer(int.parse(addTipTextFieldController.text.toString()) > 0 ? tipText.toString():'0.0');
     String discountText = addDiscountTextFieldController.text;
     setState(() {
-      tip = double.parse(tipText.isEmpty ? '0.0' : tipText);
+      tip = double.parse(tipText.isEmpty && int.parse(addTipTextFieldController.text.toString()) < 0 ? '0.0' : tipText);
       discount = double.parse(discountText.isEmpty ? '0.0' : discountText);
     });
     FocusScope.of(context).unfocus();
