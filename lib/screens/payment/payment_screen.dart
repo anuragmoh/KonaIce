@@ -1160,6 +1160,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       performCardPayment();
     }
     getEmailIdPhoneNumber();
+    getApiCallPayReceipt();
   }
   getEmailIdPhoneNumber()  {
     setState(() {
@@ -1722,7 +1723,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       isApiProcess = true;
     });
-    // orderPresenter.finixReceipt(payReceiptModel);
+    orderPresenter.finixReceipt(payReceiptModel);
     return payReceiptModel;
   }
 }
