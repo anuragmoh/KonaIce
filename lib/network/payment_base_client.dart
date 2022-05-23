@@ -21,10 +21,11 @@ class PaymentBaseClient {
     var uri = Uri.parse(UrlConstants.paymentBaseUrl + api);
     debugPrint(uri.toString());
     final body = {
-      "card[number]":"4111111111111111",
-      "card[cvc]":"123",
-      "card[exp_month]":"12",
-      "card[exp_year]":"22"};
+      "card[number]": "4111111111111111",
+      "card[cvc]": "123",
+      "card[exp_month]": "12",
+      "card[exp_year]": "22"
+    };
 
     var payload = json.encode(payloadObj);
 
@@ -36,7 +37,7 @@ class PaymentBaseClient {
           .post(
             uri,
             headers: header,
-            body:payloadObj,
+            body: payloadObj,
             encoding: Encoding.getByName("utf-8"),
           )
           .timeout(const Duration(seconds: timeOutDuration));

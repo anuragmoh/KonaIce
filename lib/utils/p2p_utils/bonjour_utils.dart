@@ -19,31 +19,31 @@ abstract class P2PContractor {
 }
 
 class P2PConnectionManager {
-
   P2PConnectionManager._privateConstructor();
   late P2PContractor _view;
 
-  static final P2PConnectionManager shared = P2PConnectionManager
-      ._privateConstructor();
+  static final P2PConnectionManager shared =
+      P2PConnectionManager._privateConstructor();
 
   late NearbyService nearbyService;
   late StreamSubscription subscription;
   late StreamSubscription receivedDataSubscription;
   bool isServiceStarted = false;
   Device? connectedDevice;
-  String userName= "";
+  String userName = "";
 
   getP2PContractor(P2PContractor view) {
-    _view = view ;
+    _view = view;
   }
 
   startService({required bool isStaffView}) async {
     nearbyService = NearbyService();
     String userID = await FunctionalUtils.getUserID();
-     userName = await FunctionalUtils.getUserName();
+    userName = await FunctionalUtils.getUserName();
     isServiceStarted = true;
 
-    await nearbyService.init(serviceType: "kona-connection",
+    await nearbyService.init(
+        serviceType: "kona-connection",
         deviceName: userName,
         strategy: Strategy.P2P_POINT_TO_POINT,
         callback: (isRunning) async {
@@ -62,19 +62,16 @@ class P2PConnectionManager {
               getDeviceListAtCustomer();
             }
           }
-        }
-    );
+        });
 
     configureDataSubscription();
-
   }
 
   Future<List<Device>> getDeviceList(Function sentBackValue) async {
     List<Device> devices = [];
-    subscription = nearbyService.stateChangedSubscription(callback: (devicesList) {
+    subscription =
+        nearbyService.stateChangedSubscription(callback: (devicesList) {
       for (var element in devicesList) {
-
-
         if (Platform.isAndroid) {
           if (element.state == SessionState.connected) {
             nearbyService.stopBrowsingForPeers();
@@ -84,8 +81,12 @@ class P2PConnectionManager {
         }
       }
       devices.clear();
-      devices.addAll(devicesList.where((element) => element.deviceName == userName).toList());
-      var connectedDevices = devices.where((device) => device.state == SessionState.connected).toList();
+      devices.addAll(devicesList
+          .where((element) => element.deviceName == userName)
+          .toList());
+      var connectedDevices = devices
+          .where((device) => device.state == SessionState.connected)
+          .toList();
       if (connectedDevices.isNotEmpty) {
         setConnectedDevice(connectedDevices[0]);
       }
@@ -101,13 +102,14 @@ class P2PConnectionManager {
   configureDataSubscription() {
     receivedDataSubscription =
         nearbyService.dataReceivedSubscription(callback: (data) {
-          if (data != null) {
-            var dataObjectEncoded = jsonEncode(data);
-            Map<String, dynamic> dataObject = json.decode(dataObjectEncoded);
-            P2PDataModel dataObjectP2P = p2PDataModelFromJson(dataObject['message']);
-            _receivedData(dataObjectP2P);
-          }
-  });
+      if (data != null) {
+        var dataObjectEncoded = jsonEncode(data);
+        Map<String, dynamic> dataObject = json.decode(dataObjectEncoded);
+        P2PDataModel dataObjectP2P =
+            p2PDataModelFromJson(dataObject['message']);
+        _receivedData(dataObjectP2P);
+      }
+    });
   }
 
   setConnectedDevice(Device device) {
@@ -131,9 +133,9 @@ class P2PConnectionManager {
     }
   }
 
-
   _sendData(String text) {
-    if (connectedDevice != null && connectedDevice!.state == SessionState.connected) {
+    if (connectedDevice != null &&
+        connectedDevice!.state == SessionState.connected) {
       nearbyService.sendMessage(connectedDevice!.deviceId, text);
       debugPrint("-----------data sent-------------------");
     } else {
@@ -146,8 +148,10 @@ class P2PConnectionManager {
   }
 
   _receivedData(P2PDataModel data) async {
-    var selectedMode = await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
-    bool isStaffView = (selectedMode != null && selectedMode.value == StringConstants.staffMode);
+    var selectedMode =
+        await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
+    bool isStaffView = (selectedMode != null &&
+        selectedMode.value == StringConstants.staffMode);
 
     if (isStaffView) {
       dataReceivedAtStaff(data);
@@ -156,10 +160,11 @@ class P2PConnectionManager {
     }
   }
 
-
   updateData({required String action, String data = ''}) async {
-    var selectedMode = await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
-    bool isStaffView = (selectedMode != null && selectedMode.value == StringConstants.staffMode);
+    var selectedMode =
+        await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
+    bool isStaffView = (selectedMode != null &&
+        selectedMode.value == StringConstants.staffMode);
 
     if (isStaffView) {
       notifyChangeToCustomer(action: action, data: data);
@@ -170,42 +175,36 @@ class P2PConnectionManager {
 
   updateDataWithObject({required String action, required dynamic dataObject}) {
     String dataStr = StringExtension.empty();
-     if (action == StaffActionConst.orderModelUpdated) {
-       P2POrderDetailsModel model = dataObject as P2POrderDetailsModel ;
-       dataStr = p2POrderDetailsModelToJson(model);
-     }else if(action == StaffActionConst.customerCardScan){
-       P2PCardDetailsModel model = dataObject as P2PCardDetailsModel;
-       dataStr = p2PCardDetailsModelToJson(model);
-     }
+    if (action == StaffActionConst.orderModelUpdated) {
+      P2POrderDetailsModel model = dataObject as P2POrderDetailsModel;
+      dataStr = p2POrderDetailsModelToJson(model);
+    } else if (action == StaffActionConst.customerCardScan) {
+      P2PCardDetailsModel model = dataObject as P2PCardDetailsModel;
+      dataStr = p2PCardDetailsModelToJson(model);
+    }
 
-     updateData(action: action, data: dataStr);
-
+    updateData(action: action, data: dataStr);
   }
 
-
   notifyChangeToCustomer({required String action, required String data}) {
-    P2PDataModel dataObject =  P2PDataModel(action: action, data: data);
+    P2PDataModel dataObject = P2PDataModel(action: action, data: data);
     String dataInStr = p2PDataModelToJson(dataObject);
     _sendData(dataInStr);
   }
 
   notifyChangeToStaff({required String action, required String data}) {
-    P2PDataModel dataObject =  P2PDataModel(action: action, data: data);
+    P2PDataModel dataObject = P2PDataModel(action: action, data: data);
     String dataInStr = p2PDataModelToJson(dataObject);
 
     _sendData(dataInStr);
   }
 
-
   //Received Data
   dataReceivedAtCustomer(P2PDataModel data) {
-
-      _view.receivedDataFromP2P(data);
+    _view.receivedDataFromP2P(data);
   }
 
   dataReceivedAtStaff(P2PDataModel data) {
-     _view.receivedDataFromP2P(data);
+    _view.receivedDataFromP2P(data);
   }
-
-
 }

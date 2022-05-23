@@ -26,6 +26,7 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
+
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
 
@@ -104,7 +105,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         child: Dialog(
           //backgroundColor: Colors.transparent,
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: mainUI(),
         ));
   }
@@ -158,276 +159,276 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   }
 
   Widget eventName() => Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      CommonWidgets().textView(
-          StringConstants.name,
-          StyleConstants.customTextStyle(
-              fontSize: 14.0,
-              color: AppColors.textColor2,
-              fontFamily: FontConstants.montserratRegular)),
-      const SizedBox(height: 5.0),
-      TextField(
-        controller: eventNameController,
-        keyboardType: TextInputType.name,
-        decoration: InputDecoration(
-          hintText: StringConstants.enterName,
-          errorText:
-          isValidEventName ? null : StringConstants.emptyEventName,
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.denotiveColor4),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.denotiveColor4),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.denotiveColor4),
-          ),
-        ),
-      ),
-    ],
-  );
-
-  Widget address() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20.0),
-        CommonWidgets().textView(
-            StringConstants.address,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: AppColors.textColor2,
-                fontFamily: FontConstants.montserratRegular)),
-        const SizedBox(height: 5.0),
-        GestureDetector(
-          onTap: () {
-            googlePlaces();
-          },
-          child: TextField(
-            scrollPhysics: const ScrollPhysics(),
-            enabled: zipCodeController.text.isEmpty ? true : false,
-            controller: addressController,
-            keyboardType: TextInputType.streetAddress,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommonWidgets().textView(
+              StringConstants.name,
+              StyleConstants.customTextStyle(
+                  fontSize: 14.0,
+                  color: AppColors.textColor2,
+                  fontFamily: FontConstants.montserratRegular)),
+          const SizedBox(height: 5.0),
+          TextField(
+            controller: eventNameController,
+            keyboardType: TextInputType.name,
             decoration: InputDecoration(
-              hintText: StringConstants.enterAddress,
-              errorStyle: const TextStyle(color: Colors.red),
+              hintText: StringConstants.enterName,
               errorText:
-              isValidAddress ? null : StringConstants.emptyAddress,
+                  isValidEventName ? null : StringConstants.emptyEventName,
               border: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColor2),
+                borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
               enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColor2),
+                borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.textColor2),
+                borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
             ),
           ),
-        )
-      ]);
+        ],
+      );
+
+  Widget address() => Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20.0),
+            CommonWidgets().textView(
+                StringConstants.address,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: AppColors.textColor2,
+                    fontFamily: FontConstants.montserratRegular)),
+            const SizedBox(height: 5.0),
+            GestureDetector(
+              onTap: () {
+                googlePlaces();
+              },
+              child: TextField(
+                scrollPhysics: const ScrollPhysics(),
+                enabled: zipCodeController.text.isEmpty ? true : false,
+                controller: addressController,
+                keyboardType: TextInputType.streetAddress,
+                decoration: InputDecoration(
+                  hintText: StringConstants.enterAddress,
+                  errorStyle: const TextStyle(color: Colors.red),
+                  errorText:
+                      isValidAddress ? null : StringConstants.emptyAddress,
+                  border: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.textColor2),
+                  ),
+                  enabledBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.textColor2),
+                  ),
+                  focusedBorder: const OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.textColor2),
+                  ),
+                ),
+              ),
+            )
+          ]);
 
   Widget city() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20.0),
-        CommonWidgets().textView(
-            StringConstants.city,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: AppColors.textColor2,
-                fontFamily: FontConstants.montserratRegular)),
-        const SizedBox(height: 5.0),
-        TextField(
-          enabled: false,
-          controller: cityController,
-          keyboardType: TextInputType.streetAddress,
-          decoration: InputDecoration(
-            enabled: cityController.text.isEmpty ? true : false,
-            hintText: StringConstants.enterCity,
-            errorStyle: const TextStyle(color: Colors.red),
-            errorText: isValidCity ? null : StringConstants.emptyCity,
-            border: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textColor2),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textColor2),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textColor2),
-            ),
-          ),
-        )
-      ]);
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20.0),
+            CommonWidgets().textView(
+                StringConstants.city,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: AppColors.textColor2,
+                    fontFamily: FontConstants.montserratRegular)),
+            const SizedBox(height: 5.0),
+            TextField(
+              enabled: false,
+              controller: cityController,
+              keyboardType: TextInputType.streetAddress,
+              decoration: InputDecoration(
+                enabled: cityController.text.isEmpty ? true : false,
+                hintText: StringConstants.enterCity,
+                errorStyle: const TextStyle(color: Colors.red),
+                errorText: isValidCity ? null : StringConstants.emptyCity,
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.textColor2),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.textColor2),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.textColor2),
+                ),
+              ),
+            )
+          ]);
 
   Widget state() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20.0),
-        CommonWidgets().textView(
-            StringConstants.state,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: AppColors.textColor2,
-                fontFamily: FontConstants.montserratRegular)),
-        const SizedBox(height: 5.0),
-        TextField(
-          controller: stateController,
-          keyboardType: TextInputType.streetAddress,
-          decoration: InputDecoration(
-            enabled: stateController.text.isEmpty ? true : false,
-            hintText: StringConstants.enterState,
-            errorStyle: const TextStyle(color: Colors.red),
-            errorText: isValidState ? null : StringConstants.emptyState,
-            border: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textColor2),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textColor2),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.textColor2),
-            ),
-          ),
-        )
-      ]);
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20.0),
+            CommonWidgets().textView(
+                StringConstants.state,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: AppColors.textColor2,
+                    fontFamily: FontConstants.montserratRegular)),
+            const SizedBox(height: 5.0),
+            TextField(
+              controller: stateController,
+              keyboardType: TextInputType.streetAddress,
+              decoration: InputDecoration(
+                enabled: stateController.text.isEmpty ? true : false,
+                hintText: StringConstants.enterState,
+                errorStyle: const TextStyle(color: Colors.red),
+                errorText: isValidState ? null : StringConstants.emptyState,
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.textColor2),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.textColor2),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.textColor2),
+                ),
+              ),
+            )
+          ]);
 
   Widget zipCode() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20.0),
-        CommonWidgets().textView(
-            StringConstants.zipCode,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: AppColors.textColor2,
-                fontFamily: FontConstants.montserratRegular)),
-        const SizedBox(height: 5.0),
-        TextField(
-          controller: zipCodeController,
-          enabled: zipCodeController.text.isEmpty ? true : false,
-          keyboardType: TextInputType.number,
-          maxLength: 5,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: InputDecoration(
-            hintText: StringConstants.enterZipCode,
-            counterText: "",
-            errorStyle: const TextStyle(color: Colors.red),
-            errorText: isValidZipCode ? null : StringConstants.emptyZipCode,
-            border: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.denotiveColor4),
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.denotiveColor4),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.denotiveColor4),
-            ),
-          ),
-        )
-      ]);
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20.0),
+            CommonWidgets().textView(
+                StringConstants.zipCode,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: AppColors.textColor2,
+                    fontFamily: FontConstants.montserratRegular)),
+            const SizedBox(height: 5.0),
+            TextField(
+              controller: zipCodeController,
+              enabled: zipCodeController.text.isEmpty ? true : false,
+              keyboardType: TextInputType.number,
+              maxLength: 5,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              decoration: InputDecoration(
+                hintText: StringConstants.enterZipCode,
+                counterText: "",
+                errorStyle: const TextStyle(color: Colors.red),
+                errorText: isValidZipCode ? null : StringConstants.emptyZipCode,
+                border: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.denotiveColor4),
+                ),
+                enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.denotiveColor4),
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.denotiveColor4),
+                ),
+              ),
+            )
+          ]);
 
   Widget dropDown() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20.0),
-        CommonWidgets().textView(
-            StringConstants.equipment,
-            StyleConstants.customTextStyle(
-                fontSize: 14.0,
-                color: AppColors.denotiveColor4,
-                fontFamily: FontConstants.montserratRegular)),
-        const SizedBox(height: 5.0),
-        Container(
-            width: MediaQuery.of(context).size.width,
-            height: 60.0,
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: isAssetSelected
-                        ? AppColors.denotiveColor4
-                        : AppColors.textColor5,
-                    width: 1.0),
-                borderRadius: BorderRadius.circular(5.0)),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  equipmentDropDown(),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20.0),
+            CommonWidgets().textView(
+                StringConstants.equipment,
+                StyleConstants.customTextStyle(
+                    fontSize: 14.0,
+                    color: AppColors.denotiveColor4,
+                    fontFamily: FontConstants.montserratRegular)),
+            const SizedBox(height: 5.0),
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: 60.0,
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: isAssetSelected
+                            ? AppColors.denotiveColor4
+                            : AppColors.textColor5,
+                        width: 1.0),
+                    borderRadius: BorderRadius.circular(5.0)),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      equipmentDropDown(),
 /*                      const Padding(
                         padding: EdgeInsets.only(right: 16.0),
                         child: Icon(Icons.arrow_drop_down_sharp, size: 20.0),
                       )*/
-                ],
-              ),
-            )),
+                    ],
+                  ),
+                )),
 
-        // Error Message
-        Visibility(
-          visible: !isAssetSelected,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0, left: 12.0),
-            child: CommonWidgets().textView(
-                StringConstants.selectEquipments,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: AppColors.textColor5,
-                    fontFamily: FontConstants.montserratRegular)),
-          ),
-        ),
-      ]);
+            // Error Message
+            Visibility(
+              visible: !isAssetSelected,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 12.0),
+                child: CommonWidgets().textView(
+                    StringConstants.selectEquipments,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: AppColors.textColor5,
+                        fontFamily: FontConstants.montserratRegular)),
+              ),
+            ),
+          ]);
 
   Widget equipmentDropDown() => DropdownButton(
-    hint: const Text(StringConstants.selectEquipment),
-    isDense: true,
-    underline: Container(),
-    iconSize: 20.0,
-    menuMaxHeight: 300.0,
-    items: assetList.map((item) {
-      return DropdownMenuItem(
-        child: SizedBox(
-          //width: MediaQuery.of(context).size.width * 0.35,
-            child: Padding(
+        hint: const Text(StringConstants.selectEquipment),
+        isDense: true,
+        underline: Container(),
+        iconSize: 20.0,
+        menuMaxHeight: 300.0,
+        items: assetList.map((item) {
+          return DropdownMenuItem(
+            child: SizedBox(
+                //width: MediaQuery.of(context).size.width * 0.35,
+                child: Padding(
               padding: const EdgeInsets.only(right: 230.0),
               child: Text(item.assetName!),
             )),
-        value: item.id.toString(),
+            value: item.id.toString(),
+          );
+        }).toList(),
+        onChanged: (newVal) {
+          setState(() {
+            _selectedAsset = newVal;
+          });
+        },
+        value: _selectedAsset,
       );
-    }).toList(),
-    onChanged: (newVal) {
-      setState(() {
-        _selectedAsset = newVal;
-      });
-    },
-    value: _selectedAsset,
-  );
 
   Widget createButton() => GestureDetector(
-    onTap: onTapCreate,
-    child: Container(
-      width: MediaQuery.of(context).size.width,
-      height: 40.0,
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-          color: AppColors.primaryColor2),
-      child: Center(
-          child: Text(
+        onTap: onTapCreate,
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 40.0,
+          decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              color: AppColors.primaryColor2),
+          child: Center(
+              child: Text(
             StringConstants.create,
             style: StyleConstants.customTextStyle(
                 fontSize: 16.0,
                 color: AppColors.textColor1,
                 fontFamily: FontConstants.montserratBold),
           )),
-    ),
-  );
+        ),
+      );
 
   onTapCreate() {
     CheckConnection().connectionState().then((value) {
@@ -614,7 +615,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );
     PlacesDetailsResponse detail =
-    await _places.getDetailsByPlaceId(p.placeId.toString());
+        await _places.getDetailsByPlaceId(p.placeId.toString());
 
     setState(() {
       lat = detail.result.geometry!.location.lat;
@@ -630,8 +631,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     for (int i = 0; i < detail.result.addressComponents.length; i++) {
       try {
         for (int j = 0;
-        j < detail.result.addressComponents[i].types.length;
-        i++) {
+            j < detail.result.addressComponents[i].types.length;
+            i++) {
           if (detail.result.addressComponents[i].types[j] == "route") {
             setState(() {
               String route = detail.result.addressComponents[i].longName;
@@ -719,14 +720,15 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   _getCurrentLocation() {
     debugPrint("Get current location call");
     Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low,
-        forceAndroidLocationManager: true)
+            desiredAccuracy: LocationAccuracy.low,
+            forceAndroidLocationManager: true)
         .then((Position position) {
       debugPrint("Position $position");
       setState(() {
         _currentPosition = position;
         _getAddressFromLatLng();
-        getAddressFromLatLng(context,_currentPosition.latitude,_currentPosition.longitude);
+        getAddressFromLatLng(
+            context, _currentPosition.latitude, _currentPosition.longitude);
       });
     }).catchError((e) {
       debugPrint("Catch error $e");
@@ -761,23 +763,23 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       debugPrint("$e");
     }
   }
-
 }
 
 getAddressFromLatLng(context, double lat, double lng) async {
   String _host = 'https://maps.google.com/maps/api/geocode/json';
-  final url = '$_host?key=${GoogleMapKey.googleMapKey}&language=en&latlng=$lat,$lng';
-  if(lat != null && lng != null){
+  final url =
+      '$_host?key=${GoogleMapKey.googleMapKey}&language=en&latlng=$lat,$lng';
+  if (lat != null && lng != null) {
     var response = await http.get(Uri.parse(url));
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       Map data = jsonDecode(response.body);
       String _formattedAddress = data["results"][0]["formatted_address"];
       print("response ==== $data");
       debugPrint('URL===>$url');
       debugPrint(data["results"][0]["address_components"][6]['long_name']);
       return _formattedAddress;
-    } else return null;
-  } else return null;
+    } else
+      return null;
+  } else
+    return null;
 }
-
-

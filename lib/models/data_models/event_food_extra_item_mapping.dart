@@ -1,4 +1,4 @@
-class EventFoodExtraItemMapping{
+class EventFoodExtraItemMapping {
   final String id;
   final String eventItemId;
   final String eventId;
@@ -16,23 +16,21 @@ class EventFoodExtraItemMapping{
   final int sequence;
 
   EventFoodExtraItemMapping(
-      {
-        required this.id,
-        required this.eventItemId,
-        required this.eventId,
-        required this.itemCategoryId,
-        required this.itemId,
-        required this.foodExtraCategoryId,
-        required this.foodExtraItemId,
-        required this.activated,
-        required this.createdBy,
-        required this.createdAt,
-        required this.updatedBy,
-        required this.updatedAt,
-        required this.deleted,
-        required this.price,
-        required this.sequence});
-
+      {required this.id,
+      required this.eventItemId,
+      required this.eventId,
+      required this.itemCategoryId,
+      required this.itemId,
+      required this.foodExtraCategoryId,
+      required this.foodExtraItemId,
+      required this.activated,
+      required this.createdBy,
+      required this.createdAt,
+      required this.updatedBy,
+      required this.updatedAt,
+      required this.deleted,
+      required this.price,
+      required this.sequence});
 
   Map<String, dynamic> toMap() {
     return {
@@ -57,19 +55,19 @@ class EventFoodExtraItemMapping{
   factory EventFoodExtraItemMapping.fromMap(Map<String, dynamic> map) {
     return EventFoodExtraItemMapping(
       id: map["id"],
-      eventItemId : map["event_item_id"],
+      eventItemId: map["event_item_id"],
       eventId: map["event_id"],
-      itemCategoryId :map["item_category_id"],
+      itemCategoryId: map["item_category_id"],
       itemId: map["item_id"],
       foodExtraCategoryId: map["food_extra_category_id"],
       foodExtraItemId: map["food_extra_item_id"],
-      activated:map["activated"],
+      activated: map["activated"],
       createdBy: map["created_by"],
       createdAt: map["created_at"],
       updatedBy: map["updated_by"],
       updatedAt: map["updated_at"],
       deleted: map["deleted"],
-      price :map["price"],
+      price: map["price"],
       sequence: map["sequence"],
     );
   }
@@ -98,5 +96,4 @@ class EventFoodExtraItemMapping{
     ----------------------------------
     """;
   }
-
 }

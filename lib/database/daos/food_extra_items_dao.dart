@@ -15,23 +15,44 @@ class FoodExtraItemsDAO {
       final db = await _db;
       var result = await db.rawInsert(
           "INSERT OR REPLACE INTO $tableName (id, food_extra_item_category_id,item_id,event_id, item_name, selling_price, selection, sequence, image_file_id, min_qty_allowed, max_qty_allowed, activated, created_by, created_at, updated_by, updated_at, deleted)"
-              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?,?)",
-          [foodExtraItems.id, foodExtraItems.foodExtraItemCategoryId,foodExtraItems.itemId,foodExtraItems.eventId, foodExtraItems.itemName, foodExtraItems.sellingPrice, foodExtraItems.selection, foodExtraItems.sequence,foodExtraItems.imageFileId, foodExtraItems.minQtyAllowed, foodExtraItems.maxQtyAllowed, foodExtraItems.activated, foodExtraItems.createdBy, foodExtraItems.createdAt, foodExtraItems.updatedBy, foodExtraItems.updatedAt, foodExtraItems.deleted]);
+          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? ,?,?)",
+          [
+            foodExtraItems.id,
+            foodExtraItems.foodExtraItemCategoryId,
+            foodExtraItems.itemId,
+            foodExtraItems.eventId,
+            foodExtraItems.itemName,
+            foodExtraItems.sellingPrice,
+            foodExtraItems.selection,
+            foodExtraItems.sequence,
+            foodExtraItems.imageFileId,
+            foodExtraItems.minQtyAllowed,
+            foodExtraItems.maxQtyAllowed,
+            foodExtraItems.activated,
+            foodExtraItems.createdBy,
+            foodExtraItems.createdAt,
+            foodExtraItems.updatedBy,
+            foodExtraItems.updatedAt,
+            foodExtraItems.deleted
+          ]);
       return result;
     } catch (error) {
       debugPrint(error.toString());
     }
   }
 
-  Future<List<FoodExtraItems>?> getFoodExtraByEventIdAndItemId(String eventId,String itemId) async {
+  Future<List<FoodExtraItems>?> getFoodExtraByEventIdAndItemId(
+      String eventId, String itemId) async {
     try {
       final db = await _db;
       debugPrint('itemID $itemId---->eventID $eventId');
-      var result =
-      await db.rawQuery("SELECT * from $tableName where event_id=? AND item_id=?",[eventId,itemId]);
+      var result = await db.rawQuery(
+          "SELECT * from $tableName where event_id=? AND item_id=?",
+          [eventId, itemId]);
       if (result.isNotEmpty) {
         debugPrint(result.toString());
-        return List.generate(result.length, (index) => FoodExtraItems.fromMap(result[index]));
+        return List.generate(
+            result.length, (index) => FoodExtraItems.fromMap(result[index]));
       } else {
         return null;
       }
@@ -44,16 +65,20 @@ class FoodExtraItemsDAO {
   Future clearFoodExtraItemsByEventID({required String eventID}) async {
     try {
       final db = await _db;
-      await db.rawDelete("DELETE from $tableName where event_id = ?", [eventID]);
+      await db
+          .rawDelete("DELETE from $tableName where event_id = ?", [eventID]);
     } catch (error) {
       debugPrint(error.toString());
     }
   }
 
-  Future clearFoodExtraItemsByEventIDAndItemID({required String eventID, required String itemID}) async {
+  Future clearFoodExtraItemsByEventIDAndItemID(
+      {required String eventID, required String itemID}) async {
     try {
       final db = await _db;
-      await db.rawDelete("DELETE from $tableName where event_id = ? and item_id = ?", [eventID, itemID]);
+      await db.rawDelete(
+          "DELETE from $tableName where event_id = ? and item_id = ?",
+          [eventID, itemID]);
     } catch (error) {
       debugPrint(error.toString());
     }

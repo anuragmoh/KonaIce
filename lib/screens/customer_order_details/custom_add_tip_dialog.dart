@@ -13,7 +13,6 @@ class CustomerAddTipDialog extends StatefulWidget {
   Function callBack;
   CustomerAddTipDialog({Key? key, required this.callBack}) : super(key: key);
 
-
   @override
   State<CustomerAddTipDialog> createState() => _CustomerAddTipDialogState();
 }
@@ -21,7 +20,6 @@ class CustomerAddTipDialog extends StatefulWidget {
 class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   bool isValidTip = true;
   TextEditingController tipController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +98,8 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.textColor5)),
+                borderSide:
+                    BorderSide(color: getMaterialColor(AppColors.textColor5)),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(

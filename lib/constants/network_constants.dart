@@ -1,13 +1,10 @@
-
 enum ContentType {
 // const json = 'application/json';
 // const multipart = "multipart/form-data";
   eNUS
 }
 
-enum HTTPHeaderField {
-  authentication
-}
+enum HTTPHeaderField { authentication }
 //  const authentication = "Authorization";
 // const contentType = "Content-Type";
 // const acceptType = "Accept";

@@ -35,7 +35,7 @@ class BottomBarWidget extends StatefulWidget {
 
 class _BottomBarWidgetState extends State<BottomBarWidget> {
   // late BottomBarMenu bottomBarMenu=Bottombarme;
-  BottomBarMenuClass bottomBarMenuClass=BottomBarMenuClass();
+  BottomBarMenuClass bottomBarMenuClass = BottomBarMenuClass();
   final service = ServiceNotifier();
 /*  _BottomBarWidgetState() {
     bottomBarMenu = BottomBarMenu();
@@ -97,7 +97,6 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               onTap: () {
-
                 setState(() {
                   // onTapBottomListItem(index);
                   // bottomBarMenuClass.changeIndex(index);
@@ -117,7 +116,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: CommonWidgets().image(
-                          image: ServiceNotifier.count  == index
+                          image: ServiceNotifier.count == index
                               ? bottomItemList[index].selectedImage
                               : bottomItemList[index].basicImage,
                           width: 3.38 * SizeConfig.imageSizeMultiplier,

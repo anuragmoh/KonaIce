@@ -32,7 +32,6 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 
-
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
 
@@ -40,7 +39,8 @@ class Dashboard extends StatefulWidget {
   _DashboardState createState() => _DashboardState();
 }
 
-class _DashboardState extends State<Dashboard> implements ResponseContractor,BottomBarMenu {
+class _DashboardState extends State<Dashboard>
+    implements ResponseContractor, BottomBarMenu {
   List<Events> eventList = [];
   final service = ServiceNotifier();
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
@@ -48,13 +48,13 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
   List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
   List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
-  [];
+      [];
   List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
-  [];
+      [];
   List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList>
-  pOsSyncDeletedEventItemExtrasDataDtoList = [];
+      pOsSyncDeletedEventItemExtrasDataDtoList = [];
   bool isApiProcess = false;
   int currentIndex = 0;
   String userName = StringExtension.empty();
@@ -83,7 +83,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   void getIndex() {
     setState(() {
-      currentIndex=ServiceNotifier.count;
+      currentIndex = ServiceNotifier.count;
       debugPrint(currentIndex.toString());
     });
   }
@@ -99,19 +99,19 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
   @override
   Widget build(BuildContext context) {
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
-
   }
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
-
       backgroundColor: getMaterialColor(AppColors.textColor3),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CommonWidgets().dashboardTopBar(topBarComponent()),
           Expanded(
-            child: currentIndex==0?HomeScreen(onCallback: onReloadDashboardScreen):const SettingScreen(),
+            child: currentIndex == 0
+                ? HomeScreen(onCallback: onReloadDashboardScreen)
+                : const SettingScreen(),
             // child: bodyWidgets[currentIndex],
             //   child: CommonWidgets().bodyWidgets[],
             //   child: body(),
@@ -202,7 +202,6 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   onTapBottomListItem(int index) {
     setState(() {
-
       currentIndex = index;
       print('dasssss$index');
     });
@@ -210,7 +209,10 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
 
   void onProfileChange() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MyProfile())).then((value){onReloadDashboardScreen(value);});
+        .push(MaterialPageRoute(builder: (context) => const MyProfile()))
+        .then((value) {
+      onReloadDashboardScreen(value);
+    });
   }
 
   //Function Other than UI dependency
@@ -388,7 +390,7 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
       await FoodExtraItemsDAO().insert(FoodExtraItems(
           id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
           foodExtraItemCategoryId:
-          pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+              pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
           itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
           eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
           itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
@@ -429,21 +431,27 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
   }
 
   Future<void> updateLastEventSync() async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.events, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.events,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemSync() async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.items, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.items,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastCategoriesSync() async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.categories, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.categories,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemExtrasSync() async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.itemExtras, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.itemExtras,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   @override
@@ -454,12 +462,10 @@ class _DashboardState extends State<Dashboard> implements ResponseContractor,Bot
     });
   }
 
-  void onReloadDashboardScreen(dynamic value){
+  void onReloadDashboardScreen(dynamic value) {
     print('onReloadDashboardScreen');
     setState(() {
-      currentIndex=ServiceNotifier.count;
+      currentIndex = ServiceNotifier.count;
     });
   }
-
-
 }

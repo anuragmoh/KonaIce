@@ -23,12 +23,10 @@ class _OrderCompleteState extends State<OrderComplete> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-        const Duration(seconds: 5),
-            () {
-          if (!isMovedToNextScreen) {
-            showSplashScreen();
-          }
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!isMovedToNextScreen) {
+        showSplashScreen();
+      }
     });
   }
 
@@ -100,7 +98,8 @@ class _OrderCompleteState extends State<OrderComplete> {
   }
 
   //Navigation
-   showSplashScreen() {
-     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) =>  SplashScreen()));
-   }
+  showSplashScreen() {
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => SplashScreen()));
+  }
 }

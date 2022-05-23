@@ -245,7 +245,8 @@ class Events {
       "payment_term": paymentTerm,
       "secondary_contact_name": secondaryContactName,
       "secondary_contact_email": secondaryContactEmail,
-      "secondary_contact_phone_num_country_code": secondaryContactPhoneNumCountryCode,
+      "secondary_contact_phone_num_country_code":
+          secondaryContactPhoneNumCountryCode,
       "secondary_contact_phone_number": secondaryContactPhoneNumber,
       "notes": notes,
       "event_type": eventType,
@@ -327,33 +328,35 @@ class Events {
         contactPhoneNumber: map["contact_phone_number"],
         key: map["key"],
         values: map["values"],
-        displayAdditionalPaymentField: map["display_additional_payment_field"]==1,
+        displayAdditionalPaymentField:
+            map["display_additional_payment_field"] == 1,
         additionalPaymentFieldLabel: map["additional_payment_field_label"],
-        activated: map["activated"]==1,
+        activated: map["activated"] == 1,
         createdBy: map["created_by"],
         createdAt: map["created_at"],
         updatedBy: map["updated_by"],
         updatedAt: map["updated_at"],
-        deleted: map["deleted"]==1,
+        deleted: map["deleted"] == 1,
         franchiseId: map["franchise_id"],
         minimumOrderAmount: map["minimum_order_amount"],
         eventStatus: map["event_status"],
         specialInstructionLabel: map["special_instruction_label"],
-        displayGratuityField: map["display_gratuity_field"]==1,
+        displayGratuityField: map["display_gratuity_field"] == 1,
         gratuityFieldLabel: map["gratuity_field_label"],
         campaignId: map["campaign_id"],
-        enableDonation: map["enable_donation"]==1,
+        enableDonation: map["enable_donation"] == 1,
         donationFieldLabel: map["donation_field_label"],
         assetId: map["asset_id"],
         weatherType: map["weather_type"],
         paymentTerm: map["payment_term"],
         secondaryContactName: map["secondary_contact_name"],
         secondaryContactEmail: map["secondary_contact_email"],
-        secondaryContactPhoneNumCountryCode: map["secondary_contact_phone_num_country_code"],
+        secondaryContactPhoneNumCountryCode:
+            map["secondary_contact_phone_num_country_code"],
         secondaryContactPhoneNumber: map["secondary_contact_phone_number"],
         notes: map["notes"],
         eventType: map["event_type"],
-        preOrder: map["pre_order"]==1,
+        preOrder: map["pre_order"] == 1,
         radius: map["radius"],
         timeSlot: map["time_slot"],
         maxOrderInSlot: map["max_order_in_slot"],
@@ -361,20 +364,20 @@ class Events {
         orderAttribute: map["order_attribute"],
         minimumDeliveryTime: map["minimum_delivery_time"],
         startAddress: map["start_address"],
-        useTimeSlot: map["use_time_slot"]==1,
+        useTimeSlot: map["use_time_slot"] == 1,
         maxAllowedOrders: map["max_allowed_orders"],
         deliveryMessage: map["delivery_message"],
         recipientNameLabel: map["recipient_name_label"],
         orderStartDateTime: map["order_start_date_time"],
         orderEndDateTime: map["order_end_date_time"],
-        smsNotification: map["sms_notification"]==1,
-        emailNotification: map["email_notification"]==1,
+        smsNotification: map["sms_notification"] == 1,
+        emailNotification: map["email_notification"] == 1,
         clientId: map["client_id"],
         recurringType: map["recurring_type"],
         days: map["days"],
         monthlyDateTime: map["monthly_date_time"],
         expiryDate: map["expiry_date"],
-        lastDayOfMonth: map["last_day_of_month"]==1,
+        lastDayOfMonth: map["last_day_of_month"] == 1,
         seriesId: map["series_id"],
         manualStatus: map["manual_status"],
         entryFee: map["entry_fee"],
@@ -390,23 +393,23 @@ class Events {
         eventSales: map["event_sales"],
         collected: map["collected"],
         balance: map["balance"],
-        givebackPaid: map["giveback_paid"]==1,
-        clientInvoice: map["client_invoice"]==1,
+        givebackPaid: map["giveback_paid"] == 1,
+        clientInvoice: map["client_invoice"] == 1,
         givebackSettledDate: map["giveback_settled_date"],
         invoiceSettledDate: map["invoice_settled_date"],
         givebackCheck: map["giveback_check"],
-        thankYouEmail: map["thank_you_email"]==1,
+        thankYouEmail: map["thank_you_email"] == 1,
         eventSalesTypeId: map["event_sales_type_id"],
         minimumFee: map["minimum_fee"],
-        keepCupCount: map["keep_cup_count"]==1,
+        keepCupCount: map["keep_cup_count"] == 1,
         cupCountTotal: map["cup_count_total"],
         packageFee: map["package_fee"],
-        prePay: map["pre_pay"]==1,
+        prePay: map["pre_pay"] == 1,
         contactTitle: map["contact_title"],
         clientIndustriesTypeId: map["client_industries_type_id"],
         invoiceCheck: map["invoice_check"],
         oldDbEventId: map["old_db_event_id"],
-        confirmedEmailSent: map["confirmed_email_sent"]==1);
+        confirmedEmailSent: map["confirmed_email_sent"] == 1);
   }
 
   @override
@@ -514,7 +517,7 @@ class Events {
     """;
   }
 
-   String getEventName() {
+  String getEventName() {
     return name.toUpperCase();
   }
 
@@ -531,7 +534,6 @@ class Events {
     String endDateStr = Date.getDateFrom(date: end, formatValue: format);
 
     return '$startDateStr - $endDateStr';
-
   }
 
   String getEventTime() {

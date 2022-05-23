@@ -1,0 +1,11 @@
+framework module FinixPOS {
+  umbrella header "FinixPOS.h"
+
+  export *
+  module * { export * }
+}
+
+module FinixPOS.Swift {
+    header "FinixPOS-Swift.h"
+    requires objc
+}

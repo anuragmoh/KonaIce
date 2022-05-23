@@ -10,8 +10,7 @@ class SavedOrdersExtraItems {
   bool deleted;
 
   SavedOrdersExtraItems(
-      {
-      required this.orderId,
+      {required this.orderId,
       required this.itemId,
       required this.extraFoodItemId,
       required this.extraFoodItemName,

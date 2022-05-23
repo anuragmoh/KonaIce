@@ -14,9 +14,9 @@ import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PaymentFailPopup extends StatefulWidget {
-  String totalAmount;
+  String paymentFailMessage;
 
-  PaymentFailPopup({required this.totalAmount, Key? key})
+  PaymentFailPopup({required this.paymentFailMessage, Key? key})
       : super(key: key);
 
   @override

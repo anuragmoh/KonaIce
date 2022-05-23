@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-PayOrderResponseCardModel payOrderResponseCardModelFromJson(String str) => PayOrderResponseCardModel.fromJson(json.decode(str));
+PayOrderResponseCardModel payOrderResponseCardModelFromJson(String str) =>
+    PayOrderResponseCardModel.fromJson(json.decode(str));
 
-String payOrderResponseCardModelToJson(PayOrderResponseCardModel data) => json.encode(data.toJson());
+String payOrderResponseCardModelToJson(PayOrderResponseCardModel data) =>
+    json.encode(data.toJson());
 
 class PayOrderResponseCardModel {
   PayOrderResponseCardModel({
@@ -19,17 +21,19 @@ class PayOrderResponseCardModel {
   String messageKey;
   OrderItemsInvoiceDto orderItemsInvoiceDto;
 
-  factory PayOrderResponseCardModel.fromJson(Map<String, dynamic> json) => PayOrderResponseCardModel(
-    status: json["Status"],
-    messageKey: json["messageKey"],
-    orderItemsInvoiceDto: OrderItemsInvoiceDto.fromJson(json["orderItemsInvoiceDto"]),
-  );
+  factory PayOrderResponseCardModel.fromJson(Map<String, dynamic> json) =>
+      PayOrderResponseCardModel(
+        status: json["Status"],
+        messageKey: json["messageKey"],
+        orderItemsInvoiceDto:
+            OrderItemsInvoiceDto.fromJson(json["orderItemsInvoiceDto"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "Status": status,
-    "messageKey": messageKey,
-    "orderItemsInvoiceDto": orderItemsInvoiceDto.toJson(),
-  };
+        "Status": status,
+        "messageKey": messageKey,
+        "orderItemsInvoiceDto": orderItemsInvoiceDto.toJson(),
+      };
 }
 
 class OrderItemsInvoiceDto {
@@ -39,13 +43,14 @@ class OrderItemsInvoiceDto {
 
   dynamic transactionId;
 
-  factory OrderItemsInvoiceDto.fromJson(Map<String, dynamic> json) => OrderItemsInvoiceDto(
-    transactionId: json["transactionId"],
-  );
+  factory OrderItemsInvoiceDto.fromJson(Map<String, dynamic> json) =>
+      OrderItemsInvoiceDto(
+        transactionId: json["transactionId"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "transactionId": transactionId,
-  };
+        "transactionId": transactionId,
+      };
 }
 //
 // class OrderInvoice {

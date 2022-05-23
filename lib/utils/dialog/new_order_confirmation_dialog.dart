@@ -7,13 +7,17 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 class NewOrderConfirmationDialog extends StatefulWidget {
   final VoidCallback onTapSave;
   final VoidCallback onTapCancel;
-   const NewOrderConfirmationDialog({Key? key, required this.onTapSave, required this.onTapCancel}) : super(key: key);
+  const NewOrderConfirmationDialog(
+      {Key? key, required this.onTapSave, required this.onTapCancel})
+      : super(key: key);
 
   @override
-  State<NewOrderConfirmationDialog> createState() => _NewOrderConfirmationDialogState();
+  State<NewOrderConfirmationDialog> createState() =>
+      _NewOrderConfirmationDialogState();
 }
 
-class _NewOrderConfirmationDialogState extends State<NewOrderConfirmationDialog> {
+class _NewOrderConfirmationDialogState
+    extends State<NewOrderConfirmationDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -24,8 +28,7 @@ class _NewOrderConfirmationDialogState extends State<NewOrderConfirmationDialog>
     );
   }
 
-  Widget dialogUi() =>
-      SizedBox(
+  Widget dialogUi() => SizedBox(
         height: 225,
         width: 391,
         child: Column(
@@ -39,7 +42,8 @@ class _NewOrderConfirmationDialogState extends State<NewOrderConfirmationDialog>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(StringConstants.confirm,
-                        style: StyleConstants.customTextStyle(fontSize: 16.0,
+                        style: StyleConstants.customTextStyle(
+                            fontSize: 16.0,
                             color: AppColors.whiteColor,
                             fontFamily: FontConstants.montserratSemiBold)),
                     // GestureDetector(
@@ -55,7 +59,8 @@ class _NewOrderConfirmationDialogState extends State<NewOrderConfirmationDialog>
               padding: const EdgeInsets.only(
                   left: 50.0, right: 50, top: 47.0, bottom: 49.0),
               child: Text(StringConstants.confirmNewOrder,
-                  style: StyleConstants.customTextStyle(fontSize: 14.0,
+                  style: StyleConstants.customTextStyle(
+                      fontSize: 14.0,
                       color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratMedium)),
             ),
@@ -85,16 +90,18 @@ class _NewOrderConfirmationDialogState extends State<NewOrderConfirmationDialog>
         child: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-              color: color
-          ),
+              color: color),
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 31.0, vertical: 8.0),
-              child: Text(title, style: StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: AppColors.textColor1,
-                  fontFamily: FontConstants.montserratBold),),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 31.0, vertical: 8.0),
+              child: Text(
+                title,
+                style: StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratBold),
+              ),
             ),
           ),
         ),
