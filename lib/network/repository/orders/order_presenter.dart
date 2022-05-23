@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
+import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 
 import '../../exception.dart';
 import '../../response_contractor.dart';
@@ -28,6 +29,18 @@ class OrderPresenter {
   void payOrder(PayOrderRequestModel payOrderRequestModel) {
     _orderRepository
         .payOrder(payOrderRequestModel: payOrderRequestModel)
+        .then((value){
+      debugPrint("Success ----- $value}");
+      _view.showSuccess(value);
+    }).onError((error, stackTrace){
+      debugPrint("Errror ----- ${error.toString()}");
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
+  }
+
+  void finixReceipt(PayReceipt payReceipt) {
+    _orderRepository
+        .finixRecipt(payReceipt: payReceipt)
         .then((value){
       debugPrint("Success ----- $value}");
       _view.showSuccess(value);

@@ -1274,7 +1274,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     PayOrderCardRequestModel payOrderCardRequestModel =
         PayOrderCardRequestModel();
     payOrderCardRequestModel.orderId = orderID;
-    payOrderCardRequestModel.paymentMethod = "CARD";
+    payOrderCardRequestModel.paymentMethod = "CARD_FINIX_CREDIT_CARD";
     payOrderCardRequestModel.stripeCardId = stripeTokenId;
     payOrderCardRequestModel.stripePaymentMethodId = stripePaymentMethodId;
 
@@ -1284,7 +1284,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   PayOrderRequestModel getPayOrderPosRequestModel() {
     PayOrderRequestModel payOrderRequestModel = PayOrderRequestModel();
     payOrderRequestModel.orderId = orderID;
-    payOrderRequestModel.paymentMethod = "CASH";
+    payOrderRequestModel.paymentMethod = "CARD_FINIX_BBPOS";
     payOrderRequestModel.cardId = StringExtension.empty();
 
     return payOrderRequestModel;
@@ -1313,6 +1313,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     orderPresenter.payOrderCardMethod(payOrderCardRequestModel);
   }
 
+
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
@@ -1328,6 +1329,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       isApiProcess = false;
     });
+
+
 
     if (response is StripTokenResponseModel) {
       //getting StripeTokenId
@@ -1582,6 +1585,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     FinixSaleReciptResponseRequest finixSaleReciptResponseRequest=FinixSaleReciptResponseRequest();
     FinixSaleReceiptRequest finixSaleReceiptRequest=FinixSaleReceiptRequest();
 
+    payReceiptModel.orderId = orderID;
+    payReceiptModel.paymentMethod = "CARD_FINIX_CREDIT_CARD";
     finixSaleReciptResponseRequest.transferId=finixResponseModel.finixSaleResponse!.transferId;
     finixSaleReciptResponseRequest.updated=finixResponseModel.finixSaleResponse!.updated;
     finixSaleReciptResponseRequest.amount=finixResponseModel.finixSaleResponse!.amount;
@@ -1631,6 +1636,10 @@ class _PaymentScreenState extends State<PaymentScreen>
     debugPrint(
         '>>>>>>>>>>>${payReceiptModel.toString()}');
 
+    setState(() {
+      isApiProcess = true;
+    });
+    orderPresenter.finixReceipt(payReceiptModel);
     return payReceiptModel;
   }
 }

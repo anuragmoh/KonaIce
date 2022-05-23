@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/models/network_model/order_model/order_response_mod
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_card_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_response_model.dart';
+import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 
 import '../../base_client.dart';
 
@@ -24,6 +25,14 @@ class OrderRepository {
     return baseClient.put(UrlConstants.payOrder, payOrderRequestModel).then((
         value) {
       return payOrderResponseModelFromJson(value);
+    });
+  }
+
+  Future<PayReceipt> finixRecipt(
+      {required PayReceipt payReceipt}) {
+    return baseClient.put(UrlConstants.payOrder, payReceipt).then((
+        value) {
+      return payReceiptFromJson(value);
     });
   }
 
