@@ -1,25 +1,57 @@
 // To parse this JSON data, do
 //
-//     final FinixResponseModel = finixResponseFromJson(jsonString);
+//     final payReceipt = payReceiptFromJson(jsonString);
 
 import 'dart:convert';
 
-FinixResponseModel finixResponseFromJson(String str) => FinixResponseModel.fromJson(json.decode(str));
+PayReceipt payReceiptFromJson(String str) => PayReceipt.fromJson(json.decode(str));
 
-String finixResponseToJson(FinixResponseModel data) => json.encode(data.toJson());
+String payReceiptToJson(PayReceipt data) => json.encode(data.toJson());
 
-class FinixResponseModel {
-  FinixResponseModel({
+class PayReceipt {
+  PayReceipt({
+    this.paymentMethod,
+    this.orderId,
+    this.stripePaymentMethodId,
+    this.stripeCardId,
+    this.finixResponseDto,
+  });
+
+  String? paymentMethod;
+  String? orderId;
+  dynamic stripePaymentMethodId;
+  dynamic stripeCardId;
+  FinixResponseDto? finixResponseDto;
+
+  factory PayReceipt.fromJson(Map<String, dynamic> json) => PayReceipt(
+    paymentMethod: json["paymentMethod"],
+    orderId: json["orderId"],
+    stripePaymentMethodId: json["stripePaymentMethodId"],
+    stripeCardId: json["stripeCardId"],
+    finixResponseDto: FinixResponseDto.fromJson(json["finixResponseDto"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "paymentMethod": paymentMethod,
+    "orderId": orderId,
+    "stripePaymentMethodId": stripePaymentMethodId,
+    "stripeCardId": stripeCardId,
+    "finixResponseDto": finixResponseDto!.toJson(),
+  };
+}
+
+class FinixResponseDto {
+  FinixResponseDto({
     this.finixSaleResponse,
     this.finixSaleReceipt,
   });
 
-  FinixSaleResponse? finixSaleResponse;
-  FinixSaleReceipt? finixSaleReceipt;
+  FinixSaleReciptResponseRequest? finixSaleResponse;
+  FinixSaleReceiptRequest? finixSaleReceipt;
 
-  factory FinixResponseModel.fromJson(Map<String, dynamic> json) => FinixResponseModel(
-    finixSaleResponse: FinixSaleResponse.fromJson(json["finixSaleResponse"]),
-    finixSaleReceipt: FinixSaleReceipt.fromJson(json["finixSaleReceipt"]),
+  factory FinixResponseDto.fromJson(Map<String, dynamic> json) => FinixResponseDto(
+    finixSaleResponse: FinixSaleReciptResponseRequest.fromJson(json["finixSaleResponse"]),
+    finixSaleReceipt: FinixSaleReceiptRequest.fromJson(json["finixSaleReceipt"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -28,8 +60,8 @@ class FinixResponseModel {
   };
 }
 
-class FinixSaleReceipt {
-  FinixSaleReceipt({
+class FinixSaleReceiptRequest {
+  FinixSaleReceiptRequest({
     this.cryptogram,
     this.merchantId,
     this.accountNumber,
@@ -65,7 +97,7 @@ class FinixSaleReceipt {
   String? applicationIdentifier;
   dynamic date;
 
-  factory FinixSaleReceipt.fromJson(Map<String, dynamic> json) => FinixSaleReceipt(
+  factory FinixSaleReceiptRequest.fromJson(Map<String, dynamic> json) => FinixSaleReceiptRequest(
     cryptogram: json["cryptogram"],
     merchantId: json["merchantId"],
     accountNumber: json["accountNumber"],
@@ -104,8 +136,8 @@ class FinixSaleReceipt {
   };
 }
 
-class FinixSaleResponse {
-  FinixSaleResponse({
+class FinixSaleReciptResponseRequest {
+  FinixSaleReciptResponseRequest({
     this.transferId,
     this.updated,
     this.amount,
@@ -127,7 +159,7 @@ class FinixSaleResponse {
   String? cardLogo;
   String? cardHolderName;
   String? expirationMonth;
-  ResourceTags? resourceTags;
+  ResourceTagsRequest? resourceTags;
   String? entryMode;
   String? maskedAccountNumber;
   double? created;
@@ -135,14 +167,14 @@ class FinixSaleResponse {
   String? transferState;
   String? expirationYear;
 
-  factory FinixSaleResponse.fromJson(Map<String, dynamic> json) => FinixSaleResponse(
+  factory FinixSaleReciptResponseRequest.fromJson(Map<String, dynamic> json) => FinixSaleReciptResponseRequest(
     transferId: json["transferId"],
     updated: json["updated"].toDouble(),
     amount: json["amount"],
     cardLogo: json["cardLogo"],
     cardHolderName: json["cardHolderName"],
     expirationMonth: json["expirationMonth"],
-    resourceTags: ResourceTags.fromJson(json["resourceTags"]),
+    resourceTags: ResourceTagsRequest.fromJson(json["resourceTags"]),
     entryMode: json["entryMode"],
     maskedAccountNumber: json["maskedAccountNumber"],
     created: json["created"].toDouble(),
@@ -168,23 +200,38 @@ class FinixSaleResponse {
   };
 }
 
-class ResourceTags {
-  ResourceTags({
-    this.test,
-    this.orderNumber,
+class ResourceTagsRequest {
+  ResourceTagsRequest({
+    this.customerEmail,
+    this.customerName,
+    this.eventName,
+    this.eventCode,
+    this.environment,
+    this.paymentMethod,
   });
 
-  String? test;
-  String? orderNumber;
+  String? customerEmail;
+  String? customerName;
+  String? eventName;
+  String? eventCode;
+  String? environment;
+  String? paymentMethod;
 
-  factory ResourceTags.fromJson(Map<String, dynamic> json) => ResourceTags(
-    test: json["Test"],
-    orderNumber: json["order_number"],
+  factory ResourceTagsRequest.fromJson(Map<String, dynamic> json) => ResourceTagsRequest(
+    customerEmail: json["customerEmail"],
+    customerName: json["customerName"],
+    eventName: json["eventName"],
+    eventCode: json["eventCode"],
+    environment: json["environment"],
+    paymentMethod: json["paymentMethod"],
   );
 
   Map<String, dynamic> toJson() => {
-    "Test": test,
-    "order_number": orderNumber,
+    "customerEmail": customerEmail,
+    "customerName": customerName,
+    "eventName": eventName,
+    "eventCode": eventCode,
+    "environment": environment,
+    "paymentMethod": paymentMethod,
   };
 }
-

@@ -20,6 +20,7 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/finix_response_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
+import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -160,7 +161,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       isPaymentDone = true;
     });
 
-    FinixResponse finixResponse=finixResponseFromJson(msg);
+    FinixResponseModel finixResponse=finixResponseFromJson(msg);
     debugPrint("Payment Success: ${finixResponse.toString()}");
   }
 
@@ -1652,6 +1653,77 @@ class _PaymentScreenState extends State<PaymentScreen>
     getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
 
     // Navigator.pop(context);
+  }
+  getApiCallPayReceipt() {
+    String testString =
+        "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
+    FinixResponseModel finixResponse = finixResponseFromJson(testString);
+    debugPrint("Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
+
+    PayReceipt payReceipt= getPayReceiptModel(finixResponse);
+  }
+
+  PayReceipt getPayReceiptModel(FinixResponseModel finixResponseModel) {
+    PayReceipt payReceiptModel = PayReceipt();
+    FinixResponseDto finixResponseDto=FinixResponseDto();
+    FinixSaleReciptResponseRequest finixSaleReciptResponseRequest=FinixSaleReciptResponseRequest();
+    FinixSaleReceiptRequest finixSaleReceiptRequest=FinixSaleReceiptRequest();
+
+    payReceiptModel.orderId = orderID;
+    payReceiptModel.paymentMethod = "CARD_FINIX_CREDIT_CARD";
+    finixSaleReciptResponseRequest.transferId=finixResponseModel.finixSaleResponse!.transferId;
+    finixSaleReciptResponseRequest.updated=finixResponseModel.finixSaleResponse!.updated;
+    finixSaleReciptResponseRequest.amount=finixResponseModel.finixSaleResponse!.amount;
+    finixSaleReciptResponseRequest.cardLogo=finixResponseModel.finixSaleResponse!.cardLogo;
+    finixSaleReciptResponseRequest.cardHolderName=finixResponseModel.finixSaleResponse!.cardHolderName;
+    finixSaleReciptResponseRequest.expirationMonth=finixResponseModel.finixSaleResponse!.expirationMonth;
+
+
+    ResourceTagsRequest resourceTagsRequest=ResourceTagsRequest();
+    resourceTagsRequest.customerEmail=widget.placeOrderRequestModel.email ?? StringExtension.empty();
+    resourceTagsRequest.customerName=widget.placeOrderRequestModel.getPhoneNumber();
+    resourceTagsRequest.eventName=widget.events.getEventName();
+    resourceTagsRequest.eventCode=widget.events.getEventCode();
+    resourceTagsRequest.environment="";//***********
+    resourceTagsRequest.paymentMethod="";//***********
+
+    finixSaleReciptResponseRequest.entryMode=finixResponseModel.finixSaleResponse!.entryMode;
+    finixSaleReciptResponseRequest.maskedAccountNumber=finixResponseModel.finixSaleResponse!.maskedAccountNumber;
+    finixSaleReciptResponseRequest.created=finixResponseModel.finixSaleResponse!.created;
+    finixSaleReciptResponseRequest.traceId=finixResponseModel.finixSaleResponse!.traceId;
+    finixSaleReciptResponseRequest.transferState=finixResponseModel.finixSaleResponse!.transferState;
+    finixSaleReciptResponseRequest.expirationYear=finixResponseModel.finixSaleResponse!.expirationYear;
+
+    finixSaleReceiptRequest.cryptogram=finixResponseModel.finixSaleReceipt!.cryptogram;
+    finixSaleReceiptRequest.merchantId=finixResponseModel.finixSaleReceipt!.merchantId;
+    finixSaleReceiptRequest.accountNumber=finixResponseModel.finixSaleReceipt!.accountNumber;
+    finixSaleReceiptRequest.referenceNumber=finixResponseModel.finixSaleReceipt!.referenceNumber;
+    finixSaleReceiptRequest.applicationLabel=finixResponseModel.finixSaleReceipt!.applicationLabel;
+    finixSaleReceiptRequest.entryMode=finixResponseModel.finixSaleReceipt!.entryMode;
+    finixSaleReceiptRequest.approvalCode=finixResponseModel.finixSaleReceipt!.approvalCode;
+    finixSaleReceiptRequest.transactionId=finixResponseModel.finixSaleReceipt!.transactionId;
+    finixSaleReceiptRequest.cardBrand=finixResponseModel.finixSaleReceipt!.cardBrand;
+    finixSaleReceiptRequest.merchantName=finixResponseModel.finixSaleReceipt!.merchantName;
+    finixSaleReceiptRequest.responseCode=finixResponseModel.finixSaleReceipt!.responseCode;
+    finixSaleReceiptRequest.transactionType=finixResponseModel.finixSaleReceipt!.transactionType;
+    finixSaleReceiptRequest.responseMessage=finixResponseModel.finixSaleReceipt!.responseMessage;
+    finixSaleReceiptRequest.applicationIdentifier=finixResponseModel.finixSaleReceipt!.applicationIdentifier;
+    finixSaleReceiptRequest.date=finixResponseModel.finixSaleReceipt!.date;
+
+
+    finixResponseDto.finixSaleResponse=finixSaleReciptResponseRequest;
+    finixResponseDto.finixSaleResponse!.resourceTags=resourceTagsRequest;
+    finixResponseDto.finixSaleReceipt=finixSaleReceiptRequest;
+    payReceiptModel.finixResponseDto=finixResponseDto;
+
+    debugPrint(
+        '>>>>>>>>>>>${payReceiptModel.toString()}');
+
+    setState(() {
+      isApiProcess = true;
+    });
+    // orderPresenter.finixReceipt(payReceiptModel);
+    return payReceiptModel;
   }
 }
 
