@@ -28,11 +28,11 @@ class OrderRepository {
     });
   }
 
-  Future<PayReceipt> finixRecipt(
+  Future<PayOrderResponseModel> finixRecipt(
       {required PayReceipt payReceipt}) {
     return baseClient.put(UrlConstants.payOrder, payReceipt).then((
         value) {
-      return payReceiptFromJson(value);
+      return payOrderResponseModelFromJson(value);
     });
   }
 

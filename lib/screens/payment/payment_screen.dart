@@ -1329,9 +1329,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       isApiProcess = false;
     });
-
-
-
     if (response is StripTokenResponseModel) {
       //getting StripeTokenId
       stripeTokenId = response.id.toString();
@@ -1570,7 +1567,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   getApiCallPayReceipt() {
     String testString =
-        "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{\"Test\":\"Test\",\"order_number\":\"21DFASJSAKAS\"},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
+        "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
     FinixResponseModel finixResponse = finixResponseFromJson(testString);
     debugPrint("Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
 
@@ -1579,9 +1576,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   PayReceipt getPayReceiptModel(FinixResponseModel finixResponseModel) {
     PayReceipt payReceiptModel = PayReceipt();
-    payReceiptModel.paymentMethod="";//**********Pass Payment PAram
-    payReceiptModel.orderId=orderID;
-    FinixResponse finixResponse=FinixResponse();
+    FinixResponseDto finixResponseDto=FinixResponseDto();
     FinixSaleReciptResponseRequest finixSaleReciptResponseRequest=FinixSaleReciptResponseRequest();
     FinixSaleReceiptRequest finixSaleReceiptRequest=FinixSaleReceiptRequest();
 
@@ -1627,11 +1622,10 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixSaleReceiptRequest.date=finixResponseModel.finixSaleReceipt!.date;
 
 
-
-    finixResponse.finixSaleResponse=finixSaleReciptResponseRequest;
-    finixResponse.finixSaleResponse!.resourceTags=resourceTagsRequest;
-    finixResponse.finixSaleReceipt=finixSaleReceiptRequest;
-    payReceiptModel.finixResponse=finixResponse;
+    finixResponseDto.finixSaleResponse=finixSaleReciptResponseRequest;
+    finixResponseDto.finixSaleResponse!.resourceTags=resourceTagsRequest;
+    finixResponseDto.finixSaleReceipt=finixSaleReceiptRequest;
+    payReceiptModel.finixResponseDto=finixResponseDto;
 
     debugPrint(
         '>>>>>>>>>>>${payReceiptModel.toString()}');

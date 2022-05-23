@@ -14,21 +14,21 @@ class PayReceipt {
     this.orderId,
     this.stripePaymentMethodId,
     this.stripeCardId,
-    this.finixResponse,
+    this.finixResponseDto,
   });
 
   String? paymentMethod;
   String? orderId;
   dynamic stripePaymentMethodId;
   dynamic stripeCardId;
-  FinixResponse? finixResponse;
+  FinixResponseDto? finixResponseDto;
 
   factory PayReceipt.fromJson(Map<String, dynamic> json) => PayReceipt(
     paymentMethod: json["paymentMethod"],
     orderId: json["orderId"],
     stripePaymentMethodId: json["stripePaymentMethodId"],
     stripeCardId: json["stripeCardId"],
-    finixResponse: FinixResponse.fromJson(json["finixResponse"]),
+    finixResponseDto: FinixResponseDto.fromJson(json["finixResponseDto"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -36,12 +36,12 @@ class PayReceipt {
     "orderId": orderId,
     "stripePaymentMethodId": stripePaymentMethodId,
     "stripeCardId": stripeCardId,
-    "finixResponse": finixResponse!.toJson(),
+    "finixResponseDto": finixResponseDto!.toJson(),
   };
 }
 
-class FinixResponse {
-  FinixResponse({
+class FinixResponseDto {
+  FinixResponseDto({
     this.finixSaleResponse,
     this.finixSaleReceipt,
   });
@@ -49,7 +49,7 @@ class FinixResponse {
   FinixSaleReciptResponseRequest? finixSaleResponse;
   FinixSaleReceiptRequest? finixSaleReceipt;
 
-  factory FinixResponse.fromJson(Map<String, dynamic> json) => FinixResponse(
+  factory FinixResponseDto.fromJson(Map<String, dynamic> json) => FinixResponseDto(
     finixSaleResponse: FinixSaleReciptResponseRequest.fromJson(json["finixSaleResponse"]),
     finixSaleReceipt: FinixSaleReceiptRequest.fromJson(json["finixSaleReceipt"]),
   );
@@ -202,8 +202,6 @@ class FinixSaleReciptResponseRequest {
 
 class ResourceTagsRequest {
   ResourceTagsRequest({
-    this.test,
-    this.orderNumber,
     this.customerEmail,
     this.customerName,
     this.eventName,
@@ -212,8 +210,6 @@ class ResourceTagsRequest {
     this.paymentMethod,
   });
 
-  String? test;
-  String? orderNumber;
   String? customerEmail;
   String? customerName;
   String? eventName;
@@ -222,8 +218,6 @@ class ResourceTagsRequest {
   String? paymentMethod;
 
   factory ResourceTagsRequest.fromJson(Map<String, dynamic> json) => ResourceTagsRequest(
-    test: json["Test"],
-    orderNumber: json["order_number"],
     customerEmail: json["customerEmail"],
     customerName: json["customerName"],
     eventName: json["eventName"],
@@ -233,8 +227,6 @@ class ResourceTagsRequest {
   );
 
   Map<String, dynamic> toJson() => {
-    "Test": test,
-    "order_number": orderNumber,
     "customerEmail": customerEmail,
     "customerName": customerName,
     "eventName": eventName,
