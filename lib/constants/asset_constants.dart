@@ -59,5 +59,6 @@ class AssetsConstants {
 
   static const defaultProfileImage = assetsPath + 'default_profile_icon.png';
   static const assetsAnimationsPath = 'assets/animations/';
-  static const insertCardAnimationPath = assetsAnimationsPath + 'insertCard.json';
+  static const insertCardAnimationPath =
+      assetsAnimationsPath + 'insertCard.json';
 }

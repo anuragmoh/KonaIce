@@ -39,12 +39,10 @@ class OrderPresenter {
   }
 
   void finixReceipt(PayReceipt payReceipt) {
-    _orderRepository
-        .finixRecipt(payReceipt: payReceipt)
-        .then((value){
+    _orderRepository.finixReceipt(payReceipt: payReceipt).then((value) {
       debugPrint("Success ----- $value}");
       _view.showSuccess(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       debugPrint("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
@@ -62,10 +60,10 @@ class OrderPresenter {
     });
   }
 
-
-  void finixSendReceipt(String orderId,FinixSendReceiptRequest finixSendReceiptRequest) {
+  void finixSendReceipt(
+      String orderId, FinixSendReceiptRequest finixSendReceiptRequest) {
     _orderRepository
-        .finixSendReceipt(orderId,finixSendReceiptRequest)
+        .finixSendReceipt(orderId, finixSendReceiptRequest)
         .then((value) {
       print("Success ----- $value}");
       _view.showSuccess(value);
@@ -74,5 +72,4 @@ class OrderPresenter {
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }
-
 }

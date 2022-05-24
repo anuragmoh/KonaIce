@@ -59,8 +59,7 @@ class _ValidationPopup extends State<ValidationPopup> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: showCustomMenuPopup(),
     );
   }
@@ -87,8 +86,8 @@ class _ValidationPopup extends State<ValidationPopup> {
             Padding(
               padding:
                   const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
-              child:  CommonWidgets().textWidget(
-                 widget.validationMessage,
+              child: CommonWidgets().textWidget(
+                  widget.validationMessage,
                   StyleConstants.customTextStyle(
                       fontSize: 14.0,
                       color: getMaterialColor(AppColors.textColor1),
@@ -115,6 +114,7 @@ class _ValidationPopup extends State<ValidationPopup> {
       ),
     );
   }
+
   onTapCloseButton() {
     Navigator.of(context).pop(false);
   }

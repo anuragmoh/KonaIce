@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-FinixSendReceiptRequest finixSendReceiptRequestFromJson(String str) => FinixSendReceiptRequest.fromJson(json.decode(str));
+FinixSendReceiptRequest finixSendReceiptRequestFromJson(String str) =>
+    FinixSendReceiptRequest.fromJson(json.decode(str));
 
-String finixSendReceiptRequestToJson(FinixSendReceiptRequest data) => json.encode(data.toJson());
+String finixSendReceiptRequestToJson(FinixSendReceiptRequest data) =>
+    json.encode(data.toJson());
 
 class FinixSendReceiptRequest {
   FinixSendReceiptRequest({
@@ -19,15 +21,16 @@ class FinixSendReceiptRequest {
   String? phoneNumCountryCode;
   String? phoneNumber;
 
-  factory FinixSendReceiptRequest.fromJson(Map<String, dynamic> json) => FinixSendReceiptRequest(
-    email: json["email"],
-    phoneNumCountryCode: json["phoneNumCountryCode"],
-    phoneNumber: json["phoneNumber"],
-  );
+  factory FinixSendReceiptRequest.fromJson(Map<String, dynamic> json) =>
+      FinixSendReceiptRequest(
+        email: json["email"],
+        phoneNumCountryCode: json["phoneNumCountryCode"],
+        phoneNumber: json["phoneNumber"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "email": email,
-    "phoneNumCountryCode": phoneNumCountryCode,
-    "phoneNumber": phoneNumber,
-  };
+        "email": email,
+        "phoneNumCountryCode": phoneNumCountryCode,
+        "phoneNumber": phoneNumber,
+      };
 }

@@ -31,10 +31,8 @@ class OrderRepository {
     });
   }
 
-  Future<PayOrderResponseModel> finixRecipt(
-      {required PayReceipt payReceipt}) {
-    return baseClient.put(UrlConstants.payOrder, payReceipt).then((
-        value) {
+  Future<PayOrderResponseModel> finixReceipt({required PayReceipt payReceipt}) {
+    return baseClient.put(UrlConstants.payOrder, payReceipt).then((value) {
       return payOrderResponseModelFromJson(value);
     });
   }
@@ -48,10 +46,11 @@ class OrderRepository {
     });
   }
 
-  Future<GeneralSuccessModel> finixSendReceipt(String orderId, finixSendReceiptRequest) {
+  Future<GeneralSuccessModel> finixSendReceipt(
+      String orderId, finixSendReceiptRequest) {
     return baseClient
         .put(UrlConstants.getFinixSendReceipt(orderId: orderId),
-        finixSendReceiptRequest)
+            finixSendReceiptRequest)
         .then((value) {
       return generalSuccessModelFromJson(value);
     });

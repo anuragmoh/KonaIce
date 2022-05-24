@@ -59,8 +59,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
-      shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: showCustomMenuPopup(),
     );
   }
@@ -87,7 +86,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
             Padding(
               padding:
                   const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
-              child:  CommonWidgets().textWidget(
+              child: CommonWidgets().textWidget(
                   StringConstants.paymentFailMessage,
                   StyleConstants.customTextStyle(
                       fontSize: 14.0,
@@ -115,6 +114,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
       ),
     );
   }
+
   onTapCloseButton() {
     Navigator.of(context).pop(false);
   }

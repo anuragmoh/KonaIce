@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-FinixResponseModel finixResponseFromJson(String str) => FinixResponseModel.fromJson(json.decode(str));
+FinixResponseModel finixResponseFromJson(String str) =>
+    FinixResponseModel.fromJson(json.decode(str));
 
-String finixResponseToJson(FinixResponseModel data) => json.encode(data.toJson());
+String finixResponseToJson(FinixResponseModel data) =>
+    json.encode(data.toJson());
 
 class FinixResponseModel {
   FinixResponseModel({
@@ -17,15 +19,17 @@ class FinixResponseModel {
   FinixSaleResponse? finixSaleResponse;
   FinixSaleReceipt? finixSaleReceipt;
 
-  factory FinixResponseModel.fromJson(Map<String, dynamic> json) => FinixResponseModel(
-    finixSaleResponse: FinixSaleResponse.fromJson(json["finixSaleResponse"]),
-    finixSaleReceipt: FinixSaleReceipt.fromJson(json["finixSaleReceipt"]),
-  );
+  factory FinixResponseModel.fromJson(Map<String, dynamic> json) =>
+      FinixResponseModel(
+        finixSaleResponse:
+            FinixSaleResponse.fromJson(json["finixSaleResponse"]),
+        finixSaleReceipt: FinixSaleReceipt.fromJson(json["finixSaleReceipt"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "finixSaleResponse": finixSaleResponse!.toJson(),
-    "finixSaleReceipt": finixSaleReceipt!.toJson(),
-  };
+        "finixSaleResponse": finixSaleResponse!.toJson(),
+        "finixSaleReceipt": finixSaleReceipt!.toJson(),
+      };
 }
 
 class FinixSaleReceipt {
@@ -65,43 +69,44 @@ class FinixSaleReceipt {
   String? applicationIdentifier;
   dynamic date;
 
-  factory FinixSaleReceipt.fromJson(Map<String, dynamic> json) => FinixSaleReceipt(
-    cryptogram: json["cryptogram"],
-    merchantId: json["merchantId"],
-    accountNumber: json["accountNumber"],
-    referenceNumber: json["referenceNumber"],
-    applicationLabel: json["applicationLabel"],
-    entryMode: json["entryMode"],
-    approvalCode: json["approvalCode"],
-    transactionId: json["transactionId"],
-    cardBrand: json["cardBrand"],
-    merchantName: json["merchantName"],
-    merchantAddress: json["merchantAddress"],
-    responseCode: json["responseCode"],
-    transactionType: json["transactionType"],
-    responseMessage: json["responseMessage"],
-    applicationIdentifier: json["applicationIdentifier"],
-    date: json["date"],
-  );
+  factory FinixSaleReceipt.fromJson(Map<String, dynamic> json) =>
+      FinixSaleReceipt(
+        cryptogram: json["cryptogram"],
+        merchantId: json["merchantId"],
+        accountNumber: json["accountNumber"],
+        referenceNumber: json["referenceNumber"],
+        applicationLabel: json["applicationLabel"],
+        entryMode: json["entryMode"],
+        approvalCode: json["approvalCode"],
+        transactionId: json["transactionId"],
+        cardBrand: json["cardBrand"],
+        merchantName: json["merchantName"],
+        merchantAddress: json["merchantAddress"],
+        responseCode: json["responseCode"],
+        transactionType: json["transactionType"],
+        responseMessage: json["responseMessage"],
+        applicationIdentifier: json["applicationIdentifier"],
+        date: json["date"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "cryptogram": cryptogram,
-    "merchantId": merchantId,
-    "accountNumber": accountNumber,
-    "referenceNumber": referenceNumber,
-    "applicationLabel": applicationLabel,
-    "entryMode": entryMode,
-    "approvalCode": approvalCode,
-    "transactionId": transactionId,
-    "cardBrand": cardBrand,
-    "merchantName": merchantName,
-    "merchantAddress": merchantAddress,
-    "responseCode": responseCode,
-    "transactionType": transactionType,
-    "responseMessage": responseMessage,
-    "applicationIdentifier": applicationIdentifier,
-    "date": date,
-  };
+        "cryptogram": cryptogram,
+        "merchantId": merchantId,
+        "accountNumber": accountNumber,
+        "referenceNumber": referenceNumber,
+        "applicationLabel": applicationLabel,
+        "entryMode": entryMode,
+        "approvalCode": approvalCode,
+        "transactionId": transactionId,
+        "cardBrand": cardBrand,
+        "merchantName": merchantName,
+        "merchantAddress": merchantAddress,
+        "responseCode": responseCode,
+        "transactionType": transactionType,
+        "responseMessage": responseMessage,
+        "applicationIdentifier": applicationIdentifier,
+        "date": date,
+      };
 }
 
 class FinixSaleResponse {
@@ -135,37 +140,38 @@ class FinixSaleResponse {
   String? transferState;
   String? expirationYear;
 
-  factory FinixSaleResponse.fromJson(Map<String, dynamic> json) => FinixSaleResponse(
-    transferId: json["transferId"],
-    updated: json["updated"].toDouble(),
-    amount: json["amount"],
-    cardLogo: json["cardLogo"],
-    cardHolderName: json["cardHolderName"],
-    expirationMonth: json["expirationMonth"],
-    resourceTags: ResourceTags.fromJson(json["resourceTags"]),
-    entryMode: json["entryMode"],
-    maskedAccountNumber: json["maskedAccountNumber"],
-    created: json["created"].toDouble(),
-    traceId: json["traceId"],
-    transferState: json["transferState"],
-    expirationYear: json["expirationYear"],
-  );
+  factory FinixSaleResponse.fromJson(Map<String, dynamic> json) =>
+      FinixSaleResponse(
+        transferId: json["transferId"],
+        updated: json["updated"].toDouble(),
+        amount: json["amount"],
+        cardLogo: json["cardLogo"],
+        cardHolderName: json["cardHolderName"],
+        expirationMonth: json["expirationMonth"],
+        resourceTags: ResourceTags.fromJson(json["resourceTags"]),
+        entryMode: json["entryMode"],
+        maskedAccountNumber: json["maskedAccountNumber"],
+        created: json["created"].toDouble(),
+        traceId: json["traceId"],
+        transferState: json["transferState"],
+        expirationYear: json["expirationYear"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "transferId": transferId,
-    "updated": updated,
-    "amount": amount,
-    "cardLogo": cardLogo,
-    "cardHolderName": cardHolderName,
-    "expirationMonth": expirationMonth,
-    "resourceTags": resourceTags!.toJson(),
-    "entryMode": entryMode,
-    "maskedAccountNumber": maskedAccountNumber,
-    "created": created,
-    "traceId": traceId,
-    "transferState": transferState,
-    "expirationYear": expirationYear,
-  };
+        "transferId": transferId,
+        "updated": updated,
+        "amount": amount,
+        "cardLogo": cardLogo,
+        "cardHolderName": cardHolderName,
+        "expirationMonth": expirationMonth,
+        "resourceTags": resourceTags!.toJson(),
+        "entryMode": entryMode,
+        "maskedAccountNumber": maskedAccountNumber,
+        "created": created,
+        "traceId": traceId,
+        "transferState": transferState,
+        "expirationYear": expirationYear,
+      };
 }
 
 class ResourceTags {
@@ -178,13 +184,12 @@ class ResourceTags {
   String? orderNumber;
 
   factory ResourceTags.fromJson(Map<String, dynamic> json) => ResourceTags(
-    test: json["Test"],
-    orderNumber: json["order_number"],
-  );
+        test: json["Test"],
+        orderNumber: json["order_number"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "Test": test,
-    "order_number": orderNumber,
-  };
+        "Test": test,
+        "order_number": orderNumber,
+      };
 }
-
