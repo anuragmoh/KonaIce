@@ -16,7 +16,6 @@ class CustomMenuPopup extends StatefulWidget {
 }
 
 class _CustomMenuPopupState extends State<CustomMenuPopup> {
-
   String menuName = StringConstants.customMenuPackage;
   bool isEditingMenuName = false;
   var amountTextFieldController = TextEditingController();
@@ -43,7 +42,8 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonWidgets().popUpTopView(title: StringConstants.customMenu,
+            CommonWidgets().popUpTopView(
+                title: StringConstants.customMenu,
                 onTapCloseButton: onTapCloseButton),
             isEditingMenuName ? customMenuNameEditable() : customMenuName(),
             amountTextFieldContainer(),
@@ -75,8 +75,12 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CommonWidgets().textWidget(menuName, StyleConstants.customTextStyle(
-              fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratSemiBold)),
+          CommonWidgets().textWidget(
+              menuName,
+              StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratSemiBold)),
           editNameButton(),
         ],
       ),
@@ -87,19 +91,22 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     return TextField(
       controller: menuNameTextFieldController,
       style: StyleConstants.customTextStyle(
-          fontSize: 12.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratSemiBold),
+          fontSize: 12.0,
+          color: getMaterialColor(AppColors.textColor1),
+          fontFamily: FontConstants.montserratSemiBold),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.zero,
-        hintText: StringConstants.enterMenuName,
-        hintStyle: StyleConstants.customTextStyle(
-            fontSize: 12.0, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratRegular),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: getMaterialColor(AppColors.denotiveColor4))
-        ),
+          contentPadding: EdgeInsets.zero,
+          hintText: StringConstants.enterMenuName,
+          hintStyle: StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor2),
+              fontFamily: FontConstants.montserratRegular),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: getMaterialColor(AppColors.denotiveColor4))),
           focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: getMaterialColor(AppColors.denotiveColor4))
-          )
-      ),
+              borderSide: BorderSide(
+                  color: getMaterialColor(AppColors.denotiveColor4)))),
     );
   }
 
@@ -112,42 +119,61 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: CommonWidgets().textWidget(StringConstants.amount, StyleConstants.customTextStyle(
-                fontSize: 12, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratMedium)),
+            child: CommonWidgets().textWidget(
+                StringConstants.amount,
+                StyleConstants.customTextStyle(
+                    fontSize: 12,
+                    color: getMaterialColor(AppColors.textColor2),
+                    fontFamily: FontConstants.montserratMedium)),
           ),
           TextField(
             controller: amountTextFieldController,
             keyboardType: TextInputType.number,
-            style: StyleConstants.customTextStyle(fontSize: 22.0, color: getMaterialColor(AppColors.textColor6), fontFamily: FontConstants.montserratMedium),
+            style: StyleConstants.customTextStyle(
+                fontSize: 22.0,
+                color: getMaterialColor(AppColors.textColor6),
+                fontFamily: FontConstants.montserratMedium),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               hintText: StringConstants.enterAmount,
-              hintStyle: StyleConstants.customTextStyle(fontSize: 12, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratRegular),
+              hintStyle: StyleConstants.customTextStyle(
+                  fontSize: 12,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratRegular),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: getMaterialColor(AppColors.skyBlueBorderColor)),
-                borderRadius: BorderRadius.circular(8.0),),
+                borderSide: BorderSide(
+                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: getMaterialColor(AppColors.skyBlueBorderColor)),
-                borderRadius: BorderRadius.circular(8.0),),
+                borderSide: BorderSide(
+                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
               prefixIcon: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 15),
-                    child: CommonWidgets().textWidget(StringConstants.symbolDollar, StyleConstants.customTextStyle(
-                        fontSize: 22, color: getMaterialColor(AppColors.textColor2), fontFamily: FontConstants.montserratMedium)),
+                    child: CommonWidgets().textWidget(
+                        StringConstants.symbolDollar,
+                        StyleConstants.customTextStyle(
+                            fontSize: 22,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 15.0),
                     child: Container(
                       color: getMaterialColor(AppColors.skyBlueBorderColor),
                       width: 1.0,
                       height: 30,
                     ),
-                   )
+                  )
                 ],
               ),
-             // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+              // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             ),
           )
         ],
@@ -155,18 +181,18 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     );
   }
 
-
   Widget editNameButton() {
     return GestureDetector(
-          onTap: onTapEditNameButton,
-          child: SizedBox(
-            width: 40.0,
-            height: 40.0,
-            child: Center(
-              child: CommonWidgets().image(image: AssetsConstants.editIcon, width: 30.0, height: 30.0),
-            ),
-          ),
-        );
+      onTap: onTapEditNameButton,
+      child: SizedBox(
+        width: 40.0,
+        height: 40.0,
+        child: Center(
+          child: CommonWidgets().image(
+              image: AssetsConstants.editIcon, width: 30.0, height: 30.0),
+        ),
+      ),
+    );
   }
 
   Widget addMenuPopUpButton() {
@@ -177,12 +203,18 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         child: Container(
           height: 40.0,
           decoration: BoxDecoration(
-              color: getMaterialColor(isEditingMenuName ? AppColors.denotiveColor5 : AppColors.primaryColor2),
-              borderRadius: BorderRadius.circular(20.0)
-          ),
+              color: getMaterialColor(isEditingMenuName
+                  ? AppColors.denotiveColor5
+                  : AppColors.primaryColor2),
+              borderRadius: BorderRadius.circular(20.0)),
           child: Center(
-            child: CommonWidgets().textWidget(StringConstants.add, StyleConstants.customTextStyle(
-                fontSize: 16.0, color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratBold), textAlign: TextAlign.center),
+            child: CommonWidgets().textWidget(
+                StringConstants.add,
+                StyleConstants.customTextStyle(
+                    fontSize: 16.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratBold),
+                textAlign: TextAlign.center),
           ),
         ),
       ),
@@ -198,18 +230,22 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           height: 30.0,
           width: 45.0,
           decoration: BoxDecoration(
-              color: getMaterialColor(false ? AppColors.denotiveColor5 : AppColors.gradientColor1),
-              borderRadius: BorderRadius.circular(5.0)
-          ),
+              color: getMaterialColor(
+                  false ? AppColors.denotiveColor5 : AppColors.gradientColor1),
+              borderRadius: BorderRadius.circular(5.0)),
           child: Center(
-            child: CommonWidgets().textWidget(StringConstants.save, StyleConstants.customTextStyle(
-                fontSize: 12.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratSemiBold), textAlign: TextAlign.center),
+            child: CommonWidgets().textWidget(
+                StringConstants.save,
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.whiteColor),
+                    fontFamily: FontConstants.montserratSemiBold),
+                textAlign: TextAlign.center),
           ),
         ),
       ),
     );
   }
-
 
   //Action
   onTapCloseButton() {
@@ -217,9 +253,9 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
   }
 
   onTapEditNameButton() {
-     setState(() {
-       isEditingMenuName = true;
-     });
+    setState(() {
+      isEditingMenuName = true;
+    });
   }
 
   onTapSaveButton() {
@@ -232,8 +268,5 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     });
   }
 
-  onTapAddCustomMenu() {
-
-  }
-
+  onTapAddCustomMenu() {}
 }

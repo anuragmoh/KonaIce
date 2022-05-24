@@ -11,12 +11,23 @@ class PaymentPresenter {
   PaymentPresenter(this._view) {
     _paymentRepository = PaymentRepository();
   }
-  void getToken(dynamic body){
-    _paymentRepository.getStripeToken(body).then((value) => _view.showSuccess(value)).onError((error, stackTrace) { debugPrint(error.toString());_view.showError(FetchException(error.toString()).fetchErrorModel());});
+  void getToken(dynamic body) {
+    _paymentRepository
+        .getStripeToken(body)
+        .then((value) => _view.showSuccess(value))
+        .onError((error, stackTrace) {
+      debugPrint(error.toString());
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
   }
 
-  void getPaymentMethod(dynamic body){
-    _paymentRepository.getPaymentMethod(body).then((value) => _view.showSuccess(value)).onError((error, stackTrace) { debugPrint(error.toString());_view.showError(FetchException(error.toString()).fetchErrorModel());});
+  void getPaymentMethod(dynamic body) {
+    _paymentRepository
+        .getPaymentMethod(body)
+        .then((value) => _view.showSuccess(value))
+        .onError((error, stackTrace) {
+      debugPrint(error.toString());
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
   }
-
 }

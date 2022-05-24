@@ -1,7 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
+import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 
 import '../../exception.dart';
 import '../../response_contractor.dart';
@@ -18,9 +18,9 @@ class OrderPresenter {
   void placeOrder(PlaceOrderRequestModel placeOrderRequestModel) {
     _orderRepository
         .placeOrder(placeOrderRequestModel: placeOrderRequestModel)
-        .then((value){
+        .then((value) {
       _view.showSuccessForPlaceOrder(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       _view.showErrorForPlaceOrder(FetchException(error).fetchErrorModel());
     });
   }
@@ -28,6 +28,18 @@ class OrderPresenter {
   void payOrder(PayOrderRequestModel payOrderRequestModel) {
     _orderRepository
         .payOrder(payOrderRequestModel: payOrderRequestModel)
+        .then((value) {
+      debugPrint("Success ----- $value}");
+      _view.showSuccess(value);
+    }).onError((error, stackTrace) {
+      debugPrint("Errror ----- ${error.toString()}");
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
+  }
+
+  void finixReceipt(PayReceipt payReceipt) {
+    _orderRepository
+        .finixRecipt(payReceipt: payReceipt)
         .then((value){
       debugPrint("Success ----- $value}");
       _view.showSuccess(value);
@@ -40,10 +52,10 @@ class OrderPresenter {
   void payOrderCardMethod(PayOrderCardRequestModel payOrderCardRequestModel) {
     _orderRepository
         .payOrderCardMethod(payOrderCardRequestModel: payOrderCardRequestModel)
-        .then((value){
+        .then((value) {
       print("Success ----- $value}");
       _view.showSuccess(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       print("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });

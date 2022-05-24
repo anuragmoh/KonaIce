@@ -8,7 +8,9 @@ class ConfirmationDialog extends StatefulWidget {
   final VoidCallback onTapYes;
   final VoidCallback onTapNo;
 
-   const ConfirmationDialog({Key? key,required this.onTapYes,required this.onTapNo}) : super(key: key);
+  const ConfirmationDialog(
+      {Key? key, required this.onTapYes, required this.onTapNo})
+      : super(key: key);
 
   @override
   _ConfirmationDialogState createState() => _ConfirmationDialogState();
@@ -25,61 +27,81 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
     );
   }
 
-  Widget dialogUi()=> SizedBox(
-    height: 208,
-    width: 391,
-    child: Column(
-      children: [
-        Container(
-          color: AppColors.primaryColor1,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text(StringConstants.confirm,style: StyleConstants.customTextStyle(fontSize: 16.0, color: AppColors.whiteColor, fontFamily: FontConstants.montserratSemiBold)),
-              GestureDetector(
-                  onTap: widget.onTapNo,
-                  child: const Icon(Icons.clear,color: AppColors.whiteColor,size: 28.0)),
-              ],
+  Widget dialogUi() => SizedBox(
+        height: 208,
+        width: 391,
+        child: Column(
+          children: [
+            Container(
+              color: AppColors.primaryColor1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0, vertical: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(StringConstants.confirm,
+                        style: StyleConstants.customTextStyle(
+                            fontSize: 16.0,
+                            color: AppColors.whiteColor,
+                            fontFamily: FontConstants.montserratSemiBold)),
+                    GestureDetector(
+                        onTap: widget.onTapNo,
+                        child: const Icon(Icons.clear,
+                            color: AppColors.whiteColor, size: 28.0)),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 65.0, right: 65, top: 47.0, bottom: 49.0),
+              child: Text(StringConstants.confirmMessage,
+                  style: StyleConstants.customTextStyle(
+                      fontSize: 14.0,
+                      color: AppColors.textColor1,
+                      fontFamily: FontConstants.montserratMedium)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 16.0, right: 17.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  button(StringConstants.no, widget.onTapNo,
+                      AppColors.textColor2.withOpacity(0.3)),
+                  const SizedBox(width: 12.0),
+                  button(StringConstants.yes, widget.onTapYes,
+                      AppColors.primaryColor2),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+
+  Widget button(String title, Function onTapButton, Color color) =>
+      GestureDetector(
+        onTap: () {
+          onTapButton();
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(15.0)),
+              color: color),
+          child: Center(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 31.0, vertical: 8.0),
+              child: Text(
+                title,
+                style: StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratBold),
+              ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 65.0,right: 65,top: 47.0,bottom: 49.0),
-          child: Text(StringConstants.confirmMessage,style: StyleConstants.customTextStyle(fontSize: 14.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratMedium)),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16.0,right: 17.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              button(StringConstants.no,widget.onTapNo,AppColors.textColor2.withOpacity(0.3)),
-              const SizedBox(width: 12.0),
-              button(StringConstants.yes,widget.onTapYes,AppColors.primaryColor2),
-            ],
-          ),
-        )
-      ],
-    ),
-  );
-
-  Widget button(String title, Function onTapButton, Color color)=> GestureDetector(
-    onTap: (){
-      onTapButton();
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(15.0)),
-        color: color
-      ),
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 31.0,vertical: 8.0),
-          child: Text(title,style: StyleConstants.customTextStyle(fontSize: 12.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratBold),),
-        ),
-      ),
-    ),
-  );
+      );
 }

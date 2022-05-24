@@ -44,13 +44,16 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
+
   Future<List<SavedOrders>?> getOrdersList(String eventId) async {
     try {
       final db = await _db;
-      var result =
-      await db.rawQuery("SELECT * from $tableName where event_id=? order by order_date DESC", [eventId]);
+      var result = await db.rawQuery(
+          "SELECT * from $tableName where event_id=? order by order_date DESC",
+          [eventId]);
       if (result.isNotEmpty) {
-        return List.generate(result.length, (index) => SavedOrders.fromMap(result[index]));
+        return List.generate(
+            result.length, (index) => SavedOrders.fromMap(result[index]));
       } else {
         return null;
       }
@@ -58,13 +61,15 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
+
   Future<List<SavedOrders>?> getOrder(String orderId) async {
     try {
       final db = await _db;
-      var result =
-      await db.rawQuery("SELECT * from $tableName where order_id=?", [orderId]);
+      var result = await db
+          .rawQuery("SELECT * from $tableName where order_id=?", [orderId]);
       if (result.isNotEmpty) {
-        return List.generate(result.length, (index) => SavedOrders.fromMap(result[index]));
+        return List.generate(
+            result.length, (index) => SavedOrders.fromMap(result[index]));
       } else {
         return null;
       }
@@ -76,11 +81,12 @@ class SavedOrdersDAO {
   Future clearEventDataByOrderID(String orderID) async {
     try {
       final db = await _db;
-      await db.rawDelete("DELETE from $tableName where order_id = ?", [orderID]);
+      await db
+          .rawDelete("DELETE from $tableName where order_id = ?", [orderID]);
     } catch (error) {
       debugPrint(error.toString());
     }
-   await SavedOrdersItemsDAO().clearEventDataByOrderID(orderID);
+    await SavedOrdersItemsDAO().clearEventDataByOrderID(orderID);
     await SavedOrdersExtraItemsDAO().clearEventDataByOrderID(orderID);
   }
 

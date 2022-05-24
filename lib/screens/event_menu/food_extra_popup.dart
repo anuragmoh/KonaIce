@@ -64,13 +64,8 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             title: '${StringConstants.customize} \'${item.name}\'',
             onTapCloseButton: onTapCloseButton,
           ),
-          Container(
-              color: Colors.white,
-              child: popUpBodyContainer()),
-          Container(
-              color: Colors.white,
-              child: addFoodExtraPopUpButton(item)),
-
+          Container(color: Colors.white, child: popUpBodyContainer()),
+          Container(color: Colors.white, child: addFoodExtraPopUpButton(item)),
         ],
       ),
     );
@@ -222,12 +217,12 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
   }
 
   onTapAddExtrasButton(Item item) {
-   if (!(item.selectedExtras.isEmpty && selectedExtras.isEmpty)) {
-   widget.item.selectedExtras.clear();
-   widget.item.foodExtraItemList.clear();
-   widget.item.foodExtraItemList.addAll(foodExtraItemList);
-   widget.item.selectedExtras.addAll(selectedExtras);
-   Navigator.of(context).pop(widget.item);
-   }
+    if (!(item.selectedExtras.isEmpty && selectedExtras.isEmpty)) {
+      widget.item.selectedExtras.clear();
+      widget.item.foodExtraItemList.clear();
+      widget.item.foodExtraItemList.addAll(foodExtraItemList);
+      widget.item.selectedExtras.addAll(selectedExtras);
+      Navigator.of(context).pop(widget.item);
+    }
   }
 }

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class DottedLine extends StatelessWidget {
   final double height;
   final Color color;
- const DottedLine({Key? key, required this.height, required this.color}) : super(key: key);
+  const DottedLine({Key? key, required this.height, required this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

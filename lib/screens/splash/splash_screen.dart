@@ -18,13 +18,13 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.
 import 'package:kona_ice_pos/utils/utils.dart';
 
 enum NextScreen {
-   login,
-   dashboard,
-   modeSelection,
+  login,
+  dashboard,
+  modeSelection,
 }
 
 class SplashScreen extends StatefulWidget {
-   SplashScreen({Key? key}) : super(key: key);
+  SplashScreen({Key? key}) : super(key: key);
   bool isCustomerMode = false;
 
   @override
@@ -32,7 +32,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
-
   int numberOfTaps = 0;
   int lastTap = DateTime.now().millisecondsSinceEpoch;
 
@@ -40,57 +39,64 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
 
-  openNextScreen({required NextScreen screenType}){
+  openNextScreen({required NextScreen screenType}) {
     Future.delayed(
       const Duration(seconds: 3),
-          () {
-
-         switch (screenType) {
-           case NextScreen.login:
-             Navigator.of(context).pushReplacement( MaterialPageRoute(builder: (context) => const LoginScreen()));
-             break;
-
-            case NextScreen.dashboard:
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const Dashboard()));
+      () {
+        switch (screenType) {
+          case NextScreen.login:
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginScreen()));
             break;
 
-            case NextScreen.modeSelection:
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));
+          case NextScreen.dashboard:
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const Dashboard()));
             break;
-          }
+
+          case NextScreen.modeSelection:
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const AccountSwitchScreen()));
+            break;
+        }
       },
     );
   }
 
- selectNextScreen() async {
-   var userLoggedIn = await SessionDAO().getValueForKey(DatabaseKeys.sessionKey);
-   if (userLoggedIn != null) {
-      var selectedMode = await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
+  selectNextScreen() async {
+    var userLoggedIn =
+        await SessionDAO().getValueForKey(DatabaseKeys.sessionKey);
+    if (userLoggedIn != null) {
+      var selectedMode =
+          await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
       if (selectedMode != null) {
-       if (selectedMode.value == StringConstants.staffMode) {
-         openNextScreen(screenType: NextScreen.dashboard);
-       } else {
-         if (!P2PConnectionManager.shared.isServiceStarted) {
-           P2PConnectionManager.shared.startService(isStaffView: false);
-         }
-         setState(() {
-           widget.isCustomerMode = true;
-         });
-        // openCustomerView();
-       }
+        if (selectedMode.value == StringConstants.staffMode) {
+          openNextScreen(screenType: NextScreen.dashboard);
+        } else {
+          if (!P2PConnectionManager.shared.isServiceStarted) {
+            P2PConnectionManager.shared.startService(isStaffView: false);
+          }
+          setState(() {
+            widget.isCustomerMode = true;
+          });
+          // openCustomerView();
+        }
       } else {
         openNextScreen(screenType: NextScreen.modeSelection);
       }
-   } else {
-     openNextScreen(screenType: NextScreen.login);
-   }
- }
+    } else {
+      openNextScreen(screenType: NextScreen.login);
+    }
+  }
 
- showCustomerView(P2POrderDetailsModel orderDetailsModel) {
-     Navigator.of(context).push( MaterialPageRoute(builder: (context) => CustomerOrderDetails(orderDetailsModel: orderDetailsModel,))).then((value) => {
-     P2PConnectionManager.shared.getP2PContractor(this)
-     });
- }
+  showCustomerView(P2POrderDetailsModel orderDetailsModel) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(
+            builder: (context) => CustomerOrderDetails(
+                  orderDetailsModel: orderDetailsModel,
+                )))
+        .then((value) => {P2PConnectionManager.shared.getP2PContractor(this)});
+  }
 
   @override
   void initState() {
@@ -105,7 +111,7 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
         onTapScreenWithMultipleTimes();
       },
       child: Container(
-      color: getMaterialColor(AppColors.primaryColor1),
+        color: getMaterialColor(AppColors.primaryColor1),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,37 +123,39 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
     );
   }
 
-  Widget splashIcon(){
-    return CommonWidgets().image(image: AssetsConstants.konaIcon, width: 161.0, height: 120.0);
+  Widget splashIcon() {
+    return CommonWidgets()
+        .image(image: AssetsConstants.konaIcon, width: 161.0, height: 120.0);
   }
 
   //Action Event
-   onTapScreenWithMultipleTimes() {
-     if (widget.isCustomerMode) {
-       int currentTap = DateTime.now().millisecondsSinceEpoch;
-       if (currentTap - lastTap < 1000) {
-         numberOfTaps++;
+  onTapScreenWithMultipleTimes() {
+    if (widget.isCustomerMode) {
+      int currentTap = DateTime.now().millisecondsSinceEpoch;
+      if (currentTap - lastTap < 1000) {
+        numberOfTaps++;
 
-         if (numberOfTaps >= 4) {
-           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));
-         }
-       } else {
-         numberOfTaps = 0;
-       }
-       lastTap = currentTap;
-     }
-   }
+        if (numberOfTaps >= 4) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (context) => const AccountSwitchScreen()));
+        }
+      } else {
+        numberOfTaps = 0;
+      }
+      lastTap = currentTap;
+    }
+  }
 
   @override
   void receivedDataFromP2P(P2PDataModel response) {
-     if (response.action == StaffActionConst.eventSelected) {
-     //  showCustomerView();
-     } else if (response.action == StaffActionConst.orderModelUpdated) {
-       P2POrderDetailsModel modelObjc = p2POrderDetailsModelFromJson(
-           response.data);
-       if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
-         showCustomerView(modelObjc);
-       }
-     }
+    if (response.action == StaffActionConst.eventSelected) {
+      //  showCustomerView();
+    } else if (response.action == StaffActionConst.orderModelUpdated) {
+      P2POrderDetailsModel modelObjc =
+          p2POrderDetailsModelFromJson(response.data);
+      if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
+        showCustomerView(modelObjc);
+      }
+    }
   }
 }

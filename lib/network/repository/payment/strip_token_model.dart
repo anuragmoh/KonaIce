@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-StripTokenResponseModel stripTokenResponseModelFromJson(String str) => StripTokenResponseModel.fromJson(json.decode(str));
+StripTokenResponseModel stripTokenResponseModelFromJson(String str) =>
+    StripTokenResponseModel.fromJson(json.decode(str));
 
-String stripTokenResponseModelToJson(StripTokenResponseModel data) => json.encode(data.toJson());
+String stripTokenResponseModelToJson(StripTokenResponseModel data) =>
+    json.encode(data.toJson());
 
 class StripTokenResponseModel {
   StripTokenResponseModel({
@@ -29,27 +31,28 @@ class StripTokenResponseModel {
   String? type;
   bool? used;
 
-  factory StripTokenResponseModel.fromJson(Map<String, dynamic> json) => StripTokenResponseModel(
-    id: json["id"],
-    object: json["object"],
-    card: Card.fromJson(json["card"]),
-    clientIp: json["client_ip"],
-    created: json["created"],
-    livemode: json["livemode"],
-    type: json["type"],
-    used: json["used"],
-  );
+  factory StripTokenResponseModel.fromJson(Map<String, dynamic> json) =>
+      StripTokenResponseModel(
+        id: json["id"],
+        object: json["object"],
+        card: Card.fromJson(json["card"]),
+        clientIp: json["client_ip"],
+        created: json["created"],
+        livemode: json["livemode"],
+        type: json["type"],
+        used: json["used"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "object": object,
-    "card": card!.toJson(),
-    "client_ip": clientIp,
-    "created": created,
-    "livemode": livemode,
-    "type": type,
-    "used": used,
-  };
+        "id": id,
+        "object": object,
+        "card": card!.toJson(),
+        "client_ip": clientIp,
+        "created": created,
+        "livemode": livemode,
+        "type": type,
+        "used": used,
+      };
 }
 
 class Card {
@@ -98,48 +101,48 @@ class Card {
   dynamic tokenizationMethod;
 
   factory Card.fromJson(Map<String, dynamic> json) => Card(
-    id: json["id"],
-    object: json["object"],
-    addressCity: json["address_city"],
-    addressCountry: json["address_country"],
-    addressLine1: json["address_line1"],
-    addressLine1Check: json["address_line1_check"],
-    addressLine2: json["address_line2"],
-    addressState: json["address_state"],
-    addressZip: json["address_zip"],
-    addressZipCheck: json["address_zip_check"],
-    brand: json["brand"],
-    country: json["country"],
-    cvcCheck: json["cvc_check"],
-    dynamicLast4: json["dynamic_last4"],
-    expMonth: json["exp_month"],
-    expYear: json["exp_year"],
-    funding: json["funding"],
-    last4: json["last4"],
-    name: json["name"],
-    tokenizationMethod: json["tokenization_method"],
-  );
+        id: json["id"],
+        object: json["object"],
+        addressCity: json["address_city"],
+        addressCountry: json["address_country"],
+        addressLine1: json["address_line1"],
+        addressLine1Check: json["address_line1_check"],
+        addressLine2: json["address_line2"],
+        addressState: json["address_state"],
+        addressZip: json["address_zip"],
+        addressZipCheck: json["address_zip_check"],
+        brand: json["brand"],
+        country: json["country"],
+        cvcCheck: json["cvc_check"],
+        dynamicLast4: json["dynamic_last4"],
+        expMonth: json["exp_month"],
+        expYear: json["exp_year"],
+        funding: json["funding"],
+        last4: json["last4"],
+        name: json["name"],
+        tokenizationMethod: json["tokenization_method"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "object": object,
-    "address_city": addressCity,
-    "address_country": addressCountry,
-    "address_line1": addressLine1,
-    "address_line1_check": addressLine1Check,
-    "address_line2": addressLine2,
-    "address_state": addressState,
-    "address_zip": addressZip,
-    "address_zip_check": addressZipCheck,
-    "brand": brand,
-    "country": country,
-    "cvc_check": cvcCheck,
-    "dynamic_last4": dynamicLast4,
-    "exp_month": expMonth,
-    "exp_year": expYear,
-    "funding": funding,
-    "last4": last4,
-    "name": name,
-    "tokenization_method": tokenizationMethod,
-  };
+        "id": id,
+        "object": object,
+        "address_city": addressCity,
+        "address_country": addressCountry,
+        "address_line1": addressLine1,
+        "address_line1_check": addressLine1Check,
+        "address_line2": addressLine2,
+        "address_state": addressState,
+        "address_zip": addressZip,
+        "address_zip_check": addressZipCheck,
+        "brand": brand,
+        "country": country,
+        "cvc_check": cvcCheck,
+        "dynamic_last4": dynamicLast4,
+        "exp_month": expMonth,
+        "exp_year": expYear,
+        "funding": funding,
+        "last4": last4,
+        "name": name,
+        "tokenization_method": tokenizationMethod,
+      };
 }

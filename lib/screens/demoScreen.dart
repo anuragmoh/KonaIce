@@ -14,8 +14,8 @@ class DemoScreen extends StatefulWidget {
 
 class _DemoScreenState extends State<DemoScreen> implements ResponseContractor {
   late PaymentPresenter paymentPresenter;
-  _DemoScreenState(){
-    paymentPresenter=PaymentPresenter(this);
+  _DemoScreenState() {
+    paymentPresenter = PaymentPresenter(this);
   }
 
   @override
@@ -36,11 +36,12 @@ class _DemoScreenState extends State<DemoScreen> implements ResponseContractor {
 
   void getTokenCall() {
     final body = {
-      "type":"card",
-      "card[number]":"4111111111111111",
-      "card[cvc]":"123",
-      "card[exp_month]":"12",
-      "card[exp_year]":"22"};
+      "type": "card",
+      "card[number]": "4111111111111111",
+      "card[cvc]": "123",
+      "card[exp_month]": "12",
+      "card[exp_year]": "22"
+    };
 
     paymentPresenter.getPaymentMethod(body);
   }

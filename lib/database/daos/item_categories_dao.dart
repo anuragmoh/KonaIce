@@ -40,7 +40,8 @@ class ItemCategoriesDAO {
       final db = await _db;
       var result = await db.rawQuery("SELECT * from $tableName");
       if (result.isNotEmpty) {
-        return List.generate(result.length, (index) => ItemCategories.fromMap(result[index]));
+        return List.generate(
+            result.length, (index) => ItemCategories.fromMap(result[index]));
       } else {
         return null;
       }
@@ -55,7 +56,8 @@ class ItemCategoriesDAO {
       var result = await db
           .rawQuery("SELECT * from $tableName where event_id= ?", [eventId]);
       if (result.isNotEmpty) {
-        return List.generate(result.length, (index) => ItemCategories.fromMap(result[index]));
+        return List.generate(
+            result.length, (index) => ItemCategories.fromMap(result[index]));
       } else {
         return null;
       }
@@ -67,7 +69,8 @@ class ItemCategoriesDAO {
   Future clearCategoriesByEventID({required String eventID}) async {
     try {
       final db = await _db;
-      await db.rawDelete("DELETE from $tableName where event_id = ?", [eventID]);
+      await db
+          .rawDelete("DELETE from $tableName where event_id = ?", [eventID]);
     } catch (error) {
       debugPrint(error.toString());
     }

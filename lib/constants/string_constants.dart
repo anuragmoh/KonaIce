@@ -11,7 +11,7 @@ class StringConstants {
   static const rememberPassword = 'Remember Password ?';
   static const submit = 'Submit';
   static const pay = 'Pay';
-  static const okay='Okay';
+  static const okay = 'Okay';
   static const signOut = 'Sign Out';
 
   //DB Insertion default Value
@@ -95,7 +95,7 @@ class StringConstants {
   static const street = 'Street';
   static const storeAddress = 'Store Address';
   static const eventName = 'Event Name';
-  static const eventAddress='Event Address';
+  static const eventAddress = 'Event Address';
   static const completed = 'Completed';
   static const resume = 'Resume';
   static const pending = 'Pending';
@@ -117,17 +117,19 @@ class StringConstants {
   static const transactionId = 'Transaction ID';
   static const textMessage = 'Text Message';
   static const billTotal = 'Bill Total';
-  static const orderCompleted='Your order is complete !';
-  static const selectPaymentOption='Select Payment Option';
-  static const confirmCardDetails='Please Confirm Details';
+  static const orderCompleted = 'Your order is complete !';
+  static const selectPaymentOption = 'Select Payment Option';
+  static const confirmCardDetails = 'Please Confirm Details';
 
-  static const cardDetails='Card Details';
-  static const cardNumber='Please Enter Card Number';
-  static const cardExpiry='Expiry Date';
-  static const cardExpiryMsg='Expiry Date';
-  static const cardCvc='CVC';
-  static const cardCvcMsg='Card CVC';
+  static const cardDetails = 'Card Details';
+  static const cardNumber = 'Please Enter Card Number';
+  static const cardExpiry = 'Expiry Date';
+  static const cardExpiryMsg = 'Expiry Date';
+  static const cardCvc = 'CVC';
+  static const cardCvcMsg = 'Card CVC';
   static const addCreditCardDetails = 'Add Credit Card Details';
+  static const paymentFail = 'Payment Failed';
+  static const paymentFailMessage='We had an issue processing your payment. Please try again.';
 
   // Create adhoc event popup
   static const popHeading = "Create Adhoc Event";
@@ -155,36 +157,37 @@ class StringConstants {
   static const oldPassword = 'Old Password*';
   static const newPassword = 'New Password*';
   static const confirmPassword = 'Confirm Password*';
-  static const enterFirstName ='Enter First Name';
-  static const enterLastName ='Enter Last Name';
-  static const enterContactNumber ='Enter Contact Number';
-  static const enterEmailId ='Enter EmailID';
-  static const enterOldPassword ='Enter Old Password';
-  static const enterNewPassword ='Enter New Password';
-  static const enterConfirmPassword ='Enter Confirm Password';
+  static const enterFirstName = 'Enter First Name';
+  static const enterLastName = 'Enter Last Name';
+  static const enterContactNumber = 'Enter Contact Number';
+  static const enterEmailId = 'Enter EmailID';
+  static const enterOldPassword = 'Enter Old Password';
+  static const enterNewPassword = 'Enter New Password';
+  static const enterConfirmPassword = 'Enter Confirm Password';
   static const confirm = "Confirm";
-  static const edit="Edit";
+  static const edit = "Edit";
 
-  static const markAllAsRead='Mark all as read';
+  static const markAllAsRead = 'Mark all as read';
 
   static const internetConnectionError = 'No Internet connection';
   static const apiNotResponding = 'API not responded in time';
   static const errorOccurredWithCode = 'Error occurred with code';
   static const errorSessionExpire = 'Your session has expired';
 
-
   // Error Messages
   static const emptyValidEmail = 'Please Enter Email Address';
   static const enterValidEmail = 'Please Enter Valid Email Address';
   static const emptyValidPassword = 'Please Enter Password';
   static const enterValidPassword = 'Please Enter Valid Password';
-  static const enterValidPasswordLength = 'Password should be at least 8 to 12 alphanumeric characters';
-  static const enterSpecialChar="Please Enter At least 1 Special character";
+  static const enterValidPasswordLength =
+      'Password should be at least 8 to 12 alphanumeric characters';
+  static const enterSpecialChar = "Please Enter At least 1 Special character";
   static const noInternetConnection = 'Please check your internet connection.';
-  static const somethingWentWrong = 'Sorry, something went wrong. Please try again.';
-  static const emptyLastName="Please Enter Last Name";
-  static const emptyFirstName="Please Enter First Name";
-  static const emptyContactNumber="Please Enter Contact Number";
+  static const somethingWentWrong =
+      'Sorry, something went wrong. Please try again.';
+  static const emptyLastName = "Please Enter Last Name";
+  static const emptyFirstName = "Please Enter First Name";
+  static const emptyContactNumber = "Please Enter Contact Number";
 
   static const emptyEventName = "Please enter event name";
   static const emptyAddress = "Please enter address";
@@ -198,19 +201,20 @@ class StringConstants {
   static const profileUpdateSuccessfully = 'Profile saved successfully!';
   static const eventCreatedSuccessfully = "Adhoc event created successfully";
 
-
   //Data not available messages
-  static const eventNotAvailable = 'No event has been assigned to you for today';
-  static const noMenuItemsAvailable = 'No menu items available for the selected event';
+  static const eventNotAvailable =
+      'No event has been assigned to you for today';
+  static const noMenuItemsAvailable =
+      'No menu items available for the selected event';
   static const noOrdersToDisplay = "No records found in the order history";
-
 
   // Dialog String
 
   static const confirmMessage = "Do you really want to clear the cart ?";
   static const yes = "Yes";
   static const no = "No";
-  static const confirmNewOrder = "Do you want to save or cancel currently selected order ?";
+  static const confirmNewOrder =
+      "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
 
   //Enter Tip Amount
@@ -225,13 +229,12 @@ class StringConstants {
   static const orderStatusNew = "NEW";
 
   // all device screen
-  static const allDeviceScreenHead = "Please select customer device from the list";
+  static const allDeviceScreenHead =
+      "Please select customer device from the list";
 
   static String noDeviceAvailableToConnect = "No device available to connect";
 
-  String getDefaultEventName(){
-    return defaultEventName+Date.getDateAndTime();
+  String getDefaultEventName() {
+    return defaultEventName + Date.getDateAndTime();
   }
-
-
 }

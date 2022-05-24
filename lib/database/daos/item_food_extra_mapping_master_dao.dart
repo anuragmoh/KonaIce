@@ -14,8 +14,22 @@ class ItemFoodExtraMappingMasterDAO {
       final db = await _db;
       var result = await db.rawInsert(
           "INSERT OR REPLACE INTO $tableName (id, item_category_id, item_id, food_extra_category_id, food_extra_item_id, activated, created_by, created_at, updated_by, updated_at, deleted, price, sequence)"
-              "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-          [itemFoodExtraMappingMaster.id, itemFoodExtraMappingMaster.itemCategoryId, itemFoodExtraMappingMaster.itemId, itemFoodExtraMappingMaster.foodExtraCategoryId, itemFoodExtraMappingMaster.foodExtraItemId, itemFoodExtraMappingMaster.price, itemFoodExtraMappingMaster.sequence, itemFoodExtraMappingMaster.activated, itemFoodExtraMappingMaster.createdBy, itemFoodExtraMappingMaster.createdAt, itemFoodExtraMappingMaster.updatedBy, itemFoodExtraMappingMaster.updatedAt, itemFoodExtraMappingMaster.deleted]);
+          "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+          [
+            itemFoodExtraMappingMaster.id,
+            itemFoodExtraMappingMaster.itemCategoryId,
+            itemFoodExtraMappingMaster.itemId,
+            itemFoodExtraMappingMaster.foodExtraCategoryId,
+            itemFoodExtraMappingMaster.foodExtraItemId,
+            itemFoodExtraMappingMaster.price,
+            itemFoodExtraMappingMaster.sequence,
+            itemFoodExtraMappingMaster.activated,
+            itemFoodExtraMappingMaster.createdBy,
+            itemFoodExtraMappingMaster.createdAt,
+            itemFoodExtraMappingMaster.updatedBy,
+            itemFoodExtraMappingMaster.updatedAt,
+            itemFoodExtraMappingMaster.deleted
+          ]);
       return result;
     } catch (error) {
       debugPrint(error.toString());
@@ -25,8 +39,7 @@ class ItemFoodExtraMappingMasterDAO {
   Future<ItemFoodExtraMappingMaster?> getValues() async {
     try {
       final db = await _db;
-      var result =
-      await db.rawQuery("SELECT * from $tableName");
+      var result = await db.rawQuery("SELECT * from $tableName");
       if (result.isNotEmpty) {
         return ItemFoodExtraMappingMaster.fromMap(result.first);
       } else {

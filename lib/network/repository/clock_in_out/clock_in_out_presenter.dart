@@ -12,22 +12,29 @@ class ClockInOutPresenter {
     _clockInOutRepository = ClockInOutRepository();
   }
 
-  void clockInOutUpdate(ClockInOutRequestModel clockInOutPresenterRequestModel, String userID) {
+  void clockInOutUpdate(
+      ClockInOutRequestModel clockInOutPresenterRequestModel, String userID) {
     _clockInOutRepository
         .clockInOutUpdate(clockInOutPresenterRequestModel, userID)
-        .then((value){
+        .then((value) {
       _view.showSuccessForUpdateClockIN(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       _view.showErrorForUpdateClockIN(FetchException(error).fetchErrorModel());
     });
   }
 
-  void clockInOutDetails({required String userID, required String startTimestamp, required String endTimestamp}) {
+  void clockInOutDetails(
+      {required String userID,
+      required String startTimestamp,
+      required String endTimestamp}) {
     _clockInOutRepository
-        .clockInOutDetails(userID: userID, startTimestamp: startTimestamp, endTimestamp: endTimestamp)
-        .then((value){
+        .clockInOutDetails(
+            userID: userID,
+            startTimestamp: startTimestamp,
+            endTimestamp: endTimestamp)
+        .then((value) {
       _view.showSuccess(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       _view.showError(FetchException(error).fetchErrorModel());
     });
   }

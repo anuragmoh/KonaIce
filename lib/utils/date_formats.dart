@@ -14,14 +14,16 @@ class Date {
     return DateFormat(formatValue).format(DateTime.now());
   }
 
-  static String getDateFrom({required DateTime date, required String formatValue}) {
+  static String getDateFrom(
+      {required DateTime date, required String formatValue}) {
     return DateFormat(formatValue).format(date);
   }
 
-  static String getDateAndTime(){
-    return DateFormat(DateFormatsConstant.YYYYMMddhhmm).format(DateTime.now()).toString();
+  static String getDateAndTime() {
+    return DateFormat(DateFormatsConstant.YYYYMMddhhmm)
+        .format(DateTime.now())
+        .toString();
   }
-
 
   static String getDateInHrMinSec({required DateTime date}) {
     var diffDate = DateTime.now().difference(date);
@@ -51,13 +53,14 @@ class Date {
   }
 
   static String getStartOfDateTimeStamp({required DateTime date}) {
-      return getStartOfDay(date: date).millisecondsSinceEpoch.toString();
+    return getStartOfDay(date: date).millisecondsSinceEpoch.toString();
   }
 
   static String getEndOfDateTimeStamp({required DateTime date}) {
-     int dayComponent = 1;
-     int secComponent = -1;
-     DateTime endDate = getStartOfDay(date: date).add(Duration(days: dayComponent, seconds: secComponent));
+    int dayComponent = 1;
+    int secComponent = -1;
+    DateTime endDate = getStartOfDay(date: date)
+        .add(Duration(days: dayComponent, seconds: secComponent));
     return endDate.millisecondsSinceEpoch.toString();
   }
 }

@@ -10,7 +10,7 @@ class SyncPresenter {
     _syncRepository = SyncRepository();
   }
 
-  void syncData( int lastSyncTime) {
+  void syncData(int lastSyncTime) {
     _syncRepository.syncData(lastSyncTime).then((value) {
       _view.showSyncSuccess(value);
     }).onError((error, stackTrace) {

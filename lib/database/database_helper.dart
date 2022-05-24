@@ -24,8 +24,7 @@ class DatabaseHelper {
       // DBScheme.orderFoodExtraItemMappingTable,
       // DBScheme.orderItemsTable,
       // DBScheme.ordersTable,
-
-        ],
+    ],
   };
 
   // Singleton instance
@@ -49,9 +48,8 @@ class DatabaseHelper {
   Future initializeDB() async {
     final documentsDir = await getApplicationDocumentsDirectory();
     debugPrint(documentsDir.toString());
-    final dbPath = join(documentsDir.path, "trans_passenger.db");
-     var password = await SecureStorage.getDBPassword();
-  // var password = "";
+    final dbPath = join(documentsDir.path, "kona_ice_pos.db");
+    var password = await SecureStorage.getDBPassword();
     if (password == null) {
       password = _randomAlphaNumericString(16);
       await SecureStorage.setDBPassword(password);

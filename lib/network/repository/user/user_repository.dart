@@ -28,16 +28,18 @@ class UserRepository {
     });
   }
 
-
-  Future<MyProfileResponseModel> getMyProfile(String userID){
-    return baseClient.get(UrlConstants.getMyProfile(userID: userID)).then((value){
+  Future<MyProfileResponseModel> getMyProfile(String userID) {
+    return baseClient
+        .get(UrlConstants.getMyProfile(userID: userID))
+        .then((value) {
       return myProfileResponseModelFromJson(value);
     });
   }
 
-  Future<General> updateProfile(String userID,myProfileUpdateRequestModel) {
+  Future<General> updateProfile(String userID, myProfileUpdateRequestModel) {
     return baseClient
-        .put(UrlConstants.getMyProfile(userID: userID), myProfileUpdateRequestModel)
+        .put(UrlConstants.getMyProfile(userID: userID),
+            myProfileUpdateRequestModel)
         .then((value) {
       return generalResponseModelFromJson(value);
     });

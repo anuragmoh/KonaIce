@@ -7,7 +7,9 @@ class SyncRepository {
   BaseClient baseClient = BaseClient();
 
   Future<dynamic> syncData(int lastSyncTime) async {
-    return baseClient.post(UrlConstants.syncData, getSyncData(lastSyncTime)).then((value) {
+    return baseClient
+        .post(UrlConstants.syncData, getSyncData(lastSyncTime))
+        .then((value) {
       return syncEventMenuFromJson(value);
     });
   }
@@ -23,5 +25,4 @@ class SyncRepository {
     ];
     return _eventRequestModel;
   }
-
 }

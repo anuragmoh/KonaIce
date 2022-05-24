@@ -6,8 +6,10 @@ import '../../base_client.dart';
 class CustomerRepository {
   BaseClient baseClient = BaseClient();
 
-  Future<List<CustomerDetails>> customerList(searchText){
-    return baseClient.get(UrlConstants.getCustomerList(searchText: searchText)).then((value){
+  Future<List<CustomerDetails>> customerList(searchText) {
+    return baseClient
+        .get(UrlConstants.getCustomerList(searchText: searchText))
+        .then((value) {
       return customerDetailsFromJson(value);
     });
   }

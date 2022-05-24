@@ -8,15 +8,13 @@ import 'package:kona_ice_pos/network/app_exception.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 
-
 class BaseClient {
-
   static const int timeOutDuration = 20;
   Map<String, String> header = {
     "Content-Type": "application/json",
     "Accept-Language": "en-US",
     "X-Client-App": "POS-APP",
-    "Timezone":DateTime.now().timeZoneName.toString(),
+    "Timezone": DateTime.now().timeZoneName.toString(),
   };
 
   //GET
@@ -25,10 +23,10 @@ class BaseClient {
     await addSessionKeyToHeader();
     debugPrint(uri.toString());
     try {
-        var response = await http.get(uri, headers: header).timeout(
-            const Duration(seconds: timeOutDuration));
-        return _processResponse(response);
-
+      var response = await http
+          .get(uri, headers: header)
+          .timeout(const Duration(seconds: timeOutDuration));
+      return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
     } on Exception {
@@ -45,7 +43,8 @@ class BaseClient {
     debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {
-      var response = await http.post(uri, headers: header, body: payload)
+      var response = await http
+          .post(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
       debugPrint(response.body.toString());
       return _processResponse(response);
@@ -64,7 +63,8 @@ class BaseClient {
     debugPrint(uri.toString());
     await addSessionKeyToHeader();
     try {
-      var response = await http.put(uri, headers: header, body: payload)
+      var response = await http
+          .put(uri, headers: header, body: payload)
           .timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
@@ -79,8 +79,9 @@ class BaseClient {
     var uri = Uri.parse(UrlConstants.baseUrl + api);
     await addSessionKeyToHeader();
     try {
-      var response = await http.delete(uri, headers: header).timeout(
-          const Duration(seconds: timeOutDuration));
+      var response = await http
+          .delete(uri, headers: header)
+          .timeout(const Duration(seconds: timeOutDuration));
       return _processResponse(response);
     } on GeneralApiResponseErrorException catch (error) {
       throw GeneralApiResponseErrorException(error.errorModel);
@@ -88,7 +89,6 @@ class BaseClient {
       throw GeneralApiResponseErrorException(getDefaultErrorResponse());
     }
   }
-
 
   //OTHER
   addSessionKeyToHeader() async {
@@ -106,10 +106,9 @@ class BaseClient {
     if (response.isOkResponse()) {
       debugPrint("Ok");
       return response.body.toString();
-    } else if(response.isUnauthorizedUser()) {
-
+    } else if (response.isUnauthorizedUser()) {
       FunctionalUtils.clearSessionData();
-    //   getErrorModel(response);
+      //   getErrorModel(response);
     } else {
       debugPrint("Not Ok");
       getErrorModel(response);
@@ -131,8 +130,9 @@ class BaseClient {
   }
 
   String getDefaultErrorResponse() {
-    String defaultValue = (GeneralErrorResponse(
-        message: StringConstants.somethingWentWrong)).toRawJson();
+    String defaultValue =
+        (GeneralErrorResponse(message: StringConstants.somethingWentWrong))
+            .toRawJson();
     return defaultValue.toString();
   }
 }

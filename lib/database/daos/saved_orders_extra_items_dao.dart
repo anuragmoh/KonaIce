@@ -8,26 +8,39 @@ class SavedOrdersExtraItemsDAO {
 
   Future<Database> get _db async => await DatabaseHelper.shared.database;
 
-  Future insert(SavedOrdersExtraItems savedOrdersExtraItems) async{
+  Future insert(SavedOrdersExtraItems savedOrdersExtraItems) async {
     try {
       final db = await _db;
       var result = await db.rawInsert(
           "INSERT OR REPLACE INTO $tableName (order_id,item_id,extra_food_item_id,extra_food_item_name,extra_food_item_category_id,quantity,unit_price,total_price,deleted)"
-              "VALUES (?,?,?,?,?,?,?,?,?)",
-          [savedOrdersExtraItems.orderId,savedOrdersExtraItems.itemId,savedOrdersExtraItems.extraFoodItemId,savedOrdersExtraItems.extraFoodItemName,savedOrdersExtraItems.extraFoodItemCategoryId,savedOrdersExtraItems.quantity,savedOrdersExtraItems.unitPrice,savedOrdersExtraItems.totalPrice,savedOrdersExtraItems.deleted]);
+          "VALUES (?,?,?,?,?,?,?,?,?)",
+          [
+            savedOrdersExtraItems.orderId,
+            savedOrdersExtraItems.itemId,
+            savedOrdersExtraItems.extraFoodItemId,
+            savedOrdersExtraItems.extraFoodItemName,
+            savedOrdersExtraItems.extraFoodItemCategoryId,
+            savedOrdersExtraItems.quantity,
+            savedOrdersExtraItems.unitPrice,
+            savedOrdersExtraItems.totalPrice,
+            savedOrdersExtraItems.deleted
+          ]);
       return result;
-    }catch(error){
+    } catch (error) {
       debugPrint(error.toString());
     }
   }
+
   Future<List<SavedOrdersExtraItems>?> getExtraItemList(
       {required String itemId, required String orderId}) async {
     try {
       final db = await _db;
-      var result =
-      await db.rawQuery("SELECT * from $tableName where item_id=? AND order_id=?",[itemId,orderId]);
+      var result = await db.rawQuery(
+          "SELECT * from $tableName where item_id=? AND order_id=?",
+          [itemId, orderId]);
       if (result.isNotEmpty) {
-        return List.generate(result.length, (index) => SavedOrdersExtraItems.fromMap(result[index]));
+        return List.generate(result.length,
+            (index) => SavedOrdersExtraItems.fromMap(result[index]));
       } else {
         return null;
       }
@@ -39,7 +52,8 @@ class SavedOrdersExtraItemsDAO {
   Future clearEventDataByOrderID(String orderID) async {
     try {
       final db = await _db;
-      await db.rawDelete("DELETE from $tableName where order_id = ?", [orderID]);
+      await db
+          .rawDelete("DELETE from $tableName where order_id = ?", [orderID]);
     } catch (error) {
       debugPrint(error.toString());
     }
@@ -53,5 +67,4 @@ class SavedOrdersExtraItemsDAO {
       debugPrint(error.toString());
     }
   }
-
 }

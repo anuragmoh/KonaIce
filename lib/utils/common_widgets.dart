@@ -20,13 +20,18 @@ class CommonWidgets {
 
   Widget textMultiLineWidget(String textTitle, TextStyle textStyle,
       {TextAlign textAlign = TextAlign.start}) {
-    return Text(textTitle, style: textStyle, textAlign: textAlign,maxLines: 5,);
+    return Text(
+      textTitle,
+      style: textStyle,
+      textAlign: textAlign,
+      maxLines: 5,
+    );
   }
 
   Widget dashboardTopBar(Widget child) {
     // print('check for height in orientation ${8.30*SizeConfig.heightSizeMultiplier}');
     return Container(
-      height: 8.30*SizeConfig.heightSizeMultiplier,
+      height: 8.30 * SizeConfig.heightSizeMultiplier,
       decoration: BoxDecoration(
           color: getMaterialColor(AppColors.primaryColor1),
           borderRadius: const BorderRadius.only(
@@ -56,13 +61,14 @@ class CommonWidgets {
         Visibility(
             visible: false,
             child: CommonWidgets().image(
-            image: AssetsConstants.dropDownArrowIcon, width: 1.30*SizeConfig.imageSizeMultiplier, height: 1.04*SizeConfig.imageSizeMultiplier)
-        )
+                image: AssetsConstants.dropDownArrowIcon,
+                width: 1.30 * SizeConfig.imageSizeMultiplier,
+                height: 1.04 * SizeConfig.imageSizeMultiplier))
       ],
     );
   }
 
-  Widget profileImage(String imageName,bool editPencilVisibility) {
+  Widget profileImage(String imageName, bool editPencilVisibility) {
     return Stack(
       children: [
         const CircleAvatar(
@@ -81,14 +87,13 @@ class CommonWidgets {
     );
   }
 
-  Widget buildEditIcon(Color color) =>
-      buildCircle(
-          all: 8,
-          child: Icon(
-            Icons.edit,
-            color: color,
-            size: 20,
-          ));
+  Widget buildEditIcon(Color color) => buildCircle(
+      all: 8,
+      child: Icon(
+        Icons.edit,
+        color: color,
+        size: 20,
+      ));
 
   Widget buildCircle({
     required Widget child,
@@ -96,16 +101,18 @@ class CommonWidgets {
   }) =>
       ClipOval(
           child: Container(
-            padding: EdgeInsets.all(all),
-            color: AppColors.textColor6,
-            child: child,
-          ));
+        padding: EdgeInsets.all(all),
+        color: AppColors.textColor6,
+        child: child,
+      ));
 
   Widget textView(String text, TextStyle textStyle) =>
       Text(text, style: textStyle);
 
   Widget quantityIncrementDecrementContainer(
-      {required int quantity, required Function onTapMinus, required Function onTapPlus}) {
+      {required int quantity,
+      required Function onTapMinus,
+      required Function onTapPlus}) {
     return Row(
       children: [
         GestureDetector(
@@ -120,10 +127,11 @@ class CommonWidgets {
             height: 3 * SizeConfig.imageSizeMultiplier,
             child: Center(
               child: CommonWidgets().textWidget(
-                  '$quantity', StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratSemiBold)),
+                  '$quantity',
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: getMaterialColor(AppColors.textColor2),
+                      fontFamily: FontConstants.montserratSemiBold)),
             ),
           ),
         ),
@@ -145,10 +153,12 @@ class CommonWidgets {
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Center(
-        child: CommonWidgets().textWidget(title, StyleConstants.customTextStyle(
-            fontSize: 12.0,
-            color: getMaterialColor(AppColors.textColor4),
-            fontFamily: FontConstants.montserratSemiBold),
+        child: CommonWidgets().textWidget(
+            title,
+            StyleConstants.customTextStyle(
+                fontSize: 12.0,
+                color: getMaterialColor(AppColors.textColor4),
+                fontFamily: FontConstants.montserratSemiBold),
             textAlign: TextAlign.center),
       ),
     );
@@ -160,18 +170,18 @@ class CommonWidgets {
         decoration: BoxDecoration(
             color: getMaterialColor(AppColors.primaryColor1),
             borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))
-        ),
+                topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
         child: Padding(
             padding: const EdgeInsets.fromLTRB(16, 10, 20, 10),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CommonWidgets().textWidget(
-                      title, StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.whiteColor),
-                      fontFamily: FontConstants.montserratSemiBold)),
+                      title,
+                      StyleConstants.customTextStyle(
+                          fontSize: 16.0,
+                          color: getMaterialColor(AppColors.whiteColor),
+                          fontFamily: FontConstants.montserratSemiBold)),
                   GestureDetector(
                     onTap: () {
                       onTapCloseButton();
@@ -181,9 +191,7 @@ class CommonWidgets {
                         width: 25.0,
                         height: 25.0),
                   ),
-                ])
-        )
-    );
+                ])));
   }
 
   Widget buttonWidget(String buttonTitle, VoidCallback onTap) =>
@@ -196,7 +204,7 @@ class CommonWidgets {
           ),
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 84.0),
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 84.0),
             child: Text(
               buttonTitle,
               style: StyleConstants.customTextStyle(
@@ -214,12 +222,12 @@ class CommonWidgets {
         child: Container(
           decoration: BoxDecoration(
             // color: getMaterialColor(AppColors.primaryColor2),
-            border:Border.all(color:AppColors.primaryColor2),
+            border: Border.all(color: AppColors.primaryColor2),
             borderRadius: BorderRadius.circular(30.0),
           ),
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(vertical: 12.0, horizontal: 84.0),
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 84.0),
             child: Text(
               buttonTitle,
               style: StyleConstants.customTextStyle(
@@ -231,18 +239,29 @@ class CommonWidgets {
         ),
       );
 
-
-   showErrorSnackBar({required String errorMessage, required BuildContext context}) {
-     final snackBar = SnackBar(
-       content: textWidget(errorMessage, StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratMedium)),
-       backgroundColor: getMaterialColor(AppColors.denotiveColor1),
-     );
-     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  showErrorSnackBar(
+      {required String errorMessage, required BuildContext context}) {
+    final snackBar = SnackBar(
+      content: textWidget(
+          errorMessage,
+          StyleConstants.customTextStyle(
+              fontSize: 14.0,
+              color: getMaterialColor(AppColors.whiteColor),
+              fontFamily: FontConstants.montserratMedium)),
+      backgroundColor: getMaterialColor(AppColors.denotiveColor1),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  showSuccessSnackBar({required String message, required BuildContext context}) {
+  showSuccessSnackBar(
+      {required String message, required BuildContext context}) {
     final snackBar = SnackBar(
-      content: textWidget(message, StyleConstants.customTextStyle(fontSize: 14.0, color: getMaterialColor(AppColors.whiteColor), fontFamily: FontConstants.montserratMedium)),
+      content: textWidget(
+          message,
+          StyleConstants.customTextStyle(
+              fontSize: 14.0,
+              color: getMaterialColor(AppColors.whiteColor),
+              fontFamily: FontConstants.montserratMedium)),
       backgroundColor: getMaterialColor(AppColors.denotiveColor2),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -258,7 +277,7 @@ class CommonWidgets {
               bottomRight: Radius.circular(8.0))),
       child: const Padding(
         padding:
-        EdgeInsets.only(left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
+            EdgeInsets.only(left: 18.0, right: 18.0, bottom: 20.0, top: 30.0),
       ),
     );
   }

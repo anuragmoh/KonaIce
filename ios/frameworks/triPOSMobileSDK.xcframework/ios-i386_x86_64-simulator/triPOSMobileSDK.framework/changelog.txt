@@ -1,0 +1,130 @@
+triPOS Mobile SDK Change Log
+Worldpay Integrated Payments
+
+v2.2.0, Release date December 2021
+- Added support for BBPos Chipper 3X BT devices.
+- Updated the CAPKs for card brands expiring on 12/31/2021 on Ingenico devices (Telium and Tetra).
+- Updated BBPos Chipper 2X BT firmware version to '1.00.03.47' and configuration version to 'ANVB_Worldpay_v58' to updated CAPKs for card brands expiring on 12/31/2021.
+- Fixed Issue with EMV partial refunds on Tetra devices when quick chip is enabled. EMV Partial refunds are disabled if quick chip is enabled.
+- Fixed Issue with connect\disconnect notifications during device restarts on Ingenico devices (Tetra and Telium) after device IsConnected check is performed.
+- Fixed delays while stopping an ongoing transaction using 'stopCurrentFlow' method on Telium devices.
+
+v2.1.0, Release date September 2021
+- Added support for Valutec loyalty gift cards.
+- Updated to UPP 6.81.11 for Ingenico Tetra devices (Lane 3000 and Link 2500).
+- Firmware files for Telium and Tetra Ingenico devices (with extension .OGZ) have been moved out of the triPOS Mobile SDK framework. The correct firmware packages for the supported devices needs to be added to the target iOS Application.
+- Added contactless detection time to device configuration. This allows customizing the delay (in seconds) for the contactless card to be presented before the card read begins.
+- Added support to access the Tetra device menu while the device is still connected to triPOS Mobile SDK.
+- Fixed issues with missing expiration date in the transaction response when the financial track 2 data is not available.
+- Fixed issues with disconnecting from BBPos Chipper 2X BT devices when the de-initialize\disconnect is not initiated from the main thread.
+
+v2.0.0, Release date June 2021
+- Updated to RBA 23.50.6 for Ingenico iSMP4 devices (IMP627 and IMP657).
+- Added support for Valutec gift cards.
+- Switched from packaging the triPOS Mobile SDK as a "fat framework" to an XCFramework.
+- Updated BBPos Chipper 2X BT configation version to ANVB_Worldpay_v54.
+
+v1.9.0, Release date February 2021
+- Added module map file.
+- Updated header file access to 'project' or 'private' for files that were erroneously marked as 'public'.
+- Updated to honor isDebitAllowed configuration for EMV transactions for Tetra and Telium devices.
+- Updated to display standard Debit/Credit screen for EMV transactions if only options are 1 debit and 1 credit AID.
+- Added Deferred Authentication Indicator flag in Store and Forward transaction requests.
+- IMPORTANT: Any Tetra or Telium device that is used with triPOS Mobile SDK 1.9.0 will no longer work with previous versions of triPOS Mobile SDK.
+
+v1.8.0, Release date October 2020
+- Added support for Fiserv/First Data as a payment processor for Ingenico Telium and Tetra devices.
+- Added protection to ensure the SDK cannot be initialized more than once without first being deinitialized.
+- Added protection to ensure only one transaction can be in progress at a time.
+- Updated BBPos Chipper 2X BT firmware version to 1.00.03.44.
+- DE39361: Fixed signature mismatch for Barcode related functions.
+
+v1.7.1, Release date July 2020
+- DE42154: Fixed issue with Ingenico devices connected via Bluetooth not auto-connecting after communication loss
+- DE42410: Fixed issue with Ingenico devices connected via TCP/IP crashing when attempging sale after communication loss and reconnection.
+- DE41679: Corrected an issue that caused the SDK to not return the completed transaction response to the calling application.
+- DE42404: Removed RBA messages that are no longer necessary after support for EMV contactless and QuickChip were added.
+- Added additional logging, including logging when any Offline messages are received.
+
+v1.7.0, Release date Jun 2020
+- Added support for Ingenico Lane 3000 and Ingenico Link 2500 devices.
+- Added support for BBPos Chipper 2X BT devices.
+- Added support for including billing email with requests.
+- Added support for scanning nearby supported BLE devices.
+- DE39159: Fixed issue with American Express contactless cards not being accepted.
+
+v1.6.2, Release date January 2020
+- Added bitcode support (compiled with XCode 11.2.1)
+- Fixed JCB and CUP EMV Contact QuickChip refunds.
+
+v1.6.0, Release date November 2019
+- Added support contactless EMV
+- Added support for QuickChip EMV.
+- Added support for pre-read on both swipe and EMV.
+
+v1.5.0, Release date August 2019
+    - Allow 2 times for bad chip reader error before prompting for fallback.
+
+v1.4.1, Release date April 2019
+    - Added logging mechanism that allows integrators to programatically retrieve logs.
+    - Added EBT support.
+    - Added support for swipe/contactless MSD retries before returning error.
+    - Updated to RBA 23.0.12.
+
+v1.4.0, Release date August 2018
+    - Added EMV certification for RBA 21 with L2 kernal 5.26.
+    - Added support for setting the reboot time for PCI v4 requirements. The default reboot time is set to 3:00am local time based on the iOS device clock.
+    - Rebranding for Worldpay Integrated Payments.
+
+v1.3.1, Release date February 2018
+    - 112689: Fixed an issue with enabling aimer and scan lights on the iSMP4.
+    - 126366: Fixed bug where triPOS Mobile was unable to automatically recover from a TCP/IP device connection failure.
+    - 126434: Fixed bug where stored contactless MSD transactions could not be processed when forwarded.
+    - 128401: Fixed an issue with the calculation of store and forward unprocessed total amount.
+
+v1.3.0, Release date November 2017
+    - Added support for the Ingenico iSMP4 with bluetooth and Wi-Fi connectivity
+    - Added barcode support for the iSMP4
+    - 118692: Fixed bug where the version number was not updated inside the Index.html.
+    - 116121: Fixed bug where gift card flows prompted for amount confirmation.
+
+v1.2.0, Release date October 2017
+    - Added support for creating an OmniToken using a transaction ID.
+    - Added support for creating an OmniToken from card data.
+    - Added support for processing a Sale, Auth, and Refund transaction using an OmniToken.
+    - Added gift card Activate, Balance Inquiry, Credit, Reversal, Reload, Return and Sale transactions.
+    - Added Vantiv StoreCard support for all gift card transactions.
+    - 106784: Fixed bug where billing postal code would not allow leading zeros.
+    - 109213: Fixed typo in terms of service document.
+
+v1.1.13, Release date July 2017
+    - Changed the Express ApplicationVersion to include the SDK version.
+    - Added ability to create OmniToken via card input or transaction ID.
+    - Added sample code to demonstrate OmniToken transactions for Express transaction types: CreditCardSale, CreditCardAuthorization, CreditCardCredit.
+    - Added sample code to demonstrate a CreditCardReturn using a transaction ID from a prior OmniToken transaction.
+    - 104247: Fixed bug where PIN data was being sent during no-PIN credit transactions.
+    - 104249: Fixed bug where an Ingenico RBA device configured to use a static IP would revert to DHCP after a firmware update.
+    - 99639: Fixed bug where the manual card entry mode button is inconsistently displayed.
+    - 102081: Fixed bug where valid Visa Apple Pay transactions are declined.
+    - 104904: Fixed bug where manual entry refund transactions would cause the PIN pad to disconnect.
+
+v1.1.11, Release date March 2017
+    - 92170: Fixed bug where card holder name was not being returned for chip read cards.
+    - 92171: Fixed bug where deleting a stored transaction would cause unexpected errors until the SDK is reinitialized.
+
+v1.1.10, Release date February 2017
+    - 88525: Fixed bug where payment account information was not being returned for payment account create Express methods.
+    - 89750: Fixed bug where some EMV refunds prompted for cashback amount.
+    - 89751: Fixed bug where there were some method names that conflicted with method names in libXml.
+
+v1.1.9, Release date February 2017
+    - Sale, Auth, and Refund transaction responses now return the raw Express XML.
+    - 87218: Fixed bug where performing a contactless card input would display as swiped.
+    - 87210: Fixed bug where the host properties were missing from the query stored transactions response.
+    - 86482: Fixed bug where the transaction ID was missing from the manually forward response.
+    - 87639: Fixed bug where the convenience fee amount was not added to the total amount when manually forwarding a stored transaction.
+
+v1.1.8, Release date December 2016
+    - Added store and forward.
+
+

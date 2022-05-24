@@ -16,15 +16,14 @@ import '../../../models/network_model/search_customer/customer_model.dart';
 
 class SearchCustomers extends StatefulWidget {
   Function onTapCustomer;
-   SearchCustomers({required this.onTapCustomer, Key? key}) : super(key: key);
+  SearchCustomers({required this.onTapCustomer, Key? key}) : super(key: key);
 
   @override
   _SearchCustomersState createState() => _SearchCustomersState();
 }
 
 class _SearchCustomersState extends State<SearchCustomers>
-    implements ResponseContractor{
-
+    implements ResponseContractor {
   late CustomerPresenter customerPresenter;
 
   _SearchCustomersState() {
@@ -38,51 +37,59 @@ class _SearchCustomersState extends State<SearchCustomers>
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: searchCustomerContainer(context));
+    return Loader(
+        isCallInProgress: isApiProcess,
+        child: searchCustomerContainer(context));
     //return searchCustomerContainer(context);
   }
 
   Widget searchCustomerContainer(BuildContext context) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              cancelButton(),
-              clearButton(),
-            ],
-          ),
-          searchTextField(),
-          Expanded(child: searchedCustomerList())
-        ]
-    );
+          cancelButton(),
+          clearButton(),
+        ],
+      ),
+      searchTextField(),
+      Expanded(child: searchedCustomerList())
+    ]);
   }
 
   Widget searchTextField() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
       child: SizedBox(
-        height: 3.3*SizeConfig.heightSizeMultiplier,
+        height: 3.3 * SizeConfig.heightSizeMultiplier,
         child: TextField(
           controller: searchFieldController,
-          style: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor1),
+          style: StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor1),
               fontFamily: FontConstants.montserratMedium),
           decoration: InputDecoration(
               hintText: StringConstants.searchCustomerNameORNum,
-              hintStyle: StyleConstants.customTextStyle(fontSize: 12.0, color: getMaterialColor(AppColors.textColor2),
+              hintStyle: StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor2),
                   fontFamily: FontConstants.montserratMedium),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.5),
-                borderSide: BorderSide(color: getMaterialColor(AppColors.primaryColor1)),
+                borderSide: BorderSide(
+                    color: getMaterialColor(AppColors.primaryColor1)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.5),
-                borderSide: BorderSide(color: getMaterialColor(AppColors.primaryColor1)),
+                borderSide: BorderSide(
+                    color: getMaterialColor(AppColors.primaryColor1)),
               ),
               contentPadding: const EdgeInsets.only(left: 15.0),
-              suffixIcon: Icon(Icons.search, size: 24.0, color: getMaterialColor(AppColors.primaryColor1),)
-          ),
+              suffixIcon: Icon(
+                Icons.search,
+                size: 24.0,
+                color: getMaterialColor(AppColors.primaryColor1),
+              )),
           onChanged: onChangeSearchText,
         ),
       ),
@@ -98,10 +105,9 @@ class _SearchCustomersState extends State<SearchCustomers>
             color: getMaterialColor(AppColors.textColor2),
           );
         },
-        itemBuilder:(context, index) {
+        itemBuilder: (context, index) {
           return buildSearchedCustomerTile(index);
-        }
-    );
+        });
   }
 
   Widget buildSearchedCustomerTile(int index) {
@@ -117,16 +123,22 @@ class _SearchCustomersState extends State<SearchCustomers>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CommonWidgets().textWidget(customerList[index].getFullName(),
-                StyleConstants.customTextStyle(fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratMedium)),
+            CommonWidgets().textWidget(
+                customerList[index].getFullName(),
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratMedium)),
             Visibility(
               visible: (customerList[index].phoneNum ?? '').isNotEmpty,
               child: Padding(
                 padding: const EdgeInsets.only(top: 2.0),
-                child: CommonWidgets().textWidget(customerList[index].phoneNum!,
-                    StyleConstants.customTextStyle(fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1), fontFamily: FontConstants.montserratRegular)),
+                child: CommonWidgets().textWidget(
+                    customerList[index].phoneNum!,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratRegular)),
               ),
             )
           ],
@@ -143,9 +155,12 @@ class _SearchCustomersState extends State<SearchCustomers>
       onTap: onTapClearButton,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-        child: CommonWidgets().textWidget(StringConstants.clear, StyleConstants.customTextStyle(
-            fontSize: 9.0, color: getMaterialColor(AppColors.textColor5), fontFamily: FontConstants.montserratSemiBold)
-        ),
+        child: CommonWidgets().textWidget(
+            StringConstants.clear,
+            StyleConstants.customTextStyle(
+                fontSize: 9.0,
+                color: getMaterialColor(AppColors.textColor5),
+                fontFamily: FontConstants.montserratSemiBold)),
       ),
     );
   }
@@ -155,20 +170,25 @@ class _SearchCustomersState extends State<SearchCustomers>
       onTap: onTapCancelButton,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 5.0),
-        child: CommonWidgets().textWidget(StringConstants.cancel, StyleConstants.customTextStyle(
-            fontSize: 9.0, color: getMaterialColor(AppColors.textColor5), fontFamily: FontConstants.montserratSemiBold)
-        ),
+        child: CommonWidgets().textWidget(
+            StringConstants.cancel,
+            StyleConstants.customTextStyle(
+                fontSize: 9.0,
+                color: getMaterialColor(AppColors.textColor5),
+                fontFamily: FontConstants.montserratSemiBold)),
       ),
     );
   }
 
   //Action events
   onTapCustomerName(int index) {
-      widget.onTapCustomer(customerList[index]);
+    widget.onTapCustomer(customerList[index]);
   }
 
   onChangeSearchText(String? inputText) {
-    if ((inputText ?? '').length > 2 && (inputText ?? '').length % 2 != 0 && (inputText ?? '').isNotEmpty) {
+    if ((inputText ?? '').length > 2 &&
+        (inputText ?? '').length % 2 != 0 &&
+        (inputText ?? '').isNotEmpty) {
       customerListAPI(searchText: inputText!);
     }
     // } else if ((inputText ?? '').length < 3 ) {
@@ -189,8 +209,6 @@ class _SearchCustomersState extends State<SearchCustomers>
     });
   }
 
-
-
   //API Call
 
   customerListAPI({required String searchText}) {
@@ -206,7 +224,9 @@ class _SearchCustomersState extends State<SearchCustomers>
     // TODO: implement showError
     setState(() {
       isApiProcess = false;
-      CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+          context: context);
     });
   }
 
