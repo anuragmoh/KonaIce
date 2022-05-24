@@ -15,8 +15,10 @@ import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_response_model.dart';
+import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/finix_response_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
@@ -26,6 +28,7 @@ import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_mo
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
+import 'package:kona_ice_pos/screens/payment/validation_popup.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
@@ -95,6 +98,9 @@ class _PaymentScreenState extends State<PaymentScreen>
   String _fullDocumentSecondImageBase64 = "";
   String userEmail=StringExtension.empty();
   String userMobileNumber=StringExtension.empty();
+  String emailValidationMessage = "";
+  String smsValidationMessage = "";
+  String countryCode="+1";
 
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -180,6 +186,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentStatus(status) async {
     debugPrint("Payment Status: $status");
+
   }
 
   @override
@@ -653,7 +660,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget emailReceiptWidget() => Container(
     width: 253.0,
-    height: 40.0,
+    height: 47.0,
     decoration: BoxDecoration(
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       color: getMaterialColor(AppColors.gradientColor1),
@@ -663,7 +670,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       children: [
         Container(
           width: 203.0,
-          height: 40.0,
+          height: 45.0,
           decoration: BoxDecoration(
             color: getMaterialColor(AppColors.whiteColor),
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -675,12 +682,14 @@ class _PaymentScreenState extends State<PaymentScreen>
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
                   child: TextField(
+                    maxLength: 100,
                     controller: emailController,
                     style: StyleConstants.customTextStyle(
                         fontSize: 12.0,
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratSemiBold),
                     decoration: const InputDecoration(
+                      counterText: "",
                       border: InputBorder.none,
                     ),
                   ),
@@ -689,11 +698,16 @@ class _PaymentScreenState extends State<PaymentScreen>
             ],
           ),
         ),
-        Padding(
-          padding:
-          const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
-          child: CommonWidgets().image(
-              image: AssetsConstants.send, width: 25.0, height: 25.0),
+        GestureDetector(
+          onTap: (){
+            emailValidation();
+          },
+          child: Padding(
+            padding:
+            const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+            child: CommonWidgets().image(
+                image: AssetsConstants.send, width: 25.0, height: 25.0),
+          ),
         )
       ],
     ),
@@ -701,7 +715,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget textMessageReceiptWidget() => Container(
     width: 253.0,
-    height: 40.0,
+    height: 47.0,
     decoration: BoxDecoration(
       borderRadius: const BorderRadius.all(Radius.circular(8.0)),
       color: getMaterialColor(AppColors.gradientColor1),
@@ -711,7 +725,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       children: [
         Container(
           width: 203.0,
-          height: 40.0,
+          height: 45.0,
           decoration: BoxDecoration(
             color: getMaterialColor(AppColors.whiteColor),
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -727,8 +741,9 @@ class _PaymentScreenState extends State<PaymentScreen>
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
+                  padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
                   child: TextField(
+                    maxLength: 15,
                     controller: phoneNumberController,
                     keyboardType: TextInputType.phone,
                     inputFormatters: <TextInputFormatter>[
@@ -739,6 +754,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                         color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratSemiBold),
                     decoration: const InputDecoration(
+                      counterText: "",
                       border: InputBorder.none,
                     ),
                   ),
@@ -749,7 +765,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         ),
         GestureDetector(
           onTap: (){
-            sendReciptMailOrSmsApiCall();
+            smsValidation();
           },
           child: Padding(
             padding:
@@ -763,14 +779,16 @@ class _PaymentScreenState extends State<PaymentScreen>
   );
 
   Widget countryPicker() => CountryCodePicker(
-    onChanged: (value) {},
+    onChanged: (value) {
+    countryCode=value.toString();
+    },
     padding: EdgeInsets.zero,
     textStyle: StyleConstants.customTextStyle(
         fontSize: 12.0,
         color: getMaterialColor(AppColors.textColor1),
         fontFamily: FontConstants.montserratMedium),
     // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-    initialSelection: '+91',
+    initialSelection: '+1',
     showFlag: false,
     // optional. Shows only country name and flag
     showCountryOnly: true,
@@ -1429,6 +1447,17 @@ class _PaymentScreenState extends State<PaymentScreen>
       isApiProcess = false;
     });
 
+    GeneralSuccessModel responseModel = response;
+    setState(() {
+      isApiProcess = false;
+    });
+    CommonWidgets().showSuccessSnackBar(
+        message: responseModel.general![0].message ??
+            StringConstants.eventCreatedSuccessfully,
+        context: context);
+    phoneNumberController.clear();
+    emailController.clear();
+
     if (response is StripTokenResponseModel) {
       //getting StripeTokenId
       stripeTokenId = response.id.toString();
@@ -1733,12 +1762,68 @@ class _PaymentScreenState extends State<PaymentScreen>
     orderPresenter.finixReceipt(payReceiptModel);
     return payReceiptModel;
   }
+   emailValidation() {
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailValidationMessage = StringConstants.emptyValidEmail;
+        validationPopup(emailValidationMessage);
+      });
+      return false;
+    }
+    if (!emailController.text.isValidEmail()) {
+      setState(() {
+        emailValidationMessage = StringConstants.enterValidEmail;
+        validationPopup(emailValidationMessage);
+      });
+      return false;
+    }
+    if (emailController.text.isValidEmail()) {
+      setState(() {
+        emailValidationMessage = "";
+        sendReciptMailOrSmsApiCall("","",emailController.text);
+      });
+      return true;
+    }
+  }
+  smsValidation() {
+    if (phoneNumberController.text.isEmpty) {
+      setState(() {
+        smsValidationMessage = StringConstants.emptyContactNumber;
+        validationPopup(smsValidationMessage);
+      });
+      return false;
+    }
+    if (phoneNumberController.text.isNotEmpty) {
+      setState(() {
+        smsValidationMessage = "";
+        sendReciptMailOrSmsApiCall(countryCode,phoneNumberController.text,"");
+      });
+      return true;
+    }
+  }
+  validationPopup(String validationMessage){
+    showDialog(
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return ValidationPopup(validationMessage: validationMessage);
+        });
+  }
 
-  void sendReciptMailOrSmsApiCall() {
+  void sendReciptMailOrSmsApiCall(String countryCode,String phoneNumber, String emailAddress) {
+  FinixSendReceiptRequest finixSendReceiptRequest=FinixSendReceiptRequest();
 
-    debugPrint(widget.placeOrderRequestModel.email);
-    debugPrint(widget.placeOrderRequestModel.getPhoneNumber());
+  finixSendReceiptRequest.phoneNumCountryCode=countryCode;
+  finixSendReceiptRequest.phoneNumber=phoneNumber;
+  finixSendReceiptRequest.email=emailAddress;
 
+  setState(() {
+    isApiProcess = true;
+  });
+  // orderPresenter.finixSendReceipt("f7db3c4576b24fd38452d2bda6cb7ac1",finixSendReceiptRequest);
+  orderPresenter.finixSendReceipt(orderID,finixSendReceiptRequest);
+    debugPrint(countryCode);
+    debugPrint(phoneNumber);
   }
 }
 

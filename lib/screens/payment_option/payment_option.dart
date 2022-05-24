@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 // import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -16,6 +17,7 @@ import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:lottie/lottie.dart';
 
 class PaymentOption extends StatefulWidget {
   const PaymentOption({Key? key}) : super(key: key);
@@ -57,25 +59,38 @@ class _PaymentOptionState extends State<PaymentOption>
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 20),
-              child: Column(
+              child: Stack(
                 children: [
-                  paymentOption(0.0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Divider(
-                      color: getMaterialColor(AppColors.gradientColor1)
-                          .withOpacity(0.2),
-                      thickness: 1,
-                    ),
+                  Column(
+                    children: [
+                      paymentOption(0.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Divider(
+                          color: getMaterialColor(AppColors.gradientColor1)
+                              .withOpacity(0.2),
+                          thickness: 1,
+                        ),
+                      ),
+                      paymentModeWidget(),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Divider(
+                          color: getMaterialColor(AppColors.gradientColor1)
+                              .withOpacity(0.2),
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
                   ),
-                  paymentModeWidget(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Divider(
-                      color: getMaterialColor(AppColors.gradientColor1)
-                          .withOpacity(0.2),
-                      thickness: 1,
-                    ),
+                  Center(
+                    child: Visibility(
+                        visible:
+                            paymentModeType == PaymentModeConstants.creditCard,
+                        child: Lottie.asset(
+                            AssetsConstants.insertCardAnimationPath,
+                            height: 150,
+                            width: 150)),
                   ),
                 ],
               ),
@@ -176,6 +191,7 @@ class _PaymentOptionState extends State<PaymentOption>
 
   //Action Event
   onTapCashMode() {}
+
   onTapPaymentMode(int index) {
     setState(() {
       paymentModeType = index;
