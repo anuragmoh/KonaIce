@@ -13,17 +13,17 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-class PaymentFailPopup extends StatefulWidget {
-  String paymentFailMessage;
+class ValidationPopup extends StatefulWidget {
+  String validationMessage;
 
-  PaymentFailPopup({required this.paymentFailMessage, Key? key})
+  ValidationPopup({required this.validationMessage, Key? key})
       : super(key: key);
 
   @override
-  _PaymentFailPopupPopupState createState() => _PaymentFailPopupPopupState();
+  _ValidationPopup createState() => _ValidationPopup();
 }
 
-class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
+class _ValidationPopup extends State<ValidationPopup> {
   String menuName = StringConstants.customMenuPackage;
   bool isEditingMenuName = false;
   var amountTextFieldController = TextEditingController();
@@ -81,13 +81,13 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonWidgets().popUpTopView(
-                title: StringConstants.paymentFail,
+                title: StringConstants.error,
                 onTapCloseButton: onTapCloseButton),
             Padding(
               padding:
                   const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
               child: CommonWidgets().textWidget(
-                  StringConstants.paymentFailMessage,
+                  widget.validationMessage,
                   StyleConstants.customTextStyle(
                       fontSize: 14.0,
                       color: getMaterialColor(AppColors.textColor1),

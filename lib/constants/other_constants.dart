@@ -5,6 +5,13 @@ class PaymentModeConstants {
   static const creditCardManual = 3;
 }
 
+class PaymentMethods {
+  static const bbpos = "CARD_FINIX_BBPOS";
+  static const creditCard = "CARD_FINIX_CREDIT_CARD";
+  static const qrCode = "QR_CODE";
+  static const cash = "CASH";
+}
+
 class BlinkConstants {
   static const blinkKey =
       "sRwAAAEXY29tLm1vYmlzb2Z0LmtvbmFpY2Vwb3NCZo67NUEb+TDWlpfBv4/9BdVjX0q5jrDYyyY3RtjXf9+FWJmogMD/L5emtXx4rYK4MPl7Y56S1OoSXhF9M4mM/b5xPbdt76fqFsebeSHP2Dt5XSWiPmOyfhyX+KtPzoZDa2T/klDbCMLLI0MaevrqqjcVFTUecM9POplnSfEZbasx59uWl/4AcdU3UCQK7IG05hWFRMu9MrXZGCGEZa86CfcyB9AS8Ve+QWQFxC56";

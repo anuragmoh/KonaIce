@@ -1,9 +1,11 @@
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_response_model.dart';
+import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_card_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_response_model.dart';
+import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 
 import '../../base_client.dart';
@@ -29,10 +31,8 @@ class OrderRepository {
     });
   }
 
-  Future<PayOrderResponseModel> finixRecipt(
-      {required PayReceipt payReceipt}) {
-    return baseClient.put(UrlConstants.payOrder, payReceipt).then((
-        value) {
+  Future<PayOrderResponseModel> finixReceipt({required PayReceipt payReceipt}) {
+    return baseClient.put(UrlConstants.payOrder, payReceipt).then((value) {
       return payOrderResponseModelFromJson(value);
     });
   }
@@ -43,6 +43,16 @@ class OrderRepository {
         .put(UrlConstants.payOrder, payOrderCardRequestModel)
         .then((value) {
       return payOrderResponseCardModelFromJson(value);
+    });
+  }
+
+  Future<GeneralSuccessModel> finixSendReceipt(
+      String orderId, finixSendReceiptRequest) {
+    return baseClient
+        .put(UrlConstants.getFinixSendReceipt(orderId: orderId),
+            finixSendReceiptRequest)
+        .then((value) {
+      return generalSuccessModelFromJson(value);
     });
   }
 }

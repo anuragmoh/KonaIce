@@ -520,9 +520,11 @@ class Events {
   String getEventName() {
     return name.toUpperCase();
   }
+
   String getEventCode() {
     return eventCode;
   }
+
   String getEventAddress() {
     return '$addressLine1, $state, $zipCode';
   }

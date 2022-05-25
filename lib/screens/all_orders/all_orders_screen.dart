@@ -50,10 +50,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   List<SavedOrdersExtraItems> savedOrderExtraItemList = [];
   late AllOrderPresenter allOrderPresenter;
   List<AllOrderResponse> allOrdersList = [];
-
   int selectedRow = -1;
-
-  // late ScrollController _scrollController;
   bool isApiProcess = false;
   int countOffSet = 0;
 
@@ -108,15 +105,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   void initState() {
     super.initState();
     getData();
-    // _scrollController = ScrollController();
-    // _scrollController.addListener(() {
-    //   if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-    //     setState(() {
-    //       countOffSet = countOffSet + 1;
-    //     });
-    //     getData();
-    //   }
-    // });
   }
 
   @override
@@ -306,9 +294,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           setState(() {
             selectedRow = index;
           });
-          //  if (selectedRow != index) {
           getItemByOrderId(savedOrders.orderId);
-          //   }
         },
         color: selectedRow == index
             ? MaterialStateProperty.all(Colors.white)
@@ -867,8 +853,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             const SizedBox(
               width: 15.0,
             ),
-            // CommonWidgets().image(
-            //     image: AssetsConstants.blueTriangle, width: 6.0, height: 6.0),
           ],
         ),
       );
@@ -946,35 +930,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  // Widget rightSavedView() => Container(
-  //       height: 25.0,
-  //       width: 80.0,
-  //       decoration: BoxDecoration(
-  //           borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-  //           color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
-  //       child: Row(
-  //         children: [
-  //           const SizedBox(
-  //             width: 15.0,
-  //           ),
-  //           CommonWidgets().textView(
-  //               StringConstants.saved,
-  //               StyleConstants.customTextStyle(
-  //                   fontSize: 9.0,
-  //                   color: getMaterialColor(AppColors.primaryColor1),
-  //                   fontFamily: FontConstants.montserratMedium)),
-  //           const SizedBox(
-  //             width: 10.0,
-  //           ),
-  //           CommonWidgets().image(
-  //               image: AssetsConstants.blueTriangle, width: 6.0, height: 6.0),
-  //           const SizedBox(
-  //             width: 15.0,
-  //           ),
-  //         ],
-  //       ),
-  //     );
-
   Widget rightSavedView() => GestureDetector(
         onTap: onTapResumeButton,
         child: Container(
@@ -994,10 +949,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         fontSize: 16.0,
                         color: getMaterialColor(AppColors.primaryColor1),
                         fontFamily: FontConstants.montserratBold)),
-                // CommonWidgets().image(
-                //     image: AssetsConstants.greenTriangle,
-                //     width: 12.0,
-                //     height: 9.0)
               ],
             ),
           ),
@@ -1097,11 +1048,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         savedOrderExtraItemList.addAll(result);
       });
     }
-    // else{
-    //   setState(() {
-    //     savedOrderExtraItemList.clear();
-    //   });
-    // }
   }
 
   @override

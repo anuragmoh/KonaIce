@@ -173,7 +173,6 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
                   )
                 ],
               ),
-              // prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             ),
           )
         ],

@@ -12,84 +12,84 @@ String myProfileResponseModelToJson(MyProfileResponseModel data) =>
 
 class MyProfileResponseModel {
   MyProfileResponseModel({
-    required this.id,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.createdBy,
-    required this.updatedBy,
-    required this.deleted,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.phoneNum,
-    required this.numCountryCode,
-    required this.profileImageFileId,
-    required this.franchiseId,
-    required this.activated,
-    required this.emailVerified,
-    required this.phoneNumberVerified,
+     this.id,
+     this.createdAt,
+     this.updatedAt,
+     this.createdBy,
+     this.updatedBy,
+     this.deleted,
+     this.firstName,
+     this.lastName,
+     this.email,
+     this.phoneNum,
+     this.numCountryCode,
+     this.profileImageFileId,
+     this.franchiseId,
+     this.activated,
+     this.emailVerified,
+     this.phoneNumberVerified,
     // this.timezone,
-    required this.roles,
+     this.roles,
     // required this.files,
-    required this.code,
-    required this.franchisePhoneNumber,
-    required this.connectAccountLink,
-    required this.franchiseName,
-    required this.franchisePhoneNumCountryCode,
-    required this.franchiseEmail,
-    required this.defaultTimezone,
-    required this.billingName,
-    required this.billingAddress,
+     this.code,
+     this.franchisePhoneNumber,
+     this.connectAccountLink,
+     this.franchiseName,
+     this.franchisePhoneNumCountryCode,
+     this.franchiseEmail,
+     this.defaultTimezone,
+     this.billingName,
+     this.billingAddress,
     // this.billingCountry,
-    required this.billingState,
-    required this.billingCity,
-    required this.billingZipCode,
+     this.billingState,
+     this.billingCity,
+     this.billingZipCode,
     // this.addressLine2,
-    required this.addressLine1,
-    required this.country,
-    required this.city,
-    required this.state,
-    required this.zipCode,
+     this.addressLine1,
+     this.country,
+     this.city,
+     this.state,
+     this.zipCode,
   });
 
-  String id;
-  int createdAt;
-  int updatedAt;
-  String createdBy;
-  String updatedBy;
-  bool deleted;
-  String firstName;
-  String lastName;
-  String email;
-  String phoneNum;
-  String numCountryCode;
-  String profileImageFileId;
-  String franchiseId;
-  bool activated;
-  bool emailVerified;
-  bool phoneNumberVerified;
+  String? id;
+  int? createdAt;
+  int? updatedAt;
+  String? createdBy;
+  String? updatedBy;
+  bool? deleted;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? phoneNum;
+  String? numCountryCode;
+  String? profileImageFileId;
+  String? franchiseId;
+  bool? activated;
+  bool? emailVerified;
+  bool? phoneNumberVerified;
   // dynamic timezone;
-  List<Role> roles;
+  List<Role>? roles;
   // Files files;
-  String code;
-  String franchisePhoneNumber;
-  String connectAccountLink;
-  String franchiseName;
-  String franchisePhoneNumCountryCode;
-  String franchiseEmail;
-  String defaultTimezone;
-  String billingName;
-  String billingAddress;
+  String? code;
+  String? franchisePhoneNumber;
+  String? connectAccountLink;
+  String? franchiseName;
+  String? franchisePhoneNumCountryCode;
+  String? franchiseEmail;
+  String? defaultTimezone;
+  String? billingName;
+  String? billingAddress;
   dynamic billingCountry;
-  String billingState;
-  String billingCity;
-  String billingZipCode;
+  String? billingState;
+  String? billingCity;
+  String? billingZipCode;
   // dynamic addressLine2;
-  String addressLine1;
-  String country;
-  String city;
-  String state;
-  String zipCode;
+  String? addressLine1;
+  String? country;
+  String? city;
+  String? state;
+  String? zipCode;
 
   factory MyProfileResponseModel.fromJson(Map<String, dynamic> json) =>
       MyProfileResponseModel(
@@ -151,7 +151,7 @@ class MyProfileResponseModel {
         "emailVerified": emailVerified,
         "phoneNumberVerified": phoneNumberVerified,
         // "timezone": timezone,
-        "roles": List<dynamic>.from(roles.map((x) => x.toJson())),
+        "roles": List<dynamic>.from(roles!.map((x) => x.toJson())),
         // "files": files.toJson(),
         "code": code,
         "franchisePhoneNumber": franchisePhoneNumber,

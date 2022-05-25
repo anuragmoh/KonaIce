@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
+import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 
@@ -38,12 +39,10 @@ class OrderPresenter {
   }
 
   void finixReceipt(PayReceipt payReceipt) {
-    _orderRepository
-        .finixRecipt(payReceipt: payReceipt)
-        .then((value){
+    _orderRepository.finixReceipt(payReceipt: payReceipt).then((value) {
       debugPrint("Success ----- $value}");
       _view.showSuccess(value);
-    }).onError((error, stackTrace){
+    }).onError((error, stackTrace) {
       debugPrint("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
@@ -52,6 +51,19 @@ class OrderPresenter {
   void payOrderCardMethod(PayOrderCardRequestModel payOrderCardRequestModel) {
     _orderRepository
         .payOrderCardMethod(payOrderCardRequestModel: payOrderCardRequestModel)
+        .then((value) {
+      print("Success ----- $value}");
+      _view.showSuccess(value);
+    }).onError((error, stackTrace) {
+      print("Errror ----- ${error.toString()}");
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
+  }
+
+  void finixSendReceipt(
+      String orderId, FinixSendReceiptRequest finixSendReceiptRequest) {
+    _orderRepository
+        .finixSendReceipt(orderId, finixSendReceiptRequest)
         .then((value) {
       print("Success ----- $value}");
       _view.showSuccess(value);

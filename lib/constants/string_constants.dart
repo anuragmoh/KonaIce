@@ -129,7 +129,8 @@ class StringConstants {
   static const cardCvcMsg = 'Card CVC';
   static const addCreditCardDetails = 'Add Credit Card Details';
   static const paymentFail = 'Payment Failed';
-  static const paymentFailMessage='We had an issue processing your payment. Please try again.';
+  static const paymentFailMessage =
+      'We had an issue processing your payment. Please try again.';
 
   // Create adhoc event popup
   static const popHeading = "Create Adhoc Event";
@@ -166,7 +167,7 @@ class StringConstants {
   static const enterConfirmPassword = 'Enter Confirm Password';
   static const confirm = "Confirm";
   static const edit = "Edit";
-
+  static const error = "Error";
   static const markAllAsRead = 'Mark all as read';
 
   static const internetConnectionError = 'No Internet connection';
