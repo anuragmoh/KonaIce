@@ -87,16 +87,8 @@ class _PaymentScreenState extends State<PaymentScreen>
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
   String paymentFailMessage = StringExtension.empty();
-
-  String _resultString = "";
-  String cardNumber = "4111111111111111",
-      cardCvc = "124",
-      cardExpiryYear = "22",
-      cardExpiryMonth = "12";
   String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
-  String _fullDocumentFirstImageBase64 = "";
-  String _fullDocumentSecondImageBase64 = "";
   String userEmail = StringExtension.empty();
   String userMobileNumber = StringExtension.empty();
   String emailValidationMessage = "";
@@ -142,9 +134,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         widget.placeOrderRequestModel.id!.isNotEmpty) {
       orderID = widget.placeOrderRequestModel.id!;
     }
-
     callPlaceOrderAPI();
-
     cardPaymentChannel.setMethodCallHandler((call) async {
       debugPrint("init state setMethodCallHandler ${call.method}");
       if (call.method == "paymentSuccess") {
@@ -155,21 +145,16 @@ class _PaymentScreenState extends State<PaymentScreen>
         _paymentStatus(call.arguments.toString());
       }
     });
-
     getFinixdetailsValues();
   }
 
   _paymentSuccess(msg) async {
     debugPrint("Payment Success: $msg");
-
     setState(() {
       updatePaymentSuccess();
       isPaymentDone = true;
     });
-
     FinixResponseModel finixResponse = finixResponseFromJson(msg);
-    debugPrint("Payment Success: ${finixResponse.toString()}");
-
     //Finix recipt Api Call
     PayReceipt payReceipt = getPayReceiptModel(finixResponse);
   }
@@ -231,12 +216,10 @@ class _PaymentScreenState extends State<PaymentScreen>
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
         child: bodyWidgetComponent(),
       );
-
   Widget bodyWidgetComponent() => Row(children: [
         leftSideWidget(),
         rightSideWidget(),
       ]);
-
   Widget leftSideWidget() => Expanded(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -751,9 +734,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       });
     }
   }
-
   // Right side panel design
-
   Widget rightSideWidget() => Padding(
         padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
         child: SingleChildScrollView(
@@ -1001,7 +982,6 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget subOrderItemView(String subItem) =>
       Text(subItem, style: const TextStyle(fontSize: 10.0),);
-
   Widget componentBill() => Column(
         children: [
           const SizedBox(height: 14.0),
@@ -1051,7 +1031,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       ]);
 
   //Action Event
-
   onTapPaymentMode(int index) {
     setState(() {
       paymentModeType = index;
@@ -1072,14 +1051,10 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
-      // scan();
-      // getFinixdetailsValues();
       performCardPayment();
     }
     getEmailIdPhoneNumber();
-    // getApiCallPayReceipt();
   }
-
   getEmailIdPhoneNumber() {
     setState(() {
       emailController.text =
@@ -1097,9 +1072,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
-    debugPrint(
-        '>>>>>>>>>$finixMerchantId, $finixdeviceId, $finixSerialNumber, $finixUsername, $finixPassword');
-  }
+   }
 
   Future performCardPayment() async {
     // const String username = "US5XSPK8w4W8dCHT9t7fUUYz";
@@ -1211,15 +1184,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     return payOrderCardRequestModel;
   }
 
-  PayOrderRequestModel getPayOrderPosRequestModel() {
-    PayOrderRequestModel payOrderRequestModel = PayOrderRequestModel();
-    payOrderRequestModel.orderId = orderID;
-    payOrderRequestModel.paymentMethod = "CASH";
-    payOrderRequestModel.cardId = StringExtension.empty();
-
-    return payOrderRequestModel;
-  }
-
   //API call
   callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
     orderPresenter.placeOrder(widget.placeOrderRequestModel);
@@ -1268,17 +1232,13 @@ class _PaymentScreenState extends State<PaymentScreen>
       phoneNumberController.clear();
       emailController.clear();
     }
-
     if (response is StripTokenResponseModel) {
       //getting StripeTokenId
       stripeTokenId = response.id.toString();
-
       //PaymentMethodApi call
-      getMethodPayment(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
     } else if (response is StripePaymentMethodRequestModel) {
       //getting StripePaymentMethodId
       stripePaymentMethodId = response.id.toString();
-
       callPayOrderCardMethodAPI();
     } else {
       setState(() {
@@ -1327,85 +1287,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
   }
 
-  void getTokenCall(String cardNumber, String cardCvc, String expiryMonth,
-      String expiryYear) {
-    final body = {
-      "card[number]": cardNumber,
-      "card[cvc]": cardCvc,
-      "card[exp_month]": expiryMonth,
-      "card[exp_year]": expiryYear
-    };
-    paymentPresenter.getToken(body);
-  }
-
-  void getMethodPayment(String cardNumber, String cardCvc, String expiryMonth,
-      String expiryYear) {
-    final bodyPaymentMethod = {
-      "type": "card",
-      "card[number]": cardNumber,
-      "card[cvc]": cardCvc,
-      "card[exp_month]": expiryMonth,
-      "card[exp_year]": expiryYear
-    };
-    paymentPresenter.getPaymentMethod(bodyPaymentMethod);
-  }
-
-//Card Details Confirmation Popup
-  Widget _buildPopupDialog(BuildContext context) {
-    return AlertDialog(
-      title: Container(
-        alignment: Alignment.center,
-        child: CommonWidgets().textWidget(
-          StringConstants.confirmCardDetails,
-          StyleConstants.customTextStyle(
-              fontSize: 22.0,
-              color: getMaterialColor(AppColors.textColor1),
-              fontFamily: FontConstants.montserratSemiBold),
-        ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: TextField(
-                // controller: textEditingController,
-                decoration: InputDecoration(
-                    filled: true,
-                    border: InputBorder.none,
-                    labelText: demoCardNumber,
-                    hintStyle: StyleConstants.customTextStyle(
-                        fontSize: 15.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratRegular)),
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 23.0,
-                    vertical: 3.90 * SizeConfig.heightSizeMultiplier),
-                child: CommonWidgets().buttonWidget(
-                  StringConstants.submit,
-                  onTapConfirmPayment,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
   onTapConfirmPayment() {
-    //TokenMethodApi call
-    getTokenCall(cardNumber, cardCvc, cardExpiryMonth, cardExpiryYear);
   }
-}
-
   getApiCallPayReceipt() {
     String testString =
         "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
@@ -1567,7 +1450,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       isApiProcess = true;
     });
-    // orderPresenter.finixSendReceipt("f7db3c4576b24fd38452d2bda6cb7ac1",finixSendReceiptRequest);
     orderPresenter.finixSendReceipt(orderID, finixSendReceiptRequest);
     debugPrint(countryCode);
     debugPrint(phoneNumber);

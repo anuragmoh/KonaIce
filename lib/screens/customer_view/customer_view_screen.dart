@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
-import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
@@ -93,9 +92,6 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           ),
         ),
       );
-
-  // Widget textView(String text, TextStyle textStyle) =>
-  //     Text(text, style: textStyle);
 
   onDrawerTap() {
     Scaffold.of(context).openDrawer();
