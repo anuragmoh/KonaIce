@@ -113,16 +113,12 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           children: [
             CommonWidgets().textView(
                 StringConstants.orderDetails,
-                StyleConstants.customTextStyle(
-                    fontSize: 22.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
+                StyleConstants.customTextStyle22MontserratBold(
+                    color: getMaterialColor(AppColors.textColor1))),
             CommonWidgets().textView(
                 orderDate,
-                StyleConstants.customTextStyle(
-                    fontSize: 14.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratMedium)),
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor1))),
           ],
         ),
       );
@@ -138,24 +134,18 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
               children: [
                 CommonWidgets().textView(
                     "${StringConstants.customerName}:",
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                    StyleConstants.customTextStyle14MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor1))),
                 const SizedBox(height: 13.0),
                 CommonWidgets().textView(
                     StringConstants.phone,
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                    StyleConstants.customTextStyle14MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor1))),
                 const SizedBox(height: 13.0),
                 CommonWidgets().textView(
                     StringConstants.email,
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                    StyleConstants.customTextStyle14MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor1))),
               ],
             ),
             const SizedBox(
@@ -168,24 +158,18 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                   children: [
                     CommonWidgets().textView(
                         customerName,
-                        StyleConstants.customTextStyle(
-                            fontSize: 14.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratMedium)),
+                        StyleConstants.customTextStyle14MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor1))),
                     const SizedBox(height: 13.0),
                     CommonWidgets().textView(
                         phoneNumber,
-                        StyleConstants.customTextStyle(
-                            fontSize: 14.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratMedium)),
+                        StyleConstants.customTextStyle14MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor1))),
                     const SizedBox(height: 13.0),
                     CommonWidgets().textView(
                         email,
-                        StyleConstants.customTextStyle(
-                            fontSize: 14.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratMedium)),
+                        StyleConstants.customTextStyle14MonsterMedium(
+                            color: getMaterialColor(AppColors.textColor1))),
                   ],
                 ))
           ]),
@@ -200,10 +184,8 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           children: [
             CommonWidgets().textView(
                 StringConstants.orderItem,
-                StyleConstants.customTextStyle(
-                    fontSize: 16.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
+                StyleConstants.customTextStyle16MontserratBold(
+                    color: getMaterialColor(AppColors.textColor1))),
             ListView.builder(
                 shrinkWrap: true,
                 itemCount: 5,
@@ -228,40 +210,30 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
               children: [
                 CommonWidgets().textView(
                     itemTitle,
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                    StyleConstants.customTextStyle14MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor1))),
                 const SizedBox(width: 5.0),
                 CommonWidgets().textView(
                     'x',
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                    StyleConstants.customTextStyle14MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor1))),
                 const SizedBox(width: 5.0),
                 CommonWidgets().textView(
                     '$itemCount',
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium)),
+                    StyleConstants.customTextStyle14MonsterMedium(
+                        color: getMaterialColor(AppColors.textColor1))),
               ],
             ),
             Row(
               children: [
                 CommonWidgets().textView(
                     "\$",
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
                 CommonWidgets().textView(
                     '$itemAmount',
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
               ],
             ),
           ]),
@@ -320,24 +292,18 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             CommonWidgets().textView(
                 billTitle,
-                StyleConstants.customTextStyle(
-                    fontSize: 14.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratMedium)),
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor1))),
             Row(
               children: [
                 CommonWidgets().textView(
                     "\$",
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
                 CommonWidgets().textView(
                     '$itemAmount',
-                    StyleConstants.customTextStyle(
-                        fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratBold)),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: getMaterialColor(AppColors.textColor1))),
               ],
             ),
           ]),
@@ -349,23 +315,17 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         CommonWidgets().textView(
             StringConstants.total,
-            StyleConstants.customTextStyle(
-                fontSize: 20.0,
-                color: getMaterialColor(AppColors.textColor1),
-                fontFamily: FontConstants.montserratBold)),
+            StyleConstants.customTextStyle20MontserratBold(
+                color: getMaterialColor(AppColors.textColor1))),
         const SizedBox(width: 38.0),
         CommonWidgets().textView(
             "\$",
-            StyleConstants.customTextStyle(
-                fontSize: 24.0,
-                color: getMaterialColor(AppColors.denotiveColor2),
-                fontFamily: FontConstants.montserratBold)),
+            StyleConstants.customTextStyle24MontserratBold(
+                color: getMaterialColor(AppColors.denotiveColor2))),
         CommonWidgets().textView(
             '$totalAmount',
-            StyleConstants.customTextStyle(
-                fontSize: 24.0,
-                color: getMaterialColor(AppColors.denotiveColor2),
-                fontFamily: FontConstants.montserratBold)),
+            StyleConstants.customTextStyle24MontserratBold(
+                color: getMaterialColor(AppColors.denotiveColor2))),
       ]);
 
   Widget componentBottomWidget() => Padding(

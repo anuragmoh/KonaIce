@@ -37,11 +37,11 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   bool isPasswordVisible = true;
   bool editMode = false;
   var userName = '';
-  String emailValidationMessage = "";
-  String firstNameValidationMessage = "";
-  String lastNameValidationMessage = "";
-  String contactNumberValidationMessage = "";
-  String passwordValidationMessage = "";
+  String emailValidationMessage = "",
+      firstNameValidationMessage = "",
+      lastNameValidationMessage = "",
+      contactNumberValidationMessage = "",
+      passwordValidationMessage = "";
   bool isEmailValid = true;
   bool isFirstNameValid = true;
   bool isLastNameValid = true;
@@ -88,8 +88,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     super.initState();
     getMyProfileDetails();
     ServiceNotifier().increment(2);
-    P2PConnectionManager.shared.updateData(
-        action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
+    P2PConnectionManager.shared.updateData(action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
 
     // getUserDetails();
   }
@@ -120,19 +119,11 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           children: [
             CommonWidgets().dashboardTopBar(topBarComponent()),
             Expanded(child: bodyWidget()),
-/*            Padding(
-              padding: const EdgeInsets.only(left: 23.0,top: 15.0),
-              child: changeProfileButtons(),
-            ),
-            SizedBox(
-              height: 4.88 * SizeConfig.heightSizeMultiplier,
-            ),*/
             BottomBarWidget(
               onTapCallBack: onTapBottomListItem,
               accountImageVisibility: false,
               isFromDashboard: false,
             )
-            // CommonWidgets().bottomBar(false),
           ],
         ),
       ),
@@ -142,7 +133,6 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   onTapBottomListItem(int index) {
     setState(() {
       currentIndex = index;
-      print('profile$index');
     });
   }
 
@@ -154,10 +144,6 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         editMode = false;
       }
     });
-    /* showDialog(
-      context: context,
-      builder: (BuildContext context) => _buildPopupDialog(context),
-    );*/
   }
 
   onTapCancel() {
@@ -234,10 +220,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               padding: const EdgeInsets.only(left: 18),
               child: CommonWidgets().textWidget(
                   StringConstants.dashboard,
-                  StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.whiteColor),
-                      fontFamily: FontConstants.montserratBold)),
+                  StyleConstants.customTextStyle16MontserratBold(
+                      color: getMaterialColor(AppColors.whiteColor))),
             ),
           ),
           CommonWidgets().profileComponent(userName),
@@ -302,10 +286,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               padding: const EdgeInsets.symmetric(horizontal: 23.0),
               child: CommonWidgets().textWidget(
                   StringConstants.myProfile,
-                  StyleConstants.customTextStyle(
-                      fontSize: 22.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold),
+                  StyleConstants.customTextStyle22MontserratBold(
+                      color: getMaterialColor(AppColors.textColor1)),
                   textAlign: TextAlign.start),
             ),
             const SizedBox(height: 20.0),
@@ -404,10 +386,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         children: [
           CommonWidgets().textWidget(
               txtName,
-              StyleConstants.customTextStyle(
-                  fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratRegular),
+              StyleConstants.customTextStyle14MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor1)),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -437,19 +417,15 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle(
-                          fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratRegular)),
+                      hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                          color: getMaterialColor(AppColors.textColor1))),
                 ),
               ),
             ),
           ),
           Text(validationMessage,
-              style: StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor5),
-                  fontFamily: FontConstants.montserratRegular),
+              style: StyleConstants.customTextStyle12MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor5)),
               textAlign: TextAlign.left)
         ],
       );
@@ -467,10 +443,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         children: [
           CommonWidgets().textWidget(
               txtName,
-              StyleConstants.customTextStyle(
-                  fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratRegular),
+              StyleConstants.customTextStyle14MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor1)),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -513,10 +487,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       hintText: txtHint,
                       border: InputBorder.none,
                       labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle(
-                          fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratRegular)),
+                      hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                          color: getMaterialColor(AppColors.textColor1))),
                 ),
               ),
             ),
@@ -524,30 +496,22 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           Visibility(
             visible: editMode ? true : false,
             child: Text(validationMessage,
-                style: StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor5),
-                    fontFamily: FontConstants.montserratRegular),
+                style: StyleConstants.customTextStyle12MonsterRegular(
+                    color: getMaterialColor(AppColors.textColor5)),
                 textAlign: TextAlign.left),
           )
         ],
       );
 
-  Widget profileEmailTextFiledComponent(
-          String txtName,
-          String txtValue,
-          String txtHint,
-          TextEditingController textEditingController,
-          bool textFiledColor) =>
+  Widget profileEmailTextFiledComponent(String txtName, String txtValue,
+      String txtHint, TextEditingController textEditingController, bool textFiledColor) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CommonWidgets().textWidget(
               txtName,
-              StyleConstants.customTextStyle(
-                  fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratRegular),
+              StyleConstants.customTextStyle14MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor1)),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -556,9 +520,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               height: 40.0,
               width: 300.0,
               decoration: BoxDecoration(
-                  color: textFiledColor
-                      ? AppColors.whiteColor
-                      : AppColors.denotiveColor5,
+                  color: textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
                       color: getMaterialColor(AppColors.textColor1)
@@ -578,16 +540,14 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       controller: textEditingController,
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor: textFiledColor
-                              ? AppColors.whiteColor
-                              : AppColors.denotiveColor5,
+                          fillColor:textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
                           hintText: txtHint,
                           border: InputBorder.none,
                           labelText: txtValue,
-                          hintStyle: StyleConstants.customTextStyle(
-                              fontSize: 15.0,
-                              color: getMaterialColor(AppColors.textColor1),
-                              fontFamily: FontConstants.montserratRegular)),
+                          hintStyle:
+                              StyleConstants.customTextStyle15MonsterRegular(
+                                  color:
+                                      getMaterialColor(AppColors.textColor1))),
                     ),
                   ),
                 ),
@@ -595,10 +555,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
             ),
           ),
           Text(emailValidationMessage,
-              style: StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor5),
-                  fontFamily: FontConstants.montserratRegular),
+              style: StyleConstants.customTextStyle12MonsterRegular(
+                  color: getMaterialColor(AppColors.textColor5)),
               textAlign: TextAlign.left)
         ],
       );
@@ -641,7 +599,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   lastNameValidation() {
     if (lastNameController.text.isEmpty) {
       setState(() {
-        lastNameValidationMessage = StringConstants.emptyLastName;
+        lastNameValidationMessage =StringConstants.emptyLastName;
       });
       return false;
     } else {
@@ -656,7 +614,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   phoneNumberValidation() {
     if (contactNumberController.text.isEmpty) {
       setState(() {
-        contactNumberValidationMessage = StringConstants.emptyContactNumber;
+        contactNumberValidationMessage =StringConstants.emptyContactNumber;
       });
       return false;
     } else {
@@ -682,8 +640,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       });
       return false;
     }
-    if (newPasswordController.text.length < 7 ||
-        newPasswordController.text.length > 12) {
+    if (newPasswordController.text.length<7||newPasswordController.text.length>12) {
       setState(() {
         passwordValidationMessage = StringConstants.enterValidPasswordLength;
       });
@@ -738,9 +695,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   getUserDetails() {
-    userName = getMyProfile[0].firstName.toString() +
-        " " +
-        getMyProfile[0].lastName.toString();
+    userName = getMyProfile[0].firstName.toString() + " " +getMyProfile[0].lastName.toString();
     firstNameController.text = getMyProfile[0].firstName.toString();
     lastNameController.text = getMyProfile[0].lastName.toString();
     contactNumberController.text = getMyProfile[0].phoneNum.toString();
@@ -757,65 +712,6 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     SessionDAO().insert(Session(key: DatabaseKeys.firstName, value: firstName));
     SessionDAO().insert(Session(key: DatabaseKeys.lastName, value: lastName));
     SessionDAO().insert(Session(key: DatabaseKeys.email, value: email));
-    SessionDAO()
-        .insert(Session(key: DatabaseKeys.phoneNum, value: contactNumber));
+    SessionDAO().insert(Session(key: DatabaseKeys.phoneNum, value: contactNumber));
   }
-/*  Widget _buildPopupDialog(BuildContext context) {
-    return AlertDialog(
-      title: Container(
-        alignment: Alignment.center,
-        child: CommonWidgets().textWidget(
-          StringConstants.changePassword,
-          StyleConstants.customTextStyle(
-              fontSize: 22.0,
-              color: getMaterialColor(AppColors.textColor1),
-              fontFamily: FontConstants.montserratSemiBold),
-        ),
-      ),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(StringConstants.oldPassword, "",
-                  StringConstants.oldPassword, oldPasswordController),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(StringConstants.newPassword, "",
-                  StringConstants.newPassword, newPasswordController),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 25.0, left: 23.0, right: 23.0, bottom: 10.0),
-              child: profileDetailsComponent(
-                  StringConstants.confirmPassword,
-                  "",
-                  StringConstants.confirmPassword,
-                  confirmPasswordController),
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 23.0,
-                    vertical: 3.90 * SizeConfig.heightSizeMultiplier),
-                child: CommonWidgets().buttonWidget(
-                  StringConstants.submit,
-                  onTapSubmitChangePassword,
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  onTapSubmitChangePassword() {
-    Navigator.pop(context);
-  }*/
 }

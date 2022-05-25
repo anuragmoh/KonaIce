@@ -282,16 +282,12 @@ class _HomeScreenState extends State<HomeScreen>
             children: [
               createEventButton(
                   StringConstants.createAdhocEvent,
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold)),
+                  StyleConstants.customTextStyle12MontserratBold(
+                      color: getMaterialColor(AppColors.textColor1))),
               CommonWidgets().textWidget(
                   currentDate,
-                  StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratBold)),
+                  StyleConstants.customTextStyle16MontserratBold(
+                      color: getMaterialColor(AppColors.textColor1))),
               clockInOutButton(
                   isClockIn
                       ? StringConstants.clockOut
@@ -302,10 +298,8 @@ class _HomeScreenState extends State<HomeScreen>
                       fontFamily: isClockIn
                           ? FontConstants.montserratBold
                           : FontConstants.montserratMedium),
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.whiteColor),
-                      fontFamily: FontConstants.montserratMedium))
+                  StyleConstants.customTextStyle12MonsterMedium(
+                      color: getMaterialColor(AppColors.whiteColor)))
             ],
           ),
           Expanded(
@@ -351,12 +345,9 @@ class _HomeScreenState extends State<HomeScreen>
                                   padding: const EdgeInsets.only(bottom: 10.0),
                                   child: CommonWidgets().textWidget(
                                       eventDetails.getEventName(),
-                                      StyleConstants.customTextStyle(
-                                          fontSize: 16.0,
+                                      StyleConstants.customTextStyle16MontserratBold(
                                           color: getMaterialColor(
-                                              AppColors.textColor1),
-                                          fontFamily:
-                                              FontConstants.montserratBold)),
+                                              AppColors.textColor1))),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 5.0),
@@ -374,15 +365,10 @@ class _HomeScreenState extends State<HomeScreen>
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
                                           child: CommonWidgets()
-                                              .textMultiLineWidget(
-                                                  eventDetails
-                                                      .getEventAddress(),
-                                                  StyleConstants.customTextStyle(
-                                                      fontSize: 12.0,
+                                              .textMultiLineWidget(eventDetails.getEventAddress(),
+                                                  StyleConstants.customTextStyle12MonsterMedium(
                                                       color: getMaterialColor(
-                                                          AppColors.textColor4),
-                                                      fontFamily: FontConstants
-                                                          .montserratMedium)),
+                                                          AppColors.textColor4))),
                                         ),
                                       ),
                                     ],
@@ -400,24 +386,17 @@ class _HomeScreenState extends State<HomeScreen>
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: CommonWidgets().textWidget(
                                         eventDetails.getEventDate(),
-                                        StyleConstants.customTextStyle(
-                                            fontSize: 12.0,
-                                            color: getMaterialColor(
-                                                AppColors.textColor4),
-                                            fontFamily:
-                                                FontConstants.montserratMedium),
+                                        StyleConstants.customTextStyle12MonsterMedium(
+                                            color: getMaterialColor(AppColors.textColor4)),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 40),
                                       child: CommonWidgets().textWidget(
                                         eventDetails.getEventTime(),
-                                        StyleConstants.customTextStyle(
-                                            fontSize: 12.0,
+                                        StyleConstants.customTextStyle12MonsterMedium(
                                             color: getMaterialColor(
-                                                AppColors.textColor4),
-                                            fontFamily:
-                                                FontConstants.montserratMedium),
+                                                AppColors.textColor4)),
                                       ),
                                     ),
                                   ],
@@ -434,10 +413,8 @@ class _HomeScreenState extends State<HomeScreen>
                     SizedBox(height: MediaQuery.of(context).size.height * 0.27),
                     Center(
                       child: Text(StringConstants.eventNotAvailable,
-                          style: StyleConstants.customTextStyle(
-                              fontSize: 20.0,
-                              color: AppColors.textColor1,
-                              fontFamily: FontConstants.montserratSemiBold)),
+                          style: StyleConstants.customTextStyle20MontserratBold(
+                              color: AppColors.textColor1)),
                     ),
                   ],
                 ),
