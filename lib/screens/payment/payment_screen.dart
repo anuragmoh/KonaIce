@@ -795,7 +795,6 @@ class _PaymentScreenState extends State<PaymentScreen>
         // optional. aligns the flag and the Text left
         alignLeft: false,
       );
-
   onAmountEnter(double value) {
     receivedAmount = value;
     if (value > totalAmount) {
@@ -1767,6 +1766,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         finixResponseModel.finixSaleReceipt!.cardBrand;
     finixSaleReceiptRequest.merchantName =
         finixResponseModel.finixSaleReceipt!.merchantName;
+    finixSaleReceiptRequest.merchantAddress =
+        finixResponseModel.finixSaleReceipt!.merchantAddress;
     finixSaleReceiptRequest.responseCode =
         finixResponseModel.finixSaleReceipt!.responseCode;
     finixSaleReceiptRequest.transactionType =
