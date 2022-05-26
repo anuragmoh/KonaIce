@@ -78,6 +78,10 @@ class FunctionalUtils {
       SessionDAO().insert(Session(
           key: DatabaseKeys.finixPassword, value: userModel.finixPassword!));
     }
+    if (userModel.merchantIdNCP != null) {
+      SessionDAO().insert(Session(
+          key: DatabaseKeys.merchantIdNCP, value: userModel.merchantIdNCP!));
+    }
     if (userModel.franchiseId != null) {
       SessionDAO().insert(Session(
           key: DatabaseKeys.franchiseId, value: userModel.franchiseId!));
@@ -163,6 +167,14 @@ class FunctionalUtils {
   static Future<String> getFinixMerchantId() async {
     String merchantId = StringExtension.empty();
     var idObj = await SessionDAO().getValueForKey(DatabaseKeys.merchantId);
+    if (idObj != null) {
+      merchantId = idObj.value;
+    }
+    return merchantId;
+  }
+  static Future<String> getFinixMerchantIdNCP() async {
+    String merchantId = StringExtension.empty();
+    var idObj = await SessionDAO().getValueForKey(DatabaseKeys.merchantIdNCP);
     if (idObj != null) {
       merchantId = idObj.value;
     }

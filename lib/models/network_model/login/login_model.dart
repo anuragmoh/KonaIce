@@ -89,6 +89,7 @@ class LoginResponseModel {
     this.finixSerialNumber,
     this.finixUsername,
     this.finixPassword,
+    this.merchantIdNCP
   });
 
   String? id;
@@ -109,6 +110,7 @@ class LoginResponseModel {
   bool? phoneNumberVerified;
   String? timezone;
   List<Role>? roles;
+
   //Files? files;
   String? sessionKey;
   ProjectConfigs? projectConfigs;
@@ -117,36 +119,37 @@ class LoginResponseModel {
   String? finixSerialNumber;
   String? finixUsername;
   String? finixPassword;
+  String? merchantIdNCP;
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginResponseModel(
-        id: json["id"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-        createdBy: json["createdBy"],
-        updatedBy: json["updatedBy"],
-        deleted: json["deleted"],
-        firstName: json["firstName"],
-        lastName: json["lastName"],
-        email: json["email"],
-        phoneNum: json["phoneNum"],
-        numCountryCode: json["numCountryCode"],
-        profileImageFileId: json["profileImageFileId"],
-        franchiseId: json["franchiseId"],
-        activated: json["activated"],
-        emailVerified: json["emailVerified"],
-        phoneNumberVerified: json["phoneNumberVerified"],
-        timezone: json["timezone"],
-        roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
-        // files: Files.fromJson(json["files"]),
-        sessionKey: json["sessionKey"],
-        projectConfigs: ProjectConfigs.fromJson(json["projectConfigs"]),
-        merchantId: json["merchantId"],
-        deviceId: json["deviceId"],
-        finixSerialNumber: json["finixSerialNumber"],
-        finixUsername: json["finixUsername"],
-        finixPassword: json["finixPassword"],
-      );
+          id: json["id"],
+          createdAt: json["createdAt"],
+          updatedAt: json["updatedAt"],
+          createdBy: json["createdBy"],
+          updatedBy: json["updatedBy"],
+          deleted: json["deleted"],
+          firstName: json["firstName"],
+          lastName: json["lastName"],
+          email: json["email"],
+          phoneNum: json["phoneNum"],
+          numCountryCode: json["numCountryCode"],
+          profileImageFileId: json["profileImageFileId"],
+          franchiseId: json["franchiseId"],
+          activated: json["activated"],
+          emailVerified: json["emailVerified"],
+          phoneNumberVerified: json["phoneNumberVerified"],
+          timezone: json["timezone"],
+          roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
+          // files: Files.fromJson(json["files"]),
+          sessionKey: json["sessionKey"],
+          projectConfigs: ProjectConfigs.fromJson(json["projectConfigs"]),
+          merchantId: json["merchantId"],
+          deviceId: json["deviceId"],
+          finixSerialNumber: json["finixSerialNumber"],
+          finixUsername: json["finixUsername"],
+          finixPassword: json["finixPassword"],
+          merchantIdNCP: json["merchantIdNCP"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -175,6 +178,7 @@ class LoginResponseModel {
         "finixSerialNumber": finixSerialNumber,
         "finixUsername": finixUsername,
         "finixPassword": finixPassword,
+        "merchantIdNCP": merchantIdNCP
       };
 }
 

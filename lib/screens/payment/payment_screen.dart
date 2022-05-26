@@ -17,7 +17,6 @@ import 'package:kona_ice_pos/models/network_model/order_model/order_request_mode
 import 'package:kona_ice_pos/models/network_model/order_model/order_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
-import 'package:kona_ice_pos/models/network_model/payment/finix_mannualpay_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
@@ -86,6 +85,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String finixSerialNumber = StringExtension.empty();
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
+  String merchantIdNCP= StringExtension.empty();
   String paymentFailMessage = StringExtension.empty();
   String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
@@ -1092,6 +1092,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
+    merchantIdNCP = await FunctionalUtils.getFinixMerchantIdNCP();
   }
 
   Future performCardPayment() async {
@@ -1325,20 +1326,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     await cardPaymentChannel.invokeListMethod('performCardPayment', valuesCardDetails);
   }
 
-  //ApiCall Aftergetting Mannual Card token
-  finixMannualApiCall() {
-    FinixMannualPayModel finixMannualPayModel = FinixMannualPayModel();
-    finixMannualPayModel.paymentMethod=PaymentMethods.creditCard;
-    finixMannualPayModel.orderId=orderID;
-    finixMannualPayModel.stripePaymentMethodId="";
-    finixMannualPayModel.stripeCardId="";
-    finixMannualPayModel.finixResponseDto="";
-    finixMannualPayModel.finixNcPaymentToken="";//Pass the values
-    finixMannualPayModel.finixNcpMerchantId="";//Pass the values
-
-    orderPresenter.finixMannualPay(finixMannualPayModel);
-  }
-
   getApiCallPayReceipt() {
     String testString =
         "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
@@ -1346,6 +1333,20 @@ class _PaymentScreenState extends State<PaymentScreen>
     debugPrint(
         "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
     PayReceipt payReceipt = getPayReceiptModel(finixResponse);
+  }
+
+  //ApiCall Aftergetting Mannual Card token
+  finixMannualApiCall() {
+    PayReceipt payReceiptModel = PayReceipt();
+    payReceiptModel.paymentMethod=PaymentMethods.creditCard;
+    payReceiptModel.orderId=orderID;
+    payReceiptModel.stripePaymentMethodId="";
+    payReceiptModel.stripeCardId="";
+    // payReceiptModel.finixResponseDto="";
+    payReceiptModel.finixNCPaymentToken="";//Pass the values
+    payReceiptModel.finixNCPMerchantId==merchantIdNCP;//Pass the values
+
+    orderPresenter.finixReceipt(payReceiptModel);
   }
 
   PayReceipt getPayReceiptModel(FinixResponseModel finixResponseModel) {
