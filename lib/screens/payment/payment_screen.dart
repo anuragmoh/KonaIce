@@ -17,6 +17,7 @@ import 'package:kona_ice_pos/models/network_model/order_model/order_request_mode
 import 'package:kona_ice_pos/models/network_model/order_model/order_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
+import 'package:kona_ice_pos/models/network_model/payment/finix_mannualpay_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
@@ -58,7 +59,6 @@ class PaymentScreen extends StatefulWidget {
       required this.billDetails,
       required this.userName})
       : super(key: key);
-
 
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
@@ -216,10 +216,12 @@ class _PaymentScreenState extends State<PaymentScreen>
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
         child: bodyWidgetComponent(),
       );
+
   Widget bodyWidgetComponent() => Row(children: [
         leftSideWidget(),
         rightSideWidget(),
       ]);
+
   Widget leftSideWidget() => Expanded(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -445,9 +447,16 @@ class _PaymentScreenState extends State<PaymentScreen>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
-            paymentModeView(StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCardScan),
-            paymentModeView(StringConstants.creditCardManual, PaymentModeConstants.creditCardManual, AssetsConstants.creditCard),
+            paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
+                AssetsConstants.cash),
+            paymentModeView(
+                StringConstants.creditCard,
+                PaymentModeConstants.creditCard,
+                AssetsConstants.creditCardScan),
+            paymentModeView(
+                StringConstants.creditCardManual,
+                PaymentModeConstants.creditCardManual,
+                AssetsConstants.creditCard),
           ],
         ),
       );
@@ -513,7 +522,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             padding: const EdgeInsets.symmetric(horizontal: 135.0),
             child: Divider(
               color:
-              getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
               thickness: 1,
             ),
           ),
@@ -564,7 +573,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   child: Container(
                       decoration: BoxDecoration(
                         borderRadius:
-                        const BorderRadius.all(Radius.circular(8.0)),
+                            const BorderRadius.all(Radius.circular(8.0)),
                         color: receiptMode == 2
                             ? getMaterialColor(AppColors.primaryColor2)
                             : null,
@@ -722,6 +731,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         // optional. aligns the flag and the Text left
         alignLeft: false,
       );
+
   onAmountEnter(double value) {
     receivedAmount = value;
     if (value > totalAmount) {
@@ -734,6 +744,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       });
     }
   }
+
   // Right side panel design
   Widget rightSideWidget() => Padding(
         padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
@@ -806,18 +817,19 @@ class _PaymentScreenState extends State<PaymentScreen>
       ]);
 
   // customer Details
-  Widget customerDetailsComponent({required String eventName,
-    required String email,
-    required String storeAddress,
-    required String phone}) =>
+  Widget customerDetailsComponent(
+          {required String eventName,
+          required String email,
+          required String storeAddress,
+          required String phone}) =>
       Column(
         children: [
           Visibility(
             visible: eventName.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start, children: [
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
@@ -834,8 +846,8 @@ class _PaymentScreenState extends State<PaymentScreen>
             visible: email.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start, children: [
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.email}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
@@ -852,8 +864,8 @@ class _PaymentScreenState extends State<PaymentScreen>
             visible: phone.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start, children: [
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.phone}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
@@ -882,7 +894,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   // Widget orderDetails
   Widget orderDetailsWidget(
-      {required String orderId, required String orderDate}) =>
+          {required String orderId, required String orderDate}) =>
       Column(children: [
         Row(children: [
           CommonWidgets().textView(
@@ -980,8 +992,11 @@ class _PaymentScreenState extends State<PaymentScreen>
         ],
       );
 
-  Widget subOrderItemView(String subItem) =>
-      Text(subItem, style: const TextStyle(fontSize: 10.0),);
+  Widget subOrderItemView(String subItem) => Text(
+        subItem,
+        style: const TextStyle(fontSize: 10.0),
+      );
+
   Widget componentBill() => Column(
         children: [
           const SizedBox(height: 14.0),
@@ -1036,16 +1051,20 @@ class _PaymentScreenState extends State<PaymentScreen>
       paymentModeType = index;
       updateSelectedPaymentMode();
     });
-    if(paymentModeType == PaymentModeConstants.creditCardManual){
+    if (paymentModeType == PaymentModeConstants.creditCardManual) {
       showDialog(
           barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
           context: context,
           builder: (context) {
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
-        if (value == true) {
-          debugPrint('>>>>>>>$value');
-          onTapConfirmPayment();
+        debugPrint('>>>>>>>$value');
+        bool valueForApi = value['value'];
+        if (valueForApi == true) {
+          String cardNumber = value['cardNumber'];
+          String cardDate = value['cardDate'];
+          String cardYear = value['cardYear'];
+          onTapConfirmPayment(cardNumber, cardDate, cardYear);
         }
       });
     }
@@ -1055,6 +1074,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
     getEmailIdPhoneNumber();
   }
+
   getEmailIdPhoneNumber() {
     setState(() {
       emailController.text =
@@ -1072,7 +1092,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
-   }
+  }
 
   Future performCardPayment() async {
     // const String username = "US5XSPK8w4W8dCHT9t7fUUYz";
@@ -1081,7 +1101,15 @@ class _PaymentScreenState extends State<PaymentScreen>
     const String version = "1.0";
     // const String merchantId = "MUuGRWnvvg62MxAmMpzGcXxq";
     // const String deviceID = "DVtQTgPQYgJVcnA4p8KE89gm";   // "DV9jHr66AG5bc5qorHDRPpMK";
-    final tags = {"Test": "Test", "order_number": "21DFASJSAKAS"};
+    final tags = {
+      "customerEmail":
+          widget.placeOrderRequestModel.email ?? StringExtension.empty(),
+      "customerName": widget.placeOrderRequestModel.getCustomerName(),
+      "eventName": widget.events.getEventName(),
+      "eventCode": widget.events.getEventCode(),
+      "environment": "",
+      "paymentMethod": "BBPOS"
+    };
 
     /* Working Creds:
     finixMerchantId = "MUkai3hhJJ19k1SCZp2AQFEm";
@@ -1287,8 +1315,30 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
   }
 
-  onTapConfirmPayment() {
+  //FinixMannual CardDetails
+  onTapConfirmPayment(String cardNumber, String cardDate, cardYear) async {
+    final valuesCardDetails = {
+      "cardNumber": cardNumber,
+      "cardDate": cardDate,
+      "cardYear": cardYear,
+    };
+    await cardPaymentChannel.invokeListMethod('performCardPayment', valuesCardDetails);
   }
+
+  //ApiCall Aftergetting Mannual Card token
+  finixMannualApiCall() {
+    FinixMannualPayModel finixMannualPayModel = FinixMannualPayModel();
+    finixMannualPayModel.paymentMethod=PaymentMethods.creditCard;
+    finixMannualPayModel.orderId=orderID;
+    finixMannualPayModel.stripePaymentMethodId="";
+    finixMannualPayModel.stripeCardId="";
+    finixMannualPayModel.finixResponseDto="";
+    finixMannualPayModel.finixNcPaymentToken="";//Pass the values
+    finixMannualPayModel.finixNcpMerchantId="";//Pass the values
+
+    orderPresenter.finixMannualPay(finixMannualPayModel);
+  }
+
   getApiCallPayReceipt() {
     String testString =
         "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";

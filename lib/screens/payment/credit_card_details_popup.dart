@@ -31,16 +31,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String cardNumberValidationMessage = "";
   String cardDateValidationMessage = "";
   String cardCvvValidationMessage = "";
-  String cardNumber = "4111111111111111",
-      cardCvc = "123",
-      cardExpiryYear = "22",
-      cardExpiryMonth = "12";
   String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
   bool isExpiryValid = false;
   bool isCvcValid = false;
   bool isApiProcess = false;
+  var date, year;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
   var maskFormatter = MaskTextInputFormatter(
@@ -293,7 +290,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   dateValidation() {
-    var date, year;
     try {
       String s = dateExpiryController.text;
       int idx = s.indexOf("/");
@@ -345,7 +341,12 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
 
   void onTapConfirmManualCardPayment() {
     if (isCardNumberValid && isExpiryValid && isCvcValid) {
-      Navigator.of(context).pop(true);
+      Map<String, dynamic> myData = Map();
+      myData['value'] = true;
+      myData['cardNumber'] = cardNumberController.text;
+      myData['cardDate'] = date;
+      myData['cardYear']=year;
+      Navigator.pop(context, myData);
     }
   }
 }

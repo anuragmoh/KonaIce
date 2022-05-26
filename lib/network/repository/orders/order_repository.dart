@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendrece
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_card_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_response_model.dart';
+import 'package:kona_ice_pos/models/network_model/payment/finix_mannualpay_model.dart';
 import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 
@@ -53,6 +54,12 @@ class OrderRepository {
             finixSendReceiptRequest)
         .then((value) {
       return generalSuccessModelFromJson(value);
+    });
+  }
+
+  Future<PayOrderResponseModel> finixMannualPay({required FinixMannualPayModel finixMannualPayModel}) {
+    return baseClient.post(UrlConstants.finixMannualPay, finixMannualPayModel).then((value) {
+      return payOrderResponseModelFromJson(value);
     });
   }
 }
