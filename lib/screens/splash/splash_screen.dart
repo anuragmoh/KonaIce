@@ -149,7 +149,6 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
   @override
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == StaffActionConst.eventSelected) {
-      //  showCustomerView();
     } else if (response.action == StaffActionConst.orderModelUpdated) {
       P2POrderDetailsModel modelObjc =
           p2POrderDetailsModelFromJson(response.data);

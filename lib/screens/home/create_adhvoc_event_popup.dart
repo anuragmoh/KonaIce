@@ -64,7 +64,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
 
   // ignore: prefer_typing_uninitialized_variables
   var _selectedAsset;
-
   var lat;
   var long;
   late String _currentCountry;
@@ -601,7 +600,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       setState(() {
         isApiProcess = true;
       });
-      //print("prediction: ${p}");
     }
   }
 
@@ -683,10 +681,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
           }
         }
       } on RangeError catch (e) {
-        // ShowMessage().showToast(e.toString());
         debugPrint(e.toString());
       } catch (e) {
-        // print("Error: $e");
       }
     }
     setState(() {
@@ -742,9 +738,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
           _currentPosition.latitude, _currentPosition.longitude);
       Placemark place = placeMarks[0];
       debugPrint("Place data $place");
-      // setState(() {
-      //   _currentCountry = "${place.country}";
-      // });
       cityController.text = place.locality!;
       addressController.text = place.street! + place.subLocality!;
       stateController.text = place.administrativeArea!;
