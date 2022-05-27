@@ -94,6 +94,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String emailValidationMessage = "";
   String smsValidationMessage = "";
   String countryCode = "+1";
+  FinixResponseModel finixResponse=FinixResponseModel();
 
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -134,6 +135,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         widget.placeOrderRequestModel.id!.isNotEmpty) {
       orderID = widget.placeOrderRequestModel.id!;
     }
+    getFinixdetailsValues();
     callPlaceOrderAPI();
     cardPaymentChannel.setMethodCallHandler((call) async {
       debugPrint("init state setMethodCallHandler ${call.method}");
@@ -145,7 +147,6 @@ class _PaymentScreenState extends State<PaymentScreen>
         _paymentStatus(call.arguments.toString());
       }
     });
-    getFinixdetailsValues();
   }
 
   _paymentSuccess(msg) async {
@@ -154,9 +155,9 @@ class _PaymentScreenState extends State<PaymentScreen>
       updatePaymentSuccess();
       isPaymentDone = true;
     });
-    FinixResponseModel finixResponse = finixResponseFromJson(msg);
+    finixResponse = finixResponseFromJson(msg);
     //Finix recipt Api Call
-    PayReceipt payReceipt = getPayReceiptModel(finixResponse);
+    PayReceipt payReceipt = getPayReceiptModel(false);
   }
 
   _paymentFailed() async {
@@ -1047,6 +1048,8 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //Action Event
   onTapPaymentMode(int index) {
+    getApiCallPayReceipt();
+    // finixMannualApiCall();
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
@@ -1329,27 +1332,18 @@ class _PaymentScreenState extends State<PaymentScreen>
   getApiCallPayReceipt() {
     String testString =
         "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
-    FinixResponseModel finixResponse = finixResponseFromJson(testString);
+     finixResponse = finixResponseFromJson(testString);
     debugPrint(
         "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
-    PayReceipt payReceipt = getPayReceiptModel(finixResponse);
+    PayReceipt payReceipt = getPayReceiptModel(false);
   }
 
   //ApiCall Aftergetting Mannual Card token
-  finixMannualApiCall() {
-    PayReceipt payReceiptModel = PayReceipt();
-    payReceiptModel.paymentMethod=PaymentMethods.creditCard;
-    payReceiptModel.orderId=orderID;
-    payReceiptModel.stripePaymentMethodId="";
-    payReceiptModel.stripeCardId="";
-    // payReceiptModel.finixResponseDto="";
-    payReceiptModel.finixNCPaymentToken="";//Pass the values
-    payReceiptModel.finixNCPMerchantId==merchantIdNCP;//Pass the values
-
-    orderPresenter.finixReceipt(payReceiptModel);
+   finixMannualApiCall() {
+     getPayReceiptModel(true);
   }
 
-  PayReceipt getPayReceiptModel(FinixResponseModel finixResponseModel) {
+  PayReceipt getPayReceiptModel(bool paymentMethodCall) {
     PayReceipt payReceiptModel = PayReceipt();
     FinixResponseDto finixResponseDto = FinixResponseDto();
     FinixSaleReciptResponseRequest finixSaleReciptResponseRequest =
@@ -1359,17 +1353,17 @@ class _PaymentScreenState extends State<PaymentScreen>
     payReceiptModel.orderId = orderID;
     payReceiptModel.paymentMethod = PaymentMethods.bbpos;
     finixSaleReciptResponseRequest.transferId =
-        finixResponseModel.finixSaleResponse!.transferId;
+        finixResponse.finixSaleResponse?.transferId;
     finixSaleReciptResponseRequest.updated =
-        finixResponseModel.finixSaleResponse!.updated;
+        finixResponse.finixSaleResponse?.updated;
     finixSaleReciptResponseRequest.amount =
-        finixResponseModel.finixSaleResponse!.amount;
+        finixResponse.finixSaleResponse?.amount;
     finixSaleReciptResponseRequest.cardLogo =
-        finixResponseModel.finixSaleResponse!.cardLogo;
+        finixResponse.finixSaleResponse?.cardLogo;
     finixSaleReciptResponseRequest.cardHolderName =
-        finixResponseModel.finixSaleResponse!.cardHolderName;
+        finixResponse.finixSaleResponse?.cardHolderName;
     finixSaleReciptResponseRequest.expirationMonth =
-        finixResponseModel.finixSaleResponse!.expirationMonth;
+        finixResponse.finixSaleResponse?.expirationMonth;
 
     ResourceTagsRequest resourceTagsRequest = ResourceTagsRequest();
     resourceTagsRequest.customerEmail =
@@ -1382,56 +1376,65 @@ class _PaymentScreenState extends State<PaymentScreen>
     resourceTagsRequest.paymentMethod = ""; //***********
 
     finixSaleReciptResponseRequest.entryMode =
-        finixResponseModel.finixSaleResponse!.entryMode;
+        finixResponse.finixSaleResponse?.entryMode;
     finixSaleReciptResponseRequest.maskedAccountNumber =
-        finixResponseModel.finixSaleResponse!.maskedAccountNumber;
+        finixResponse.finixSaleResponse?.maskedAccountNumber;
     finixSaleReciptResponseRequest.created =
-        finixResponseModel.finixSaleResponse!.created;
+        finixResponse.finixSaleResponse?.created;
     finixSaleReciptResponseRequest.traceId =
-        finixResponseModel.finixSaleResponse!.traceId;
+        finixResponse.finixSaleResponse?.traceId;
     finixSaleReciptResponseRequest.transferState =
-        finixResponseModel.finixSaleResponse!.transferState;
+        finixResponse.finixSaleResponse?.transferState;
     finixSaleReciptResponseRequest.expirationYear =
-        finixResponseModel.finixSaleResponse!.expirationYear;
+        finixResponse.finixSaleResponse?.expirationYear;
 
     finixSaleReceiptRequest.cryptogram =
-        finixResponseModel.finixSaleReceipt!.cryptogram;
+        finixResponse.finixSaleReceipt?.cryptogram;
     finixSaleReceiptRequest.merchantId =
-        finixResponseModel.finixSaleReceipt!.merchantId;
+        finixResponse.finixSaleReceipt?.merchantId;
     finixSaleReceiptRequest.accountNumber =
-        finixResponseModel.finixSaleReceipt!.accountNumber;
+        finixResponse.finixSaleReceipt?.accountNumber;
     finixSaleReceiptRequest.referenceNumber =
-        finixResponseModel.finixSaleReceipt!.referenceNumber;
+        finixResponse.finixSaleReceipt?.referenceNumber;
     finixSaleReceiptRequest.applicationLabel =
-        finixResponseModel.finixSaleReceipt!.applicationLabel;
+        finixResponse.finixSaleReceipt?.applicationLabel;
     finixSaleReceiptRequest.entryMode =
-        finixResponseModel.finixSaleReceipt!.entryMode;
+        finixResponse.finixSaleReceipt?.entryMode;
     finixSaleReceiptRequest.approvalCode =
-        finixResponseModel.finixSaleReceipt!.approvalCode;
+        finixResponse.finixSaleReceipt?.approvalCode;
     finixSaleReceiptRequest.transactionId =
-        finixResponseModel.finixSaleReceipt!.transactionId;
+        finixResponse.finixSaleReceipt?.transactionId;
     finixSaleReceiptRequest.cardBrand =
-        finixResponseModel.finixSaleReceipt!.cardBrand;
+        finixResponse.finixSaleReceipt?.cardBrand;
     finixSaleReceiptRequest.merchantName =
-        finixResponseModel.finixSaleReceipt!.merchantName;
+        finixResponse.finixSaleReceipt?.merchantName;
     finixSaleReceiptRequest.merchantAddress =
-        finixResponseModel.finixSaleReceipt!.merchantAddress;
+        finixResponse.finixSaleReceipt?.merchantAddress;
     finixSaleReceiptRequest.responseCode =
-        finixResponseModel.finixSaleReceipt!.responseCode;
+        finixResponse.finixSaleReceipt?.responseCode;
     finixSaleReceiptRequest.transactionType =
-        finixResponseModel.finixSaleReceipt!.transactionType;
+        finixResponse.finixSaleReceipt?.transactionType;
     finixSaleReceiptRequest.responseMessage =
-        finixResponseModel.finixSaleReceipt!.responseMessage;
+        finixResponse.finixSaleReceipt?.responseMessage;
     finixSaleReceiptRequest.applicationIdentifier =
-        finixResponseModel.finixSaleReceipt!.applicationIdentifier;
-    finixSaleReceiptRequest.date = finixResponseModel.finixSaleReceipt!.date;
+        finixResponse.finixSaleReceipt?.applicationIdentifier;
+    finixSaleReceiptRequest.date = finixResponse.finixSaleReceipt?.date;
 
     finixResponseDto.finixSaleResponse = finixSaleReciptResponseRequest;
-    finixResponseDto.finixSaleResponse!.resourceTags = resourceTagsRequest;
+    finixResponseDto.finixSaleResponse?.resourceTags = resourceTagsRequest;
     finixResponseDto.finixSaleReceipt = finixSaleReceiptRequest;
     payReceiptModel.finixResponseDto = finixResponseDto;
 
     debugPrint('>>>>>>>>>>>${payReceiptModel.toString()}');
+
+    if(paymentMethodCall==true){
+      payReceiptModel.paymentMethod=PaymentMethods.creditCard;
+      payReceiptModel.orderId=orderID;
+      payReceiptModel.stripePaymentMethodId=null;
+      payReceiptModel.stripeCardId=null;
+      payReceiptModel.finixNCPaymentToken="";//Pass the values
+      payReceiptModel.finixNCPMerchantId=merchantIdNCP;
+    }
 
     setState(() {
       isApiProcess = true;
