@@ -28,7 +28,8 @@ class PaymentOption extends StatefulWidget {
 class _PaymentOptionState extends State<PaymentOption>
     implements P2PContractor {
   int paymentModeType = -1;
-
+  String paymentStatus = "";
+  bool isAnimation=false;
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
@@ -75,12 +76,9 @@ class _PaymentOptionState extends State<PaymentOption>
                   ),
                   Center(
                     child: Visibility(
-                        visible:
-                            paymentModeType == PaymentModeConstants.creditCard,
-                        child: Lottie.asset(
-                            AssetsConstants.insertCardAnimationPath,
-                            height: 150,
-                            width: 150)),
+                        visible: (paymentModeType == PaymentModeConstants.creditCard && isAnimation)||(paymentModeType == PaymentModeConstants.creditCardManual && isAnimation),
+                        child: Lottie.asset(paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
+                            height: 150, width: 150)),
                   ),
                 ],
               ),
@@ -183,6 +181,14 @@ class _PaymentOptionState extends State<PaymentOption>
   onTapCashMode() {}
 
   onTapPaymentMode(int index) {
+    paymentStatus = 'insert';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: paymentStatus.toString());
+    setState(() {
+      paymentModeType = index;
+      updateSelectedPaymentMode();
+    });
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
@@ -193,6 +199,12 @@ class _PaymentOptionState extends State<PaymentOption>
           paymentModeType = -1;
         });
       });
+    }
+    else if (paymentModeType == PaymentModeConstants.creditCardManual) {
+      paymentStatus = 'progress';
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.paymentStatus,
+          data: paymentStatus.toString());
     }
   }
 
@@ -240,6 +252,27 @@ class _PaymentOptionState extends State<PaymentOption>
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
+    }else if (response.action ==
+        StaffActionConst.paymentStatus) {
+      setState(() {
+        isAnimation=true;
+      });
+      setState(() {
+        paymentStatus=response.data.toString();
+      });
+      debugPrint('response--->' + response.data.toString());
+    }else if (response.action ==
+        StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+      FunctionalUtils.showCustomerSplashScreen();
+    }else if (response.action ==
+        StaffActionConst.paymentStatus) {
+      setState(() {
+        isAnimation=true;
+      });
+      setState(() {
+        paymentStatus=response.data.toString();
+      });
+      debugPrint('response--->' + response.data.toString());
     }
   }
 }

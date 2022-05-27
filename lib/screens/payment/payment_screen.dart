@@ -39,6 +39,7 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
@@ -52,11 +53,11 @@ class PaymentScreen extends StatefulWidget {
 
   const PaymentScreen(
       {Key? key,
-      required this.events,
-      required this.selectedMenuItems,
-      required this.placeOrderRequestModel,
-      required this.billDetails,
-      required this.userName})
+        required this.events,
+        required this.selectedMenuItems,
+        required this.placeOrderRequestModel,
+        required this.billDetails,
+        required this.userName})
       : super(key: key);
 
 
@@ -87,14 +88,16 @@ class _PaymentScreenState extends State<PaymentScreen>
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
   String paymentFailMessage = StringExtension.empty();
-  String stripeTokenId = "", stripePaymentMethodId = "";
+  String stripeTokenId = "",
+      stripePaymentMethodId = "";
   String demoCardNumber = "";
   String userEmail = StringExtension.empty();
   String userMobileNumber = StringExtension.empty();
   String emailValidationMessage = "";
   String smsValidationMessage = "";
   String countryCode = "+1";
-
+  String paymentStatus = "";
+  bool isAnimation = false;
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
@@ -114,7 +117,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   late PaymentPresenter paymentPresenter;
 
   static const MethodChannel cardPaymentChannel =
-      MethodChannel("com.mobisoft.konaicepos/cardPayment");
+  MethodChannel("com.mobisoft.konaicepos/cardPayment");
 
   _PaymentScreenState() {
     orderPresenter = OrderPresenter(this);
@@ -212,41 +215,66 @@ class _PaymentScreenState extends State<PaymentScreen>
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
 
-  Widget bodyWidget() => Container(
+  Widget bodyWidget() =>
+      Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
         child: bodyWidgetComponent(),
       );
-  Widget bodyWidgetComponent() => Row(children: [
+
+  Widget bodyWidgetComponent() =>
+      Row(children: [
         leftSideWidget(),
         rightSideWidget(),
       ]);
-  Widget leftSideWidget() => Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const SizedBox(
-          height: 14.0,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
-          child: leftSideTopComponent(totalAmount),
-        ),
-        // leftSideTopComponent(totalAmount),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Divider(
-            color: getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
-            thickness: 1,
-          ),
-        ),
-        Expanded(child: leftBodyComponent()),
-      ]));
 
-  Widget leftSideTopComponent(double totalAmount) => Padding(
+  Widget leftSideWidget() =>
+      Expanded(
+        child:
+        Stack(
+          children: [
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              const SizedBox(
+                height: 14.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 18.0, vertical: 5.0),
+                child: leftSideTopComponent(totalAmount),
+              ),
+              // leftSideTopComponent(totalAmount),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Divider(
+                  color: getMaterialColor(AppColors.gradientColor1).withOpacity(
+                      0.2),
+                  thickness: 1,
+                ),
+              ),
+              Expanded(child: leftBodyComponent()),
+            ],),
+            Center(
+              child: Visibility(
+                  visible: (paymentModeType ==
+                      PaymentModeConstants.creditCard) || (paymentModeType ==
+                      PaymentModeConstants.creditCardManual),
+                  child: Lottie.asset(
+                      paymentStatus == 'insert' ? AssetsConstants
+                          .insertCardAnimationPath : paymentStatus == 'progress'
+                          ? AssetsConstants.progressAnimationPath
+                          : AssetsConstants.removeCardAnimationPath,
+                      height: 150, width: 150)),
+            ),
+          ],
+        ),);
+
+
+  Widget leftSideTopComponent(double totalAmount) =>
+      Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: SizedBox(
           height: 80.0,
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -286,7 +314,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             // Amount to return field
             Visibility(
               visible:
-                  isPaymentDone == false && paymentModeType == 0 ? true : false,
+              isPaymentDone == false && paymentModeType == 0 ? true : false,
               child: Expanded(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -305,7 +333,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                               '\$',
                               StyleConstants.customTextStyle22MonsterMedium(
                                   color:
-                                      getMaterialColor(AppColors.textColor1))),
+                                  getMaterialColor(AppColors.textColor1))),
                           const SizedBox(
                             width: 10.0,
                           ),
@@ -327,8 +355,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                                     controller: amountReceivedController,
                                     style: StyleConstants
                                         .customTextStyle22MonsterMedium(
-                                            color: getMaterialColor(
-                                                AppColors.textColor1)),
+                                        color: getMaterialColor(
+                                            AppColors.textColor1)),
                                     keyboardType: TextInputType.number,
                                     inputFormatters: <TextInputFormatter>[
                                       FilteringTextInputFormatter.digitsOnly
@@ -355,7 +383,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             ),
             Visibility(
               visible:
-                  isPaymentDone == false && paymentModeType == 0 ? true : false,
+              isPaymentDone == false && paymentModeType == 0 ? true : false,
               child: Expanded(
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,7 +405,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                                 returnAmount.toStringAsFixed(2),
                                 StyleConstants.customTextStyle22MonsterMedium(
                                     color:
-                                        getMaterialColor(AppColors.textColor1)))
+                                    getMaterialColor(AppColors.textColor1)))
                           ])
                     ]),
               ),
@@ -399,8 +427,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     return GestureDetector(
       onTap: isPaymentDone == false
           ? () {
-              onTapProceed(showDisabledButton);
-            }
+        onTapProceed(showDisabledButton);
+      }
           : onTapNewOrder,
       child: Container(
         decoration: BoxDecoration(
@@ -417,7 +445,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     );
   }
 
-  Widget leftBodyComponent() => SingleChildScrollView(
+  Widget leftBodyComponent() =>
+      SingleChildScrollView(
         child: Column(children: [
           Visibility(
               visible: !isPaymentDone,
@@ -436,18 +465,24 @@ class _PaymentScreenState extends State<PaymentScreen>
               )),
           SingleChildScrollView(
               child:
-                  isPaymentDone ? paymentSuccess('35891456') : const Text('')),
+              isPaymentDone ? paymentSuccess('35891456') : const Text('')),
         ]),
       );
 
-  Widget paymentModeWidget() => Padding(
+  Widget paymentModeWidget() =>
+      Padding(
         padding: const EdgeInsets.symmetric(vertical: 19.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            paymentModeView(StringConstants.cash, PaymentModeConstants.cash, AssetsConstants.cash),
-            paymentModeView(StringConstants.creditCard, PaymentModeConstants.creditCard, AssetsConstants.creditCardScan),
-            paymentModeView(StringConstants.creditCardManual, PaymentModeConstants.creditCardManual, AssetsConstants.creditCard),
+            paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
+                AssetsConstants.cash),
+            paymentModeView(
+                StringConstants.creditCard, PaymentModeConstants.creditCard,
+                AssetsConstants.creditCardScan),
+            paymentModeView(StringConstants.creditCardManual,
+                PaymentModeConstants.creditCardManual,
+                AssetsConstants.creditCard),
           ],
         ),
       );
@@ -469,7 +504,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
                 child: CommonWidgets().image(
                     image: icon,
                     width: 4.25 * SizeConfig.imageSizeMultiplier,
@@ -485,7 +520,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         ),
       );
 
-  Widget paymentSuccess(String transactionId) => Column(
+  Widget paymentSuccess(String transactionId) =>
+      Column(
         children: [
           const SizedBox(height: 68.0),
           CommonWidgets().image(
@@ -540,7 +576,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(8.0)),
+                      const BorderRadius.all(Radius.circular(8.0)),
                       color: receiptMode == 1
                           ? getMaterialColor(AppColors.primaryColor2)
                           : null,
@@ -587,7 +623,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         ],
       );
 
-  Widget emailReceiptWidget() => Container(
+  Widget emailReceiptWidget() =>
+      Container(
         width: 253.0,
         height: 47.0,
         decoration: BoxDecoration(
@@ -614,8 +651,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                         maxLength: 100,
                         controller: emailController,
                         style:
-                            StyleConstants.customTextStyle12MontserratSemiBold(
-                                color: getMaterialColor(AppColors.textColor1)),
+                        StyleConstants.customTextStyle12MontserratSemiBold(
+                            color: getMaterialColor(AppColors.textColor1)),
                         decoration: const InputDecoration(
                           counterText: "",
                           border: InputBorder.none,
@@ -632,7 +669,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               },
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
                 child: CommonWidgets().image(
                     image: AssetsConstants.send, width: 25.0, height: 25.0),
               ),
@@ -641,7 +678,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         ),
       );
 
-  Widget textMessageReceiptWidget() => Container(
+  Widget textMessageReceiptWidget() =>
+      Container(
         width: 253.0,
         height: 47.0,
         decoration: BoxDecoration(
@@ -678,8 +716,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         style:
-                            StyleConstants.customTextStyle12MontserratSemiBold(
-                                color: getMaterialColor(AppColors.textColor1)),
+                        StyleConstants.customTextStyle12MontserratSemiBold(
+                            color: getMaterialColor(AppColors.textColor1)),
                         decoration: const InputDecoration(
                           counterText: "",
                           border: InputBorder.none,
@@ -696,7 +734,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               },
               child: Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
                 child: CommonWidgets().image(
                     image: AssetsConstants.send, width: 25.0, height: 25.0),
               ),
@@ -705,7 +743,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         ),
       );
 
-  Widget countryPicker() => CountryCodePicker(
+  Widget countryPicker() =>
+      CountryCodePicker(
         onChanged: (value) {
           countryCode = value.toString();
         },
@@ -722,6 +761,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         // optional. aligns the flag and the Text left
         alignLeft: false,
       );
+
   onAmountEnter(double value) {
     receivedAmount = value;
     if (value > totalAmount) {
@@ -734,13 +774,21 @@ class _PaymentScreenState extends State<PaymentScreen>
       });
     }
   }
+
   // Right side panel design
-  Widget rightSideWidget() => Padding(
+  Widget rightSideWidget() =>
+      Padding(
         padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
         child: SingleChildScrollView(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.307,
-            height: MediaQuery.of(context).size.height * 0.78,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.307,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.78,
             decoration: BoxDecoration(
                 color: getMaterialColor(AppColors.whiteColor),
                 borderRadius: const BorderRadius.all(Radius.circular(8.0))),
@@ -756,15 +804,15 @@ class _PaymentScreenState extends State<PaymentScreen>
                             StringConstants.orderDetails,
                             StyleConstants.customTextStyle22MontserratBold(
                                 color:
-                                    getMaterialColor(AppColors.textColor1)))),
+                                getMaterialColor(AppColors.textColor1)))),
                     customerNameWidget(
                         customerName:
-                            widget.placeOrderRequestModel.getCustomerName()),
+                        widget.placeOrderRequestModel.getCustomerName()),
                     const SizedBox(height: 7.0),
                     orderDetailsWidget(
                         orderId: orderID,
                         orderDate:
-                            widget.placeOrderRequestModel.getOrderDate()),
+                        widget.placeOrderRequestModel.getOrderDate()),
                     const SizedBox(height: 8.0),
                     customerDetailsComponent(
                         eventName: widget.events.getEventName(),
@@ -907,7 +955,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         ]),
       ]);
 
-  Widget itemView() => Column(children: [
+  Widget itemView() =>
+      Column(children: [
         ListView.builder(
             shrinkWrap: true,
             itemCount: widget.placeOrderRequestModel.orderItemsList!.length,
@@ -915,11 +964,12 @@ class _PaymentScreenState extends State<PaymentScreen>
             itemBuilder: (context, index) {
               return itemViewListItem(
                   orderItem:
-                      widget.placeOrderRequestModel.orderItemsList![index]);
+                  widget.placeOrderRequestModel.orderItemsList![index]);
             }),
       ]);
 
-  Widget itemViewListItem({required OrderItemsList orderItem}) => Column(
+  Widget itemViewListItem({required OrderItemsList orderItem}) =>
+      Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Expanded(
@@ -954,8 +1004,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
                     ? (orderItem.foodExtraItemMappingList![0]
-                            .orderFoodExtraItemDetailDto?.length ??
-                        0)
+                    .orderFoodExtraItemDetailDto?.length ??
+                    0)
                     : 0,
                 itemBuilder: (context, innerIndex) {
                   return Row(
@@ -963,9 +1013,9 @@ class _PaymentScreenState extends State<PaymentScreen>
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: subOrderItemView(orderItem
-                                .foodExtraItemMappingList![0]
-                                .orderFoodExtraItemDetailDto![innerIndex]
-                                .name ??
+                            .foodExtraItemMappingList![0]
+                            .orderFoodExtraItemDetailDto![innerIndex]
+                            .name ??
                             ''),
                       ),
                       const Text(','),
@@ -982,7 +1032,9 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget subOrderItemView(String subItem) =>
       Text(subItem, style: const TextStyle(fontSize: 10.0),);
-  Widget componentBill() => Column(
+
+  Widget componentBill() =>
+      Column(
         children: [
           const SizedBox(height: 14.0),
           billTextView(StringConstants.foodCost, foodCost),
@@ -994,7 +1046,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         ],
       );
 
-  Widget billTextView(String billTitle, double itemAmount) => Column(
+  Widget billTextView(String billTitle, double itemAmount) =>
+      Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             CommonWidgets().textView(
@@ -1032,12 +1085,24 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //Action Event
   onTapPaymentMode(int index) {
+    paymentStatus = 'insert';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: paymentStatus.toString());
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
     });
-    if(paymentModeType == PaymentModeConstants.creditCardManual){
-      showDialog(
+    setState(() {
+      paymentModeType = index;
+      updateSelectedPaymentMode();
+    });
+    if (paymentModeType == PaymentModeConstants.creditCardManual) {
+      paymentStatus = 'progress';
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.paymentStatus,
+          data: paymentStatus.toString());
+      /*showDialog(
           barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
           context: context,
           builder: (context) {
@@ -1047,7 +1112,7 @@ class _PaymentScreenState extends State<PaymentScreen>
           debugPrint('>>>>>>>$value');
           onTapConfirmPayment();
         }
-      });
+      });*/
     }
 
     if (paymentModeType == PaymentModeConstants.creditCard) {
@@ -1055,6 +1120,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
     getEmailIdPhoneNumber();
   }
+
   getEmailIdPhoneNumber() {
     setState(() {
       emailController.text =
@@ -1072,7 +1138,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     finixUsername = await FunctionalUtils.getFinixUserName();
     finixPassword = await FunctionalUtils.getFinixPassword();
-   }
+  }
 
   Future performCardPayment() async {
     // const String username = "US5XSPK8w4W8dCHT9t7fUUYz";
@@ -1175,7 +1241,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   PayOrderCardRequestModel getPayOrderCardMethodRequestModel() {
     PayOrderCardRequestModel payOrderCardRequestModel =
-        PayOrderCardRequestModel();
+    PayOrderCardRequestModel();
     payOrderCardRequestModel.orderId = orderID;
     payOrderCardRequestModel.paymentMethod = "CARD";
     payOrderCardRequestModel.stripeCardId = stripeTokenId;
@@ -1200,7 +1266,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   callPayOrderCardMethodAPI() {
     PayOrderCardRequestModel payOrderCardRequestModel =
-        getPayOrderCardMethodRequestModel();
+    getPayOrderCardMethodRequestModel();
     setState(() {
       isApiProcess = true;
     });
@@ -1284,174 +1350,183 @@ class _PaymentScreenState extends State<PaymentScreen>
       }
     } else if (response.action == CustomerActionConst.editOrderDetails) {
       showEventMenuScreen();
+    } else if (response.action ==
+        StaffActionConst.paymentStatus) {
+      setState(() {
+        isAnimation = true;
+      });
+      setState(() {
+        paymentStatus = response.data.toString();
+      });
+      debugPrint('response--->' + response.data.toString());
     }
-  }
+}
 
-  onTapConfirmPayment() {
-  }
-  getApiCallPayReceipt() {
-    String testString =
-        "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
-    FinixResponseModel finixResponse = finixResponseFromJson(testString);
-    debugPrint(
-        "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
-    PayReceipt payReceipt = getPayReceiptModel(finixResponse);
-  }
+onTapConfirmPayment() {
+}
+getApiCallPayReceipt() {
+  String testString =
+      "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
+  FinixResponseModel finixResponse = finixResponseFromJson(testString);
+  debugPrint(
+      "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
+  PayReceipt payReceipt = getPayReceiptModel(finixResponse);
+}
 
-  PayReceipt getPayReceiptModel(FinixResponseModel finixResponseModel) {
-    PayReceipt payReceiptModel = PayReceipt();
-    FinixResponseDto finixResponseDto = FinixResponseDto();
-    FinixSaleReciptResponseRequest finixSaleReciptResponseRequest =
-        FinixSaleReciptResponseRequest();
-    FinixSaleReceiptRequest finixSaleReceiptRequest = FinixSaleReceiptRequest();
+PayReceipt getPayReceiptModel(FinixResponseModel finixResponseModel) {
+  PayReceipt payReceiptModel = PayReceipt();
+  FinixResponseDto finixResponseDto = FinixResponseDto();
+  FinixSaleReciptResponseRequest finixSaleReciptResponseRequest =
+  FinixSaleReciptResponseRequest();
+  FinixSaleReceiptRequest finixSaleReceiptRequest = FinixSaleReceiptRequest();
 
-    payReceiptModel.orderId = orderID;
-    payReceiptModel.paymentMethod = PaymentMethods.bbpos;
-    finixSaleReciptResponseRequest.transferId =
-        finixResponseModel.finixSaleResponse!.transferId;
-    finixSaleReciptResponseRequest.updated =
-        finixResponseModel.finixSaleResponse!.updated;
-    finixSaleReciptResponseRequest.amount =
-        finixResponseModel.finixSaleResponse!.amount;
-    finixSaleReciptResponseRequest.cardLogo =
-        finixResponseModel.finixSaleResponse!.cardLogo;
-    finixSaleReciptResponseRequest.cardHolderName =
-        finixResponseModel.finixSaleResponse!.cardHolderName;
-    finixSaleReciptResponseRequest.expirationMonth =
-        finixResponseModel.finixSaleResponse!.expirationMonth;
+  payReceiptModel.orderId = orderID;
+  payReceiptModel.paymentMethod = PaymentMethods.bbpos;
+  finixSaleReciptResponseRequest.transferId =
+      finixResponseModel.finixSaleResponse!.transferId;
+  finixSaleReciptResponseRequest.updated =
+      finixResponseModel.finixSaleResponse!.updated;
+  finixSaleReciptResponseRequest.amount =
+      finixResponseModel.finixSaleResponse!.amount;
+  finixSaleReciptResponseRequest.cardLogo =
+      finixResponseModel.finixSaleResponse!.cardLogo;
+  finixSaleReciptResponseRequest.cardHolderName =
+      finixResponseModel.finixSaleResponse!.cardHolderName;
+  finixSaleReciptResponseRequest.expirationMonth =
+      finixResponseModel.finixSaleResponse!.expirationMonth;
 
-    ResourceTagsRequest resourceTagsRequest = ResourceTagsRequest();
-    resourceTagsRequest.customerEmail =
-        widget.placeOrderRequestModel.email ?? StringExtension.empty();
-    resourceTagsRequest.customerName =
-        widget.placeOrderRequestModel.getPhoneNumber();
-    resourceTagsRequest.eventName = widget.events.getEventName();
-    resourceTagsRequest.eventCode = widget.events.getEventCode();
-    resourceTagsRequest.environment = ""; //***********
-    resourceTagsRequest.paymentMethod = ""; //***********
+  ResourceTagsRequest resourceTagsRequest = ResourceTagsRequest();
+  resourceTagsRequest.customerEmail =
+      widget.placeOrderRequestModel.email ?? StringExtension.empty();
+  resourceTagsRequest.customerName =
+      widget.placeOrderRequestModel.getPhoneNumber();
+  resourceTagsRequest.eventName = widget.events.getEventName();
+  resourceTagsRequest.eventCode = widget.events.getEventCode();
+  resourceTagsRequest.environment = ""; //***********
+  resourceTagsRequest.paymentMethod = ""; //***********
 
-    finixSaleReciptResponseRequest.entryMode =
-        finixResponseModel.finixSaleResponse!.entryMode;
-    finixSaleReciptResponseRequest.maskedAccountNumber =
-        finixResponseModel.finixSaleResponse!.maskedAccountNumber;
-    finixSaleReciptResponseRequest.created =
-        finixResponseModel.finixSaleResponse!.created;
-    finixSaleReciptResponseRequest.traceId =
-        finixResponseModel.finixSaleResponse!.traceId;
-    finixSaleReciptResponseRequest.transferState =
-        finixResponseModel.finixSaleResponse!.transferState;
-    finixSaleReciptResponseRequest.expirationYear =
-        finixResponseModel.finixSaleResponse!.expirationYear;
+  finixSaleReciptResponseRequest.entryMode =
+      finixResponseModel.finixSaleResponse!.entryMode;
+  finixSaleReciptResponseRequest.maskedAccountNumber =
+      finixResponseModel.finixSaleResponse!.maskedAccountNumber;
+  finixSaleReciptResponseRequest.created =
+      finixResponseModel.finixSaleResponse!.created;
+  finixSaleReciptResponseRequest.traceId =
+      finixResponseModel.finixSaleResponse!.traceId;
+  finixSaleReciptResponseRequest.transferState =
+      finixResponseModel.finixSaleResponse!.transferState;
+  finixSaleReciptResponseRequest.expirationYear =
+      finixResponseModel.finixSaleResponse!.expirationYear;
 
-    finixSaleReceiptRequest.cryptogram =
-        finixResponseModel.finixSaleReceipt!.cryptogram;
-    finixSaleReceiptRequest.merchantId =
-        finixResponseModel.finixSaleReceipt!.merchantId;
-    finixSaleReceiptRequest.accountNumber =
-        finixResponseModel.finixSaleReceipt!.accountNumber;
-    finixSaleReceiptRequest.referenceNumber =
-        finixResponseModel.finixSaleReceipt!.referenceNumber;
-    finixSaleReceiptRequest.applicationLabel =
-        finixResponseModel.finixSaleReceipt!.applicationLabel;
-    finixSaleReceiptRequest.entryMode =
-        finixResponseModel.finixSaleReceipt!.entryMode;
-    finixSaleReceiptRequest.approvalCode =
-        finixResponseModel.finixSaleReceipt!.approvalCode;
-    finixSaleReceiptRequest.transactionId =
-        finixResponseModel.finixSaleReceipt!.transactionId;
-    finixSaleReceiptRequest.cardBrand =
-        finixResponseModel.finixSaleReceipt!.cardBrand;
-    finixSaleReceiptRequest.merchantName =
-        finixResponseModel.finixSaleReceipt!.merchantName;
-    finixSaleReceiptRequest.merchantAddress =
-        finixResponseModel.finixSaleReceipt!.merchantAddress;
-    finixSaleReceiptRequest.responseCode =
-        finixResponseModel.finixSaleReceipt!.responseCode;
-    finixSaleReceiptRequest.transactionType =
-        finixResponseModel.finixSaleReceipt!.transactionType;
-    finixSaleReceiptRequest.responseMessage =
-        finixResponseModel.finixSaleReceipt!.responseMessage;
-    finixSaleReceiptRequest.applicationIdentifier =
-        finixResponseModel.finixSaleReceipt!.applicationIdentifier;
-    finixSaleReceiptRequest.date = finixResponseModel.finixSaleReceipt!.date;
+  finixSaleReceiptRequest.cryptogram =
+      finixResponseModel.finixSaleReceipt!.cryptogram;
+  finixSaleReceiptRequest.merchantId =
+      finixResponseModel.finixSaleReceipt!.merchantId;
+  finixSaleReceiptRequest.accountNumber =
+      finixResponseModel.finixSaleReceipt!.accountNumber;
+  finixSaleReceiptRequest.referenceNumber =
+      finixResponseModel.finixSaleReceipt!.referenceNumber;
+  finixSaleReceiptRequest.applicationLabel =
+      finixResponseModel.finixSaleReceipt!.applicationLabel;
+  finixSaleReceiptRequest.entryMode =
+      finixResponseModel.finixSaleReceipt!.entryMode;
+  finixSaleReceiptRequest.approvalCode =
+      finixResponseModel.finixSaleReceipt!.approvalCode;
+  finixSaleReceiptRequest.transactionId =
+      finixResponseModel.finixSaleReceipt!.transactionId;
+  finixSaleReceiptRequest.cardBrand =
+      finixResponseModel.finixSaleReceipt!.cardBrand;
+  finixSaleReceiptRequest.merchantName =
+      finixResponseModel.finixSaleReceipt!.merchantName;
+  finixSaleReceiptRequest.merchantAddress =
+      finixResponseModel.finixSaleReceipt!.merchantAddress;
+  finixSaleReceiptRequest.responseCode =
+      finixResponseModel.finixSaleReceipt!.responseCode;
+  finixSaleReceiptRequest.transactionType =
+      finixResponseModel.finixSaleReceipt!.transactionType;
+  finixSaleReceiptRequest.responseMessage =
+      finixResponseModel.finixSaleReceipt!.responseMessage;
+  finixSaleReceiptRequest.applicationIdentifier =
+      finixResponseModel.finixSaleReceipt!.applicationIdentifier;
+  finixSaleReceiptRequest.date = finixResponseModel.finixSaleReceipt!.date;
 
-    finixResponseDto.finixSaleResponse = finixSaleReciptResponseRequest;
-    finixResponseDto.finixSaleResponse!.resourceTags = resourceTagsRequest;
-    finixResponseDto.finixSaleReceipt = finixSaleReceiptRequest;
-    payReceiptModel.finixResponseDto = finixResponseDto;
+  finixResponseDto.finixSaleResponse = finixSaleReciptResponseRequest;
+  finixResponseDto.finixSaleResponse!.resourceTags = resourceTagsRequest;
+  finixResponseDto.finixSaleReceipt = finixSaleReceiptRequest;
+  payReceiptModel.finixResponseDto = finixResponseDto;
 
-    debugPrint('>>>>>>>>>>>${payReceiptModel.toString()}');
+  debugPrint('>>>>>>>>>>>${payReceiptModel.toString()}');
 
+  setState(() {
+    isApiProcess = true;
+  });
+  orderPresenter.finixReceipt(payReceiptModel);
+  return payReceiptModel;
+}
+
+emailValidation() {
+  if (emailController.text.isEmpty) {
     setState(() {
-      isApiProcess = true;
+      emailValidationMessage = StringConstants.emptyValidEmail;
+      validationPopup(emailValidationMessage);
     });
-    orderPresenter.finixReceipt(payReceiptModel);
-    return payReceiptModel;
+    return false;
   }
-
-  emailValidation() {
-    if (emailController.text.isEmpty) {
-      setState(() {
-        emailValidationMessage = StringConstants.emptyValidEmail;
-        validationPopup(emailValidationMessage);
-      });
-      return false;
-    }
-    if (!emailController.text.isValidEmail()) {
-      setState(() {
-        emailValidationMessage = StringConstants.enterValidEmail;
-        validationPopup(emailValidationMessage);
-      });
-      return false;
-    }
-    if (emailController.text.isValidEmail()) {
-      setState(() {
-        emailValidationMessage = "";
-        sendReciptMailOrSmsApiCall("", "", emailController.text);
-      });
-      return true;
-    }
-  }
-
-  smsValidation() {
-    if (phoneNumberController.text.isEmpty) {
-      setState(() {
-        smsValidationMessage = StringConstants.emptyContactNumber;
-        validationPopup(smsValidationMessage);
-      });
-      return false;
-    }
-    if (phoneNumberController.text.isNotEmpty) {
-      setState(() {
-        smsValidationMessage = "";
-        sendReciptMailOrSmsApiCall(countryCode, phoneNumberController.text, "");
-      });
-      return true;
-    }
-  }
-
-  validationPopup(String validationMessage) {
-    showDialog(
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
-        context: context,
-        builder: (context) {
-          return ValidationPopup(validationMessage: validationMessage);
-        });
-  }
-
-  void sendReciptMailOrSmsApiCall(
-      String countryCode, String phoneNumber, String emailAddress) {
-    FinixSendReceiptRequest finixSendReceiptRequest = FinixSendReceiptRequest();
-
-    finixSendReceiptRequest.phoneNumCountryCode = countryCode;
-    finixSendReceiptRequest.phoneNumber = phoneNumber;
-    finixSendReceiptRequest.email = emailAddress;
-
+  if (!emailController.text.isValidEmail()) {
     setState(() {
-      isApiProcess = true;
+      emailValidationMessage = StringConstants.enterValidEmail;
+      validationPopup(emailValidationMessage);
     });
-    orderPresenter.finixSendReceipt(orderID, finixSendReceiptRequest);
-    debugPrint(countryCode);
-    debugPrint(phoneNumber);
+    return false;
   }
+  if (emailController.text.isValidEmail()) {
+    setState(() {
+      emailValidationMessage = "";
+      sendReciptMailOrSmsApiCall("", "", emailController.text);
+    });
+    return true;
+  }
+}
+
+smsValidation() {
+  if (phoneNumberController.text.isEmpty) {
+    setState(() {
+      smsValidationMessage = StringConstants.emptyContactNumber;
+      validationPopup(smsValidationMessage);
+    });
+    return false;
+  }
+  if (phoneNumberController.text.isNotEmpty) {
+    setState(() {
+      smsValidationMessage = "";
+      sendReciptMailOrSmsApiCall(countryCode, phoneNumberController.text, "");
+    });
+    return true;
+  }
+}
+
+validationPopup(String validationMessage) {
+  showDialog(
+      barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+      context: context,
+      builder: (context) {
+        return ValidationPopup(validationMessage: validationMessage);
+      });
+}
+
+void sendReciptMailOrSmsApiCall(
+    String countryCode, String phoneNumber, String emailAddress) {
+  FinixSendReceiptRequest finixSendReceiptRequest = FinixSendReceiptRequest();
+
+  finixSendReceiptRequest.phoneNumCountryCode = countryCode;
+  finixSendReceiptRequest.phoneNumber = phoneNumber;
+  finixSendReceiptRequest.email = emailAddress;
+
+  setState(() {
+    isApiProcess = true;
+  });
+  orderPresenter.finixSendReceipt(orderID, finixSendReceiptRequest);
+  debugPrint(countryCode);
+  debugPrint(phoneNumber);
+}
 }
