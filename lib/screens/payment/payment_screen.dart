@@ -1048,8 +1048,6 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //Action Event
   onTapPaymentMode(int index) {
-    getApiCallPayReceipt();
-    // finixMannualApiCall();
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
@@ -1065,13 +1063,13 @@ class _PaymentScreenState extends State<PaymentScreen>
         bool valueForApi = value['value'];
         if (valueForApi == true) {
           String cardNumber = value['cardNumber'];
-          String cardDate = value['cardDate'];
+          String cardDate = value['cardMonth'];
           String cardYear = value['cardYear'];
+          debugPrint('cccccccc@$cardDate');
           onTapConfirmPayment(cardNumber, cardDate, cardYear);
         }
       });
     }
-
     if (paymentModeType == PaymentModeConstants.creditCard) {
       performCardPayment();
     }
@@ -1320,13 +1318,14 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   //FinixMannual CardDetails
-  onTapConfirmPayment(String cardNumber, String cardDate, cardYear) async {
+  onTapConfirmPayment(String cardNumber, String cardMonth, String cardYear) async {
     final valuesCardDetails = {
       "cardNumber": cardNumber,
-      "cardDate": cardDate,
+      "cardMonth": cardMonth,
       "cardYear": cardYear,
     };
-    await cardPaymentChannel.invokeListMethod('performCardPayment', valuesCardDetails);
+    debugPrint('sdasdadasdas$cardMonth');
+    // await cardPaymentChannel.invokeListMethod('performCardPayment', valuesCardDetails);
   }
 
   getApiCallPayReceipt() {

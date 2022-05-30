@@ -37,7 +37,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   bool isExpiryValid = false;
   bool isCvcValid = false;
   bool isApiProcess = false;
-  var date, year;
+  var month, year;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
   var maskFormatter = MaskTextInputFormatter(
@@ -111,7 +111,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                         5),
                   ),
                 ),
-                Expanded(
+               /* Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: profileDetailsComponent(
@@ -123,7 +123,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                         cvvValidation,
                         3),
                   ),
-                ),
+                ),*/
               ],
             ),
             Row(
@@ -293,7 +293,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     try {
       String s = dateExpiryController.text;
       int idx = s.indexOf("/");
-      date = int.parse(s.substring(0, idx).trim());
+      month = int.parse(s.substring(0, idx).trim());
       year = int.parse(s.substring(idx + 1).trim());
     } catch (error) {
       debugPrint(error.toString());
@@ -305,13 +305,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         cardDateValidationMessage = "Please Enter Date";
         isExpiryValid = false;
       });
-    } else if (date > 31) {
+    }  if (month > 12) {
       setState(() {
         cardDateValidationMessage = "Please Check Date";
         isExpiryValid = false;
       });
     }
-    if (year > 12) {
+     if (year < 22) {
       setState(() {
         cardDateValidationMessage = "Please Check Year";
         isExpiryValid = false;
@@ -340,12 +340,14 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   void onTapConfirmManualCardPayment() {
-    if (isCardNumberValid && isExpiryValid && isCvcValid) {
+    if (isCardNumberValid && isExpiryValid) {
+      String sendMonth=month.toString();
+      String sendYear=year.toString();
       Map<String, dynamic> myData = Map();
       myData['value'] = true;
       myData['cardNumber'] = cardNumberController.text;
-      myData['cardDate'] = date;
-      myData['cardYear']=year;
+      myData['cardMonth'] = sendMonth;
+      myData['cardYear']=sendYear;
       Navigator.pop(context, myData);
     }
   }
