@@ -30,7 +30,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String demoCardNumber = "";
   bool isCardNumberValid = false;
   bool isExpiryValid = false;
-  bool isCvcValid = false;
+  bool isYearValid = false;
   bool isApiProcess = false;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
@@ -305,25 +305,25 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     if (yearController.text.isEmpty) {
       setState(() {
         cardYearValidationMessage = "Please Enter Year";
-        isCvcValid = false;
+        isYearValid = false;
       });
       return false;
     }
     if (cardYear < 2022) {
       setState(() {
         cardYearValidationMessage = "Please Check Year";
-        isExpiryValid = false;
+        isYearValid = false;
       });
     } else {
       setState(() {
         cardYearValidationMessage = "";
-        isExpiryValid = true;
+        isYearValid = true;
       });
     }
   }
 
   void onTapConfirmManualCardPayment() {
-    if (isCardNumberValid && isExpiryValid && isCvcValid) {
+    if (isCardNumberValid && isExpiryValid && isYearValid) {
       Map<String, dynamic> myData = Map();
       myData['value'] = true;
       myData['cardNumber'] = cardNumberController.text;
