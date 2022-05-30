@@ -1065,7 +1065,6 @@ class _PaymentScreenState extends State<PaymentScreen>
           String cardNumber = value['cardNumber'];
           String cardDate = value['cardMonth'];
           String cardYear = value['cardYear'];
-          debugPrint('cccccccc@$cardDate');
           onTapConfirmPayment(cardNumber, cardDate, cardYear);
         }
       });
@@ -1324,7 +1323,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       "cardMonth": cardMonth,
       "cardYear": cardYear,
     };
-    debugPrint('sdasdadasdas$cardMonth');
     // await cardPaymentChannel.invokeListMethod('performCardPayment', valuesCardDetails);
   }
 

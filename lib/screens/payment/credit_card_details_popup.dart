@@ -40,13 +40,9 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   var month, year;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
-  var maskFormatter = MaskTextInputFormatter(
-      mask: '##/##',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
 
   TextEditingController cardNumberController = TextEditingController();
-  TextEditingController cvcController = TextEditingController();
+  TextEditingController yearController = TextEditingController();
 
   _CreditCardDetailsPopupState() {
     // paymentPresenter = PaymentPresenter(this);
@@ -108,22 +104,22 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                         dateExpiryController,
                         cardDateValidationMessage,
                         dateValidation,
-                        5),
+                        2),
                   ),
                 ),
-               /* Expanded(
+                Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: profileDetailsComponent(
-                        StringConstants.cardCvc,
+                        StringConstants.cardExpiry,
                         "",
                         StringConstants.cardCvcMsg,
-                        cvcController,
+                        yearController,
                         cardCvvValidationMessage,
                         cvvValidation,
-                        3),
+                        4),
                   ),
-                ),*/
+                ),
               ],
             ),
             Row(
@@ -238,7 +234,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
                   maxLength: maxLength,
-                  inputFormatters: [maskFormatter],
                   onChanged: (value) {
                     validationMethod();
                   },
@@ -290,30 +285,16 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   dateValidation() {
-    try {
-      String s = dateExpiryController.text;
-      int idx = s.indexOf("/");
-      month = int.parse(s.substring(0, idx).trim());
-      year = int.parse(s.substring(idx + 1).trim());
-    } catch (error) {
-      debugPrint(error.toString());
-    }
-
-    debugPrint('validation');
+      int cardMonth =int.parse( dateExpiryController.text);
     if (dateExpiryController.text.isEmpty) {
       setState(() {
         cardDateValidationMessage = "Please Enter Date";
         isExpiryValid = false;
       });
-    }  if (month > 12) {
+    }
+    if (cardMonth > 12) {
       setState(() {
         cardDateValidationMessage = "Please Check Date";
-        isExpiryValid = false;
-      });
-    }
-     if (year < 22) {
-      setState(() {
-        cardDateValidationMessage = "Please Check Year";
         isExpiryValid = false;
       });
     } else {
@@ -325,16 +306,23 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   cvvValidation() {
-    if (cvcController.text.isEmpty) {
+    int cardYear =int.parse( yearController.text);
+
+    if (yearController.text.isEmpty) {
       setState(() {
-        cardCvvValidationMessage = "Please Enter Card Details";
+        cardCvvValidationMessage = "Please Enter Year";
         isCvcValid = false;
       });
       return false;
+    } if (cardYear < 2022) {
+      setState(() {
+        cardCvvValidationMessage = "Please Check Year";
+        isExpiryValid = false;
+      });
     } else {
       setState(() {
         cardCvvValidationMessage = "";
-        isCvcValid = true;
+        isExpiryValid = true;
       });
     }
   }
@@ -346,8 +334,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       Map<String, dynamic> myData = Map();
       myData['value'] = true;
       myData['cardNumber'] = cardNumberController.text;
-      myData['cardMonth'] = sendMonth;
-      myData['cardYear']=sendYear;
+      myData['cardMonth'] = dateExpiryController.text;
+      myData['cardYear']= yearController.text;
       Navigator.pop(context, myData);
     }
   }
