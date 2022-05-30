@@ -98,7 +98,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
                     child: cardExpiryComponent(
-                        StringConstants.cardExpiry,
+                        StringConstants.cardExpiryMonth,
                         "",
                         StringConstants.cardExpiryMsg,
                         dateExpiryController,
@@ -111,7 +111,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: profileDetailsComponent(
-                        StringConstants.cardExpiry,
+                        StringConstants.cardExpiryYear,
                         "",
                         StringConstants.cardCvcMsg,
                         yearController,
