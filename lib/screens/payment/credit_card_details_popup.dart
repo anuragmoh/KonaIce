@@ -49,7 +49,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         child: Dialog(
           backgroundColor: Colors.transparent,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
           child: showCustomMenuPopup(),
         ));
   }
@@ -75,7 +75,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 onTapCloseButton: onTapCloseButton),
             Padding(
               padding:
-                  const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
+              const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
               child: profileDetailsComponent(
                   StringConstants.cardNumber,
                   "",
@@ -107,7 +107,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                     child: profileDetailsComponent(
                         StringConstants.cardExpiryYear,
                         "",
-                        StringConstants.cardCvcMsg,
+                        StringConstants.cardExpiryYear,
                         yearController,
                         cardYearValidationMessage,
                         yearValidation,
@@ -135,13 +135,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   Widget profileDetailsComponent(
-          String txtName,
-          String txtValue,
-          String txtHint,
-          TextEditingController textEditingController,
-          String validationMessage,
-          Function validationMethod,
-          int maxLength) =>
+      String txtName,
+      String txtValue,
+      String txtHint,
+      TextEditingController textEditingController,
+      String validationMessage,
+      Function validationMethod,
+      int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -196,13 +196,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       );
 
   Widget cardExpiryComponent(
-          String txtName,
-          String txtValue,
-          String txtHint,
-          TextEditingController textEditingController,
-          String validationMessage,
-          Function validationMethod,
-          int maxLength) =>
+      String txtName,
+      String txtValue,
+      String txtHint,
+      TextEditingController textEditingController,
+      String validationMessage,
+      Function validationMethod,
+      int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -299,13 +299,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
   }
 
-<<<<<<< HEAD
-  cvvValidation() {
-    int cardYear = int.parse(yearController.text);
-=======
   yearValidation() {
-    int cardYear =int.parse( yearController.text);
->>>>>>> de070c6c9b80d4835b3fa97643c8710f78220266
+    int cardYear = int.parse(yearController.text);
 
     if (yearController.text.isEmpty) {
       setState(() {
@@ -328,7 +323,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   void onTapConfirmManualCardPayment() {
-    if (isCardNumberValid && isExpiryValid&&isCvcValid) {
+    if (isCardNumberValid && isExpiryValid && isCvcValid) {
       Map<String, dynamic> myData = Map();
       myData['value'] = true;
       myData['cardNumber'] = cardNumberController.text;
