@@ -1069,9 +1069,14 @@ class _PaymentScreenState extends State<PaymentScreen>
         bool valueForApi = value['value'];
         if (valueForApi == true) {
           String cardNumber = value['cardNumber'];
-          String cardDate = value['cardMonth'];
+          String cardMonth = value['cardMonth'];
           String cardYear = value['cardYear'];
-          onTapConfirmPayment(cardNumber, cardDate, cardYear);
+
+          int valCardNumber = int.parse(cardNumber);
+          int valCardMonth = int.parse(cardMonth);
+          int valCardYEar = int.parse(cardYear);
+
+          onTapConfirmPayment(valCardNumber, valCardMonth, valCardYEar);
         }
       });
     }
@@ -1324,7 +1329,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //FinixMannual CardDetails
   onTapConfirmPayment(
-      String cardNumber, String cardMonth, String cardYear) async {
+      int cardNumber, int cardMonth, int cardYear) async {
     final valuesCardDetails = {
       "cardNumber": cardNumber,
       "cardMonth": cardMonth,

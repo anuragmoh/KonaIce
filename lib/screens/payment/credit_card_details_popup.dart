@@ -166,6 +166,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   maxLength: maxLength,
                   onChanged: (value) {
                     validationMethod();
@@ -227,6 +228,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
+                  keyboardType: TextInputType.number,
                   maxLength: maxLength,
                   onChanged: (value) {
                     validationMethod();
@@ -261,41 +263,39 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   cardValidation() {
-    debugPrint('validation');
     if (cardNumberController.text.isEmpty) {
       setState(() {
-        debugPrint('validation$cardNumberValidationMessage');
         cardNumberValidationMessage = "Please Enter Card Details";
-        isCardNumberValid = false;
       });
       return false;
     } else {
       setState(() {
-        debugPrint('validationFull$cardNumberValidationMessage');
         cardNumberValidationMessage = "";
-        isCardNumberValid = true;
       });
+      isCardNumberValid = true;
     }
   }
 
   dateValidation() {
     int cardMonth = int.parse(dateExpiryController.text);
-    if (dateExpiryController.text.isEmpty) {
+
+    if (dateExpiryController.text=="") {
+      debugPrint('validation$cardDateValidationMessage');
       setState(() {
         cardDateValidationMessage = "Please Enter Date";
-        isExpiryValid = false;
       });
+      isExpiryValid = false;
     }
     if (cardMonth > 12) {
       setState(() {
         cardDateValidationMessage = "Please Check Date";
-        isExpiryValid = false;
       });
+      isExpiryValid = false;
     } else {
       setState(() {
         cardDateValidationMessage = "";
-        isExpiryValid = true;
       });
+      isExpiryValid = true;
     }
   }
 
@@ -305,24 +305,41 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     if (yearController.text.isEmpty) {
       setState(() {
         cardYearValidationMessage = "Please Enter Year";
-        isYearValid = false;
       });
       return false;
     }
     if (cardYear < 2022) {
       setState(() {
         cardYearValidationMessage = "Please Check Year";
-        isYearValid = false;
       });
+      isYearValid = false;
     } else {
       setState(() {
         cardYearValidationMessage = "";
-        isYearValid = true;
       });
+      isYearValid = true;
     }
   }
 
   void onTapConfirmManualCardPayment() {
+    if (isExpiryValid==false) {
+      setState(() {
+        cardDateValidationMessage = "Please Enter Date";
+      });
+      isExpiryValid = false;
+    }
+    if (yearController.text.isEmpty) {
+      setState(() {
+        cardYearValidationMessage = "Please Enter Year";
+      });
+      isYearValid= false;
+    }
+    if (cardNumberController.text.isEmpty) {
+      setState(() {
+        cardNumberValidationMessage = "Please Enter Card Details";
+      });
+      isCardNumberValid= false;
+    }
     if (isCardNumberValid && isExpiryValid && isYearValid) {
       Map<String, dynamic> myData = Map();
       myData['value'] = true;
@@ -333,3 +350,4 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
   }
 }
+
