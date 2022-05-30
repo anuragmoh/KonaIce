@@ -79,8 +79,8 @@ extension AppDelegate {
     
     func getFinixPaymentToken(cardNumber: String, expMonth: Int, expYear: Int, onCompletion: @escaping (String) -> Void) {
         
-        let tokenizer = Tokenizer(host: "https://api-staging.finix.io",
-                                  applicationId: "AP2kL9QSWYJGpuAtYYnK5cZY")
+        let tokenizer = Tokenizer(host: "https://finix.sandbox-payments-api.com/",
+                                  applicationId: "APoGjsiWhbgidfvyS7FE6VMU")
         
         tokenizer.createToken(cardNumber: cardNumber, paymentType: PaymentType.PAYMENT_CARD, expirationMonth: expMonth, expirationYear: expYear) { (token, error) in
             guard let token = token else {

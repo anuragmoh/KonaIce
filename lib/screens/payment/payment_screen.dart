@@ -1072,11 +1072,10 @@ class _PaymentScreenState extends State<PaymentScreen>
           String cardMonth = value['cardMonth'];
           String cardYear = value['cardYear'];
 
-          int valCardNumber = int.parse(cardNumber);
           int valCardMonth = int.parse(cardMonth);
           int valCardYEar = int.parse(cardYear);
 
-          onTapConfirmPayment(valCardNumber, valCardMonth, valCardYEar);
+          onTapConfirmPayment(cardNumber, valCardMonth, valCardYEar);
         }
       });
     }
@@ -1329,14 +1328,14 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //FinixMannual CardDetails
   onTapConfirmPayment(
-      int cardNumber, int cardMonth, int cardYear) async {
+      String cardNumber, int expirationMonth, int expirationYear) async {
     final valuesCardDetails = {
       "cardNumber": cardNumber,
-      "cardMonth": cardMonth,
-      "cardYear": cardYear,
+      "expirationMonth": expirationMonth,
+      "expirationYear": expirationYear,
     };
     await cardPaymentChannel.invokeListMethod(
-        'performCardPayment', valuesCardDetails);
+        'getPaymentToken', valuesCardDetails);
   }
 
   getApiCallPayReceipt() {
