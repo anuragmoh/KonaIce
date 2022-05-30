@@ -87,7 +87,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     super.initState();
     getMyProfileDetails();
     ServiceNotifier().increment(2);
-    P2PConnectionManager.shared.updateData(action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
 
     // getUserDetails();
   }
@@ -502,8 +503,12 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         ],
       );
 
-  Widget profileEmailTextFiledComponent(String txtName, String txtValue,
-      String txtHint, TextEditingController textEditingController, bool textFiledColor) =>
+  Widget profileEmailTextFiledComponent(
+          String txtName,
+          String txtValue,
+          String txtHint,
+          TextEditingController textEditingController,
+          bool textFiledColor) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -519,7 +524,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               height: 40.0,
               width: 300.0,
               decoration: BoxDecoration(
-                  color: textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
+                  color: textFiledColor
+                      ? AppColors.whiteColor
+                      : AppColors.denotiveColor5,
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
                       color: getMaterialColor(AppColors.textColor1)
@@ -539,7 +546,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       controller: textEditingController,
                       decoration: InputDecoration(
                           filled: true,
-                          fillColor:textFiledColor? AppColors.whiteColor:AppColors.denotiveColor5,
+                          fillColor: textFiledColor
+                              ? AppColors.whiteColor
+                              : AppColors.denotiveColor5,
                           hintText: txtHint,
                           border: InputBorder.none,
                           labelText: txtValue,
@@ -598,7 +607,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   lastNameValidation() {
     if (lastNameController.text.isEmpty) {
       setState(() {
-        lastNameValidationMessage =StringConstants.emptyLastName;
+        lastNameValidationMessage = StringConstants.emptyLastName;
       });
       return false;
     } else {
@@ -613,7 +622,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   phoneNumberValidation() {
     if (contactNumberController.text.isEmpty) {
       setState(() {
-        contactNumberValidationMessage =StringConstants.emptyContactNumber;
+        contactNumberValidationMessage = StringConstants.emptyContactNumber;
       });
       return false;
     } else {
@@ -639,7 +648,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
       });
       return false;
     }
-    if (newPasswordController.text.length<7||newPasswordController.text.length>12) {
+    if (newPasswordController.text.length < 7 ||
+        newPasswordController.text.length > 12) {
       setState(() {
         passwordValidationMessage = StringConstants.enterValidPasswordLength;
       });
@@ -694,7 +704,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   getUserDetails() {
-    userName = getMyProfile[0].firstName.toString() + " " +getMyProfile[0].lastName.toString();
+    userName = getMyProfile[0].firstName.toString() +
+        " " +
+        getMyProfile[0].lastName.toString();
     firstNameController.text = getMyProfile[0].firstName.toString();
     lastNameController.text = getMyProfile[0].lastName.toString();
     contactNumberController.text = getMyProfile[0].phoneNum.toString();
@@ -711,6 +723,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     SessionDAO().insert(Session(key: DatabaseKeys.firstName, value: firstName));
     SessionDAO().insert(Session(key: DatabaseKeys.lastName, value: lastName));
     SessionDAO().insert(Session(key: DatabaseKeys.email, value: email));
-    SessionDAO().insert(Session(key: DatabaseKeys.phoneNum, value: contactNumber));
+    SessionDAO()
+        .insert(Session(key: DatabaseKeys.phoneNum, value: contactNumber));
   }
 }

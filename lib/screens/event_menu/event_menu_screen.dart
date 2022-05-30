@@ -687,7 +687,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               hintText: StringConstants.addTip,
               imageName: AssetsConstants.dollarIcon,
               controller: addTipTextFieldController),
-
           orderBillDetailContainer(),
         ],
       ),

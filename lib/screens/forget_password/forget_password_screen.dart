@@ -19,31 +19,35 @@ class ForgetPasswordScreen extends StatefulWidget {
   Function navigateBackToLoginView;
   Function forgotPasswordLoader;
 
-   ForgetPasswordScreen({required this.navigateBackToLoginView, required this.forgotPasswordLoader,Key? key}) : super(key: key);
+  ForgetPasswordScreen(
+      {required this.navigateBackToLoginView,
+      required this.forgotPasswordLoader,
+      Key? key})
+      : super(key: key);
 
   @override
   _ForgetPasswordScreenState createState() => _ForgetPasswordScreenState();
 }
 
-class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements ResponseContractor{
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
+    implements ResponseContractor {
   bool isApiProcess = false;
   bool isEmailValid = true;
   String emailValidationMessage = "";
   TextEditingController emailController = TextEditingController();
 
   late UserPresenter userPresenter;
-  ForgotPasswordRequestModel forgotPasswordRequestModel=ForgotPasswordRequestModel();
+  ForgotPasswordRequestModel forgotPasswordRequestModel =
+      ForgotPasswordRequestModel();
 
   _ForgetPasswordScreenState() {
     userPresenter = UserPresenter(this);
   }
-    forgotPasswordApiCall(){
-
+  forgotPasswordApiCall() {
     widget.forgotPasswordLoader(true);
-      forgotPasswordRequestModel.email=emailController.text.toString();
-      userPresenter.forgotPassword(forgotPasswordRequestModel);
-    }
-
+    forgotPasswordRequestModel.email = emailController.text.toString();
+    userPresenter.forgotPassword(forgotPasswordRequestModel);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding:  EdgeInsets.only(top: 3.25*SizeConfig.imageSizeMultiplier, bottom: 3.25*SizeConfig.imageSizeMultiplier),
+            padding: EdgeInsets.only(
+                top: 3.25 * SizeConfig.imageSizeMultiplier,
+                bottom: 3.25 * SizeConfig.imageSizeMultiplier),
             child: CommonWidgets().textWidget(
                 StringConstants.forgotPassword,
                 StyleConstants.customTextStyle22MontserratSemiBold(
@@ -80,7 +86,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
             child: Padding(
               padding: const EdgeInsets.only(left: 4.0),
               child: TextField(
-                onChanged: (value){
+                onChanged: (value) {
                   emailValidation();
                 },
                 maxLength: 100,
@@ -89,7 +95,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
                   counterText: "",
                   border: const OutlineInputBorder(
                     borderSide:
-                    BorderSide(color: AppColors.textColor2, width: 1.0),
+                        BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
                   hintText: 'abc@gmail.com',
                   errorText: emailValidationMessage,
@@ -97,58 +103,68 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
                       color: getMaterialColor(AppColors.textColor1)),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
-                    BorderSide(color: AppColors.textColor2, width: 1.0),
+                        BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
                   errorBorder: const OutlineInputBorder(
                     borderSide:
-                    BorderSide(color: AppColors.primaryColor1, width: 1.0),
+                        BorderSide(color: AppColors.primaryColor1, width: 1.0),
                   ),
                 ),
               ),
             ),
           ),
           Padding(
-            padding:  EdgeInsets.only(bottom:0.65*SizeConfig.imageSizeMultiplier),
-            child: GestureDetector(
-              onTap: onTapSignIn,
-              child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(text: StringConstants.rememberPassword, style: StyleConstants.customTextStyle12MontserratSemiBold(
+              padding: EdgeInsets.only(
+                  bottom: 0.65 * SizeConfig.imageSizeMultiplier),
+              child: GestureDetector(
+                onTap: onTapSignIn,
+                child: RichText(
+                    text: TextSpan(children: [
+                  TextSpan(
+                      text: StringConstants.rememberPassword,
+                      style: StyleConstants.customTextStyle12MontserratSemiBold(
                           color: getMaterialColor(AppColors.denotiveColor4))),
-                      TextSpan(text: ' ${StringConstants.signIn}', style: TextStyle(
-                        color: getMaterialColor(AppColors.gradientColor2),
-                        fontSize: 12.0, fontFamily: FontConstants.montserratSemiBold,
-                        decoration: TextDecoration.underline
-                      )),
-                    ]
-                  )
-              ),
-            )
-          ),
-          submitButton(StringConstants.submit, StyleConstants.customTextStyle12MontserratBold(color: getMaterialColor(AppColors.textColor1))),
+                  TextSpan(
+                      text: ' ${StringConstants.signIn}',
+                      style: TextStyle(
+                          color: getMaterialColor(AppColors.gradientColor2),
+                          fontSize: 12.0,
+                          fontFamily: FontConstants.montserratSemiBold,
+                          decoration: TextDecoration.underline)),
+                ])),
+              )),
+          submitButton(
+              StringConstants.submit,
+              StyleConstants.customTextStyle12MontserratBold(
+                  color: getMaterialColor(AppColors.textColor1))),
         ],
       ),
     );
   }
-  Widget submitButton(String buttonText, TextStyle textStyle){
+
+  Widget submitButton(String buttonText, TextStyle textStyle) {
     return Padding(
-      padding:  EdgeInsets.only(bottom: 4.55*SizeConfig.imageSizeMultiplier, top: 4.55*SizeConfig.imageSizeMultiplier),
+      padding: EdgeInsets.only(
+          bottom: 4.55 * SizeConfig.imageSizeMultiplier,
+          top: 4.55 * SizeConfig.imageSizeMultiplier),
       child: GestureDetector(
-        onTap:  onTapSubmit,
+        onTap: onTapSubmit,
         child: Container(
           decoration: BoxDecoration(
             color: getMaterialColor(AppColors.primaryColor2),
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
-            padding:  EdgeInsets.symmetric(vertical: 1.56*SizeConfig.imageSizeMultiplier,horizontal: 84.0),
+            padding: EdgeInsets.symmetric(
+                vertical: 1.56 * SizeConfig.imageSizeMultiplier,
+                horizontal: 84.0),
             child: CommonWidgets().textWidget(buttonText, textStyle),
           ),
         ),
       ),
     );
   }
+
   emailValidation() {
     if (emailController.text.isEmpty) {
       setState(() {
@@ -171,33 +187,35 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
   }
 
   //Actions
- onTapSubmit() {
-   FunctionalUtils.hideKeyboard();
-   setState(() {
-     emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
-   });
+  onTapSubmit() {
+    FunctionalUtils.hideKeyboard();
+    setState(() {
+      emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
+    });
 
-   emailValidation();
-   if (isEmailValid) {
-     CheckConnection().connectionState().then((value){
-       if(value == true){
-         forgotPasswordApiCall();
-       }else{
-         CommonWidgets().showErrorSnackBar(errorMessage: StringConstants.noInternetConnection, context: context);
-       }
-     });
-   }
+    emailValidation();
+    if (isEmailValid) {
+      CheckConnection().connectionState().then((value) {
+        if (value == true) {
+          forgotPasswordApiCall();
+        } else {
+          CommonWidgets().showErrorSnackBar(
+              errorMessage: StringConstants.noInternetConnection,
+              context: context);
+        }
+      });
+    }
+  }
 
-
- }
-
- onTapSignIn() {
-   widget.navigateBackToLoginView("");
- }
+  onTapSignIn() {
+    widget.navigateBackToLoginView("");
+  }
 
   @override
   void showError(GeneralErrorResponse exception) {
-    CommonWidgets().showErrorSnackBar(errorMessage: exception.message ?? StringConstants.somethingWentWrong, context: context);
+    CommonWidgets().showErrorSnackBar(
+        errorMessage: exception.message ?? StringConstants.somethingWentWrong,
+        context: context);
     widget.forgotPasswordLoader(false);
   }
 

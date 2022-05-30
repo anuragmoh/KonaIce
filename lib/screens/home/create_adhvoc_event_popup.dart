@@ -682,8 +682,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         }
       } on RangeError catch (e) {
         debugPrint(e.toString());
-      } catch (e) {
-      }
+      } catch (e) {}
     }
     setState(() {
       isApiProcess = false;

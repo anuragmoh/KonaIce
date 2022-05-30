@@ -93,8 +93,8 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.textColor5)),
+                borderSide:
+                    BorderSide(color: getMaterialColor(AppColors.textColor5)),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(

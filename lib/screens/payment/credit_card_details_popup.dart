@@ -279,7 +279,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   dateValidation() {
-      int cardMonth =int.parse( dateExpiryController.text);
+    int cardMonth = int.parse(dateExpiryController.text);
     if (dateExpiryController.text.isEmpty) {
       setState(() {
         cardDateValidationMessage = "Please Enter Date";
@@ -299,8 +299,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
   }
 
+<<<<<<< HEAD
+  cvvValidation() {
+    int cardYear = int.parse(yearController.text);
+=======
   yearValidation() {
     int cardYear =int.parse( yearController.text);
+>>>>>>> de070c6c9b80d4835b3fa97643c8710f78220266
 
     if (yearController.text.isEmpty) {
       setState(() {
@@ -308,7 +313,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         isCvcValid = false;
       });
       return false;
-    } if (cardYear < 2022) {
+    }
+    if (cardYear < 2022) {
       setState(() {
         cardYearValidationMessage = "Please Check Year";
         isExpiryValid = false;
@@ -327,7 +333,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       myData['value'] = true;
       myData['cardNumber'] = cardNumberController.text;
       myData['cardMonth'] = dateExpiryController.text;
-      myData['cardYear']= yearController.text;
+      myData['cardYear'] = yearController.text;
       Navigator.pop(context, myData);
     }
   }

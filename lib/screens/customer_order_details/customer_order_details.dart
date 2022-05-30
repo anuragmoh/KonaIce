@@ -71,9 +71,10 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                     ),
                     const SizedBox(width: 40),
                     Padding(
-                      padding: const EdgeInsets.only(right: 230.0, bottom: 20.0),
-                      child: CommonWidgets().buttonWidget(StringConstants.confirm,
-                          () {
+                      padding:
+                          const EdgeInsets.only(right: 230.0, bottom: 20.0),
+                      child: CommonWidgets()
+                          .buttonWidget(StringConstants.confirm, () {
                         onTapConfirmButton();
                       }),
                     ),
@@ -342,7 +343,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   Widget subOrderItemView(String subItem) => Text(subItem);
 
   Widget componentBill() => SingleChildScrollView(
-    child: Column(
+        child: Column(
           children: [
             const SizedBox(height: 14.0),
             billTextView(
@@ -467,13 +468,16 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   Widget textWidget(String textTitle, TextStyle textStyle) {
     return Text(textTitle, style: textStyle);
   }
-  getTip(double tip){
+
+  getTip(double tip) {
     orderDetailsModel?.setTip(tip);
     double? receivedTip = orderDetailsModel?.getTip();
     updateTip(receivedTip!);
-    P2PConnectionManager.shared.notifyChangeToStaff(action: CustomerActionConst.tip, data: receivedTip.toString());
+    P2PConnectionManager.shared.notifyChangeToStaff(
+        action: CustomerActionConst.tip, data: receivedTip.toString());
   }
-  updateTip(double tip){
+
+  updateTip(double tip) {
     setState(() {
       tipAmount = tip;
     });

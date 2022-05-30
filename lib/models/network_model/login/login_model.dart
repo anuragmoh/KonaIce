@@ -62,35 +62,34 @@ String loginResponseModelToJson(LoginResponseModel data) =>
     json.encode(data.toJson());
 
 class LoginResponseModel {
-  LoginResponseModel({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.createdBy,
-    this.updatedBy,
-    this.deleted,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phoneNum,
-    this.numCountryCode,
-    this.profileImageFileId,
-    this.franchiseId,
-    this.activated,
-    this.emailVerified,
-    this.phoneNumberVerified,
-    this.timezone,
-    this.roles,
-    // this.files,
-    this.sessionKey,
-    this.projectConfigs,
-    this.merchantId,
-    this.deviceId,
-    this.finixSerialNumber,
-    this.finixUsername,
-    this.finixPassword,
-    this.merchantIdNCP
-  });
+  LoginResponseModel(
+      {this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.updatedBy,
+      this.deleted,
+      this.firstName,
+      this.lastName,
+      this.email,
+      this.phoneNum,
+      this.numCountryCode,
+      this.profileImageFileId,
+      this.franchiseId,
+      this.activated,
+      this.emailVerified,
+      this.phoneNumberVerified,
+      this.timezone,
+      this.roles,
+      // this.files,
+      this.sessionKey,
+      this.projectConfigs,
+      this.merchantId,
+      this.deviceId,
+      this.finixSerialNumber,
+      this.finixUsername,
+      this.finixPassword,
+      this.merchantIdNCP});
 
   String? id;
   int? createdAt;
