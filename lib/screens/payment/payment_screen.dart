@@ -1118,7 +1118,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       "customerName": widget.placeOrderRequestModel.getCustomerName(),
       "eventName": widget.events.getEventName(),
       "eventCode": widget.events.getEventCode(),
-      "environment": "",
+      "environment": "TestCertification",
       "paymentMethod": "BBPOS"
     };
 
