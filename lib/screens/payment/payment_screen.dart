@@ -85,7 +85,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String finixSerialNumber = StringExtension.empty();
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
-  String merchantIdNCP= StringExtension.empty();
+  String merchantIdNCP = StringExtension.empty();
   String paymentFailMessage = StringExtension.empty();
   String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
@@ -94,7 +94,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String emailValidationMessage = "";
   String smsValidationMessage = "";
   String countryCode = "+1";
-  FinixResponseModel finixResponse=FinixResponseModel();
+  FinixResponseModel finixResponse = FinixResponseModel();
 
   TextEditingController amountReceivedController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -145,6 +145,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         _paymentFailed();
       } else if (call.method == "paymentStatus") {
         _paymentStatus(call.arguments.toString());
+      } else if (call.method == "getPaymentToken") {
+        _getPaymentToken(call.arguments.toString());
       }
     });
   }
@@ -172,6 +174,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentStatus(status) async {
     debugPrint("Payment Status: $status");
+  }
+
+  _getPaymentToken(token) async {
+    debugPrint("Payment Token: $token");
   }
 
   @override
@@ -1317,27 +1323,29 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   //FinixMannual CardDetails
-  onTapConfirmPayment(String cardNumber, String cardMonth, String cardYear) async {
+  onTapConfirmPayment(
+      String cardNumber, String cardMonth, String cardYear) async {
     final valuesCardDetails = {
       "cardNumber": cardNumber,
       "cardMonth": cardMonth,
       "cardYear": cardYear,
     };
-    // await cardPaymentChannel.invokeListMethod('performCardPayment', valuesCardDetails);
+    await cardPaymentChannel.invokeListMethod(
+        'performCardPayment', valuesCardDetails);
   }
 
   getApiCallPayReceipt() {
     String testString =
         "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
-     finixResponse = finixResponseFromJson(testString);
+    finixResponse = finixResponseFromJson(testString);
     debugPrint(
         "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
     PayReceipt payReceipt = getPayReceiptModel(false);
   }
 
-  //ApiCall Aftergetting Mannual Card token
-   finixMannualApiCall() {
-     getPayReceiptModel(true);
+  //ApiCall After getting Manual Card token
+  finixManualApiCall() {
+    getPayReceiptModel(true);
   }
 
   PayReceipt getPayReceiptModel(bool paymentMethodCall) {
@@ -1424,13 +1432,13 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     debugPrint('>>>>>>>>>>>${payReceiptModel.toString()}');
 
-    if(paymentMethodCall==true){
-      payReceiptModel.paymentMethod=PaymentMethods.creditCard;
-      payReceiptModel.orderId=orderID;
-      payReceiptModel.stripePaymentMethodId=null;
-      payReceiptModel.stripeCardId=null;
-      payReceiptModel.finixNCPaymentToken="";//Pass the values
-      payReceiptModel.finixNCPMerchantId=merchantIdNCP;
+    if (paymentMethodCall == true) {
+      payReceiptModel.paymentMethod = PaymentMethods.creditCard;
+      payReceiptModel.orderId = orderID;
+      payReceiptModel.stripePaymentMethodId = null;
+      payReceiptModel.stripeCardId = null;
+      payReceiptModel.finixNCPaymentToken = ""; //Pass the values
+      payReceiptModel.finixNCPMerchantId = merchantIdNCP;
     }
 
     setState(() {

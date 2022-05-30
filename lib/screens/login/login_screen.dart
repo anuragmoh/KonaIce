@@ -239,7 +239,8 @@ class _LoginScreenState extends State<LoginScreen>
           ),
           signInButton(
               StringConstants.signIn,
-              StyleConstants.customTextStyle12MontserratBold(color: getMaterialColor(AppColors.textColor1))),
+              StyleConstants.customTextStyle12MontserratBold(
+                  color: getMaterialColor(AppColors.textColor1))),
         ],
       ),
     );
@@ -348,7 +349,7 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       isLoginView = true;
     });
-    if(message != ""){
+    if (message != "") {
       CommonWidgets().showSuccessSnackBar(message: message, context: context);
     }
   }
@@ -395,6 +396,7 @@ class _LoginScreenState extends State<LoginScreen>
     LoginResponseModel loginResponseModel = response;
     checkUserDataAvailableINDB(loginResponseModel);
   }
+
   //DB Operations
   checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
     var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);

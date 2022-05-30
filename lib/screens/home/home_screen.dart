@@ -269,9 +269,10 @@ class _HomeScreenState extends State<HomeScreen>
                                   padding: const EdgeInsets.only(bottom: 10.0),
                                   child: CommonWidgets().textWidget(
                                       eventDetails.getEventName(),
-                                      StyleConstants.customTextStyle16MontserratBold(
-                                          color: getMaterialColor(
-                                              AppColors.textColor1))),
+                                      StyleConstants
+                                          .customTextStyle16MontserratBold(
+                                              color: getMaterialColor(
+                                                  AppColors.textColor1))),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 5.0),
@@ -288,11 +289,13 @@ class _HomeScreenState extends State<HomeScreen>
                                         child: Padding(
                                           padding:
                                               const EdgeInsets.only(left: 8.0),
-                                          child: CommonWidgets()
-                                              .textMultiLineWidget(eventDetails.getEventAddress(),
-                                                  StyleConstants.customTextStyle12MonsterMedium(
+                                          child: CommonWidgets().textMultiLineWidget(
+                                              eventDetails.getEventAddress(),
+                                              StyleConstants
+                                                  .customTextStyle12MonsterMedium(
                                                       color: getMaterialColor(
-                                                          AppColors.textColor4))),
+                                                          AppColors
+                                                              .textColor4))),
                                         ),
                                       ),
                                     ],
@@ -310,17 +313,20 @@ class _HomeScreenState extends State<HomeScreen>
                                       padding: const EdgeInsets.only(left: 8.0),
                                       child: CommonWidgets().textWidget(
                                         eventDetails.getEventDate(),
-                                        StyleConstants.customTextStyle12MonsterMedium(
-                                            color: getMaterialColor(AppColors.textColor4)),
+                                        StyleConstants
+                                            .customTextStyle12MonsterMedium(
+                                                color: getMaterialColor(
+                                                    AppColors.textColor4)),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 40),
                                       child: CommonWidgets().textWidget(
                                         eventDetails.getEventTime(),
-                                        StyleConstants.customTextStyle12MonsterMedium(
-                                            color: getMaterialColor(
-                                                AppColors.textColor4)),
+                                        StyleConstants
+                                            .customTextStyle12MonsterMedium(
+                                                color: getMaterialColor(
+                                                    AppColors.textColor4)),
                                       ),
                                     ),
                                   ],
