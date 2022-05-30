@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
-import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
-import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreditCardDetailsPopup extends StatefulWidget {
   String totalAmount;
@@ -30,14 +25,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   var menuNameTextFieldController = TextEditingController();
   String cardNumberValidationMessage = "";
   String cardDateValidationMessage = "";
-  String cardCvvValidationMessage = "";
+  String cardYearValidationMessage = "";
   String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
   bool isExpiryValid = false;
   bool isCvcValid = false;
   bool isApiProcess = false;
-  var month, year;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
 
@@ -115,8 +109,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                         "",
                         StringConstants.cardCvcMsg,
                         yearController,
-                        cardCvvValidationMessage,
-                        cvvValidation,
+                        cardYearValidationMessage,
+                        yearValidation,
                         4),
                   ),
                 ),
@@ -305,24 +299,29 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
   }
 
+<<<<<<< HEAD
   cvvValidation() {
     int cardYear = int.parse(yearController.text);
+=======
+  yearValidation() {
+    int cardYear =int.parse( yearController.text);
+>>>>>>> de070c6c9b80d4835b3fa97643c8710f78220266
 
     if (yearController.text.isEmpty) {
       setState(() {
-        cardCvvValidationMessage = "Please Enter Year";
+        cardYearValidationMessage = "Please Enter Year";
         isCvcValid = false;
       });
       return false;
     }
     if (cardYear < 2022) {
       setState(() {
-        cardCvvValidationMessage = "Please Check Year";
+        cardYearValidationMessage = "Please Check Year";
         isExpiryValid = false;
       });
     } else {
       setState(() {
-        cardCvvValidationMessage = "";
+        cardYearValidationMessage = "";
         isExpiryValid = true;
       });
     }
@@ -330,8 +329,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
 
   void onTapConfirmManualCardPayment() {
     if (isCardNumberValid && isExpiryValid) {
-      String sendMonth = month.toString();
-      String sendYear = year.toString();
       Map<String, dynamic> myData = Map();
       myData['value'] = true;
       myData['cardNumber'] = cardNumberController.text;
