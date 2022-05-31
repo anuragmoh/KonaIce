@@ -85,7 +85,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String finixUsername = StringExtension.empty();
   String finixPassword = StringExtension.empty();
   String merchantIdNCP = StringExtension.empty();
-  String finixNCPaymentToken= StringExtension.empty();;
+  String finixNCPaymentToken = StringExtension.empty();
   String paymentFailMessage = StringExtension.empty();
   String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
@@ -178,7 +178,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _getPaymentToken(token) async {
     debugPrint("Payment Token: $token");
-    finixNCPaymentToken=token;
+    finixNCPaymentToken = token;
   }
 
   @override
@@ -1206,7 +1206,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     PayOrderCardRequestModel payOrderCardRequestModel =
         PayOrderCardRequestModel();
     payOrderCardRequestModel.orderId = orderID;
-    payOrderCardRequestModel.paymentMethod =  PaymentMethods.card;
+    payOrderCardRequestModel.paymentMethod = PaymentMethods.card;
     payOrderCardRequestModel.stripeCardId = stripeTokenId;
     payOrderCardRequestModel.stripePaymentMethodId = stripePaymentMethodId;
 
@@ -1498,12 +1498,9 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixSendReceiptRequest.phoneNumCountryCode = countryCode;
     finixSendReceiptRequest.phoneNumber = phoneNumber;
     finixSendReceiptRequest.email = emailAddress;
-
     setState(() {
       isApiProcess = true;
     });
     orderPresenter.finixSendReceipt(orderID, finixSendReceiptRequest);
-    debugPrint(countryCode);
-    debugPrint(phoneNumber);
   }
 }
