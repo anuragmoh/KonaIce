@@ -43,6 +43,9 @@ import 'package:lottie/lottie.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:math' as math;
 
 class PaymentScreen extends StatefulWidget {
   final Events events;
@@ -344,24 +347,26 @@ class _PaymentScreenState extends State<PaymentScreen>
                                   border: Border.all(
                                       color: getMaterialColor(
                                           AppColors.primaryColor2))),
-                              width: 70.0,
+                              width: 85.0,
                               height: 42.0,
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 8.0, bottom: 2.0),
                                   child: TextField(
+                                    maxLength: 5,
                                     controller: amountReceivedController,
                                     style: StyleConstants
                                         .customTextStyle22MonsterMedium(
                                             color: getMaterialColor(
                                                 AppColors.textColor1)),
-                                    keyboardType: TextInputType.number,
+                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                     inputFormatters: <TextInputFormatter>[
-                                      FilteringTextInputFormatter.digitsOnly
+                                      NumberRemoveExtraDotFormatter(),
                                     ],
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
+                                      counterText: "",
                                     ),
                                     onChanged: (value) {
                                       if (value.isNotEmpty) {
@@ -1513,5 +1518,46 @@ class _PaymentScreenState extends State<PaymentScreen>
     orderPresenter.finixSendReceipt(orderID, finixSendReceiptRequest);
     debugPrint(countryCode);
     debugPrint(phoneNumber);
+  }
+}
+
+class NumberRemoveExtraDotFormatter extends TextInputFormatter {
+  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    if (nValue.startsWith('.')) {
+      nValue = '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldValue.text;
+      } else {
+        if (nValue.split('.').length > 2) {
+          List<String> split = nValue.split('.');
+          nValue = split[0] + '.' + split[1];
+        }
+      }
+    }
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: math.min(nValue.length, nValue.length + 1),
+      extentOffset: math.min(nValue.length, nValue.length + 1),
+    );
+
+    return TextEditingValue(
+        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }
