@@ -317,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen>
   onTapSingIn() {
     FocusScope.of(context).unfocus();
     setState(() {
-      emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
+      emailController.text.isEmpty || !emailController.text.isValidEmail() ? isEmailValid = false : isEmailValid = true;
       passwordController.text.isEmpty
           ? isPasswordValid = false
           : isPasswordValid = true;
