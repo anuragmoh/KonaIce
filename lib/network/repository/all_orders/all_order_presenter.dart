@@ -1,3 +1,4 @@
+import 'package:kona_ice_pos/models/network_model/all_order/refund_payment_model.dart';
 import 'package:kona_ice_pos/network/exception.dart';
 import 'package:kona_ice_pos/network/repository/all_orders/all_order_repository.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
@@ -22,4 +23,18 @@ class AllOrderPresenter {
       _view.showError(FetchException(error).fetchErrorModel());
     });
   }
+
+  void refundPayment(
+      String orderId, RefundPaymentModel refundPaymentModel) {
+    _repository
+        .refundPayment(orderId, refundPaymentModel)
+        .then((value) {
+      print("Success ----- $value}");
+      _view.showSuccess(value);
+    }).onError((error, stackTrace) {
+      print("Errror ----- ${error.toString()}");
+      _view.showError(FetchException(error.toString()).fetchErrorModel());
+    });
+  }
+
 }

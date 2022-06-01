@@ -15,12 +15,13 @@ import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/network_model/all_order/refund_payment_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/all_orders/all_order_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart';
 import 'package:kona_ice_pos/screens/payment/refund_popup.dart';
-import 'package:kona_ice_pos/screens/payment/validation_popup.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
@@ -1000,9 +1001,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         builder: (context) {
           return RefundPopup(amount: savedOrdersList[selectedRow].totalAmount);
         }).then((value) {
-      String totalAmount = value['totalAmount'];
-      debugPrint('>>>>>>>$totalAmount');
+      String amount = value['totalAmount'];
+      double totalAmount=double.parse(amount);
+      refundPaymentApiCall(totalAmount);
     });
+  }
+
+  //Refund Payment Api call
+  refundPaymentApiCall(double totalAmount){
+    RefundPaymentModel refundPaymentModel=RefundPaymentModel();
+    refundPaymentModel.refundAmount=totalAmount;
+    setState(() {
+      isApiProcess = true;
+    });
+    allOrderPresenter.refundPayment(savedOrdersList[selectedRow].orderId, refundPaymentModel);
   }
 
   // Get data from local db function start from here
@@ -1109,7 +1121,18 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     setState(() {
       isApiProcess = false;
     });
-    ordersInsertIntoDb(response);
+
+    if (response is GeneralSuccessModel) {
+      GeneralSuccessModel responseModel = response;
+      CommonWidgets().showSuccessSnackBar(
+          message: responseModel.general![0].message ??
+              StringConstants.eventCreatedSuccessfully,
+          context: context);
+    }
+    else{
+      ordersInsertIntoDb(response);
+    }
+
   }
 
   updateLastSync() async {
