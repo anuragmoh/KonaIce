@@ -103,6 +103,7 @@ class StringConstants {
   static const saved = 'Saved';
   static const qty = 'Qty';
   static const refund = 'Refund';
+  static const refunded = 'Refunded';
 
   static const totalAmount = 'Total Amount';
   static const amountReceived = 'Amount Received';
@@ -224,7 +225,7 @@ class StringConstants {
   static const confirmNewOrder =
       "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
-  static const confirmAmountMessage = "Do you  want to refund amount ?";
+  static const confirmAmountMessage = "Are you sure, you want to refund the amount?";
 
   //Enter Tip Amount
   static const enterTip = "Enter Tip Amount.";

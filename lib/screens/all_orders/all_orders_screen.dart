@@ -56,6 +56,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   int selectedRow = -1;
   bool isApiProcess = false;
   int countOffSet = 0;
+  bool refundBool=true;
 
   _AllOrdersScreenState() {
     allOrderPresenter = AllOrderPresenter(this);
@@ -792,18 +793,24 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         child: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-              color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
+              color:refundBool? getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2):getMaterialColor(AppColors.denotiveColor4).withOpacity(0.2)),
           child: Padding(
             padding: const EdgeInsets.only(
                 top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                refundBool?
                 CommonWidgets().textView(
                     StringConstants.refund,
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
                         color: getMaterialColor(AppColors.denotiveColor2),
+                        fontFamily: FontConstants.montserratMedium)):CommonWidgets().textView(
+                    StringConstants.refunded,
+                    StyleConstants.customTextStyle(
+                        fontSize: 9.0,
+                        color: getMaterialColor(AppColors.textColor1),
                         fontFamily: FontConstants.montserratMedium)),
               ],
             ),
