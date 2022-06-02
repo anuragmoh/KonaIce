@@ -22,8 +22,6 @@ import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/finix_response_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
-import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
-import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
@@ -1227,14 +1225,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     orderPresenter.payOrder(payOrderRequestModel);
   }
 
-  callPayOrderCardMethodAPI() {
-    PayOrderCardRequestModel payOrderCardRequestModel =
-        getPayOrderCardMethodRequestModel();
-    setState(() {
-      isApiProcess = true;
-    });
-    orderPresenter.payOrderCardMethod(payOrderCardRequestModel);
-  }
 
   @override
   void showError(GeneralErrorResponse exception) {
@@ -1260,15 +1250,6 @@ class _PaymentScreenState extends State<PaymentScreen>
           context: context);
       phoneNumberController.clear();
       emailController.clear();
-    }
-    if (response is StripTokenResponseModel) {
-      //getting StripeTokenId
-      stripeTokenId = response.id.toString();
-      //PaymentMethodApi call
-    } else if (response is StripePaymentMethodRequestModel) {
-      //getting StripePaymentMethodId
-      stripePaymentMethodId = response.id.toString();
-      callPayOrderCardMethodAPI();
     } else {
       setState(() {
         updatePaymentSuccess();
@@ -1328,14 +1309,6 @@ class _PaymentScreenState extends State<PaymentScreen>
         'getPaymentToken', valuesCardDetails);
   }
 
-  getApiCallPayReceipt() {
-    String testString =
-        "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
-    finixResponse = finixResponseFromJson(testString);
-    debugPrint(
-        "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
-    PayReceipt payReceipt = getPayReceiptModel(false);
-  }
 
   //ApiCall After getting Manual Card token
   finixManualApiCall() {
