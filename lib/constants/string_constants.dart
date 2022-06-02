@@ -115,7 +115,7 @@ class StringConstants {
   static const qrCode = 'QR Code';
   static const paymentSuccessful = 'Payment Successful';
   static const howWouldYouLikeToReceiveTheReceipt =
-      'How would you like to receive the receipt ?';
+      'Would you like to receive the receipt?';
   static const transactionId = 'Transaction ID';
   static const textMessage = 'Text Message';
   static const billTotal = 'Bill Total';
@@ -169,7 +169,7 @@ class StringConstants {
   static const enterFirstName = 'Enter First Name';
   static const enterLastName = 'Enter Last Name';
   static const enterContactNumber = 'Enter Contact Number';
-  static const enterEmailId = 'Enter EmailID';
+  static const enterEmailId = 'Enter Email ID';
   static const enterOldPassword = 'Enter Old Password';
   static const enterNewPassword = 'Enter New Password';
   static const enterConfirmPassword = 'Enter Confirm Password';

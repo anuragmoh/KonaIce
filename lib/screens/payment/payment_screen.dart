@@ -540,62 +540,65 @@ class _PaymentScreenState extends State<PaymentScreen>
               StyleConstants.customTextStyle16MonsterMedium(
                   color: getMaterialColor(AppColors.textColor1))),
           const SizedBox(height: 12.0),
-          Container(
-            width: 203.0,
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                border: Border.all(
-                    color: getMaterialColor(AppColors.primaryColor2))),
-            child: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      receiptMode = 1;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(8.0)),
-                      color: receiptMode == 1
-                          ? getMaterialColor(AppColors.primaryColor2)
-                          : null,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 38.0, vertical: 9.0),
-                      child: CommonWidgets().textWidget(
-                          StringConstants.email,
-                          StyleConstants.customTextStyle09MonsterRegular(
-                              color: getMaterialColor(AppColors.textColor1))),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      receiptMode = 2;
-                    });
-                  },
-                  child: Container(
+          Visibility(
+            visible: false,
+            child: Container(
+              width: 203.0,
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  border: Border.all(
+                      color: getMaterialColor(AppColors.primaryColor2))),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        receiptMode = 1;
+                      });
+                    },
+                    child: Container(
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8.0)),
-                        color: receiptMode == 2
+                        color: receiptMode == 1
                             ? getMaterialColor(AppColors.primaryColor2)
                             : null,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 19.0, vertical: 9.0),
+                            horizontal: 38.0, vertical: 9.0),
                         child: CommonWidgets().textWidget(
-                            StringConstants.textMessage,
+                            StringConstants.email,
                             StyleConstants.customTextStyle09MonsterRegular(
                                 color: getMaterialColor(AppColors.textColor1))),
-                      )),
-                ),
-              ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        receiptMode = 2;
+                      });
+                    },
+                    child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8.0)),
+                          color: receiptMode == 2
+                              ? getMaterialColor(AppColors.primaryColor2)
+                              : null,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 19.0, vertical: 9.0),
+                          child: CommonWidgets().textWidget(
+                              StringConstants.textMessage,
+                              StyleConstants.customTextStyle09MonsterRegular(
+                                  color: getMaterialColor(AppColors.textColor1))),
+                        )),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 19.0),
@@ -634,6 +637,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                             StyleConstants.customTextStyle12MontserratSemiBold(
                                 color: getMaterialColor(AppColors.textColor1)),
                         decoration: const InputDecoration(
+                          hintText: StringConstants.enterEmailId,
                           counterText: "",
                           border: InputBorder.none,
                         ),
