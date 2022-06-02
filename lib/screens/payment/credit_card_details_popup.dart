@@ -5,7 +5,6 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
 class CreditCardDetailsPopup extends StatefulWidget {
@@ -42,7 +41,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   @override
   void initState() {
     super.initState();
-    DateTime dateToday =new DateTime.now();
+    DateTime dateToday =DateTime.now();
     String date = dateToday.toString().substring(0,10);
     var yearOfDate = date.split('-');
     String yearOfExpiryString=yearOfDate[0];
@@ -283,11 +282,11 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       isCardNumberValid = false;
     }
     if (isCardNumberValid && isExpiryValid && isYearValid) {
-      Map<String, dynamic> myData = Map();
-      myData['value'] = true;
-      myData['cardNumber'] = cardNumberController.text;
-      myData['cardMonth'] = dateExpiryController.text;
-      myData['cardYear'] = yearController.text;
+      Map<String, dynamic> myData = {};
+      myData[ConstatKeys.cardValue] = true;
+      myData[ConstatKeys.cardNumber] = cardNumberController.text;
+      myData[ConstatKeys.cardMonth] = dateExpiryController.text;
+      myData[ConstatKeys.cardYear] = yearController.text;
       Navigator.pop(context, myData);
     }
   }

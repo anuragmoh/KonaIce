@@ -36,7 +36,6 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
 
@@ -72,7 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   double foodCost = 0.0;
   bool isPaymentDone = false;
   int receiptMode = 1;
-  String orderID = 'NA';
+  String orderID = StringConstants.na;
   String cardNumberValidationMessage = "";
   bool isCardNumberValid = true;
   bool isExpiryValid = true;
@@ -91,7 +90,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String userMobileNumber = StringExtension.empty();
   String emailValidationMessage = "";
   String smsValidationMessage = "";
-  String countryCode = "+1";
+  String countryCode = StringConstants.usCountryCode;
   FinixResponseModel finixResponse = FinixResponseModel();
 
   TextEditingController amountReceivedController = TextEditingController();
@@ -101,11 +100,6 @@ class _PaymentScreenState extends State<PaymentScreen>
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvcController = TextEditingController();
   TextEditingController dateExpiryController = TextEditingController();
-
-  var maskFormatter = MaskTextInputFormatter(
-      mask: '##/##',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
 
   late OrderPresenter orderPresenter;
   bool isApiProcess = false;
@@ -444,7 +438,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               )),
           SingleChildScrollView(
               child:
-                  isPaymentDone ? paymentSuccess('35891456') : const Text('')),
+                  isPaymentDone ? paymentSuccess(StringConstants.dummyOrder) : const Text('')),
         ]),
       );
 
@@ -728,7 +722,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         textStyle: StyleConstants.customTextStyle12MonsterMedium(
             color: getMaterialColor(AppColors.textColor1)),
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-        initialSelection: '+1',
+        initialSelection: StringConstants.usCountryCode,
         showFlag: false,
         // optional. Shows only country name and flag
         showCountryOnly: true,
@@ -1065,15 +1059,14 @@ class _PaymentScreenState extends State<PaymentScreen>
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
         debugPrint('>>>>>>>$value');
-        bool valueForApi = value['value'];
+        bool valueForApi = value[ConstatKeys.cardValue];
+        debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
-          String cardNumber = value['cardNumber'];
-          String cardMonth = value['cardMonth'];
-          String cardYear = value['cardYear'];
-
+          String cardNumber = value[ConstatKeys.cardNumber];
+          String cardMonth = value[ConstatKeys.cardMonth];
+          String cardYear = value[ConstatKeys.cardYear];
           int valCardMonth = int.parse(cardMonth);
           int valCardYEar = int.parse(cardYear);
-
           onTapConfirmPayment(cardNumber, valCardMonth, valCardYEar);
         }
       });
@@ -1088,10 +1081,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       emailController.text =
           widget.placeOrderRequestModel.email ?? StringExtension.empty();
-      debugPrint("?????????????????${widget.placeOrderRequestModel.email}");
       phoneNumberController.text =
           widget.placeOrderRequestModel.getPhoneNumber();
-      debugPrint("?????????????????${widget.placeOrderRequestModel.email}");
     });
   }
 
@@ -1105,27 +1096,27 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   Future performCardPayment() async {
-    const String application = "Test";
-    const String version = "1.0";
+    const String application = AssetsConstants.test;
+    const String version =AssetsConstants.appVersion;
     final tags = {
-      "customerEmail":
+      finixTagsKey.customerEmail:
           widget.placeOrderRequestModel.email ?? StringExtension.empty(),
-      "customerName": widget.placeOrderRequestModel.getCustomerName(),
-      "eventName": widget.events.getEventName(),
-      "eventCode": widget.events.getEventCode(),
-      "environment": "Test",
-      "paymentMethod": "BBPOS"
+      finixTagsKey.customerName: widget.placeOrderRequestModel.getCustomerName(),
+      finixTagsKey.eventName: widget.events.getEventName(),
+      finixTagsKey.eventCode: widget.events.getEventCode(),
+      finixTagsKey.environment: StringConstants.test,
+      finixTagsKey.paymentMethod: StringConstants.bbpos
     };
     final values = {
-      "username": finixUsername,
-      "password": finixPassword,
-      "application": application,
-      "version": version,
-      "merchantId": finixMerchantId,
-      "deviceID": finixdeviceId,
-      "amount": totalAmount,
-      "serialNumber": finixSerialNumber,
-      "tags": tags
+      finixTagsKey.username: finixUsername,
+      finixTagsKey.password: finixPassword,
+      finixTagsKey.application: application,
+      finixTagsKey.version: version,
+      finixTagsKey.merchantId: finixMerchantId,
+      finixTagsKey.deviceID: finixdeviceId,
+      finixTagsKey.amount: totalAmount,
+      finixTagsKey.serialNumber: finixSerialNumber,
+      finixTagsKey.tags: tags
     };
     await cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }
@@ -1301,9 +1292,9 @@ class _PaymentScreenState extends State<PaymentScreen>
   onTapConfirmPayment(
       String cardNumber, int expirationMonth, int expirationYear) async {
     final valuesCardDetails = {
-      "cardNumber": cardNumber,
-      "expirationMonth": expirationMonth,
-      "expirationYear": expirationYear,
+      cardDetails.cardNumber: cardNumber,
+      cardDetails.expirationMonth: expirationMonth,
+      cardDetails.expirationYear: expirationYear,
     };
     await cardPaymentChannel.invokeListMethod(
         'getPaymentToken', valuesCardDetails);

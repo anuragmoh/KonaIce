@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen>
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
-                  hintText: 'abc@gmail.com',
+                  hintText: StringConstants.hintEmail,
                   errorText: emailValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
                       color: getMaterialColor(AppColors.textColor1)),
@@ -207,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen>
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
-                  hintText: 'Password',
+                  hintText: StringConstants.password,
                   errorText: passwordValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
                       color: getMaterialColor(AppColors.textColor1)),
@@ -401,7 +401,6 @@ class _LoginScreenState extends State<LoginScreen>
   checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
     var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
     if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
-      debugPrint("old user");
     } else {
       await FunctionalUtils.clearAllDBData();
     }
