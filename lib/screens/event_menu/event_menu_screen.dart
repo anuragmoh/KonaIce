@@ -207,6 +207,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(isPaymentScreen.toString());
     if(!isPaymentScreen) {
       updateCustomerName();
       calculateTotal();
