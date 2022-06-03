@@ -1063,11 +1063,12 @@ class _PaymentScreenState extends State<PaymentScreen>
         debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
           String cardNumber = value[ConstatKeys.cardNumber];
-          String cardMonth = value[ConstatKeys.cardMonth];
-          String cardYear = value[ConstatKeys.cardYear];
-          int valCardMonth = int.parse(cardMonth);
-          int valCardYEar = int.parse(cardYear);
-          onTapConfirmPayment(cardNumber, valCardMonth, valCardYEar);
+          String cardExpiry = value[ConstatKeys.cardExpiry];
+          String cardCvv = value[ConstatKeys.cardCvv];
+          int valCardExpiry = int.parse(cardExpiry);
+          int valCardCvv = int.parse(cardCvv);
+          debugPrint('>>>>>>>>>$cardExpiry');
+          onTapConfirmPayment(cardNumber, valCardExpiry,valCardCvv);
         }
       });
     }
@@ -1290,12 +1291,14 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //FinixMannual CardDetails
   onTapConfirmPayment(
-      String cardNumber, int expirationMonth, int expirationYear) async {
+      String cardNumber, int expirationMonthYear,int cardCvvNumber) async {
     final valuesCardDetails = {
       cardDetails.cardNumber: cardNumber,
-      cardDetails.expirationMonth: expirationMonth,
-      cardDetails.expirationYear: expirationYear,
+      cardDetails.expirationMonthYear: expirationMonthYear,
+      cardDetails.cardCvv:cardCvvNumber
+
     };
+    debugPrint(valuesCardDetails.toString());
     await cardPaymentChannel.invokeListMethod(
         'getPaymentToken', valuesCardDetails);
   }

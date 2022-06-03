@@ -128,13 +128,14 @@ class StringConstants {
 
   static const cardDetails = 'Card Details';
   static const cardNumber = 'Please Enter Card Number';
-  static const cardExpiryMonth = 'Expiry Month';
+  static const cardExpiryMonthYear = 'Month/Year';
   static const cardExpiryYear = 'Expiry Year';
   static const cardExpiryMsg = 'Expiry Date';
-  static const cardExpiryEnterMsg = 'Please Enter Date';
-  static const cardExpiryCheckkMsg = "Please Check Date";
+  static const cardExpiryEnterMsg = 'Please Enter Month/Year';
+  static const cardExpiryCheckkMsg = "Please Check Month/Year";
   static const cardExpiryYearEnterMsg = "Please Enter Year";
   static const cardExpiryYearCheckMsg = "Please Check Year";
+  static const cvvEnterMsg = "Please Enter Cvv";
   static const cardCvc = 'CVC';
   static const cardCvcMsg = 'Card CVC';
   static const addCreditCardDetails = 'Add Credit Card Details';
@@ -255,6 +256,6 @@ class StringConstants {
 class ConstatKeys {
   static String cardValue = 'value';
   static String cardNumber = 'cardNumber';
-  static String cardMonth = 'cardMonth';
-  static String cardYear = 'cardYear';
+  static String cardExpiry = 'cardExpiry';
+  static String cardCvv="cardCvv";
 }
