@@ -27,8 +27,6 @@ class PaymentBaseClient {
       "card[exp_year]": "22"
     };
 
-    var payload = json.encode(payloadObj);
-
     // await addSessionKeyToHeader();
     debugPrint(body.toString());
 

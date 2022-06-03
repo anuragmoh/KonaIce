@@ -682,7 +682,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         }
       } on RangeError catch (e) {
         debugPrint(e.toString());
-      } catch (e) {}
+      } catch (e) {
+        debugPrint(e.toString());
+      }
     }
     setState(() {
       isApiProcess = false;
@@ -766,7 +768,7 @@ getAddressFromLatLng(context, double lat, double lng) async {
     if (response.statusCode == 200) {
       Map data = jsonDecode(response.body);
       String _formattedAddress = data["results"][0]["formatted_address"];
-      print("response ==== $data");
+      debugPrint("response ==== $data");
       debugPrint('URL===>$url');
       debugPrint(data["results"][0]["address_components"][6]['long_name']);
       return _formattedAddress;
