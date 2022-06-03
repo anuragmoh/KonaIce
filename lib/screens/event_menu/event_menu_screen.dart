@@ -83,6 +83,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   int selectedCategoryIndex = 1;
   int currentIndex = 0;
+  bool isPaymentScreen = false;
 
   List<Item> dbItemList = [];
   List<Item> itemList = [];
@@ -143,6 +144,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   getAllItems(String eventId) async {
     // Event Id need to pass
+    setState(() {
+      isPaymentScreen=false;
+    });
     var result = await ItemDAO().getAllItemsByEventId(eventId);
     if (result != null) {
       setState(() {
@@ -203,9 +207,11 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   @override
   Widget build(BuildContext context) {
-    updateCustomerName();
-    calculateTotal();
-    updateOrderDataToCustomer();
+    if(!isPaymentScreen) {
+      updateCustomerName();
+      calculateTotal();
+      updateOrderDataToCustomer();
+    }
 
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
@@ -1071,6 +1077,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   onTapChargeButton() {
+    isPaymentScreen = true;
     moveCustomerToPaymentScreen();
     showPaymentScreen();
   }
@@ -1368,6 +1375,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                     {orderID = value["orderID"]}
                 }
             });
+
   }
 
   //API Call
