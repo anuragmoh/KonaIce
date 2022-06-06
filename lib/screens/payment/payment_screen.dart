@@ -171,6 +171,15 @@ class _PaymentScreenState extends State<PaymentScreen>
   _getPaymentToken(token) async {
     debugPrint("Payment Token: $token");
     finixNCPaymentToken = token;
+
+    if (token.toString().isNotEmpty) {
+      finixManualApiCall();
+    }
+    else{
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.somethingWentWrong,
+          context: context);
+    }
   }
 
   @override
@@ -1067,13 +1076,17 @@ class _PaymentScreenState extends State<PaymentScreen>
         bool valueForApi = value[ConstatKeys.cardValue];
         debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
-          String cardNumber = value[ConstatKeys.cardNumber];
+          String cardNumberStr = value[ConstatKeys.cardNumber];
           String cardExpiry = value[ConstatKeys.cardExpiry];
+          int cardExpiryMonth = value[ConstatKeys.cardMonth];
+          String cardZipCodeString = value[ConstatKeys.cardZipCode];
           String cardCvv = value[ConstatKeys.cardCvv];
-          int valCardExpiry = int.parse(cardExpiry);
+          int valCardExpiry = int.parse(cardNumberStr);
+          int cardNumber = int.parse(cardExpiry);
           int valCardCvv = int.parse(cardCvv);
+          int cardZipCode = int.parse(cardZipCodeString);
           debugPrint('>>>>>>>>>$cardExpiry');
-          onTapConfirmPayment(cardNumber, valCardExpiry,valCardCvv);
+          onTapConfirmPayment(cardNumber, valCardExpiry,valCardCvv,cardExpiryMonth,cardZipCode);
         }
       });
     }
@@ -1113,11 +1126,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       finixTagsKey.eventCode: widget.events.getEventCode(),
       finixTagsKey.environment: StringConstants.test,
       finixTagsKey.paymentMethod: StringConstants.bbpos
-      "customerName": widget.placeOrderRequestModel.getCustomerName(),
-      "eventName": widget.events.getEventName(),
-      "eventCode": widget.events.getEventCode(),
-      "environment": "TestCertification",
-      "paymentMethod": PaymentMethods.bbpos
     };
     final values = {
       finixTagsKey.username: finixUsername,
@@ -1302,17 +1310,13 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //FinixMannual CardDetails
   onTapConfirmPayment(
-      String cardNumber, int expirationMonthYear,int cardCvvNumber) async {
+      int cardNumber, int expirationYear,int cardCvvNumber, int cardExpiryMonth, int cardZipCode) async {
     final valuesCardDetails = {
       cardDetails.cardNumber: cardNumber,
-      cardDetails.expirationMonthYear: expirationMonthYear,
-      cardDetails.cardCvv:cardCvvNumber
-
-      "cardNumber": cardNumber,
-      "expirationMonth": expirationMonth,
-      "expirationYear": expirationYear,
-      "cvv": "",
-      "zipcode": ""
+      cardDetails.expirationYear: expirationYear,
+      cardDetails.expirationMonth: cardExpiryMonth,
+      cardDetails.cvv:cardCvvNumber,
+      cardDetails.zipcode: cardZipCode
     };
     debugPrint(valuesCardDetails.toString());
     await cardPaymentChannel.invokeListMethod(

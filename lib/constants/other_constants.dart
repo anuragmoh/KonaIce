@@ -50,5 +50,7 @@ enum finixTagsKey{
 }
 enum cardDetails{
   cardNumber,
-  expirationMonthYear,
-cardCvv}
+  expirationMonth,
+  expirationYear,
+  zipcode,
+  cvv}

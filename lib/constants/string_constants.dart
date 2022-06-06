@@ -15,7 +15,7 @@ class StringConstants {
   static const hintEmail = "abc@gmail.com";
   static const na = 'NA';
   static const usCountryCode = '+1';
-  static const test = 'TEST';
+  static const test = 'TestCertification';
   static const bbpos = 'BBPOS';
 
   //DB Insertion default Value
@@ -144,6 +144,7 @@ class StringConstants {
   static const paymentFailMessage =
       'We had an issue processing your payment. Please try again.';
   static const totalAmountBlank = 'Please Enter Amount';
+  static const enterZipcode = 'Please Enter ZipCode';
 
   // Create adhoc event popup
   static const popHeading = "Create Adhoc Event";
@@ -260,4 +261,6 @@ class ConstatKeys {
   static String cardNumber = 'cardNumber';
   static String cardExpiry = 'cardExpiry';
   static String cardCvv="cardCvv";
+  static String cardMonth="cardMonth";
+  static String cardZipCode="cardZipcode";
 }

@@ -20,26 +20,25 @@ class CreditCardDetailsPopup extends StatefulWidget {
 }
 
 class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
-  String menuName = StringConstants.customMenuPackage;
-  bool isEditingMenuName = false;
-  var amountTextFieldController = TextEditingController();
-  var menuNameTextFieldController = TextEditingController();
   String cardNumberValidationMessage = "";
+  String zipcodeValidationMessage = "";
   String cardDateValidationMessage = "";
   String cardYearValidationMessage = "";
   String cvvValidationMessage = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
+  bool isZipCodeValid = false;
   bool isExpiryValid = false;
   bool isYearValid = false;
   bool isCvvValid = false;
-  int yearOfExpiryInt=0;
+  int yearOfExpiryInt = 0;
   var month, year;
-  String spliitYear="";
+  String spliitYear = "";
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
+  TextEditingController zipCodeController = TextEditingController();
   var maskFormatter = MaskTextInputFormatter(
       mask: '##/##',
       filter: {"#": RegExp(r'[0-9]')},
@@ -50,13 +49,12 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   @override
   void initState() {
     super.initState();
-    DateTime dateToday =DateTime.now();
-    String date = dateToday.toString().substring(0,10);
+    DateTime dateToday = DateTime.now();
+    String date = dateToday.toString().substring(0, 10);
     var yearOfDate = date.split('-');
-    String yearOfExpiryString=yearOfDate[0];
-     spliitYear=yearOfExpiryString.toString().substring(0,2);
-    yearOfExpiryInt=int.parse(spliitYear);
-
+    String yearOfExpiryString = yearOfDate[0];
+    spliitYear = yearOfExpiryString.toString().substring(0, 2);
+    yearOfExpiryInt = int.parse(spliitYear);
   }
 
   @override
@@ -89,7 +87,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 onTapCloseButton: onTapCloseButton),
             Padding(
               padding:
-                  const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
+                  const EdgeInsets.only(top: 25.0, left: 23.0),
               child: profileDetailsComponent(
                   StringConstants.cardNumber,
                   "",
@@ -104,7 +102,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
+                    padding: const EdgeInsets.only(left: 20.0),
                     child: cardExpiryComponent(
                         StringConstants.cardExpiryMonthYear,
                         "",
@@ -130,6 +128,17 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 23.0),
+              child: profileDetailsComponent(
+                  StringConstants.enterZipcode,
+                  "",
+                  StringConstants.enterZipcode,
+                  zipCodeController,
+                  zipcodeValidationMessage,
+                  zipCodeValidation,
+                  6),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -149,13 +158,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   Widget cardExpiryComponent(
-      String txtName,
-      String txtValue,
-      String txtHint,
-      TextEditingController textEditingController,
-      String validationMessage,
-      Function validationMethod,
-      int maxLength) =>
+          String txtName,
+          String txtValue,
+          String txtHint,
+          TextEditingController textEditingController,
+          String validationMessage,
+          Function validationMethod,
+          int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -290,6 +299,20 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
   }
 
+  zipCodeValidation() {
+    if (zipCodeController.text.isEmpty) {
+      setState(() {
+        zipcodeValidationMessage = StringConstants.enterZipcode;
+      });
+      isZipCodeValid = false;
+    } else {
+      setState(() {
+        zipcodeValidationMessage = "";
+      });
+      isZipCodeValid = true;
+    }
+  }
+
   dateValidation() {
     try {
       String s = dateExpiryController.text;
@@ -306,7 +329,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       });
       isExpiryValid = false;
     }
-    if (dateExpiryController.text.length<5) {
+    if (dateExpiryController.text.length < 5) {
       debugPrint('>>>>>>>>${dateExpiryController.text.length}');
       setState(() {
         cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
@@ -350,7 +373,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
     if (dateExpiryController.text.isEmpty) {
       setState(() {
-        cardDateValidationMessage =  StringConstants.cardExpiryEnterMsg;
+        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
       isYearValid = false;
     }
@@ -360,12 +383,14 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       });
       isCardNumberValid = false;
     }
-    if (isCardNumberValid && isExpiryValid&&isCvvValid) {
+    if (isCardNumberValid && isExpiryValid && isCvvValid && isZipCodeValid) {
       Map<String, dynamic> myData = {};
       myData[ConstatKeys.cardValue] = true;
       myData[ConstatKeys.cardNumber] = cardNumberController.text;
-      myData[ConstatKeys.cardExpiry] = spliitYear+stringValueYear;
+      myData[ConstatKeys.cardExpiry] = spliitYear + stringValueYear;
       myData[ConstatKeys.cardCvv] = cvvController.text;
+      myData[ConstatKeys.cardMonth] = month;
+      myData[ConstatKeys.cardZipCode] = zipCodeController.text;
       Navigator.pop(context, myData);
     }
   }
