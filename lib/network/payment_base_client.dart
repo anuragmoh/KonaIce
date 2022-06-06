@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/url_constants.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
 
 import 'app_exception.dart';
 import 'general_error_model.dart';

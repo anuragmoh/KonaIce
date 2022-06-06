@@ -22,8 +22,8 @@ class AllOrderResponse {
   int? count;
   int? limit;
   int? offset;
-  dynamic sortColumn;
-  dynamic sortType;
+  String? sortColumn;
+  String? sortType;
   String? searchText;
   List<Datum>? data;
   int? fromDate;

@@ -34,7 +34,7 @@ class _OrderCompleteState extends State<OrderComplete> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
           children: [
             CommonWidgets().topEmptyBar(),
@@ -60,7 +60,7 @@ class _OrderCompleteState extends State<OrderComplete> {
               StringConstants.orderCompleted,
               StyleConstants.customTextStyle(
                   fontSize: 22.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratBold)),
           const SizedBox(height: 8.0),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -68,13 +68,13 @@ class _OrderCompleteState extends State<OrderComplete> {
                 '${StringConstants.transactionId}:',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratSemiBold)),
             CommonWidgets().textWidget(
                 "35891456",
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratSemiBold)),
           ]),
           const SizedBox(height: 34.0),

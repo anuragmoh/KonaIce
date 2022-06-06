@@ -80,7 +80,7 @@ class MyProfileResponseModel {
   String? defaultTimezone;
   String? billingName;
   String? billingAddress;
-  dynamic billingCountry;
+  String? billingCountry;
   String? billingState;
   String? billingCity;
   String? billingZipCode;

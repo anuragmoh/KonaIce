@@ -51,7 +51,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
-          color: getMaterialColor(AppColors.textColor3),
+          color: AppColors.textColor3,
           child: Visibility(
             // visible: orderDetailsModel != null,
             visible: true,
@@ -89,7 +89,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   }
 
   Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
+        color: AppColors.textColor3.withOpacity(0.1),
         child: bodyWidgetComponent(),
       );
 
@@ -103,7 +103,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         child: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              color: getMaterialColor(AppColors.whiteColor)),
+              color: AppColors.whiteColor),
           child: Column(
             children: [
               const SizedBox(height: 20.0),
@@ -129,7 +129,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                   children: [
                     DottedLine(
                         height: 2.0,
-                        color: getMaterialColor(AppColors.textColor1)),
+                        color: AppColors.textColor1),
                     componentBill(),
                   ],
                 ),
@@ -147,11 +147,11 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             CommonWidgets().textView(
                 StringConstants.orderDetails,
                 StyleConstants.customTextStyle22MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             CommonWidgets().textView(
                 orderDate,
                 StyleConstants.customTextStyle14MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ],
         ),
       );
@@ -164,7 +164,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             CommonWidgets().textView(
                 StringConstants.orderItem,
                 StyleConstants.customTextStyle16MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -177,7 +177,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                           .orderRequestModel!.orderItemsList![index]);
                 }),
             // DottedLine(
-            //     height: 2.0, color: getMaterialColor(AppColors.textColor1)),
+            //     height: 2.0, color: AppColors.textColor1),
             // componentBill(),
           ],
         ),
@@ -192,17 +192,17 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                 CommonWidgets().textView(
                     orderItem.name!,
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 const SizedBox(width: 5.0),
                 CommonWidgets().textView(
                     'x',
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 const SizedBox(width: 5.0),
                 CommonWidgets().textView(
                     '${orderItem.quantity}',
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
             Row(
@@ -210,11 +210,11 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                 CommonWidgets().textView(
                     "\$",
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 CommonWidgets().textView(
                     orderItem.getTotalPrice().toStringAsFixed(2),
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
           ]),
@@ -249,7 +249,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                                     .quantity
                                     .toString(),
                             StyleConstants.customTextStyle10MonsterMedium(
-                                color: getMaterialColor(AppColors.textColor2))),
+                                color: AppColors.textColor2)),
                       ),
                       const SizedBox(
                         width: 3.0,
@@ -277,14 +277,14 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                   child: CommonWidgets().textView(
                       "${StringConstants.customerName}:",
                       StyleConstants.customTextStyle14MonsterMedium(
-                          color: getMaterialColor(AppColors.textColor1))),
+                          color: AppColors.textColor1)),
                 ),
                 Expanded(
                   flex: 5,
                   child: CommonWidgets().textView(
                       customerName,
                       StyleConstants.customTextStyle14MonsterMedium(
-                          color: getMaterialColor(AppColors.textColor1))),
+                          color: AppColors.textColor1)),
                 )
               ],
             ),
@@ -301,14 +301,14 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                     child: CommonWidgets().textView(
                         '${StringConstants.phone}:',
                         StyleConstants.customTextStyle14MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor1))),
+                            color: AppColors.textColor1)),
                   ),
                   Expanded(
                     flex: 5,
                     child: CommonWidgets().textView(
                         phoneNumber,
                         StyleConstants.customTextStyle14MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor1))),
+                            color: AppColors.textColor1)),
                   )
                 ],
               ),
@@ -324,14 +324,14 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                   child: CommonWidgets().textView(
                       '${StringConstants.email}:',
                       StyleConstants.customTextStyle14MonsterMedium(
-                          color: getMaterialColor(AppColors.textColor1))),
+                          color: AppColors.textColor1)),
                 ),
                 Expanded(
                   flex: 5,
                   child: CommonWidgets().textView(
                       email,
                       StyleConstants.customTextStyle14MonsterMedium(
-                          color: getMaterialColor(AppColors.textColor1))),
+                          color: AppColors.textColor1)),
                 ),
               ],
             ),
@@ -354,7 +354,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             billTextView(StringConstants.tip, tipAmount),
             Divider(
               thickness: 1,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1,
             ),
             const SizedBox(height: 18.0),
             totalBillView(orderDetailsModel?.totalAmount ?? 0.0),
@@ -368,17 +368,17 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             CommonWidgets().textView(
                 billTitle,
                 StyleConstants.customTextStyle14MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             Row(
               children: [
                 CommonWidgets().textView(
                     "\$",
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 CommonWidgets().textView(
                     itemAmount.toStringAsFixed(2),
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
           ]),
@@ -391,16 +391,16 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         CommonWidgets().textView(
             StringConstants.total,
             StyleConstants.customTextStyle20MontserratBold(
-                color: getMaterialColor(AppColors.textColor1))),
+                color: AppColors.textColor1)),
         const SizedBox(width: 38.0),
         CommonWidgets().textView(
             "\$",
             StyleConstants.customTextStyle24MontserratBold(
-                color: getMaterialColor(AppColors.denotiveColor2))),
+                color: AppColors.denotiveColor2)),
         CommonWidgets().textView(
             totalAmount.toStringAsFixed(2),
             StyleConstants.customTextStyle24MontserratBold(
-                color: getMaterialColor(AppColors.denotiveColor2))),
+                color: AppColors.denotiveColor2)),
       ]);
 
   //Action Event
@@ -457,7 +457,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   onAddTipButtonTap() {
     showDialog(
         barrierDismissible: false,
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
           return CustomerAddTipDialog(callBack: getTip);

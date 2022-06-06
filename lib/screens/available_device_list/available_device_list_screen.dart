@@ -53,7 +53,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -97,7 +97,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         Padding(
           padding: const EdgeInsets.all(40.0),
           child: proceedButton(StringConstants.proceed, StyleConstants.customTextStyle12MontserratBold(
-              color: getMaterialColor(AppColors.textColor1))),
+              color: AppColors.textColor1)),
         )
       ],
     ) ,
@@ -129,7 +129,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
                   device.deviceName,
                   textAlign: TextAlign.left,
                   style: StyleConstants.customTextStyle15MonsterMedium(
-                      color: getMaterialColor(AppColors.textColor1)),
+                      color: AppColors.textColor1),
                 ),
                 Text(
                   '(${getStateName(device.state)})',
@@ -176,7 +176,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       child: Container(
         width: 210,
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: AppColors.primaryColor2,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -212,11 +212,11 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   Color getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
-        return getMaterialColor(AppColors.textColor5);
+        return AppColors.textColor5;
       case SessionState.connecting:
-        return getMaterialColor(AppColors.textColor2);
+        return AppColors.textColor2;
       default:
-        return getMaterialColor(AppColors.textColor7);
+        return AppColors.textColor7;
     }
   }
 
@@ -241,9 +241,9 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
     switch (state) {
       case SessionState.notConnected:
       case SessionState.connecting:
-        return getMaterialColor(AppColors.denotiveColor2);
+        return AppColors.denotiveColor2;
       default:
-        return getMaterialColor(AppColors.denotiveColor1);
+        return AppColors.denotiveColor1;
     }
   }
 

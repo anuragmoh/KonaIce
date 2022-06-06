@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
@@ -29,8 +30,6 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
   @override
@@ -100,7 +99,7 @@ class _DashboardState extends State<Dashboard>
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
-      backgroundColor: getMaterialColor(AppColors.textColor3),
+      backgroundColor: AppColors.textColor3,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -131,7 +130,7 @@ class _DashboardState extends State<Dashboard>
               child: CommonWidgets().textWidget(
                   StringConstants.dashboard,
                   StyleConstants.customTextStyle16MontserratBold(
-                      color: getMaterialColor(AppColors.whiteColor))),
+                      color: AppColors.whiteColor)),
             ),
           ),
           GestureDetector(

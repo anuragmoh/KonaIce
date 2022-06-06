@@ -26,9 +26,9 @@ class AssetsResponseModel {
   int? count;
   int? limit;
   int? offset;
-  dynamic sortColumn;
-  dynamic sortType;
-  dynamic searchText;
+  String? sortColumn;
+  String? sortType;
+  String? searchText;
   List<Datum>? data;
   int? fromDate;
   int? toDate;

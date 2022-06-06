@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
-import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/notifications/notification_item.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class NotificationDrawer extends StatefulWidget {
   const NotificationDrawer({Key? key}) : super(key: key);
@@ -57,14 +54,14 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
                         StringConstants.notification,
                         StyleConstants.customTextStyle(
                             fontSize: 16.0,
-                            color: getMaterialColor(AppColors.textColor1),
+                            color: AppColors.textColor1,
                             fontFamily: FontConstants.montserratBold)),
                     const Spacer(),
                     CommonWidgets().textWidget(
                       StringConstants.markAllAsRead,
                       StyleConstants.customTextStyle(
                           fontSize: 10.0,
-                          color: getMaterialColor(AppColors.textColor6),
+                          color: AppColors.textColor6,
                           fontFamily: FontConstants.montserratMedium),
                     ),
                   ],
@@ -114,8 +111,8 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
                                     notificationDetails.notificationTitle,
                                     StyleConstants.customTextStyle(
                                         fontSize: 12.0,
-                                        color: getMaterialColor(
-                                            AppColors.textColor4),
+                                        color:
+                                            AppColors.textColor4,
                                         fontFamily:
                                             FontConstants.montserratMedium)),
                               ),
@@ -129,7 +126,7 @@ class _NotificationDrawerState extends State<NotificationDrawer> {
                           notificationDetails.notificationDate,
                           StyleConstants.customTextStyle(
                               fontSize: 9.0,
-                              color: getMaterialColor(AppColors.textColor4),
+                              color: AppColors.textColor4,
                               fontFamily: FontConstants.montserratRegular),
                         ),
                       ),

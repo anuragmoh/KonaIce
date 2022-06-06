@@ -46,6 +46,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
 
 
   @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: 360,
@@ -59,7 +64,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
             child: CommonWidgets().textWidget(
                 StringConstants.forgotPassword,
                 StyleConstants.customTextStyle22MontserratSemiBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ),
           Align(
             alignment: Alignment.topLeft,
@@ -68,7 +73,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               child: CommonWidgets().textWidget(
                   StringConstants.emailId,
                   StyleConstants.customTextStyle14MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor2))),
+                      color: AppColors.textColor2)),
             ),
           ),
           Padding(
@@ -94,7 +99,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
                   hintText: 'abc@gmail.com',
                   errorText: emailValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1)),
+                      color: AppColors.textColor1),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
                     BorderSide(color: AppColors.textColor2, width: 1.0),
@@ -115,9 +120,9 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
                   text: TextSpan(
                     children: [
                       TextSpan(text: StringConstants.rememberPassword, style: StyleConstants.customTextStyle12MontserratSemiBold(
-                          color: getMaterialColor(AppColors.denotiveColor4))),
+                          color: AppColors.denotiveColor4)),
                       TextSpan(text: ' ${StringConstants.signIn}', style: TextStyle(
-                        color: getMaterialColor(AppColors.gradientColor2),
+                        color: AppColors.gradientColor2,
                         fontSize: 12.0, fontFamily: FontConstants.montserratSemiBold,
                         decoration: TextDecoration.underline
                       )),
@@ -126,7 +131,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               ),
             )
           ),
-          submitButton(StringConstants.submit, StyleConstants.customTextStyle12MontserratBold(color: getMaterialColor(AppColors.textColor1))),
+          submitButton(StringConstants.submit, StyleConstants.customTextStyle12MontserratBold(color: AppColors.textColor1)),
         ],
       ),
     );
@@ -138,7 +143,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
         onTap:  onTapSubmit,
         child: Container(
           decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor2),
+            color: AppColors.primaryColor2,
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(

@@ -23,7 +23,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3),
+        color: AppColors.textColor3,
         child: Column(
           children: [
             TopBar(
@@ -45,21 +45,21 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
   Widget topWidget() => Container(
         height: 100.0,
         decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
+            color: AppColors.primaryColor1,
             borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(8.0),
                 bottomRight: Radius.circular(8.0))),
       );
 
   Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
+        color: AppColors.textColor3.withOpacity(0.1),
         child: bodyWidgetComponent(),
       );
 
   Widget bottomWidget() => Container(
         height: 43.0,
         decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
+            color: AppColors.primaryColor1,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
         child: Align(
@@ -71,7 +71,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
         child: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              color: getMaterialColor(AppColors.whiteColor)),
+              color: AppColors.whiteColor),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -110,11 +110,11 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
             CommonWidgets().textView(
                 StringConstants.orderDetails,
                 StyleConstants.customTextStyle22MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             CommonWidgets().textView(
                 orderDate,
                 StyleConstants.customTextStyle14MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ],
         ),
       );
@@ -131,17 +131,17 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 CommonWidgets().textView(
                     "${StringConstants.customerName}:",
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 const SizedBox(height: 13.0),
                 CommonWidgets().textView(
                     StringConstants.phone,
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 const SizedBox(height: 13.0),
                 CommonWidgets().textView(
                     StringConstants.email,
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
             const SizedBox(
@@ -155,17 +155,17 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                     CommonWidgets().textView(
                         customerName,
                         StyleConstants.customTextStyle14MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor1))),
+                            color: AppColors.textColor1)),
                     const SizedBox(height: 13.0),
                     CommonWidgets().textView(
                         phoneNumber,
                         StyleConstants.customTextStyle14MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor1))),
+                            color: AppColors.textColor1)),
                     const SizedBox(height: 13.0),
                     CommonWidgets().textView(
                         email,
                         StyleConstants.customTextStyle14MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor1))),
+                            color: AppColors.textColor1)),
                   ],
                 ))
           ]),
@@ -181,7 +181,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
             CommonWidgets().textView(
                 StringConstants.orderItem,
                 StyleConstants.customTextStyle16MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             ListView.builder(
                 shrinkWrap: true,
                 itemCount: 5,
@@ -190,7 +190,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                       'Kollectible', 2, 23.0, index.isEven ? true : false);
                 }),
             DottedLine(
-                height: 2.0, color: getMaterialColor(AppColors.textColor1)),
+                height: 2.0, color: AppColors.textColor1),
             componentBill(),
           ],
         ),
@@ -207,17 +207,17 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 CommonWidgets().textView(
                     itemTitle,
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 const SizedBox(width: 5.0),
                 CommonWidgets().textView(
                     'x',
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 const SizedBox(width: 5.0),
                 CommonWidgets().textView(
                     '$itemCount',
                     StyleConstants.customTextStyle14MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
             Row(
@@ -225,11 +225,11 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                 CommonWidgets().textView(
                     "\$",
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 CommonWidgets().textView(
                     '$itemAmount',
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
           ]),
@@ -275,7 +275,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           billTextView(StringConstants.tip, 0.0),
           Divider(
             thickness: 1,
-            color: getMaterialColor(AppColors.textColor1),
+            color: AppColors.textColor1,
           ),
           const SizedBox(height: 18.0),
           totalBillView(35.0),
@@ -289,17 +289,17 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
             CommonWidgets().textView(
                 billTitle,
                 StyleConstants.customTextStyle14MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             Row(
               children: [
                 CommonWidgets().textView(
                     "\$",
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 CommonWidgets().textView(
                     '$itemAmount',
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
           ]),
@@ -312,16 +312,16 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
         CommonWidgets().textView(
             StringConstants.total,
             StyleConstants.customTextStyle20MontserratBold(
-                color: getMaterialColor(AppColors.textColor1))),
+                color: AppColors.textColor1)),
         const SizedBox(width: 38.0),
         CommonWidgets().textView(
             "\$",
             StyleConstants.customTextStyle24MontserratBold(
-                color: getMaterialColor(AppColors.denotiveColor2))),
+                color: AppColors.denotiveColor2)),
         CommonWidgets().textView(
             '$totalAmount',
             StyleConstants.customTextStyle24MontserratBold(
-                color: getMaterialColor(AppColors.denotiveColor2))),
+                color: AppColors.denotiveColor2)),
       ]);
 
   Widget componentBottomWidget() => Padding(

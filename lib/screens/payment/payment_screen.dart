@@ -1,11 +1,12 @@
 // import 'package:blinkcard_flutter/microblink_scanner.dart';
+import 'dart:math' as math;
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
-import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -38,14 +39,10 @@ import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:lottie/lottie.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:math' as math;
 
 class PaymentScreen extends StatefulWidget {
   final Events events;
@@ -125,7 +122,16 @@ class _PaymentScreenState extends State<PaymentScreen>
     P2PConnectionManager.shared.getP2PContractor(this);
     paymentPresenter = PaymentPresenter(this);
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    amountReceivedController.dispose();
+    emailController.dispose();
+    phoneNumberController.dispose();
+    cardNumberController.dispose();
+    cvcController.dispose();
+    dateExpiryController.dispose();
+  }
   @override
   void initState() {
     super.initState();
@@ -166,7 +172,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   _paymentFailed() async {
     debugPrint("Payment Failure");
     showDialog(
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
           return PaymentFailPopup(paymentFailMessage: paymentFailMessage);
@@ -188,7 +194,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
           children: [
             TopBar(
@@ -220,7 +226,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
+        color: AppColors.textColor3.withOpacity(0.1),
         child: bodyWidgetComponent(),
       );
 
@@ -247,7 +253,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Divider(
-                    color: getMaterialColor(AppColors.gradientColor1)
+                    color: AppColors.gradientColor1
                         .withOpacity(0.2),
                     thickness: 1,
                   ),
@@ -297,7 +303,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                     CommonWidgets().textWidget(
                         StringConstants.totalAmount,
                         StyleConstants.customTextStyle12MonsterMedium(
-                          color: getMaterialColor(AppColors.textColor2),
+                          color: AppColors.textColor2,
                         )),
                     const SizedBox(
                       height: 2.0,
@@ -305,7 +311,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                     CommonWidgets().textWidget(
                         '\$${totalAmount.toStringAsFixed(2)}',
                         StyleConstants.customTextStyle34MontserratBold(
-                            color: getMaterialColor(AppColors.textColor1)))
+                            color: AppColors.textColor1))
                   ],
                 ),
               ],
@@ -324,7 +330,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                       CommonWidgets().textWidget(
                           StringConstants.amountReceived,
                           StyleConstants.customTextStyle12MonsterMedium(
-                              color: getMaterialColor(AppColors.textColor2))),
+                              color: AppColors.textColor2)),
                       const SizedBox(
                         height: 5.0,
                       ),
@@ -335,7 +341,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                               '\$',
                               StyleConstants.customTextStyle22MonsterMedium(
                                   color:
-                                      getMaterialColor(AppColors.textColor1))),
+                                      AppColors.textColor1)),
                           const SizedBox(
                             width: 10.0,
                           ),
@@ -343,10 +349,10 @@ class _PaymentScreenState extends State<PaymentScreen>
                               decoration: BoxDecoration(
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(8.0)),
-                                  color: getMaterialColor(AppColors.whiteColor),
+                                  color: AppColors.whiteColor,
                                   border: Border.all(
-                                      color: getMaterialColor(
-                                          AppColors.primaryColor2))),
+                                      color:
+                                          AppColors.primaryColor2)),
                               width: 85.0,
                               height: 42.0,
                               child: Center(
@@ -358,8 +364,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                                     controller: amountReceivedController,
                                     style: StyleConstants
                                         .customTextStyle22MonsterMedium(
-                                            color: getMaterialColor(
-                                                AppColors.textColor1)),
+                                            color:
+                                                AppColors.textColor1),
                                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                     inputFormatters: <TextInputFormatter>[
                                       NumberRemoveExtraDotFormatter(),
@@ -395,7 +401,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                       CommonWidgets().textWidget(
                           StringConstants.amountToReturn,
                           StyleConstants.customTextStyle12MonsterMedium(
-                              color: getMaterialColor(AppColors.textColor2))),
+                              color: AppColors.textColor2)),
                       const SizedBox(height: 10.0),
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -403,13 +409,13 @@ class _PaymentScreenState extends State<PaymentScreen>
                             CommonWidgets().textWidget(
                                 '\$',
                                 StyleConstants.customTextStyle22MonsterMedium(
-                                    color: getMaterialColor(
-                                        AppColors.textColor1))),
+                                    color:
+                                        AppColors.textColor1)),
                             CommonWidgets().textWidget(
                                 returnAmount.toStringAsFixed(2),
                                 StyleConstants.customTextStyle22MonsterMedium(
                                     color:
-                                        getMaterialColor(AppColors.textColor1)))
+                                        AppColors.textColor1))
                           ])
                     ]),
               ),
@@ -420,7 +426,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                     ? StringConstants.newOrder
                     : StringConstants.proceed,
                 StyleConstants.customTextStyle12MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ]),
         ),
       );
@@ -436,9 +442,9 @@ class _PaymentScreenState extends State<PaymentScreen>
           : onTapNewOrder,
       child: Container(
         decoration: BoxDecoration(
-          color: getMaterialColor(showDisabledButton
+          color: showDisabledButton
               ? AppColors.denotiveColor4
-              : AppColors.primaryColor2),
+              : AppColors.primaryColor2,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -459,7 +465,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Divider(
-                      color: getMaterialColor(AppColors.gradientColor1)
+                      color: AppColors.gradientColor1
                           .withOpacity(0.2),
                       thickness: 1,
                     ),
@@ -501,10 +507,10 @@ class _PaymentScreenState extends State<PaymentScreen>
             Container(
               decoration: BoxDecoration(
                   color: paymentModeType == index
-                      ? getMaterialColor(AppColors.primaryColor2)
+                      ? AppColors.primaryColor2
                       : null,
                   border: Border.all(
-                      color: getMaterialColor(AppColors.primaryColor2)),
+                      color: AppColors.primaryColor2),
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
@@ -519,7 +525,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             CommonWidgets().textWidget(
                 title,
                 StyleConstants.customTextStyle12MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ],
         ),
       );
@@ -535,24 +541,24 @@ class _PaymentScreenState extends State<PaymentScreen>
           CommonWidgets().textWidget(
               StringConstants.paymentSuccessful,
               StyleConstants.customTextStyle22MonsterMedium(
-                  color: getMaterialColor(AppColors.textColor1))),
+                  color: AppColors.textColor1)),
           const SizedBox(height: 8.0),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             CommonWidgets().textWidget(
                 '${StringConstants.transactionId}:',
                 StyleConstants.customTextStyle12MontserratSemiBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             CommonWidgets().textWidget(
                 transactionId,
                 StyleConstants.customTextStyle12MontserratSemiBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ]),
           const SizedBox(height: 38.0),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 135.0),
             child: Divider(
               color:
-                  getMaterialColor(AppColors.gradientColor1).withOpacity(0.2),
+                  AppColors.gradientColor1.withOpacity(0.2),
               thickness: 1,
             ),
           ),
@@ -560,14 +566,14 @@ class _PaymentScreenState extends State<PaymentScreen>
           CommonWidgets().textWidget(
               StringConstants.howWouldYouLikeToReceiveTheReceipt,
               StyleConstants.customTextStyle16MonsterMedium(
-                  color: getMaterialColor(AppColors.textColor1))),
+                  color: AppColors.textColor1)),
           const SizedBox(height: 12.0),
           Container(
             width: 203.0,
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 border: Border.all(
-                    color: getMaterialColor(AppColors.primaryColor2))),
+                    color: AppColors.primaryColor2)),
             child: Row(
               children: [
                 GestureDetector(
@@ -581,7 +587,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                       borderRadius:
                           const BorderRadius.all(Radius.circular(8.0)),
                       color: receiptMode == 1
-                          ? getMaterialColor(AppColors.primaryColor2)
+                          ? AppColors.primaryColor2
                           : null,
                     ),
                     child: Padding(
@@ -590,7 +596,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                       child: CommonWidgets().textWidget(
                           StringConstants.email,
                           StyleConstants.customTextStyle09MonsterRegular(
-                              color: getMaterialColor(AppColors.textColor1))),
+                              color: AppColors.textColor1)),
                     ),
                   ),
                 ),
@@ -605,7 +611,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8.0)),
                         color: receiptMode == 2
-                            ? getMaterialColor(AppColors.primaryColor2)
+                            ? AppColors.primaryColor2
                             : null,
                       ),
                       child: Padding(
@@ -614,7 +620,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                         child: CommonWidgets().textWidget(
                             StringConstants.textMessage,
                             StyleConstants.customTextStyle09MonsterRegular(
-                                color: getMaterialColor(AppColors.textColor1))),
+                                color: AppColors.textColor1)),
                       )),
                 ),
               ],
@@ -631,8 +637,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         height: 47.0,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          color: getMaterialColor(AppColors.gradientColor1),
-          border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+          color: AppColors.gradientColor1,
+          border: Border.all(color: AppColors.gradientColor1),
         ),
         child: Row(
           children: [
@@ -640,9 +646,9 @@ class _PaymentScreenState extends State<PaymentScreen>
               width: 203.0,
               height: 45.0,
               decoration: BoxDecoration(
-                color: getMaterialColor(AppColors.whiteColor),
+                color: AppColors.whiteColor,
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                // border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+                // border: Border.all(color: AppColors.gradientColor1),
               ),
               child: Row(
                 children: [
@@ -654,7 +660,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                         controller: emailController,
                         style:
                             StyleConstants.customTextStyle12MontserratSemiBold(
-                                color: getMaterialColor(AppColors.textColor1)),
+                                color: AppColors.textColor1),
                         decoration: const InputDecoration(
                           counterText: "",
                           border: InputBorder.none,
@@ -685,8 +691,8 @@ class _PaymentScreenState extends State<PaymentScreen>
         height: 47.0,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          color: getMaterialColor(AppColors.gradientColor1),
-          border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+          color: AppColors.gradientColor1,
+          border: Border.all(color: AppColors.gradientColor1),
         ),
         child: Row(
           children: [
@@ -694,9 +700,9 @@ class _PaymentScreenState extends State<PaymentScreen>
               width: 203.0,
               height: 45.0,
               decoration: BoxDecoration(
-                color: getMaterialColor(AppColors.whiteColor),
+                color: AppColors.whiteColor,
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                // border: Border.all(color: getMaterialColor(AppColors.gradientColor1)),
+                // border: Border.all(color: AppColors.gradientColor1),
               ),
               child: Row(
                 children: [
@@ -704,7 +710,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   Container(
                     width: 1.0,
                     height: 20.0,
-                    color: getMaterialColor(AppColors.primaryColor1),
+                    color: AppColors.primaryColor1,
                   ),
                   Expanded(
                     child: Padding(
@@ -718,7 +724,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                         ],
                         style:
                             StyleConstants.customTextStyle12MontserratSemiBold(
-                                color: getMaterialColor(AppColors.textColor1)),
+                                color: AppColors.textColor1),
                         decoration: const InputDecoration(
                           counterText: "",
                           border: InputBorder.none,
@@ -750,7 +756,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         },
         padding: EdgeInsets.zero,
         textStyle: StyleConstants.customTextStyle12MonsterMedium(
-            color: getMaterialColor(AppColors.textColor1)),
+            color: AppColors.textColor1),
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
         initialSelection: '+1',
         showFlag: false,
@@ -783,7 +789,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             width: MediaQuery.of(context).size.width * 0.307,
             height: MediaQuery.of(context).size.height * 0.78,
             decoration: BoxDecoration(
-                color: getMaterialColor(AppColors.whiteColor),
+                color: AppColors.whiteColor,
                 borderRadius: const BorderRadius.all(Radius.circular(8.0))),
             child: Padding(
               padding: const EdgeInsets.only(left: 22.0, right: 19.0),
@@ -797,7 +803,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                             StringConstants.orderDetails,
                             StyleConstants.customTextStyle22MontserratBold(
                                 color:
-                                    getMaterialColor(AppColors.textColor1)))),
+                                    AppColors.textColor1))),
                     customerNameWidget(
                         customerName:
                             widget.placeOrderRequestModel.getCustomerName()),
@@ -818,13 +824,13 @@ class _PaymentScreenState extends State<PaymentScreen>
                     Expanded(
                       child: SingleChildScrollView(
                         child: Container(
-                            color: getMaterialColor(AppColors.whiteColor),
+                            color: AppColors.whiteColor,
                             child: itemView()),
                       ),
                     ),
                     DottedLine(
                         height: 2.0,
-                        color: getMaterialColor(AppColors.textColor1)),
+                        color: AppColors.textColor1),
                     componentBill(),
                   ]),
             ),
@@ -838,12 +844,12 @@ class _PaymentScreenState extends State<PaymentScreen>
         CommonWidgets().textView(
             '${StringConstants.customerName} - ',
             StyleConstants.customTextStyle12MonsterRegular(
-                color: getMaterialColor(AppColors.textColor1))),
+                color: AppColors.textColor1)),
         Expanded(
             child: CommonWidgets().textView(
                 customerName,
                 StyleConstants.customTextStyle12MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1)))),
+                    color: AppColors.textColor1))),
       ]);
 
   // customer Details
@@ -863,12 +869,12 @@ class _PaymentScreenState extends State<PaymentScreen>
                 CommonWidgets().textView(
                     '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 Expanded(
                     child: CommonWidgets().textView(
                         eventName,
                         StyleConstants.customTextStyle09MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor2)))),
+                            color: AppColors.textColor2))),
               ]),
             ),
           ),
@@ -881,12 +887,12 @@ class _PaymentScreenState extends State<PaymentScreen>
                 CommonWidgets().textView(
                     '${StringConstants.email}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 Expanded(
                     child: CommonWidgets().textView(
                         email,
                         StyleConstants.customTextStyle09MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor2)))),
+                            color: AppColors.textColor2))),
               ]),
             ),
           ),
@@ -899,12 +905,12 @@ class _PaymentScreenState extends State<PaymentScreen>
                 CommonWidgets().textView(
                     '${StringConstants.phone}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 Expanded(
                     child: CommonWidgets().textView(
                         phone,
                         StyleConstants.customTextStyle09MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor2)))),
+                            color: AppColors.textColor2))),
               ]),
             ),
           ),
@@ -912,12 +918,12 @@ class _PaymentScreenState extends State<PaymentScreen>
             CommonWidgets().textView(
                 '${StringConstants.storeAddress}: ',
                 StyleConstants.customTextStyle09MonsterRegular(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             Expanded(
                 child: CommonWidgets().textView(
                     storeAddress,
                     StyleConstants.customTextStyle09MonsterMedium(
-                        color: getMaterialColor(AppColors.textColor2)))),
+                        color: AppColors.textColor2))),
           ]),
         ],
       );
@@ -930,22 +936,22 @@ class _PaymentScreenState extends State<PaymentScreen>
           CommonWidgets().textView(
               StringConstants.orderId,
               StyleConstants.customTextStyle09MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1))),
+                  color: AppColors.textColor1)),
           CommonWidgets().textView(
               ' #$orderId',
               StyleConstants.customTextStyle09MonsterMedium(
-                  color: getMaterialColor(AppColors.textColor2))),
+                  color: AppColors.textColor2)),
         ]),
         const SizedBox(height: 8.0),
         Row(children: [
           CommonWidgets().textView(
               StringConstants.orderDate,
               StyleConstants.customTextStyle09MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1))),
+                  color: AppColors.textColor1)),
           CommonWidgets().textView(
               ' $orderDate',
               StyleConstants.customTextStyle09MonsterMedium(
-                  color: getMaterialColor(AppColors.textColor2))),
+                  color: AppColors.textColor2)),
         ]),
       ]);
 
@@ -969,7 +975,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               child: CommonWidgets().textView(
                   orderItem.name!,
                   StyleConstants.customTextStyle12MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
             ),
             Expanded(
               flex: 2,
@@ -978,7 +984,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                 child: CommonWidgets().textView(
                     "${StringConstants.qty} - ${orderItem.quantity!}",
                     StyleConstants.customTextStyle12MonsterRegular(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ),
             ),
             Expanded(
@@ -986,7 +992,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               child: CommonWidgets().textView(
                   "\$${orderItem.getTotalPrice().toStringAsFixed(2)}",
                   StyleConstants.customTextStyle12MontserratSemiBold(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
             ),
           ]),
           Visibility(
@@ -1045,17 +1051,17 @@ class _PaymentScreenState extends State<PaymentScreen>
             CommonWidgets().textView(
                 billTitle,
                 StyleConstants.customTextStyle14MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
             Row(
               children: [
                 CommonWidgets().textView(
                     "\$",
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
                 CommonWidgets().textView(
                     itemAmount.toStringAsFixed(2),
                     StyleConstants.customTextStyle14MontserratBold(
-                        color: getMaterialColor(AppColors.textColor1))),
+                        color: AppColors.textColor1)),
               ],
             ),
           ]),
@@ -1068,11 +1074,11 @@ class _PaymentScreenState extends State<PaymentScreen>
         CommonWidgets().textView(
             '${StringConstants.billTotal}:',
             StyleConstants.customTextStyle20MontserratBold(
-                color: getMaterialColor(AppColors.textColor1))),
+                color: AppColors.textColor1)),
         CommonWidgets().textView(
             '\$${totalAmount.toStringAsFixed(2)}',
             StyleConstants.customTextStyle24MontserratBold(
-                color: getMaterialColor(AppColors.textColor1))),
+                color: AppColors.textColor1)),
       ]);
 
   //Action Event
@@ -1095,7 +1101,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       //     action: StaffActionConst.paymentStatus,
       //     data: paymentStatus.toString());
       showDialog(
-          barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+          barrierColor: AppColors.textColor1.withOpacity(0.7),
           context: context,
           builder: (context) {
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
@@ -1497,7 +1503,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   validationPopup(String validationMessage) {
     showDialog(
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
           return ValidationPopup(validationMessage: validationMessage);

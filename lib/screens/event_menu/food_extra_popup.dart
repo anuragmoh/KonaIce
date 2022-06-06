@@ -6,7 +6,6 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 //ignore: must_be_immutable
 class FoodExtraPopup extends StatefulWidget {
   Item item;
@@ -92,8 +91,8 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
       SizedBox(
         height: 40,
         child: Checkbox(
-            side: BorderSide(color: getMaterialColor(AppColors.textColor2)),
-            activeColor: getMaterialColor(AppColors.primaryColor1),
+            side: BorderSide(color: AppColors.textColor2),
+            activeColor: AppColors.primaryColor1,
             // value: widget.item.selectedExtras.contains(foodExtraObject),
             value: foodExtraItemList[index].isItemSelected,
             onChanged: (isSelected) {
@@ -103,7 +102,7 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
       CommonWidgets().textWidget(
         foodExtraObject.itemName,
         StyleConstants.customTextStyle12MonsterMedium(
-            color: getMaterialColor(AppColors.textColor4)),
+            color: AppColors.textColor4),
       ),
       Center(
         child: CommonWidgets().quantityIncrementDecrementContainer(
@@ -123,9 +122,9 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
         child: CommonWidgets().textWidget(
             '${StringConstants.symbolDollar}${foodExtraObject.getTotalPrice().toStringAsFixed(2)}',
             StyleConstants.customTextStyle12MontserratBold(
-                color: getMaterialColor(foodExtraObject.selectedItemQuantity > 0
+                color: foodExtraObject.selectedItemQuantity > 0
                     ? AppColors.textColor4
-                    : AppColors.textColor2))),
+                    : AppColors.textColor2)),
       )
     ]);
   }
@@ -143,10 +142,10 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             height: 30.0,
             width: 90.0,
             decoration: BoxDecoration(
-                color: getMaterialColor(
+                color:
                     (item.selectedExtras.isEmpty && selectedExtras.isEmpty)
                         ? AppColors.denotiveColor5
-                        : AppColors.primaryColor2),
+                        : AppColors.primaryColor2,
                 borderRadius: BorderRadius.circular(15.0)),
             child: Center(
               child: CommonWidgets().textWidget(
@@ -155,7 +154,7 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
                       : StringConstants.update,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratBold),
                   textAlign: TextAlign.center),
             ),

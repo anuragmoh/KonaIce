@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class Loader extends StatelessWidget {
   final Widget child;
@@ -34,7 +33,7 @@ class Loader extends StatelessWidget {
           ),
           Center(
             child: CircularProgressIndicator(
-                color: getMaterialColor(AppColors.primaryColor1)),
+                color: AppColors.primaryColor1),
           )
         ],
       );

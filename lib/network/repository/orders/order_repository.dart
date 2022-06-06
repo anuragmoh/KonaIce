@@ -1,7 +1,6 @@
 import 'package:kona_ice_pos/constants/url_constants.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_response_model.dart';
-import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_card_response_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_response_model.dart';

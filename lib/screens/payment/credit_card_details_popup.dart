@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
-import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
-import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreditCardDetailsPopup extends StatefulWidget {
@@ -54,7 +49,15 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   _CreditCardDetailsPopupState() {
     // paymentPresenter = PaymentPresenter(this);
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    amountTextFieldController.dispose();
+    menuNameTextFieldController.dispose();
+    dateExpiryController.dispose();
+    cardNumberController.dispose();
+    cvcController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Loader(
@@ -69,7 +72,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
 
   Widget showCustomMenuPopup() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: customMenuPopUpComponent(),
     );
@@ -162,7 +165,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               txtName,
               StyleConstants.customTextStyle(
                   fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
           Padding(
@@ -173,7 +176,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
+                      color: AppColors.textColor1
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
@@ -193,7 +196,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratRegular)),
                 ),
               ),
@@ -202,7 +205,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
           Text(validationMessage,
               style: StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor5),
+                  color: AppColors.textColor5,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left)
         ],
@@ -223,7 +226,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               txtName,
               StyleConstants.customTextStyle(
                   fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
           Padding(
@@ -234,7 +237,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
+                      color: AppColors.textColor1
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
@@ -254,7 +257,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratRegular)),
                 ),
               ),
@@ -263,7 +266,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
           Text(validationMessage,
               style: StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor5),
+                  color: AppColors.textColor5,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left)
         ],

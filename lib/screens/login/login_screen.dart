@@ -10,18 +10,17 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/network_model/login/login_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
-import 'package:kona_ice_pos/models/network_model/login/login_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -62,11 +61,16 @@ class _LoginScreenState extends State<LoginScreen>
     getDeviceInfo();
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -119,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: textWidget(
                 StringConstants.loginText,
                 StyleConstants.customTextStyle22MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
+                    color: AppColors.textColor1)),
           ),
           Align(
             alignment: Alignment.topLeft,
@@ -128,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen>
               child: textWidget(
                   StringConstants.emailId,
                   StyleConstants.customTextStyle14MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
             ),
           ),
           Padding(
@@ -156,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen>
                   hintText: 'abc@gmail.com',
                   errorText: emailValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1)),
+                      color: AppColors.textColor1),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
@@ -176,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen>
               child: textWidget(
                   StringConstants.password,
                   StyleConstants.customTextStyle14MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
             ),
           ),
           Padding(
@@ -210,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen>
                   hintText: 'Password',
                   errorText: passwordValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1)),
+                      color: AppColors.textColor1),
                   focusedBorder: const OutlineInputBorder(
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
@@ -233,13 +237,13 @@ class _LoginScreenState extends State<LoginScreen>
                 child: textWidget(
                     StringConstants.forgotPassword,
                     StyleConstants.customTextStyle12MontserratBold(
-                        color: getMaterialColor(AppColors.denotiveColor4))),
+                        color: AppColors.denotiveColor4)),
               ),
             ),
           ),
           signInButton(
               StringConstants.signIn,
-              StyleConstants.customTextStyle12MontserratBold(color: getMaterialColor(AppColors.textColor1))),
+              StyleConstants.customTextStyle12MontserratBold(color: AppColors.textColor1)),
         ],
       ),
     );
@@ -258,7 +262,7 @@ class _LoginScreenState extends State<LoginScreen>
         },
         child: Container(
           decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor2),
+            color: AppColors.primaryColor2,
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(

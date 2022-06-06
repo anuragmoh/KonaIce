@@ -6,7 +6,6 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class CustomMenuPopup extends StatefulWidget {
   const CustomMenuPopup({Key? key}) : super(key: key);
@@ -28,12 +27,18 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
 
   Widget showCustomMenuPopup() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: customMenuPopUpComponent(),
     );
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    amountTextFieldController.dispose();
+    menuNameTextFieldController.dispose();
+  }
   Widget customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
@@ -79,7 +84,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
               menuName,
               StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratSemiBold)),
           editNameButton(),
         ],
@@ -92,21 +97,21 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
       controller: menuNameTextFieldController,
       style: StyleConstants.customTextStyle(
           fontSize: 12.0,
-          color: getMaterialColor(AppColors.textColor1),
+          color: AppColors.textColor1,
           fontFamily: FontConstants.montserratSemiBold),
       decoration: InputDecoration(
           contentPadding: EdgeInsets.zero,
           hintText: StringConstants.enterMenuName,
           hintStyle: StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor2),
+              color: AppColors.textColor2,
               fontFamily: FontConstants.montserratRegular),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                  color: getMaterialColor(AppColors.denotiveColor4))),
+                  color: AppColors.denotiveColor4)),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                  color: getMaterialColor(AppColors.denotiveColor4)))),
+                  color: AppColors.denotiveColor4))),
     );
   }
 
@@ -123,7 +128,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
                 StringConstants.amount,
                 StyleConstants.customTextStyle(
                     fontSize: 12,
-                    color: getMaterialColor(AppColors.textColor2),
+                    color: AppColors.textColor2,
                     fontFamily: FontConstants.montserratMedium)),
           ),
           TextField(
@@ -131,23 +136,23 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
             keyboardType: TextInputType.number,
             style: StyleConstants.customTextStyle(
                 fontSize: 22.0,
-                color: getMaterialColor(AppColors.textColor6),
+                color: AppColors.textColor6,
                 fontFamily: FontConstants.montserratMedium),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               hintText: StringConstants.enterAmount,
               hintStyle: StyleConstants.customTextStyle(
                   fontSize: 12,
-                  color: getMaterialColor(AppColors.textColor2),
+                  color: AppColors.textColor2,
                   fontFamily: FontConstants.montserratRegular),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                    color: AppColors.skyBlueBorderColor),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                    color: AppColors.skyBlueBorderColor),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               prefixIcon: Row(
@@ -159,14 +164,14 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
                         StringConstants.symbolDollar,
                         StyleConstants.customTextStyle(
                             fontSize: 22,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2,
                             fontFamily: FontConstants.montserratMedium)),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 0.0, horizontal: 15.0),
                     child: Container(
-                      color: getMaterialColor(AppColors.skyBlueBorderColor),
+                      color: AppColors.skyBlueBorderColor,
                       width: 1.0,
                       height: 30,
                     ),
@@ -202,16 +207,16 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         child: Container(
           height: 40.0,
           decoration: BoxDecoration(
-              color: getMaterialColor(isEditingMenuName
+              color: isEditingMenuName
                   ? AppColors.denotiveColor5
-                  : AppColors.primaryColor2),
+                  : AppColors.primaryColor2,
               borderRadius: BorderRadius.circular(20.0)),
           child: Center(
             child: CommonWidgets().textWidget(
                 StringConstants.add,
                 StyleConstants.customTextStyle(
                     fontSize: 16.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratBold),
                 textAlign: TextAlign.center),
           ),
@@ -229,15 +234,15 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           height: 30.0,
           width: 45.0,
           decoration: BoxDecoration(
-              color: getMaterialColor(
-                  false ? AppColors.denotiveColor5 : AppColors.gradientColor1),
+              color:
+                  false ? AppColors.denotiveColor5 : AppColors.gradientColor1,
               borderRadius: BorderRadius.circular(5.0)),
           child: Center(
             child: CommonWidgets().textWidget(
                 StringConstants.save,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.whiteColor),
+                    color: AppColors.whiteColor,
                     fontFamily: FontConstants.montserratSemiBold),
                 textAlign: TextAlign.center),
           ),

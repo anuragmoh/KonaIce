@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -18,21 +19,20 @@ import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/models/data_models/item_categories.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/models/data_models/sync_event_menu.dart';
+import 'package:kona_ice_pos/models/network_model/clock_in_clock_out/clock_in_out_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/clock_in_out/clock_in_out_presenter.dart';
 import 'package:kona_ice_pos/network/repository/sync/sync_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/models/network_model/clock_in_clock_out/clock_in_out_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/event_menu_screen.dart';
 import 'package:kona_ice_pos/screens/home/create_adhvoc_event_popup.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import '../../common/extensions/string_extension.dart';
 
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-          color: getMaterialColor(AppColors.textColor3), child: body()),
+          color: AppColors.textColor3, child: body()),
     );
   }
 
@@ -207,23 +207,23 @@ class _HomeScreenState extends State<HomeScreen>
               createEventButton(
                   StringConstants.createAdhocEvent,
                   StyleConstants.customTextStyle12MontserratBold(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
               CommonWidgets().textWidget(
                   currentDate,
                   StyleConstants.customTextStyle16MontserratBold(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
               clockInOutButton(
                   isClockIn
                       ? StringConstants.clockOut
                       : StringConstants.clockIn,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.whiteColor),
+                      color: AppColors.whiteColor,
                       fontFamily: isClockIn
                           ? FontConstants.montserratBold
                           : FontConstants.montserratMedium),
                   StyleConstants.customTextStyle12MonsterMedium(
-                      color: getMaterialColor(AppColors.whiteColor)))
+                      color: AppColors.whiteColor))
             ],
           ),
           Expanded(
@@ -270,8 +270,8 @@ class _HomeScreenState extends State<HomeScreen>
                                   child: CommonWidgets().textWidget(
                                       eventDetails.getEventName(),
                                       StyleConstants.customTextStyle16MontserratBold(
-                                          color: getMaterialColor(
-                                              AppColors.textColor1))),
+                                          color:
+                                              AppColors.textColor1)),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 5.0),
@@ -291,8 +291,8 @@ class _HomeScreenState extends State<HomeScreen>
                                           child: CommonWidgets()
                                               .textMultiLineWidget(eventDetails.getEventAddress(),
                                                   StyleConstants.customTextStyle12MonsterMedium(
-                                                      color: getMaterialColor(
-                                                          AppColors.textColor4))),
+                                                      color:
+                                                          AppColors.textColor4)),
                                         ),
                                       ),
                                     ],
@@ -311,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen>
                                       child: CommonWidgets().textWidget(
                                         eventDetails.getEventDate(),
                                         StyleConstants.customTextStyle12MonsterMedium(
-                                            color: getMaterialColor(AppColors.textColor4)),
+                                            color: AppColors.textColor4),
                                       ),
                                     ),
                                     Padding(
@@ -319,8 +319,8 @@ class _HomeScreenState extends State<HomeScreen>
                                       child: CommonWidgets().textWidget(
                                         eventDetails.getEventTime(),
                                         StyleConstants.customTextStyle12MonsterMedium(
-                                            color: getMaterialColor(
-                                                AppColors.textColor4)),
+                                            color:
+                                                AppColors.textColor4),
                                       ),
                                     ),
                                   ],
@@ -352,9 +352,9 @@ class _HomeScreenState extends State<HomeScreen>
       onTap: isCreateAdhocEventButtonEnable ? onTapCreateEventButton : null,
       child: Container(
         decoration: BoxDecoration(
-            color: getMaterialColor(isCreateAdhocEventButtonEnable
+            color: isCreateAdhocEventButtonEnable
                 ? AppColors.primaryColor2
-                : AppColors.denotiveColor4),
+                : AppColors.denotiveColor4,
             borderRadius: BorderRadius.circular(30.0)),
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -373,8 +373,8 @@ class _HomeScreenState extends State<HomeScreen>
       child: Container(
         height: 4.19 * SizeConfig.heightSizeMultiplier,
         decoration: BoxDecoration(
-          color: getMaterialColor(
-              isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2),
+          color:
+              isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2,
           borderRadius: BorderRadius.circular(21.5),
         ),
         child: Padding(

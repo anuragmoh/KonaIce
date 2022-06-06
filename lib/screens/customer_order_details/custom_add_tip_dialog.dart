@@ -29,7 +29,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
 
   Widget showCustomAddTipDialog() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: customMenuPopUpComponent(),
     );
@@ -55,7 +55,11 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
       ),
     );
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    tipController.dispose();
+  }
   //Action
   onTapCloseButton() {
     Navigator.of(context).pop();
@@ -73,33 +77,33 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
             child: CommonWidgets().textWidget(
                 StringConstants.amount,
                 StyleConstants.customTextStyle12MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor2))),
+                    color: AppColors.textColor2)),
           ),
           TextField(
             controller: tipController,
             keyboardType: TextInputType.number,
             maxLength: TextFieldLengthConstant.addTip,
             style: StyleConstants.customTextStyle22MonsterMedium(
-                color: getMaterialColor(AppColors.textColor6)),
+                color: AppColors.textColor6),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.zero,
               hintText: StringConstants.enterAmount,
               errorText: isValidTip ? "" : StringConstants.enterTip,
               hintStyle: StyleConstants.customTextStyle12MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor2)),
+                  color: AppColors.textColor2),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                    color: AppColors.skyBlueBorderColor),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.textColor5)),
+                    color: AppColors.textColor5),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
+                    color: AppColors.skyBlueBorderColor),
                 borderRadius: BorderRadius.circular(8.0),
               ),
               prefixIcon: Row(
@@ -110,13 +114,13 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                     child: CommonWidgets().textWidget(
                         StringConstants.symbolDollar,
                         StyleConstants.customTextStyle22MonsterMedium(
-                            color: getMaterialColor(AppColors.textColor2))),
+                            color: AppColors.textColor2)),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 0.0, horizontal: 15.0),
                     child: Container(
-                      color: getMaterialColor(AppColors.skyBlueBorderColor),
+                      color: AppColors.skyBlueBorderColor,
                       width: 1.0,
                       height: 30,
                     ),
@@ -143,14 +147,14 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
             height: 30.0,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                color: getMaterialColor(AppColors.primaryColor2),
+                color: AppColors.primaryColor2,
                 borderRadius: BorderRadius.circular(15.0)),
             child: Center(
               child: CommonWidgets().textWidget(
                   StringConstants.add,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratBold),
                   textAlign: TextAlign.center),
             ),
