@@ -7,9 +7,10 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 class ConfirmationDialog extends StatefulWidget {
   final VoidCallback onTapYes;
   final VoidCallback onTapNo;
+  final String confirmMessage;
 
   const ConfirmationDialog(
-      {Key? key, required this.onTapYes, required this.onTapNo})
+      {Key? key, required this.onTapYes, required this.onTapNo,required this.confirmMessage})
       : super(key: key);
 
   @override
@@ -28,57 +29,57 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   }
 
   Widget dialogUi() => SizedBox(
-        height: 208,
-        width: 391,
-        child: Column(
-          children: [
-            Container(
-              color: AppColors.primaryColor1,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0, vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(StringConstants.confirm,
-                        style: StyleConstants.customTextStyle(
-                            fontSize: 16.0,
-                            color: AppColors.whiteColor,
-                            fontFamily: FontConstants.montserratSemiBold)),
-                    GestureDetector(
-                        onTap: widget.onTapNo,
-                        child: const Icon(Icons.clear,
-                            color: AppColors.whiteColor, size: 28.0)),
-                  ],
-                ),
-              ),
+    height: 208,
+    width: 391,
+    child: Column(
+      children: [
+        Container(
+          color: AppColors.primaryColor1,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+                horizontal: 20.0, vertical: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(StringConstants.confirm,
+                    style: StyleConstants.customTextStyle(
+                        fontSize: 16.0,
+                        color: AppColors.whiteColor,
+                        fontFamily: FontConstants.montserratSemiBold)),
+                GestureDetector(
+                    onTap: widget.onTapNo,
+                    child: const Icon(Icons.clear,
+                        color: AppColors.whiteColor, size: 28.0)),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 65.0, right: 65, top: 47.0, bottom: 49.0),
-              child: Text(StringConstants.confirmMessage,
-                  style: StyleConstants.customTextStyle(
-                      fontSize: 14.0,
-                      color: AppColors.textColor1,
-                      fontFamily: FontConstants.montserratMedium)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 16.0, right: 17.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  button(StringConstants.no, widget.onTapNo,
-                      AppColors.textColor2.withOpacity(0.3)),
-                  const SizedBox(width: 12.0),
-                  button(StringConstants.yes, widget.onTapYes,
-                      AppColors.primaryColor2),
-                ],
-              ),
-            )
-          ],
+          ),
         ),
-      );
+        Padding(
+          padding: const EdgeInsets.only(
+              left: 65.0, right: 65, top: 47.0, bottom: 49.0),
+          child: Text(widget.confirmMessage,
+              style: StyleConstants.customTextStyle(
+                  fontSize: 14.0,
+                  color: AppColors.textColor1,
+                  fontFamily: FontConstants.montserratMedium)),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0, right: 17.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              button(StringConstants.no, widget.onTapNo,
+                  AppColors.textColor2.withOpacity(0.3)),
+              const SizedBox(width: 12.0),
+              button(StringConstants.yes, widget.onTapYes,
+                  AppColors.primaryColor2),
+            ],
+          ),
+        )
+      ],
+    ),
+  );
 
   Widget button(String title, Function onTapButton, Color color) =>
       GestureDetector(
@@ -92,7 +93,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
           child: Center(
             child: Padding(
               padding:
-                  const EdgeInsets.symmetric(horizontal: 31.0, vertical: 8.0),
+              const EdgeInsets.symmetric(horizontal: 31.0, vertical: 8.0),
               child: Text(
                 title,
                 style: StyleConstants.customTextStyle(

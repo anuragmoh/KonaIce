@@ -1063,7 +1063,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   onTapClearButton() {
-    DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo);
+    DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo,StringConstants.confirmMessage);
   }
 
   onConfirmTapYes() {
