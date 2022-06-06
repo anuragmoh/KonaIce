@@ -30,10 +30,10 @@ dependencies:
   flutter:
     sdk: flutter
   # used for database
-  sqflite_sqlcipher: ^2.1.0
-  path_provider: ^2.0.5
+  sqflite_sqlcipher: ^2.1.1
+  path_provider: ^2.0.10
   # used for secure storage
-  flutter_secure_storage: ^4.2.1
+  flutter_secure_storage: ^5.0.2
   # used for date_format
   intl: ^0.17.0
   # country_code_picker

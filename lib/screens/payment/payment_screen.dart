@@ -22,8 +22,6 @@ import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/finix_response_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
-import 'package:kona_ice_pos/network/repository/payment/strip_token_model.dart';
-import 'package:kona_ice_pos/network/repository/payment/stripe_payment_method_model.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
@@ -38,7 +36,6 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
 
@@ -74,7 +71,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   double foodCost = 0.0;
   bool isPaymentDone = false;
   int receiptMode = 1;
-  String orderID = 'NA';
+  String orderID = StringConstants.na;
   String cardNumberValidationMessage = "";
   bool isCardNumberValid = true;
   bool isExpiryValid = true;
@@ -93,7 +90,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String userMobileNumber = StringExtension.empty();
   String emailValidationMessage = "";
   String smsValidationMessage = "";
-  String countryCode = "+1";
+  String countryCode = StringConstants.usCountryCode;
   FinixResponseModel finixResponse = FinixResponseModel();
 
   TextEditingController amountReceivedController = TextEditingController();
@@ -103,11 +100,6 @@ class _PaymentScreenState extends State<PaymentScreen>
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvcController = TextEditingController();
   TextEditingController dateExpiryController = TextEditingController();
-
-  var maskFormatter = MaskTextInputFormatter(
-      mask: '##/##',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
 
   late OrderPresenter orderPresenter;
   bool isApiProcess = false;
@@ -446,7 +438,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               )),
           SingleChildScrollView(
               child:
-                  isPaymentDone ? paymentSuccess('35891456') : const Text('')),
+                  isPaymentDone ? paymentSuccess(StringConstants.dummyOrder) : const Text('')),
         ]),
       );
 
@@ -735,7 +727,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         textStyle: StyleConstants.customTextStyle12MonsterMedium(
             color: getMaterialColor(AppColors.textColor1)),
         // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-        initialSelection: '+1',
+        initialSelection: StringConstants.usCountryCode,
         showFlag: false,
         // optional. Shows only country name and flag
         showCountryOnly: true,
@@ -1072,16 +1064,16 @@ class _PaymentScreenState extends State<PaymentScreen>
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
         debugPrint('>>>>>>>$value');
-        bool valueForApi = value['value'];
+        bool valueForApi = value[ConstatKeys.cardValue];
+        debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
-          String cardNumber = value['cardNumber'];
-          String cardMonth = value['cardMonth'];
-          String cardYear = value['cardYear'];
-
-          int valCardMonth = int.parse(cardMonth);
-          int valCardYEar = int.parse(cardYear);
-
-          onTapConfirmPayment(cardNumber, valCardMonth, valCardYEar);
+          String cardNumber = value[ConstatKeys.cardNumber];
+          String cardExpiry = value[ConstatKeys.cardExpiry];
+          String cardCvv = value[ConstatKeys.cardCvv];
+          int valCardExpiry = int.parse(cardExpiry);
+          int valCardCvv = int.parse(cardCvv);
+          debugPrint('>>>>>>>>>$cardExpiry');
+          onTapConfirmPayment(cardNumber, valCardExpiry,valCardCvv);
         }
       });
     }
@@ -1098,7 +1090,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       debugPrint("?????????????????${widget.placeOrderRequestModel.email}");
       phoneNumberController.text =
           widget.placeOrderRequestModel.getPhoneNumber();
-      debugPrint("?????????????????${widget.placeOrderRequestModel.email}");
     });
   }
 
@@ -1112,11 +1103,16 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   Future performCardPayment() async {
-    const String application = "Test";
-    const String version = "1.0";
+    const String application = AssetsConstants.test;
+    const String version =AssetsConstants.appVersion;
     final tags = {
-      "customerEmail":
+      finixTagsKey.customerEmail:
           widget.placeOrderRequestModel.email ?? StringExtension.empty(),
+      finixTagsKey.customerName: widget.placeOrderRequestModel.getCustomerName(),
+      finixTagsKey.eventName: widget.events.getEventName(),
+      finixTagsKey.eventCode: widget.events.getEventCode(),
+      finixTagsKey.environment: StringConstants.test,
+      finixTagsKey.paymentMethod: StringConstants.bbpos
       "customerName": widget.placeOrderRequestModel.getCustomerName(),
       "eventName": widget.events.getEventName(),
       "eventCode": widget.events.getEventCode(),
@@ -1124,15 +1120,15 @@ class _PaymentScreenState extends State<PaymentScreen>
       "paymentMethod": PaymentMethods.bbpos
     };
     final values = {
-      "username": finixUsername,
-      "password": finixPassword,
-      "application": application,
-      "version": version,
-      "merchantId": finixMerchantId,
-      "deviceID": finixdeviceId,
-      "amount": totalAmount,
-      "serialNumber": finixSerialNumber,
-      "tags": tags
+      finixTagsKey.username: finixUsername,
+      finixTagsKey.password: finixPassword,
+      finixTagsKey.application: application,
+      finixTagsKey.version: version,
+      finixTagsKey.merchantId: finixMerchantId,
+      finixTagsKey.deviceID: finixdeviceId,
+      finixTagsKey.amount: totalAmount,
+      finixTagsKey.serialNumber: finixSerialNumber,
+      finixTagsKey.tags: tags
     };
     await cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }
@@ -1232,14 +1228,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     orderPresenter.payOrder(payOrderRequestModel);
   }
 
-  callPayOrderCardMethodAPI() {
-    PayOrderCardRequestModel payOrderCardRequestModel =
-        getPayOrderCardMethodRequestModel();
-    setState(() {
-      isApiProcess = true;
-    });
-    orderPresenter.payOrderCardMethod(payOrderCardRequestModel);
-  }
 
   @override
   void showError(GeneralErrorResponse exception) {
@@ -1265,15 +1253,6 @@ class _PaymentScreenState extends State<PaymentScreen>
           context: context);
       phoneNumberController.clear();
       emailController.clear();
-    }
-    if (response is StripTokenResponseModel) {
-      //getting StripeTokenId
-      stripeTokenId = response.id.toString();
-      //PaymentMethodApi call
-    } else if (response is StripePaymentMethodRequestModel) {
-      //getting StripePaymentMethodId
-      stripePaymentMethodId = response.id.toString();
-      callPayOrderCardMethodAPI();
     } else {
       setState(() {
         updatePaymentSuccess();
@@ -1323,26 +1302,23 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //FinixMannual CardDetails
   onTapConfirmPayment(
-      String cardNumber, int expirationMonth, int expirationYear) async {
+      String cardNumber, int expirationMonthYear,int cardCvvNumber) async {
     final valuesCardDetails = {
+      cardDetails.cardNumber: cardNumber,
+      cardDetails.expirationMonthYear: expirationMonthYear,
+      cardDetails.cardCvv:cardCvvNumber
+
       "cardNumber": cardNumber,
       "expirationMonth": expirationMonth,
       "expirationYear": expirationYear,
       "cvv": "",
       "zipcode": ""
     };
+    debugPrint(valuesCardDetails.toString());
     await cardPaymentChannel.invokeListMethod(
         'getPaymentToken', valuesCardDetails);
   }
 
-  getApiCallPayReceipt() {
-    String testString =
-        "{\"finixSaleResponse\":{\"transferId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"updated\":674553072.73000002,\"amount\":6,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TEST CARD 07\",\"expirationMonth\":\"12\",\"resourceTags\":{},\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":674553061.97000003,\"traceId\":\"FNXc8UBw4n2v1Bhm5EPbqXk3z\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixSaleReceipt\":{\"cryptogram\":\"ARQC E62FA50596DB7D78\",\"merchantId\":\"IDcMVMxHVsz1ZjckryYLcs3a\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"applicationLabel\":\"VISA CREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"06511A\",\"transactionId\":\"TR9j2WbiqrAnnLS29aCAJHXY\",\"cardBrand\":\"Visa\",\"merchantName\":\"Kona Shaved Ice - California\",\"merchantAddress\":\"741 Douglass StApartment 8San Mateo CA 94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":674553069}}";
-    finixResponse = finixResponseFromJson(testString);
-    debugPrint(
-        "Payment Success: ${finixResponse.finixSaleResponse!.cardHolderName}");
-    PayReceipt payReceipt = getPayReceiptModel(false);
-  }
 
   //ApiCall After getting Manual Card token
   finixManualApiCall() {

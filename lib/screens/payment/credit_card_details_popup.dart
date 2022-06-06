@@ -5,7 +5,9 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CreditCardDetailsPopup extends StatefulWidget {
   String totalAmount;
@@ -25,26 +27,36 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String cardNumberValidationMessage = "";
   String cardDateValidationMessage = "";
   String cardYearValidationMessage = "";
+  String cvvValidationMessage = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
   bool isExpiryValid = false;
   bool isYearValid = false;
-  int yearOfExpiryInt = 0;
+  bool isCvvValid = false;
+  int yearOfExpiryInt=0;
+  var month, year;
+  String spliitYear="";
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
   TextEditingController cardNumberController = TextEditingController();
-  TextEditingController yearController = TextEditingController();
+  TextEditingController cvvController = TextEditingController();
+  var maskFormatter = MaskTextInputFormatter(
+      mask: '##/##',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   _CreditCardDetailsPopupState() {}
 
   @override
   void initState() {
     super.initState();
-    DateTime dateToday = DateTime.now();
-    String date = dateToday.toString().substring(0, 10);
+    DateTime dateToday =DateTime.now();
+    String date = dateToday.toString().substring(0,10);
     var yearOfDate = date.split('-');
-    String yearOfExpiryString = yearOfDate[0];
-    yearOfExpiryInt = int.parse(yearOfExpiryString);
+    String yearOfExpiryString=yearOfDate[0];
+     spliitYear=yearOfExpiryString.toString().substring(0,2);
+    yearOfExpiryInt=int.parse(spliitYear);
+
   }
 
   @override
@@ -93,27 +105,27 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
-                    child: profileDetailsComponent(
-                        StringConstants.cardExpiryMonth,
+                    child: cardExpiryComponent(
+                        StringConstants.cardExpiryMonthYear,
                         "",
-                        StringConstants.cardExpiryMsg,
+                        StringConstants.cardExpiryMonthYear,
                         dateExpiryController,
                         cardDateValidationMessage,
                         dateValidation,
-                        2),
+                        7),
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
                     child: profileDetailsComponent(
-                        StringConstants.cardExpiryYear,
+                        StringConstants.cardCvcMsg,
                         "",
-                        StringConstants.cardExpiryYear,
-                        yearController,
-                        cardYearValidationMessage,
-                        yearValidation,
-                        4),
+                        StringConstants.cardCvcMsg,
+                        cvvController,
+                        cvvValidationMessage,
+                        cvvValidation,
+                        3),
                   ),
                 ),
               ],
@@ -135,6 +147,68 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       ),
     );
   }
+
+  Widget cardExpiryComponent(
+      String txtName,
+      String txtValue,
+      String txtHint,
+      TextEditingController textEditingController,
+      String validationMessage,
+      Function validationMethod,
+      int maxLength) =>
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CommonWidgets().textWidget(
+              txtName,
+              StyleConstants.customTextStyle(
+                  fontSize: 14.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratRegular),
+              textAlign: TextAlign.left),
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
+            child: Container(
+              height: 40.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6.0),
+                  border: Border.all(
+                      color: getMaterialColor(AppColors.textColor1)
+                          .withOpacity(0.2),
+                      width: 2)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2.0),
+                child: TextField(
+                  inputFormatters: [maskFormatter],
+                  keyboardType: TextInputType.number,
+                  maxLength: maxLength,
+                  onChanged: (value) {
+                    validationMethod();
+                  },
+                  controller: textEditingController,
+                  decoration: InputDecoration(
+                      counterText: "",
+                      filled: true,
+                      hintText: txtHint,
+                      border: InputBorder.none,
+                      labelText: txtValue,
+                      hintStyle: StyleConstants.customTextStyle(
+                          fontSize: 15.0,
+                          color: getMaterialColor(AppColors.textColor1),
+                          fontFamily: FontConstants.montserratRegular)),
+                ),
+              ),
+            ),
+          ),
+          Text(validationMessage,
+              style: StyleConstants.customTextStyle(
+                  fontSize: 12.0,
+                  color: getMaterialColor(AppColors.textColor5),
+                  fontFamily: FontConstants.montserratRegular),
+              textAlign: TextAlign.left)
+        ],
+      );
 
   Widget profileDetailsComponent(
           String txtName,
@@ -217,15 +291,29 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   dateValidation() {
-    int cardMonth = int.parse(dateExpiryController.text);
+    try {
+      String s = dateExpiryController.text;
+      int idx = s.indexOf("/");
+      month = int.parse(s.substring(0, idx).trim());
+      year = int.parse(s.substring(idx + 1).trim());
+    } catch (error) {
+      debugPrint(error.toString());
+    }
 
-    if (dateExpiryController.text == "") {
+    if (dateExpiryController.text.isEmpty) {
       setState(() {
         cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
       isExpiryValid = false;
     }
-    if (cardMonth > 12) {
+    if (dateExpiryController.text.length<5) {
+      debugPrint('>>>>>>>>${dateExpiryController.text.length}');
+      setState(() {
+        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
+      });
+      isExpiryValid = false;
+    }
+    if (month > 12) {
       setState(() {
         cardDateValidationMessage = StringConstants.cardExpiryCheckkMsg;
       });
@@ -238,38 +326,31 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
   }
 
-  yearValidation() {
-    int cardYear = int.parse(yearController.text);
-
-    if (yearController.text.isEmpty) {
+  cvvValidation() {
+    if (cvvController.text.isEmpty) {
       setState(() {
-        cardYearValidationMessage = StringConstants.cardExpiryYearEnterMsg;
+        cvvValidationMessage = StringConstants.cvvEnterMsg;
       });
       return false;
-    }
-    if (cardYear < yearOfExpiryInt) {
-      setState(() {
-        cardYearValidationMessage = StringConstants.cardExpiryYearCheckMsg;
-      });
-      isYearValid = false;
     } else {
       setState(() {
-        cardYearValidationMessage = "";
+        cvvValidationMessage = "";
       });
-      isYearValid = true;
+      isCvvValid = true;
     }
   }
 
   void onTapConfirmManualCardPayment() {
+    String stringValueYear = year.toString();
     if (isExpiryValid == false) {
       setState(() {
         cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
       isExpiryValid = false;
     }
-    if (yearController.text.isEmpty) {
+    if (dateExpiryController.text.isEmpty) {
       setState(() {
-        cardYearValidationMessage = StringConstants.cardExpiryYearEnterMsg;
+        cardDateValidationMessage =  StringConstants.cardExpiryEnterMsg;
       });
       isYearValid = false;
     }
@@ -279,12 +360,12 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       });
       isCardNumberValid = false;
     }
-    if (isCardNumberValid && isExpiryValid && isYearValid) {
-      Map<String, dynamic> myData = Map();
-      myData['value'] = true;
-      myData['cardNumber'] = cardNumberController.text;
-      myData['cardMonth'] = dateExpiryController.text;
-      myData['cardYear'] = yearController.text;
+    if (isCardNumberValid && isExpiryValid&&isCvvValid) {
+      Map<String, dynamic> myData = {};
+      myData[ConstatKeys.cardValue] = true;
+      myData[ConstatKeys.cardNumber] = cardNumberController.text;
+      myData[ConstatKeys.cardExpiry] = spliitYear+stringValueYear;
+      myData[ConstatKeys.cardCvv] = cvvController.text;
       Navigator.pop(context, myData);
     }
   }

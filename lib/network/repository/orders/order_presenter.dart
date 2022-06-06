@@ -52,10 +52,10 @@ class OrderPresenter {
     _orderRepository
         .payOrderCardMethod(payOrderCardRequestModel: payOrderCardRequestModel)
         .then((value) {
-      print("Success ----- $value}");
+      debugPrint("Success ----- $value}");
       _view.showSuccess(value);
     }).onError((error, stackTrace) {
-      print("Errror ----- ${error.toString()}");
+      debugPrint("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }
@@ -65,10 +65,10 @@ class OrderPresenter {
     _orderRepository
         .finixSendReceipt(orderId, finixSendReceiptRequest)
         .then((value) {
-      print("Success ----- $value}");
+      debugPrint("Success ----- $value}");
       _view.showSuccess(value);
     }).onError((error, stackTrace) {
-      print("Errror ----- ${error.toString()}");
+      debugPrint("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }

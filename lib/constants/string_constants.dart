@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 
 class StringConstants {
@@ -13,6 +12,11 @@ class StringConstants {
   static const pay = 'Pay';
   static const okay = 'Okay';
   static const signOut = 'Sign Out';
+  static const hintEmail = "abc@gmail.com";
+  static const na = 'NA';
+  static const usCountryCode = '+1';
+  static const test = 'TEST';
+  static const bbpos = 'BBPOS';
 
   //DB Insertion default Value
   static const trueText = 'true';
@@ -37,7 +41,7 @@ class StringConstants {
 
   static const product = 'Product';
   static const orders = 'Orders';
-
+  static const dummyOrder = "35891456";
   static const plusSymbol = '+';
 
   static const minusSymbol = '-';
@@ -125,13 +129,14 @@ class StringConstants {
 
   static const cardDetails = 'Card Details';
   static const cardNumber = 'Please Enter Card Number';
-  static const cardExpiryMonth = 'Expiry Month';
+  static const cardExpiryMonthYear = 'Month/Year';
   static const cardExpiryYear = 'Expiry Year';
   static const cardExpiryMsg = 'Expiry Date';
-  static const cardExpiryEnterMsg = 'Please Enter Date';
-  static const cardExpiryCheckkMsg = "Please Check Date";
+  static const cardExpiryEnterMsg = 'Please Enter Month/Year';
+  static const cardExpiryCheckkMsg = "Please Check Month/Year";
   static const cardExpiryYearEnterMsg = "Please Enter Year";
   static const cardExpiryYearCheckMsg = "Please Check Year";
+  static const cvvEnterMsg = "Please Enter Cvv";
   static const cardCvc = 'CVC';
   static const cardCvcMsg = 'Card CVC';
   static const addCreditCardDetails = 'Add Credit Card Details';
@@ -248,4 +253,11 @@ class StringConstants {
   String getDefaultEventName() {
     return defaultEventName + Date.getDateAndTime();
   }
+}
+
+class ConstatKeys {
+  static String cardValue = 'value';
+  static String cardNumber = 'cardNumber';
+  static String cardExpiry = 'cardExpiry';
+  static String cardCvv="cardCvv";
 }

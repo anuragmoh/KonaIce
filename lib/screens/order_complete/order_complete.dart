@@ -5,7 +5,6 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
-import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -71,7 +70,7 @@ class _OrderCompleteState extends State<OrderComplete> {
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratSemiBold)),
             CommonWidgets().textWidget(
-                "35891456",
+                StringConstants.dummyOrder,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: getMaterialColor(AppColors.textColor1),

@@ -24,12 +24,13 @@ class AllOrderPresenter {
     });
   }
 
-  void refundPayment(String orderId, RefundPaymentModel refundPaymentModel) {
-    _repository.refundPayment(orderId, refundPaymentModel).then((value) {
-      print("Success ----- $value}");
+  void refundPayment(
+      String orderId, RefundPaymentModel refundPaymentModel) {
+    _repository
+        .refundPayment(orderId, refundPaymentModel)
+        .then((value) {
       _view.showSuccess(value);
     }).onError((error, stackTrace) {
-      print("Errror ----- ${error.toString()}");
       _view.showError(FetchException(error.toString()).fetchErrorModel());
     });
   }
