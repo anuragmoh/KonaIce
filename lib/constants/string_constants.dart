@@ -256,11 +256,11 @@ class StringConstants {
   }
 }
 
-class ConstatKeys {
+class ConstantKeys {
   static String cardValue = 'value';
   static String cardNumber = 'cardNumber';
   static String cardExpiry = 'cardExpiry';
-  static String cardCvv="cardCvv";
-  static String cardMonth="cardMonth";
-  static String cardZipCode="cardZipcode";
+  static String cardCvv = "cardCvv";
+  static String cardMonth = "cardMonth";
+  static String zipcode = "zipcode";
 }

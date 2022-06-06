@@ -86,8 +86,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 title: StringConstants.addCreditCardDetails,
                 onTapCloseButton: onTapCloseButton),
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 25.0, left: 23.0),
+              padding: const EdgeInsets.only(top: 25.0, left: 23.0),
               child: profileDetailsComponent(
                   StringConstants.cardNumber,
                   "",
@@ -385,12 +384,12 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     }
     if (isCardNumberValid && isExpiryValid && isCvvValid && isZipCodeValid) {
       Map<String, dynamic> myData = {};
-      myData[ConstatKeys.cardValue] = true;
-      myData[ConstatKeys.cardNumber] = cardNumberController.text;
-      myData[ConstatKeys.cardExpiry] = spliitYear + stringValueYear;
-      myData[ConstatKeys.cardCvv] = cvvController.text;
-      myData[ConstatKeys.cardMonth] = month;
-      myData[ConstatKeys.cardZipCode] = zipCodeController.text;
+      myData[ConstantKeys.cardValue] = true;
+      myData[ConstantKeys.cardNumber] = cardNumberController.text;
+      myData[ConstantKeys.cardExpiry] = spliitYear + stringValueYear;
+      myData[ConstantKeys.cardCvv] = cvvController.text;
+      myData[ConstantKeys.cardMonth] = month;
+      myData[ConstantKeys.zipcode] = zipCodeController.text;
       Navigator.pop(context, myData);
     }
   }

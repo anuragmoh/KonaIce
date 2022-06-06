@@ -24,11 +24,8 @@ class AllOrderPresenter {
     });
   }
 
-  void refundPayment(
-      String orderId, RefundPaymentModel refundPaymentModel) {
-    _repository
-        .refundPayment(orderId, refundPaymentModel)
-        .then((value) {
+  void refundPayment(String orderId, RefundPaymentModel refundPaymentModel) {
+    _repository.refundPayment(orderId, refundPaymentModel).then((value) {
       _view.showSuccess(value);
     }).onError((error, stackTrace) {
       _view.showError(FetchException(error.toString()).fetchErrorModel());

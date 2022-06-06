@@ -174,11 +174,9 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     if (token.toString().isNotEmpty) {
       finixManualApiCall();
-    }
-    else{
+    } else {
       CommonWidgets().showErrorSnackBar(
-          errorMessage: StringConstants.somethingWentWrong,
-          context: context);
+          errorMessage: StringConstants.somethingWentWrong, context: context);
     }
   }
 
@@ -446,8 +444,9 @@ class _PaymentScreenState extends State<PaymentScreen>
                 ],
               )),
           SingleChildScrollView(
-              child:
-                  isPaymentDone ? paymentSuccess(StringConstants.dummyOrder) : const Text('')),
+              child: isPaymentDone
+                  ? paymentSuccess(StringConstants.dummyOrder)
+                  : const Text('')),
         ]),
       );
 
@@ -1073,20 +1072,20 @@ class _PaymentScreenState extends State<PaymentScreen>
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
         debugPrint('>>>>>>>$value');
-        bool valueForApi = value[ConstatKeys.cardValue];
+        bool valueForApi = value[ConstantKeys.cardValue];
         debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
-          String cardNumberStr = value[ConstatKeys.cardNumber];
-          String cardExpiry = value[ConstatKeys.cardExpiry];
-          int cardExpiryMonth = value[ConstatKeys.cardMonth];
-          String cardZipCodeString = value[ConstatKeys.cardZipCode];
-          String cardCvv = value[ConstatKeys.cardCvv];
-          int valCardExpiry = int.parse(cardNumberStr);
-          int cardNumber = int.parse(cardExpiry);
+          String cardNumberStr = value[ConstantKeys.cardNumber];
+          String cardExpiry = value[ConstantKeys.cardExpiry];
+          int cardExpiryMonth = value[ConstantKeys.cardMonth];
+          String zipcodeString = value[ConstantKeys.zipcode];
+          String cardCvv = value[ConstantKeys.cardCvv];
+          int valCardExpiry = int.parse(cardExpiry);
           int valCardCvv = int.parse(cardCvv);
-          int cardZipCode = int.parse(cardZipCodeString);
+          String zipcode = zipcodeString;
           debugPrint('>>>>>>>>>$cardExpiry');
-          onTapConfirmPayment(cardNumber, valCardExpiry,valCardCvv,cardExpiryMonth,cardZipCode);
+          onTapConfirmPayment(cardNumberStr, valCardExpiry, valCardCvv,
+              cardExpiryMonth, zipcode);
         }
       });
     }
@@ -1117,11 +1116,12 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Future performCardPayment() async {
     const String application = AssetsConstants.test;
-    const String version =AssetsConstants.appVersion;
+    const String version = AssetsConstants.appVersion;
     final tags = {
       finixTagsKey.customerEmail:
           widget.placeOrderRequestModel.email ?? StringExtension.empty(),
-      finixTagsKey.customerName: widget.placeOrderRequestModel.getCustomerName(),
+      finixTagsKey.customerName:
+          widget.placeOrderRequestModel.getCustomerName(),
       finixTagsKey.eventName: widget.events.getEventName(),
       finixTagsKey.eventCode: widget.events.getEventCode(),
       finixTagsKey.environment: StringConstants.test,
@@ -1236,7 +1236,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     orderPresenter.payOrder(payOrderRequestModel);
   }
 
-
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
@@ -1309,20 +1308,19 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   //FinixMannual CardDetails
-  onTapConfirmPayment(
-      int cardNumber, int expirationYear,int cardCvvNumber, int cardExpiryMonth, int cardZipCode) async {
+  onTapConfirmPayment(String cardNumber, int expirationYear, int cardCvvNumber,
+      int cardExpiryMonth, String zipcode) async {
     final valuesCardDetails = {
-      cardDetails.cardNumber: cardNumber,
-      cardDetails.expirationYear: expirationYear,
-      cardDetails.expirationMonth: cardExpiryMonth,
-      cardDetails.cvv:cardCvvNumber,
-      cardDetails.zipcode: cardZipCode
+      CardDetails.cardNumber.name: cardNumber,
+      CardDetails.expirationYear.name: expirationYear,
+      CardDetails.expirationMonth.name: cardExpiryMonth,
+      CardDetails.cvv.name: cardCvvNumber,
+      CardDetails.zipcode.name: zipcode
     };
     debugPrint(valuesCardDetails.toString());
     await cardPaymentChannel.invokeListMethod(
         'getPaymentToken', valuesCardDetails);
   }
-
 
   //ApiCall After getting Manual Card token
   finixManualApiCall() {
