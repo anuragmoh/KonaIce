@@ -132,6 +132,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     cvcController.dispose();
     dateExpiryController.dispose();
   }
+
   @override
   void initState() {
     super.initState();
@@ -181,7 +182,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentStatus(status) async {
     debugPrint("Payment Status: $status");
-    if (status.toString()=="Success") {
+    if (status.toString() == "Success") {
       Navigator.of(context).pop(getOrderInfoToSendBack(true));
     }
   }
@@ -193,6 +194,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
@@ -253,8 +255,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Divider(
-                    color: AppColors.gradientColor1
-                        .withOpacity(0.2),
+                    color: AppColors.gradientColor1.withOpacity(0.2),
                     thickness: 1,
                   ),
                 ),
@@ -340,8 +341,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                           CommonWidgets().textWidget(
                               '\$',
                               StyleConstants.customTextStyle22MonsterMedium(
-                                  color:
-                                      AppColors.textColor1)),
+                                  color: AppColors.textColor1)),
                           const SizedBox(
                             width: 10.0,
                           ),
@@ -351,8 +351,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                                       Radius.circular(8.0)),
                                   color: AppColors.whiteColor,
                                   border: Border.all(
-                                      color:
-                                          AppColors.primaryColor2)),
+                                      color: AppColors.primaryColor2)),
                               width: 85.0,
                               height: 42.0,
                               child: Center(
@@ -364,9 +363,10 @@ class _PaymentScreenState extends State<PaymentScreen>
                                     controller: amountReceivedController,
                                     style: StyleConstants
                                         .customTextStyle22MonsterMedium(
-                                            color:
-                                                AppColors.textColor1),
-                                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                            color: AppColors.textColor1),
+                                    keyboardType:
+                                        const TextInputType.numberWithOptions(
+                                            decimal: true),
                                     inputFormatters: <TextInputFormatter>[
                                       NumberRemoveExtraDotFormatter(),
                                     ],
@@ -409,13 +409,11 @@ class _PaymentScreenState extends State<PaymentScreen>
                             CommonWidgets().textWidget(
                                 '\$',
                                 StyleConstants.customTextStyle22MonsterMedium(
-                                    color:
-                                        AppColors.textColor1)),
+                                    color: AppColors.textColor1)),
                             CommonWidgets().textWidget(
                                 returnAmount.toStringAsFixed(2),
                                 StyleConstants.customTextStyle22MonsterMedium(
-                                    color:
-                                        AppColors.textColor1))
+                                    color: AppColors.textColor1))
                           ])
                     ]),
               ),
@@ -465,8 +463,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Divider(
-                      color: AppColors.gradientColor1
-                          .withOpacity(0.2),
+                      color: AppColors.gradientColor1.withOpacity(0.2),
                       thickness: 1,
                     ),
                   ),
@@ -506,11 +503,9 @@ class _PaymentScreenState extends State<PaymentScreen>
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: paymentModeType == index
-                      ? AppColors.primaryColor2
-                      : null,
-                  border: Border.all(
-                      color: AppColors.primaryColor2),
+                  color:
+                      paymentModeType == index ? AppColors.primaryColor2 : null,
+                  border: Border.all(color: AppColors.primaryColor2),
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
@@ -557,8 +552,7 @@ class _PaymentScreenState extends State<PaymentScreen>
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 135.0),
             child: Divider(
-              color:
-                  AppColors.gradientColor1.withOpacity(0.2),
+              color: AppColors.gradientColor1.withOpacity(0.2),
               thickness: 1,
             ),
           ),
@@ -572,8 +566,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             width: 203.0,
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                border: Border.all(
-                    color: AppColors.primaryColor2)),
+                border: Border.all(color: AppColors.primaryColor2)),
             child: Row(
               children: [
                 GestureDetector(
@@ -586,9 +579,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                     decoration: BoxDecoration(
                       borderRadius:
                           const BorderRadius.all(Radius.circular(8.0)),
-                      color: receiptMode == 1
-                          ? AppColors.primaryColor2
-                          : null,
+                      color: receiptMode == 1 ? AppColors.primaryColor2 : null,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -610,9 +601,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                       decoration: BoxDecoration(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(8.0)),
-                        color: receiptMode == 2
-                            ? AppColors.primaryColor2
-                            : null,
+                        color:
+                            receiptMode == 2 ? AppColors.primaryColor2 : null,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -802,8 +792,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                         child: CommonWidgets().textView(
                             StringConstants.orderDetails,
                             StyleConstants.customTextStyle22MontserratBold(
-                                color:
-                                    AppColors.textColor1))),
+                                color: AppColors.textColor1))),
                     customerNameWidget(
                         customerName:
                             widget.placeOrderRequestModel.getCustomerName()),
@@ -824,13 +813,10 @@ class _PaymentScreenState extends State<PaymentScreen>
                     Expanded(
                       child: SingleChildScrollView(
                         child: Container(
-                            color: AppColors.whiteColor,
-                            child: itemView()),
+                            color: AppColors.whiteColor, child: itemView()),
                       ),
                     ),
-                    DottedLine(
-                        height: 2.0,
-                        color: AppColors.textColor1),
+                    DottedLine(height: 2.0, color: AppColors.textColor1),
                     componentBill(),
                   ]),
             ),
