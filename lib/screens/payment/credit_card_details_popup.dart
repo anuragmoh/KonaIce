@@ -26,32 +26,35 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String cardNumberValidationMessage = "";
   String cardDateValidationMessage = "";
   String cardYearValidationMessage = "";
-  String stripeTokenId = "", stripePaymentMethodId = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
   bool isExpiryValid = false;
   bool isYearValid = false;
-  bool isApiProcess = false;
+  int yearOfExpiryInt = 0;
   late PaymentPresenter paymentPresenter;
   TextEditingController dateExpiryController = TextEditingController();
-
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController yearController = TextEditingController();
 
-  _CreditCardDetailsPopupState() {
-    // paymentPresenter = PaymentPresenter(this);
+  _CreditCardDetailsPopupState() {}
+
+  @override
+  void initState() {
+    super.initState();
+    DateTime dateToday = new DateTime.now();
+    String date = dateToday.toString().substring(0, 10);
+    var yearOfDate = date.split('-');
+    String yearOfExpiryString = yearOfDate[0];
+    yearOfExpiryInt = int.parse(yearOfExpiryString);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Loader(
-        isCallInProgress: isApiProcess,
-        child: Dialog(
-          backgroundColor: Colors.transparent,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          child: showCustomMenuPopup(),
-        ));
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+      child: showCustomMenuPopup(),
+    );
   }
 
   Widget showCustomMenuPopup() {
@@ -91,7 +94,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
-                    child: cardExpiryComponent(
+                    child: profileDetailsComponent(
                         StringConstants.cardExpiryMonth,
                         "",
                         StringConstants.cardExpiryMsg,
@@ -170,68 +173,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   maxLength: maxLength,
                   onChanged: (value) {
                     validationMethod();
-                    debugPrint('============>');
-                  },
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      counterText: "",
-                      filled: true,
-                      hintText: txtHint,
-                      border: InputBorder.none,
-                      labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle(
-                          fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratRegular)),
-                ),
-              ),
-            ),
-          ),
-          Text(validationMessage,
-              style: StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor5),
-                  fontFamily: FontConstants.montserratRegular),
-              textAlign: TextAlign.left)
-        ],
-      );
-
-  Widget cardExpiryComponent(
-          String txtName,
-          String txtValue,
-          String txtHint,
-          TextEditingController textEditingController,
-          String validationMessage,
-          Function validationMethod,
-          int maxLength) =>
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CommonWidgets().textWidget(
-              txtName,
-              StyleConstants.customTextStyle(
-                  fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
-                  fontFamily: FontConstants.montserratRegular),
-              textAlign: TextAlign.left),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  maxLength: maxLength,
-                  onChanged: (value) {
-                    validationMethod();
                   },
                   controller: textEditingController,
                   decoration: InputDecoration(
@@ -265,7 +206,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   cardValidation() {
     if (cardNumberController.text.isEmpty) {
       setState(() {
-        cardNumberValidationMessage = "Please Enter Card Details";
+        cardNumberValidationMessage = StringConstants.cardNumber;
       });
       return false;
     } else {
@@ -280,15 +221,14 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     int cardMonth = int.parse(dateExpiryController.text);
 
     if (dateExpiryController.text == "") {
-      debugPrint('validation$cardDateValidationMessage');
       setState(() {
-        cardDateValidationMessage = "Please Enter Date";
+        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
       isExpiryValid = false;
     }
     if (cardMonth > 12) {
       setState(() {
-        cardDateValidationMessage = "Please Check Date";
+        cardDateValidationMessage = StringConstants.cardExpiryCheckkMsg;
       });
       isExpiryValid = false;
     } else {
@@ -304,13 +244,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
 
     if (yearController.text.isEmpty) {
       setState(() {
-        cardYearValidationMessage = "Please Enter Year";
+        cardYearValidationMessage = StringConstants.cardExpiryYearEnterMsg;
       });
       return false;
     }
-    if (cardYear < 2022) {
+    if (cardYear < yearOfExpiryInt) {
       setState(() {
-        cardYearValidationMessage = "Please Check Year";
+        cardYearValidationMessage = StringConstants.cardExpiryYearCheckMsg;
       });
       isYearValid = false;
     } else {
@@ -324,19 +264,19 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   void onTapConfirmManualCardPayment() {
     if (isExpiryValid == false) {
       setState(() {
-        cardDateValidationMessage = "Please Enter Date";
+        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
       isExpiryValid = false;
     }
     if (yearController.text.isEmpty) {
       setState(() {
-        cardYearValidationMessage = "Please Enter Year";
+        cardYearValidationMessage = StringConstants.cardExpiryYearEnterMsg;
       });
       isYearValid = false;
     }
     if (cardNumberController.text.isEmpty) {
       setState(() {
-        cardNumberValidationMessage = "Please Enter Card Details";
+        cardNumberValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
       isCardNumberValid = false;
     }

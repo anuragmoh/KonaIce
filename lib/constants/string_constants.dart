@@ -102,6 +102,8 @@ class StringConstants {
   static const preparing = 'Preparing';
   static const saved = 'Saved';
   static const qty = 'Qty';
+  static const refund = 'Refund';
+  static const refunded = 'Refunded';
 
   static const totalAmount = 'Total Amount';
   static const amountReceived = 'Amount Received';
@@ -113,7 +115,7 @@ class StringConstants {
   static const qrCode = 'QR Code';
   static const paymentSuccessful = 'Payment Successful';
   static const howWouldYouLikeToReceiveTheReceipt =
-      'How would you like to receive the receipt ?';
+      'Would you like to receive the receipt?';
   static const transactionId = 'Transaction ID';
   static const textMessage = 'Text Message';
   static const billTotal = 'Bill Total';
@@ -126,12 +128,17 @@ class StringConstants {
   static const cardExpiryMonth = 'Expiry Month';
   static const cardExpiryYear = 'Expiry Year';
   static const cardExpiryMsg = 'Expiry Date';
+  static const cardExpiryEnterMsg = 'Please Enter Date';
+  static const cardExpiryCheckkMsg = "Please Check Date";
+  static const cardExpiryYearEnterMsg = "Please Enter Year";
+  static const cardExpiryYearCheckMsg = "Please Check Year";
   static const cardCvc = 'CVC';
   static const cardCvcMsg = 'Card CVC';
   static const addCreditCardDetails = 'Add Credit Card Details';
   static const paymentFail = 'Payment Failed';
   static const paymentFailMessage =
       'We had an issue processing your payment. Please try again.';
+  static const totalAmountBlank = 'Please Enter Amount';
 
   // Create adhoc event popup
   static const popHeading = "Create Adhoc Event";
@@ -162,7 +169,7 @@ class StringConstants {
   static const enterFirstName = 'Enter First Name';
   static const enterLastName = 'Enter Last Name';
   static const enterContactNumber = 'Enter Contact Number';
-  static const enterEmailId = 'Enter EmailID';
+  static const enterEmailId = 'Enter Email ID';
   static const enterOldPassword = 'Enter Old Password';
   static const enterNewPassword = 'Enter New Password';
   static const enterConfirmPassword = 'Enter Confirm Password';
@@ -218,6 +225,8 @@ class StringConstants {
   static const confirmNewOrder =
       "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
+  static const confirmAmountMessage =
+      "Are you sure, you want to refund the amount?";
 
   //Enter Tip Amount
   static const enterTip = "Enter Tip Amount.";

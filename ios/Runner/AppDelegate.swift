@@ -47,7 +47,10 @@ import PaymentsSDK
                 let cardNumber = args["cardNumber"] as? String ?? ""
                 let expMonth = args["expirationMonth"] as? Int ?? 0
                 let expYear = args["expirationYear"] as? Int ?? 0
-                self.getFinixPaymentToken(cardNumber: cardNumber, expMonth: expMonth, expYear: expYear) { token in
+                let cvv = args["cvv"] as? Int ?? 0
+                let zipcode = args["zipcode"] as? String ?? ""
+                
+                self.getFinixPaymentToken(cardNumber: cardNumber, expMonth: expMonth, expYear: expYear, cvv: cvv, zipcode: zipcode) { token in
                     self.cardPaymentChannel.invokeMethod("getPaymentToken", arguments: [token])
                 }
             default: result(FlutterMethodNotImplemented)
@@ -77,12 +80,18 @@ extension AppDelegate {
         return appDelegate
     }
     
-    func getFinixPaymentToken(cardNumber: String, expMonth: Int, expYear: Int, onCompletion: @escaping (String) -> Void) {
+    func getFinixPaymentToken(cardNumber: String, expMonth: Int, expYear: Int, cvv: Int, zipcode: String, onCompletion: @escaping (String) -> Void) {
         
-        let tokenizer = Tokenizer(host: "https://finix.sandbox-payments-api.com/",
-                                  applicationId: "APoGjsiWhbgidfvyS7FE6VMU")
+        let tokenizer = Tokenizer(host: FinixConstants.hostUrl, applicationId: FinixConstants.applicationId)
+        var address = Address()
+        address.postal_code = zipcode
         
-        tokenizer.createToken(cardNumber: cardNumber, paymentType: PaymentType.PAYMENT_CARD, expirationMonth: expMonth, expirationYear: expYear) { (token, error) in
+        tokenizer.createToken(cardNumber: cardNumber,
+                              paymentType: PaymentType.PAYMENT_CARD,
+                              expirationMonth: expMonth,
+                              expirationYear: expYear,
+                              securityCode: String(cvv),
+                              address: address) { (token, error) in
             guard let token = token else {
                 print(error!.localizedDescription)
                 onCompletion("")

@@ -8,5 +8,6 @@
 import Foundation
 
 struct FinixConstants {
-    
+    static let hostUrl = "finix.sandbox-payments-api.com"
+    static let applicationId = "APoGjsiWhbgidfvyS7FE6VMU"
 }

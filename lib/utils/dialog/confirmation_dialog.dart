@@ -7,9 +7,13 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 class ConfirmationDialog extends StatefulWidget {
   final VoidCallback onTapYes;
   final VoidCallback onTapNo;
+  final String confirmMessage;
 
   const ConfirmationDialog(
-      {Key? key, required this.onTapYes, required this.onTapNo})
+      {Key? key,
+      required this.onTapYes,
+      required this.onTapNo,
+      required this.confirmMessage})
       : super(key: key);
 
   @override
@@ -56,7 +60,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
             Padding(
               padding: const EdgeInsets.only(
                   left: 65.0, right: 65, top: 47.0, bottom: 49.0),
-              child: Text(StringConstants.confirmMessage,
+              child: Text(widget.confirmMessage,
                   style: StyleConstants.customTextStyle(
                       fontSize: 14.0,
                       color: AppColors.textColor1,

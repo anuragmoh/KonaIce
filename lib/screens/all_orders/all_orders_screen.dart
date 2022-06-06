@@ -15,10 +15,13 @@ import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/network_model/all_order/refund_payment_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
+import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/all_orders/all_order_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart';
+import 'package:kona_ice_pos/screens/payment/refund_popup.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
@@ -53,6 +56,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   int selectedRow = -1;
   bool isApiProcess = false;
   int countOffSet = 0;
+  bool refundBool = true;
 
   _AllOrdersScreenState() {
     allOrderPresenter = AllOrderPresenter(this);
@@ -780,6 +784,50 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
+  Widget completedAndRefundView() => Column(
+        children: [
+          completedView(),
+          const SizedBox(
+            height: 10.0,
+          ),
+          GestureDetector(
+            onTap: onTapRefundButton,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+                  color: refundBool
+                      ? getMaterialColor(AppColors.denotiveColor2)
+                          .withOpacity(0.2)
+                      : getMaterialColor(AppColors.denotiveColor4)
+                          .withOpacity(0.2)),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    refundBool
+                        ? CommonWidgets().textView(
+                            StringConstants.refund,
+                            StyleConstants.customTextStyle(
+                                fontSize: 9.0,
+                                color:
+                                    getMaterialColor(AppColors.denotiveColor2),
+                                fontFamily: FontConstants.montserratMedium))
+                        : CommonWidgets().textView(
+                            StringConstants.refunded,
+                            StyleConstants.customTextStyle(
+                                fontSize: 9.0,
+                                color: getMaterialColor(AppColors.textColor1),
+                                fontFamily: FontConstants.montserratMedium)),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+
   Widget pendingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
@@ -961,6 +1009,30 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         savedOrderExtraItemList);
   }
 
+  onTapRefundButton() {
+    showDialog(
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return RefundPopup(amount: savedOrdersList[selectedRow].totalAmount);
+        }).then((value) {
+      String amount = value['totalAmount'];
+      double totalAmount = double.parse(amount);
+      refundPaymentApiCall(totalAmount);
+    });
+  }
+
+  //Refund Payment Api call
+  refundPaymentApiCall(double totalAmount) {
+    RefundPaymentModel refundPaymentModel = RefundPaymentModel();
+    refundPaymentModel.refundAmount = totalAmount;
+    setState(() {
+      isApiProcess = true;
+    });
+    allOrderPresenter.refundPayment(
+        savedOrdersList[selectedRow].orderId, refundPaymentModel);
+  }
+
   // Get data from local db function start from here
   getAllSavedOrders(String eventId) async {
     setState(() {
@@ -1004,7 +1076,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else if (status == StringConstants.orderStatusNew) {
         return rightCompletedView();
       } else if (status == StringConstants.orderStatusCompleted) {
-        return completedView();
+        return completedAndRefundView();
       } else {
         debugPrint('>>>>>>>>>>>>>');
         return rightPendingView();
@@ -1065,7 +1137,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     setState(() {
       isApiProcess = false;
     });
-    ordersInsertIntoDb(response);
+
+    if (response is GeneralSuccessModel) {
+      GeneralSuccessModel responseModel = response;
+      CommonWidgets().showSuccessSnackBar(
+          message: responseModel.general![0].message ??
+              StringConstants.eventCreatedSuccessfully,
+          context: context);
+    } else {
+      ordersInsertIntoDb(response);
+    }
   }
 
   updateLastSync() async {
@@ -1108,7 +1189,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           totalAmount: event.orderInvoice!.total!,
           payment: event.paymentStatus!,
           orderStatus: event.orderStatus!,
-          deleted: false));
+          deleted: false,
+          paymentTerm: event.paymentTerm.toString(),
+          refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount));
       for (var item in event.orderItemsList!) {
         await SavedOrdersItemsDAO().insert(SavedOrdersItem(
             orderId: event.id!,

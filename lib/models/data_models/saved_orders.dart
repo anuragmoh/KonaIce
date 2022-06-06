@@ -23,6 +23,8 @@ class SavedOrders {
   String payment;
   String orderStatus;
   bool deleted;
+  String paymentTerm;
+  dynamic refundAmount;
 
   SavedOrders(
       {required this.eventId,
@@ -46,7 +48,9 @@ class SavedOrders {
       required this.totalAmount,
       this.payment = 'NA',
       required this.orderStatus,
-      required this.deleted});
+      required this.deleted,
+      required this.paymentTerm,
+      required this.refundAmount});
 
   Map<String, dynamic> toMap() {
     return {
@@ -72,34 +76,37 @@ class SavedOrders {
       "payment": payment,
       "orderStatus": orderStatus,
       "deleted": deleted,
+      "paymentTerm": paymentTerm,
+      "refundAmount": refundAmount
     };
   }
 
   factory SavedOrders.fromMap(Map<String, dynamic> map) {
     return SavedOrders(
-      eventId: map["event_id"],
-      cardId: map["card_id"],
-      orderCode: map["order_code"],
-      orderId: map["order_id"],
-      customerName: map["customer_name"],
-      email: map["email"].toString(),
-      phoneNumber: map["phone_number"].toString(),
-      phoneCountryCode: map["phone_country_code"].toString(),
-      address1: map["address1"].toString(),
-      address2: map["address2"].toString(),
-      country: map["country"].toString(),
-      state: map["state"].toString(),
-      city: map["city"].toString(),
-      zipCode: map["zip_code"].toString(),
-      orderDate: map["order_date"],
-      tip: map["tip"],
-      discount: map["discount"],
-      foodCost: map["food_cost"],
-      totalAmount: map["total_amount"],
-      payment: map["payment"],
-      orderStatus: map["order_status"],
-      deleted: map["deleted"] == 1,
-    );
+        eventId: map["event_id"],
+        cardId: map["card_id"],
+        orderCode: map["order_code"],
+        orderId: map["order_id"],
+        customerName: map["customer_name"],
+        email: map["email"].toString(),
+        phoneNumber: map["phone_number"].toString(),
+        phoneCountryCode: map["phone_country_code"].toString(),
+        address1: map["address1"].toString(),
+        address2: map["address2"].toString(),
+        country: map["country"].toString(),
+        state: map["state"].toString(),
+        city: map["city"].toString(),
+        zipCode: map["zip_code"].toString(),
+        orderDate: map["order_date"],
+        tip: map["tip"],
+        discount: map["discount"],
+        foodCost: map["food_cost"],
+        totalAmount: map["total_amount"],
+        payment: map["payment"],
+        orderStatus: map["order_status"],
+        deleted: map["deleted"] == 1,
+        paymentTerm: map["paymentTerm"].toString(),
+        refundAmount: map["refundAmount"]);
   }
 
   @override
@@ -126,7 +133,9 @@ class SavedOrders {
     totalAmount:$totalAmount,
     payment:$payment,
     orderStatus:$orderStatus,
-    deleted:$deleted
+    deleted:$deleted,
+    paymentTerm:$paymentTerm,
+    refundAmount:$refundAmount
     """;
   }
 

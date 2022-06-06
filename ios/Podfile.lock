@@ -21,7 +21,7 @@ PODS:
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
-  - PaymentsSDK (1.0.7)
+  - PaymentsSDK (1.0.11)
   - ReachabilitySwift (5.0.0)
   - sqflite_sqlcipher (0.0.1):
     - Flutter
@@ -45,7 +45,7 @@ DEPENDENCIES:
   - lottie-ios
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
-  - PaymentsSDK (~> 1.0.7)
+  - PaymentsSDK (~> 1.0.11)
   - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
 
 SPEC REPOS:
@@ -91,12 +91,12 @@ SPEC CHECKSUMS:
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
-  PaymentsSDK: 20cbdf8049a4ce440dfb51a0e23a03d852ac26d7
+  PaymentsSDK: ce9f3005cfaac2bbff3c29ef68686b8c852d9ef4
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   sqflite_sqlcipher: 70eb7fd8d4f0b0352d0bde5cf345b810737f54bb
   SQLCipher: 1ab0b9486a77d141e72e92ff30681926ed79c07a
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: 7d4e287087ee956e172c3c6c1531c7ee7320dd0e
+PODFILE CHECKSUM: 7791a3edab0f777d3454f46dcac7d14ae9029ea6
 
 COCOAPODS: 1.11.3
