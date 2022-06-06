@@ -34,7 +34,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         child: bodyContainer(),
       ),
     );
@@ -60,7 +60,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
                       StringConstants.selectMode,
                       StyleConstants.customTextStyle(
                           fontSize: 22.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratSemiBold)),
                 ),
               ),
@@ -95,7 +95,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
                       StringConstants.proceed,
                       StyleConstants.customTextStyle(
                           fontSize: 12.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratBold)),
                 ),
               )
@@ -113,10 +113,10 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
       height: 152,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
-          color: getMaterialColor(AppColors.denotiveColor6),
+          color: AppColors.denotiveColor6,
           border: modeSelected
               ? Border.all(
-                  color: getMaterialColor(AppColors.primaryColor2), width: 2.0)
+                  color: AppColors.primaryColor2, width: 2.0)
               : const Border.fromBorderSide(BorderSide.none)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -144,7 +144,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
                     modeText,
                     StyleConstants.customTextStyle(
                         fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratSemiBold)))
           ],
         ),
@@ -160,7 +160,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
       child: Container(
         width: 210,
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: AppColors.primaryColor2,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(

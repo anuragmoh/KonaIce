@@ -1,7 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
@@ -10,22 +17,16 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/network_model/home/assest_model.dart';
+import 'package:kona_ice_pos/models/network_model/home/create_event_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_event_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/models/network_model/home/assest_model.dart';
-import 'package:kona_ice_pos/models/network_model/home/create_event_model.dart';
 import 'package:kona_ice_pos/screens/home/uuid.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:google_maps_webservice/places.dart';
-import 'package:google_api_headers/google_api_headers.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:http/http.dart' as http;
 
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
@@ -96,7 +97,15 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     getAssets();
     getLocation();
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    eventNameController.dispose();
+    addressController.dispose();
+    cityController.dispose();
+    stateController.dispose();
+    zipCodeController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Loader(
@@ -683,7 +692,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       } on RangeError catch (e) {
         debugPrint(e.toString());
       } catch (e) {
-        debugPrint(e.toString());
       }
     }
     setState(() {
@@ -768,7 +776,7 @@ getAddressFromLatLng(context, double lat, double lng) async {
     if (response.statusCode == 200) {
       Map data = jsonDecode(response.body);
       String _formattedAddress = data["results"][0]["formatted_address"];
-      debugPrint("response ==== $data");
+      print("response ==== $data");
       debugPrint('URL===>$url');
       debugPrint(data["results"][0]["address_components"][6]['long_name']);
       return _formattedAddress;

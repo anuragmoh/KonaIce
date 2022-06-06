@@ -1,6 +1,5 @@
 import UIKit
 import Flutter
-import PaymentsSDK
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -42,14 +41,6 @@ import PaymentsSDK
                                                  tags:tags )
                 self.loadPaymentView(paymentModel)
                 result("")
-            case "getPaymentToken":
-                guard let args = call.arguments as? [String: Any] else { return }
-                let cardNumber = args["cardNumber"] as? String ?? ""
-                let expMonth = args["expirationMonth"] as? Int ?? 0
-                let expYear = args["expirationYear"] as? Int ?? 0
-                self.getFinixPaymentToken(cardNumber: cardNumber, expMonth: expMonth, expYear: expYear) { token in
-                    self.cardPaymentChannel.invokeMethod("getPaymentToken", arguments: [token])
-                }
             default: result(FlutterMethodNotImplemented)
             }
         })
@@ -75,21 +66,5 @@ extension AppDelegate {
             return nil
         }
         return appDelegate
-    }
-    
-    func getFinixPaymentToken(cardNumber: String, expMonth: Int, expYear: Int, onCompletion: @escaping (String) -> Void) {
-        
-        let tokenizer = Tokenizer(host: "https://finix.sandbox-payments-api.com/",
-                                  applicationId: "APoGjsiWhbgidfvyS7FE6VMU")
-        
-        tokenizer.createToken(cardNumber: cardNumber, paymentType: PaymentType.PAYMENT_CARD, expirationMonth: expMonth, expirationYear: expYear) { (token, error) in
-            guard let token = token else {
-                print(error!.localizedDescription)
-                onCompletion("")
-                return
-            }
-            onCompletion(token.id)
-        }
-        
     }
 }

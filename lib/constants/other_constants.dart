@@ -10,7 +10,6 @@ class PaymentMethods {
   static const creditCard = "CARD_FINIX_CREDIT_CARD";
   static const qrCode = "QR_CODE";
   static const cash = "CASH";
-  static const card = "CARD";
 }
 
 class BlinkConstants {
@@ -31,24 +30,3 @@ class PaymentConstants {
   static const secreteKey =
       "pk_test_51HAHBII8e4AZvX0hDfF8Val3sayQM2bhGzCoMIR6qATFhKNnGf5yAMigUvgu2Ni3nKoIrQMj9yDG25hFd8hWczRx00tWiUlhI7";
 }
-enum finixTagsKey{
-  customerEmail,
-  customerName,
-  eventName,
-  eventCode,
-  environment,
-  paymentMethod,
-  username,
-  password,
-  application,
-  version,
-  merchantId,
-  deviceID,
-  amount,
-  serialNumber,
-  tags
-}
-enum cardDetails{
-  cardNumber,
-  expirationMonthYear,
-cardCvv}

@@ -12,7 +12,6 @@ import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -46,7 +45,7 @@ class _SettingScreenState extends State<SettingScreen>
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3),
+        color: AppColors.textColor3,
         child: Center(child: body()),
       ),
     );

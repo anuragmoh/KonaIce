@@ -50,7 +50,7 @@ class _RefundPopup extends State<RefundPopup> {
 
   Widget showCustomMenuPopup() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: customMenuPopUpComponent(),
     );
@@ -132,7 +132,7 @@ class _RefundPopup extends State<RefundPopup> {
               txtName,
               StyleConstants.customTextStyle(
                   fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
           Padding(
@@ -143,7 +143,7 @@ class _RefundPopup extends State<RefundPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
+                      color: AppColors.textColor1
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
@@ -161,7 +161,7 @@ class _RefundPopup extends State<RefundPopup> {
                       border: InputBorder.none,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratRegular)),
                 ),
               ),

@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
+import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
@@ -33,7 +34,7 @@ class _OrderCompleteState extends State<OrderComplete> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
           children: [
             CommonWidgets().topEmptyBar(),
@@ -59,7 +60,7 @@ class _OrderCompleteState extends State<OrderComplete> {
               StringConstants.orderCompleted,
               StyleConstants.customTextStyle(
                   fontSize: 22.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratBold)),
           const SizedBox(height: 8.0),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -67,13 +68,13 @@ class _OrderCompleteState extends State<OrderComplete> {
                 '${StringConstants.transactionId}:',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratSemiBold)),
             CommonWidgets().textWidget(
-                StringConstants.dummyOrder,
+                "35891456",
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratSemiBold)),
           ]),
           const SizedBox(height: 34.0),

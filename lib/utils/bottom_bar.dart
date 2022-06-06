@@ -4,15 +4,10 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/customer_view/customer_view_screen.dart';
 import 'package:kona_ice_pos/screens/dashboard/bottom_items.dart';
-import 'package:kona_ice_pos/screens/home/home_screen.dart';
-import 'package:kona_ice_pos/screens/notifications/notifications_screen.dart';
-import 'package:kona_ice_pos/screens/settings/settings.dart';
 import 'package:kona_ice_pos/utils/bottombar_menu_abstract_class.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import 'ServiceNotifier.dart';
 import 'common_widgets.dart';
@@ -70,7 +65,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
         Container(
           height: 4.19 * SizeConfig.heightSizeMultiplier,
           decoration: BoxDecoration(
-              color: getMaterialColor(AppColors.primaryColor1),
+              color: AppColors.primaryColor1,
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   topRight: Radius.circular(8.0))),
@@ -112,7 +107,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
               child: Row(
                 children: [
                   Container(
-                    color: getMaterialColor(AppColors.primaryColor1),
+                    color: AppColors.primaryColor1,
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: CommonWidgets().image(

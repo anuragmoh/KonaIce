@@ -65,6 +65,18 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     userPresenter = UserPresenter(this);
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    contactNumberController.dispose();
+    emailIdController.dispose();
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+  }
+
   getMyProfileDetails() async {
     String userID = await FunctionalUtils.getUserID();
 
@@ -94,16 +106,6 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    firstNameController.dispose();
-    lastNameController.dispose();
-    contactNumberController.dispose();
-    emailIdController.dispose();
-    newPasswordController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
@@ -112,7 +114,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -221,7 +223,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               child: CommonWidgets().textWidget(
                   StringConstants.dashboard,
                   StyleConstants.customTextStyle16MontserratBold(
-                      color: getMaterialColor(AppColors.whiteColor))),
+                      color: AppColors.whiteColor)),
             ),
           ),
           CommonWidgets().profileComponent(userName),
@@ -273,7 +275,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
+        color: AppColors.textColor3.withOpacity(0.1),
         child: SingleChildScrollView(child: bodyWidgetComponent()),
       );
 
@@ -287,7 +289,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               child: CommonWidgets().textWidget(
                   StringConstants.myProfile,
                   StyleConstants.customTextStyle22MontserratBold(
-                      color: getMaterialColor(AppColors.textColor1)),
+                      color: AppColors.textColor1),
                   textAlign: TextAlign.start),
             ),
             const SizedBox(height: 20.0),
@@ -387,7 +389,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           CommonWidgets().textWidget(
               txtName,
               StyleConstants.customTextStyle14MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1)),
+                  color: AppColors.textColor1),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -398,9 +400,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
@@ -418,14 +418,14 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       border: InputBorder.none,
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                          color: getMaterialColor(AppColors.textColor1))),
+                          color: AppColors.textColor1)),
                 ),
               ),
             ),
           ),
           Text(validationMessage,
               style: StyleConstants.customTextStyle12MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor5)),
+                  color: AppColors.textColor5),
               textAlign: TextAlign.left)
         ],
       );
@@ -444,7 +444,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           CommonWidgets().textWidget(
               txtName,
               StyleConstants.customTextStyle14MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1)),
+                  color: AppColors.textColor1),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -455,9 +455,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
@@ -488,7 +486,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       border: InputBorder.none,
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                          color: getMaterialColor(AppColors.textColor1))),
+                          color: AppColors.textColor1)),
                 ),
               ),
             ),
@@ -497,7 +495,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
             visible: editMode ? true : false,
             child: Text(validationMessage,
                 style: StyleConstants.customTextStyle12MonsterRegular(
-                    color: getMaterialColor(AppColors.textColor5)),
+                    color: AppColors.textColor5),
                 textAlign: TextAlign.left),
           )
         ],
@@ -515,7 +513,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           CommonWidgets().textWidget(
               txtName,
               StyleConstants.customTextStyle14MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1)),
+                  color: AppColors.textColor1),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -529,9 +527,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       : AppColors.denotiveColor5,
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: SingleChildScrollView(
@@ -554,8 +550,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                           labelText: txtValue,
                           hintStyle:
                               StyleConstants.customTextStyle15MonsterRegular(
-                                  color:
-                                      getMaterialColor(AppColors.textColor1))),
+                                  color: AppColors.textColor1)),
                     ),
                   ),
                 ),
@@ -564,7 +559,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           ),
           Text(emailValidationMessage,
               style: StyleConstants.customTextStyle12MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor5)),
+                  color: AppColors.textColor5),
               textAlign: TextAlign.left)
         ],
       );

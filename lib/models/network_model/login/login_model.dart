@@ -62,34 +62,34 @@ String loginResponseModelToJson(LoginResponseModel data) =>
     json.encode(data.toJson());
 
 class LoginResponseModel {
-  LoginResponseModel(
-      {this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.createdBy,
-      this.updatedBy,
-      this.deleted,
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.phoneNum,
-      this.numCountryCode,
-      this.profileImageFileId,
-      this.franchiseId,
-      this.activated,
-      this.emailVerified,
-      this.phoneNumberVerified,
-      this.timezone,
-      this.roles,
-      // this.files,
-      this.sessionKey,
-      this.projectConfigs,
-      this.merchantId,
-      this.deviceId,
-      this.finixSerialNumber,
-      this.finixUsername,
-      this.finixPassword,
-      this.merchantIdNCP});
+  LoginResponseModel({
+    this.id,
+    this.createdAt,
+    this.updatedAt,
+    this.createdBy,
+    this.updatedBy,
+    this.deleted,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.phoneNum,
+    this.numCountryCode,
+    this.profileImageFileId,
+    this.franchiseId,
+    this.activated,
+    this.emailVerified,
+    this.phoneNumberVerified,
+    this.timezone,
+    this.roles,
+    // this.files,
+    this.sessionKey,
+    this.projectConfigs,
+    this.merchantId,
+    this.deviceId,
+    this.finixSerialNumber,
+    this.finixUsername,
+    this.finixPassword,
+  });
 
   String? id;
   int? createdAt;
@@ -109,7 +109,6 @@ class LoginResponseModel {
   bool? phoneNumberVerified;
   String? timezone;
   List<Role>? roles;
-
   //Files? files;
   String? sessionKey;
   ProjectConfigs? projectConfigs;
@@ -118,37 +117,36 @@ class LoginResponseModel {
   String? finixSerialNumber;
   String? finixUsername;
   String? finixPassword;
-  String? merchantIdNCP;
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) =>
       LoginResponseModel(
-          id: json["id"],
-          createdAt: json["createdAt"],
-          updatedAt: json["updatedAt"],
-          createdBy: json["createdBy"],
-          updatedBy: json["updatedBy"],
-          deleted: json["deleted"],
-          firstName: json["firstName"],
-          lastName: json["lastName"],
-          email: json["email"],
-          phoneNum: json["phoneNum"],
-          numCountryCode: json["numCountryCode"],
-          profileImageFileId: json["profileImageFileId"],
-          franchiseId: json["franchiseId"],
-          activated: json["activated"],
-          emailVerified: json["emailVerified"],
-          phoneNumberVerified: json["phoneNumberVerified"],
-          timezone: json["timezone"],
-          roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
-          // files: Files.fromJson(json["files"]),
-          sessionKey: json["sessionKey"],
-          projectConfigs: ProjectConfigs.fromJson(json["projectConfigs"]),
-          merchantId: json["merchantId"],
-          deviceId: json["deviceId"],
-          finixSerialNumber: json["finixSerialNumber"],
-          finixUsername: json["finixUsername"],
-          finixPassword: json["finixPassword"],
-          merchantIdNCP: json["merchantIdNCP"]);
+        id: json["id"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
+        createdBy: json["createdBy"],
+        updatedBy: json["updatedBy"],
+        deleted: json["deleted"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        email: json["email"],
+        phoneNum: json["phoneNum"],
+        numCountryCode: json["numCountryCode"],
+        profileImageFileId: json["profileImageFileId"],
+        franchiseId: json["franchiseId"],
+        activated: json["activated"],
+        emailVerified: json["emailVerified"],
+        phoneNumberVerified: json["phoneNumberVerified"],
+        timezone: json["timezone"],
+        roles: List<Role>.from(json["roles"].map((x) => Role.fromJson(x))),
+        // files: Files.fromJson(json["files"]),
+        sessionKey: json["sessionKey"],
+        projectConfigs: ProjectConfigs.fromJson(json["projectConfigs"]),
+        merchantId: json["merchantId"],
+        deviceId: json["deviceId"],
+        finixSerialNumber: json["finixSerialNumber"],
+        finixUsername: json["finixUsername"],
+        finixPassword: json["finixPassword"],
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -177,7 +175,6 @@ class LoginResponseModel {
         "finixSerialNumber": finixSerialNumber,
         "finixUsername": finixUsername,
         "finixPassword": finixPassword,
-        "merchantIdNCP": merchantIdNCP
       };
 }
 

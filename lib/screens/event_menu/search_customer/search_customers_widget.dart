@@ -10,7 +10,6 @@ import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import '../../../models/network_model/search_customer/customer_model.dart';
 
@@ -42,7 +41,11 @@ class _SearchCustomersState extends State<SearchCustomers>
         child: searchCustomerContainer(context));
     //return searchCustomerContainer(context);
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    searchFieldController.dispose();
+  }
   Widget searchCustomerContainer(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Row(
@@ -66,29 +69,29 @@ class _SearchCustomersState extends State<SearchCustomers>
           controller: searchFieldController,
           style: StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1,
               fontFamily: FontConstants.montserratMedium),
           decoration: InputDecoration(
               hintText: StringConstants.searchCustomerNameORNum,
               hintStyle: StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor2),
+                  color: AppColors.textColor2,
                   fontFamily: FontConstants.montserratMedium),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.5),
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.primaryColor1)),
+                    color: AppColors.primaryColor1),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.5),
                 borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.primaryColor1)),
+                    color: AppColors.primaryColor1),
               ),
               contentPadding: const EdgeInsets.only(left: 15.0),
               suffixIcon: Icon(
                 Icons.search,
                 size: 24.0,
-                color: getMaterialColor(AppColors.primaryColor1),
+                color: AppColors.primaryColor1,
               )),
           onChanged: onChangeSearchText,
         ),
@@ -102,7 +105,7 @@ class _SearchCustomersState extends State<SearchCustomers>
         separatorBuilder: (context, index) {
           return Divider(
             height: 1.0,
-            color: getMaterialColor(AppColors.textColor2),
+            color: AppColors.textColor2,
           );
         },
         itemBuilder: (context, index) {
@@ -127,7 +130,7 @@ class _SearchCustomersState extends State<SearchCustomers>
                 customerList[index].getFullName(),
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratMedium)),
             Visibility(
               visible: (customerList[index].phoneNum ?? '').isNotEmpty,
@@ -137,7 +140,7 @@ class _SearchCustomersState extends State<SearchCustomers>
                     customerList[index].phoneNum!,
                     StyleConstants.customTextStyle(
                         fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratRegular)),
               ),
             )
@@ -159,7 +162,7 @@ class _SearchCustomersState extends State<SearchCustomers>
             StringConstants.clear,
             StyleConstants.customTextStyle(
                 fontSize: 9.0,
-                color: getMaterialColor(AppColors.textColor5),
+                color: AppColors.textColor5,
                 fontFamily: FontConstants.montserratSemiBold)),
       ),
     );
@@ -174,7 +177,7 @@ class _SearchCustomersState extends State<SearchCustomers>
             StringConstants.cancel,
             StyleConstants.customTextStyle(
                 fontSize: 9.0,
-                color: getMaterialColor(AppColors.textColor5),
+                color: AppColors.textColor5,
                 fontFamily: FontConstants.montserratSemiBold)),
       ),
     );

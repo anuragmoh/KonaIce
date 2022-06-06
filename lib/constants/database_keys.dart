@@ -30,7 +30,6 @@ class DatabaseKeys {
   static const finixSerialNumber = "finixSerialNumber";
   static const finixUsername = "finixUsername";
   static const finixPassword = "finixPassword";
-  static const merchantIdNCP = "merchantIdNCP";
 
 //End
 }

@@ -28,7 +28,8 @@ class PaymentOption extends StatefulWidget {
 class _PaymentOptionState extends State<PaymentOption>
     implements P2PContractor {
   int paymentModeType = -1;
-
+  String paymentStatus = "";
+  bool isAnimation=false;
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
@@ -42,7 +43,7 @@ class _PaymentOptionState extends State<PaymentOption>
   Widget mainUi(BuildContext context) {
     return Scaffold(
         body: Container(
-      color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+      color: AppColors.textColor3.withOpacity(0.2),
       child: Column(
         children: [
           CommonWidgets().topEmptyBar(),
@@ -57,7 +58,7 @@ class _PaymentOptionState extends State<PaymentOption>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Divider(
-                          color: getMaterialColor(AppColors.gradientColor1)
+                          color: AppColors.gradientColor1
                               .withOpacity(0.2),
                           thickness: 1,
                         ),
@@ -66,7 +67,7 @@ class _PaymentOptionState extends State<PaymentOption>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Divider(
-                          color: getMaterialColor(AppColors.gradientColor1)
+                          color: AppColors.gradientColor1
                               .withOpacity(0.2),
                           thickness: 1,
                         ),
@@ -75,12 +76,9 @@ class _PaymentOptionState extends State<PaymentOption>
                   ),
                   Center(
                     child: Visibility(
-                        visible:
-                            paymentModeType == PaymentModeConstants.creditCard,
-                        child: Lottie.asset(
-                            AssetsConstants.insertCardAnimationPath,
-                            height: 150,
-                            width: 150)),
+                        visible: (paymentModeType == PaymentModeConstants.creditCard && isAnimation)||(paymentModeType == PaymentModeConstants.creditCardManual && isAnimation),
+                        child: Lottie.asset(paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
+                            height: 150, width: 150)),
                   ),
                 ],
               ),
@@ -117,7 +115,7 @@ class _PaymentOptionState extends State<PaymentOption>
                     StringConstants.selectPaymentOption,
                     StyleConstants.customTextStyle(
                         fontSize: 22.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratBold)),
               ],
             ),
@@ -154,10 +152,10 @@ class _PaymentOptionState extends State<PaymentOption>
             Container(
               decoration: BoxDecoration(
                   color: paymentModeType == index
-                      ? getMaterialColor(AppColors.primaryColor2)
+                      ? AppColors.primaryColor2
                       : null,
                   border: Border.all(
-                      color: getMaterialColor(AppColors.primaryColor2)),
+                      color: AppColors.primaryColor2),
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
@@ -173,7 +171,7 @@ class _PaymentOptionState extends State<PaymentOption>
                 title,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratMedium)),
           ],
         ),
@@ -183,6 +181,14 @@ class _PaymentOptionState extends State<PaymentOption>
   onTapCashMode() {}
 
   onTapPaymentMode(int index) {
+    paymentStatus = 'insert';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: paymentStatus.toString());
+    setState(() {
+      paymentModeType = index;
+      updateSelectedPaymentMode();
+    });
     setState(() {
       paymentModeType = index;
       updateSelectedPaymentMode();
@@ -193,6 +199,12 @@ class _PaymentOptionState extends State<PaymentOption>
           paymentModeType = -1;
         });
       });
+    }
+    else if (paymentModeType == PaymentModeConstants.creditCardManual) {
+      paymentStatus = 'progress';
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.paymentStatus,
+          data: paymentStatus.toString());
     }
   }
 
@@ -240,6 +252,27 @@ class _PaymentOptionState extends State<PaymentOption>
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
+    }else if (response.action ==
+        StaffActionConst.paymentStatus) {
+      setState(() {
+        isAnimation=true;
+      });
+      setState(() {
+        paymentStatus=response.data.toString();
+      });
+      debugPrint('response--->' + response.data.toString());
+    }else if (response.action ==
+        StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
+      FunctionalUtils.showCustomerSplashScreen();
+    }else if (response.action ==
+        StaffActionConst.paymentStatus) {
+      setState(() {
+        isAnimation=true;
+      });
+      setState(() {
+        paymentStatus=response.data.toString();
+      });
+      debugPrint('response--->' + response.data.toString());
     }
   }
 }

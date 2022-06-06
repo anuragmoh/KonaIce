@@ -5,17 +5,14 @@ import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
-import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/customer_order_details/customer_order_details.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/login/login_screen.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/date_formats.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 enum NextScreen {
   login,
@@ -111,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
         onTapScreenWithMultipleTimes();
       },
       child: Container(
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
