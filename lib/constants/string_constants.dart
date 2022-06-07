@@ -108,6 +108,9 @@ class StringConstants {
   static const qty = 'Qty';
   static const refund = 'Refund';
   static const refunded = 'Refunded';
+  static const paymentMode="Payment Mode";
+  static const paymentModeCard="Card";
+  static const paymentModeCash="Cash";
 
   static const totalAmount = 'Total Amount';
   static const amountReceived = 'Amount Received';

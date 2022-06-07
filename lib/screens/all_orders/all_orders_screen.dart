@@ -57,6 +57,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   bool isApiProcess = false;
   int countOffSet = 0;
   bool refundBool = false;
+  bool paymentModeCardBool = false;
 
   _AllOrdersScreenState() {
     allOrderPresenter = AllOrderPresenter(this);
@@ -670,6 +671,28 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                           fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            CommonWidgets().textView(
+                '${StringConstants.paymentMode}: ',
+                StyleConstants.customTextStyle(
+                    fontSize: 9.0,
+                    color: getMaterialColor(AppColors.textColor1),
+                    fontFamily: FontConstants.montserratRegular)),
+            Expanded(
+                child: paymentModeCardBool == true
+                    ? CommonWidgets().textView(
+                    StringConstants.paymentModeCard,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium))
+                    : CommonWidgets().textView(
+                    StringConstants.paymentModeCash,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: getMaterialColor(AppColors.textColor2),
+                            fontFamily: FontConstants.montserratMedium))),
+          ]),
         ],
       );
 
@@ -1078,10 +1101,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget getRightOrderStatusView(String status, String paymentStatus,
       dynamic refundAmout, String paymentTerm) {
     refundAmout ??= 0;
+
     if (paymentTerm == "menu") {
       refundBool = true;
+      paymentModeCardBool = true;
     }
-    debugPrint('<><><><><><>$refundAmout');
+    debugPrint('<><><><><><>$paymentTerm');
     debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
