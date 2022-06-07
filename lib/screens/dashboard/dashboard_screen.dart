@@ -30,6 +30,7 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
+
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
   @override
@@ -51,7 +52,7 @@ class _DashboardState extends State<Dashboard>
       [];
   List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList>
-  pOsSyncDeletedEventItemExtrasDataDtoList = [];
+      pOsSyncDeletedEventItemExtrasDataDtoList = [];
   bool isApiProcess = false;
   int currentIndex = 0;
   String userName = StringExtension.empty();
@@ -105,7 +106,9 @@ class _DashboardState extends State<Dashboard>
         children: [
           CommonWidgets().dashboardTopBar(topBarComponent()),
           Expanded(
-            child: currentIndex==0?HomeScreen(onCallback: onReloadDashboardScreen):const SettingScreen(),
+            child: currentIndex == 0
+                ? HomeScreen(onCallback: onReloadDashboardScreen)
+                : const SettingScreen(),
           ),
           BottomBarWidget(
             onTapCallBack: onTapBottomListItem,
@@ -196,7 +199,10 @@ class _DashboardState extends State<Dashboard>
 
   void onProfileChange() {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MyProfile())).then((value){onReloadDashboardScreen(value);});
+        .push(MaterialPageRoute(builder: (context) => const MyProfile()))
+        .then((value) {
+      onReloadDashboardScreen(value);
+    });
   }
 
   //Function Other than UI dependency
@@ -249,6 +255,83 @@ class _DashboardState extends State<Dashboard>
   }
 
   Future<void> insertEventSync() async {
+    await posSyncEventDtoList();
+    updateLastEventSync();
+    await posSyncItemCategoryDataDtoList();
+    updateLastCategoriesSync();
+    await posSyncEventItemExtrasDataDtoList();
+    updateLastItemExtrasSync();
+    await posSyncEventItemDataDtoList();
+    updateLastItemSync();
+  }
+
+  Future<void> posSyncEventItemDataDtoList() async {
+    for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
+      await ItemDAO().insert(Item(
+          id: pOsSyncEventItemDataDtoList[i].itemId!,
+          eventId: pOsSyncEventItemDataDtoList[i].eventId!,
+          itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
+          itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
+          imageFileId: "empty",
+          name: pOsSyncEventItemDataDtoList[i].name!,
+          description: pOsSyncEventItemDataDtoList[i].description!,
+          price: pOsSyncEventItemDataDtoList[i].price!,
+          activated: false,
+          sequence: pOsSyncEventItemDataDtoList[i].sequence!,
+          createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
+          createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
+          updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
+          updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
+          deleted: pOsSyncEventItemDataDtoList[i].deleted!,
+          franchiseId: "empty"));
+    }
+  }
+
+  Future<void> posSyncEventItemExtrasDataDtoList() async {
+    for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
+      await FoodExtraItemsDAO().insert(FoodExtraItems(
+          id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
+          foodExtraItemCategoryId:
+              pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+          itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
+          eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
+          itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
+          sellingPrice: pOsSyncEventItemExtrasDataDtoList[i].sellingPrice!,
+          selection: "empty",
+          imageFileId: pOsSyncEventItemExtrasDataDtoList[i].imageFileId!,
+          minQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].minQtyAllowed!,
+          maxQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].maxQtyAllowed!,
+          activated: false,
+          sequence: pOsSyncEventItemExtrasDataDtoList[i].sequence!,
+          createdBy: pOsSyncEventItemExtrasDataDtoList[i].createdBy!,
+          createdAt: pOsSyncEventItemExtrasDataDtoList[i].createdAt!,
+          updatedBy: pOsSyncEventItemExtrasDataDtoList[i].updatedBy!,
+          updatedAt: pOsSyncEventItemExtrasDataDtoList[i].updatedAt!,
+          deleted: pOsSyncEventItemExtrasDataDtoList[i].deleted!));
+    }
+  }
+
+  Future<void> posSyncItemCategoryDataDtoList() async {
+    for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
+      await ItemCategoriesDAO().insert(ItemCategories(
+          id: pOsSyncItemCategoryDataDtoList[i].categoryId!,
+          eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
+          categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode != null
+              ? pOsSyncItemCategoryDataDtoList[i].categoryCode!
+              : "empty",
+          categoryName: pOsSyncItemCategoryDataDtoList[i].categoryName!,
+          description: pOsSyncItemCategoryDataDtoList[i].categoryName!,
+          activated: false,
+          createdBy: pOsSyncItemCategoryDataDtoList[i].createdBy!,
+          createdAt: pOsSyncItemCategoryDataDtoList[i].createdAt!,
+          updatedBy: pOsSyncItemCategoryDataDtoList[i].updatedBy!,
+          updatedAt: pOsSyncItemCategoryDataDtoList[i].updatedAt!,
+          deleted: pOsSyncItemCategoryDataDtoList[i].deleted!,
+          franchiseId: "empty"));
+    }
+  }
+
+  Future<void> posSyncEventDtoList() async {
     for (int i = 0; i < pOsSyncEventDataDtoList.length; i++) {
       await EventsDAO().insert(Events(
           id: pOsSyncEventDataDtoList[i].eventId!,
@@ -351,85 +434,30 @@ class _DashboardState extends State<Dashboard>
           confirmedEmailSent: false,
           givebackSubtotal: 0));
     }
-    updateLastEventSync();
-    for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
-      await ItemCategoriesDAO().insert(ItemCategories(
-          id: pOsSyncItemCategoryDataDtoList[i].categoryId!,
-          eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
-          categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode != null
-              ? pOsSyncItemCategoryDataDtoList[i].categoryCode!
-              : "empty",
-          categoryName: pOsSyncItemCategoryDataDtoList[i].categoryName!,
-          description: pOsSyncItemCategoryDataDtoList[i].categoryName!,
-          activated: false,
-          createdBy: pOsSyncItemCategoryDataDtoList[i].createdBy!,
-          createdAt: pOsSyncItemCategoryDataDtoList[i].createdAt!,
-          updatedBy: pOsSyncItemCategoryDataDtoList[i].updatedBy!,
-          updatedAt: pOsSyncItemCategoryDataDtoList[i].updatedAt!,
-          deleted: pOsSyncItemCategoryDataDtoList[i].deleted!,
-          franchiseId: "empty"));
-    }
-    updateLastCategoriesSync();
-    for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
-      await FoodExtraItemsDAO().insert(FoodExtraItems(
-          id: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
-          foodExtraItemCategoryId:
-          pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
-          itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
-          eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
-          itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
-          sellingPrice: pOsSyncEventItemExtrasDataDtoList[i].sellingPrice!,
-          selection: "empty",
-          imageFileId: pOsSyncEventItemExtrasDataDtoList[i].imageFileId!,
-          minQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].minQtyAllowed!,
-          maxQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].maxQtyAllowed!,
-          activated: false,
-          sequence: pOsSyncEventItemExtrasDataDtoList[i].sequence!,
-          createdBy: pOsSyncEventItemExtrasDataDtoList[i].createdBy!,
-          createdAt: pOsSyncEventItemExtrasDataDtoList[i].createdAt!,
-          updatedBy: pOsSyncEventItemExtrasDataDtoList[i].updatedBy!,
-          updatedAt: pOsSyncEventItemExtrasDataDtoList[i].updatedAt!,
-          deleted: pOsSyncEventItemExtrasDataDtoList[i].deleted!));
-    }
-    updateLastItemExtrasSync();
-    for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
-      await ItemDAO().insert(Item(
-          id: pOsSyncEventItemDataDtoList[i].itemId!,
-          eventId: pOsSyncEventItemDataDtoList[i].eventId!,
-          itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
-          itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
-          imageFileId: "empty",
-          name: pOsSyncEventItemDataDtoList[i].name!,
-          description: pOsSyncEventItemDataDtoList[i].description!,
-          price: pOsSyncEventItemDataDtoList[i].price!,
-          activated: false,
-          sequence: pOsSyncEventItemDataDtoList[i].sequence!,
-          createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
-          createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
-          updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
-          updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
-          deleted: pOsSyncEventItemDataDtoList[i].deleted!,
-          franchiseId: "empty"));
-    }
-    updateLastItemSync();
   }
 
   Future<void> updateLastEventSync() async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.events, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.events,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemSync() async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.items, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.items,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastCategoriesSync() async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.categories, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.categories,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   Future<void> updateLastItemExtrasSync() async {
-    await SessionDAO()
-        .insert(Session(key: DatabaseKeys.itemExtras, value: DateTime.now().microsecondsSinceEpoch.toString()));
+    await SessionDAO().insert(Session(
+        key: DatabaseKeys.itemExtras,
+        value: DateTime.now().microsecondsSinceEpoch.toString()));
   }
 
   @override
@@ -439,9 +467,10 @@ class _DashboardState extends State<Dashboard>
       debugPrint('Dashboard$index');
     });
   }
-  void onReloadDashboardScreen(dynamic value){
+
+  void onReloadDashboardScreen(dynamic value) {
     setState(() {
-      currentIndex=ServiceNotifier.count;
+      currentIndex = ServiceNotifier.count;
     });
   }
 }

@@ -123,53 +123,66 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
       Padding(
         padding: const EdgeInsets.only(left: 20.0),
         child: Column(children: [
-          Row(children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CommonWidgets().textView(
-                    "${StringConstants.customerName}:",
-                    StyleConstants.customTextStyle14MonsterMedium(
-                        color: AppColors.textColor1)),
-                const SizedBox(height: 13.0),
-                CommonWidgets().textView(
-                    StringConstants.phone,
-                    StyleConstants.customTextStyle14MonsterMedium(
-                        color: AppColors.textColor1)),
-                const SizedBox(height: 13.0),
-                CommonWidgets().textView(
-                    StringConstants.email,
-                    StyleConstants.customTextStyle14MonsterMedium(
-                        color: AppColors.textColor1)),
-              ],
-            ),
-            const SizedBox(
-              width: 20.0,
-            ),
-            Expanded(
-                flex: 5,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonWidgets().textView(
-                        customerName,
-                        StyleConstants.customTextStyle14MonsterMedium(
-                            color: AppColors.textColor1)),
-                    const SizedBox(height: 13.0),
-                    CommonWidgets().textView(
-                        phoneNumber,
-                        StyleConstants.customTextStyle14MonsterMedium(
-                            color: AppColors.textColor1)),
-                    const SizedBox(height: 13.0),
-                    CommonWidgets().textView(
-                        email,
-                        StyleConstants.customTextStyle14MonsterMedium(
-                            color: AppColors.textColor1)),
-                  ],
-                ))
-          ]),
+          buildRow(customerName, phoneNumber, email),
         ]),
       );
+
+  Row buildRow(String customerName, String phoneNumber, String email) {
+    return Row(children: [
+      buildColumn(),
+      const SizedBox(
+        width: 20.0,
+      ),
+      buildExpanded(customerName, phoneNumber, email),
+    ]);
+  }
+
+  Expanded buildExpanded(
+      String customerName, String phoneNumber, String email) {
+    return Expanded(
+        flex: 5,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonWidgets().textView(
+                customerName,
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: AppColors.textColor1)),
+            const SizedBox(height: 13.0),
+            CommonWidgets().textView(
+                phoneNumber,
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: AppColors.textColor1)),
+            const SizedBox(height: 13.0),
+            CommonWidgets().textView(
+                email,
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: AppColors.textColor1)),
+          ],
+        ));
+  }
+
+  Column buildColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CommonWidgets().textView(
+            "${StringConstants.customerName}:",
+            StyleConstants.customTextStyle14MonsterMedium(
+                color: AppColors.textColor1)),
+        const SizedBox(height: 13.0),
+        CommonWidgets().textView(
+            StringConstants.phone,
+            StyleConstants.customTextStyle14MonsterMedium(
+                color: AppColors.textColor1)),
+        const SizedBox(height: 13.0),
+        CommonWidgets().textView(
+            StringConstants.email,
+            StyleConstants.customTextStyle14MonsterMedium(
+                color: AppColors.textColor1)),
+      ],
+    );
+  }
 
   Widget componentOrderItem() => Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -188,8 +201,7 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
                   return orderItemView(
                       'Kollectible', 2, 23.0, index.isEven ? true : false);
                 }),
-            DottedLine(
-                height: 2.0, color: AppColors.textColor1),
+            DottedLine(height: 2.0, color: AppColors.textColor1),
             componentBill(),
           ],
         ),

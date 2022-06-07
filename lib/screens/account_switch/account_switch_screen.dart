@@ -41,66 +41,72 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
 
   Widget bodyContainer() {
     return Center(
-      child: Container(
-        width: 360,
-        decoration:
-            StyleConstants.customBoxShadowDecorationStyle(circularRadius: 4.0),
-        child: Padding(
-          padding: const EdgeInsets.all(17.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: CommonWidgets().textWidget(
-                      StringConstants.selectMode,
-                      StyleConstants.customTextStyle(
-                          fontSize: 22.0,
-                          color: AppColors.textColor1,
-                          fontFamily: FontConstants.montserratSemiBold)),
-                ),
+      child: buildContainer(),
+    );
+  }
+
+  Container buildContainer() {
+    return Container(
+      width: 360,
+      decoration:
+          StyleConstants.customBoxShadowDecorationStyle(circularRadius: 4.0),
+      child: Padding(
+        padding: const EdgeInsets.all(17.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: CommonWidgets().textWidget(
+                    StringConstants.selectMode,
+                    StyleConstants.customTextStyle(
+                        fontSize: 22.0,
+                        color: AppColors.textColor1,
+                        fontFamily: FontConstants.montserratSemiBold)),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          onTapSelectionMode(staffSelected: true);
-                        },
-                        child: selectionModeContainer(AssetsConstants.staffMode,
-                            StringConstants.staffMode, isStaffModeSelected)),
-                    GestureDetector(
-                        onTap: () {
-                          onTapSelectionMode(staffSelected: false);
-                        },
-                        child: selectionModeContainer(
-                            AssetsConstants.customerMode,
-                            StringConstants.customerMode,
-                            !isStaffModeSelected)),
-                  ],
-                ),
+            ),
+            buildPadding(),
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: proceedButton(
+                    StringConstants.proceed,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: AppColors.textColor1,
+                        fontFamily: FontConstants.montserratBold)),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: proceedButton(
-                      StringConstants.proceed,
-                      StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: AppColors.textColor1,
-                          fontFamily: FontConstants.montserratBold)),
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
+      ),
+    );
+  }
+
+  Padding buildPadding() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+              onTap: () {
+                onTapSelectionMode(staffSelected: true);
+              },
+              child: selectionModeContainer(AssetsConstants.staffMode,
+                  StringConstants.staffMode, isStaffModeSelected)),
+          GestureDetector(
+              onTap: () {
+                onTapSelectionMode(staffSelected: false);
+              },
+              child: selectionModeContainer(AssetsConstants.customerMode,
+                  StringConstants.customerMode, !isStaffModeSelected)),
+        ],
       ),
     );
   }
@@ -114,8 +120,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
           borderRadius: BorderRadius.circular(4.0),
           color: AppColors.denotiveColor6,
           border: modeSelected
-              ? Border.all(
-                  color: AppColors.primaryColor2, width: 2.0)
+              ? Border.all(color: AppColors.primaryColor2, width: 2.0)
               : const Border.fromBorderSide(BorderSide.none)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),

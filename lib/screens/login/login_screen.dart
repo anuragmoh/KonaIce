@@ -61,12 +61,14 @@ class _LoginScreenState extends State<LoginScreen>
     getDeviceInfo();
     return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
   }
+
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
   }
+
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
@@ -116,15 +118,7 @@ class _LoginScreenState extends State<LoginScreen>
           StyleConstants.customBoxShadowDecorationStyle(circularRadius: 3.6),
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: 3.25 * SizeConfig.imageSizeMultiplier,
-                horizontal: 141.0),
-            child: textWidget(
-                StringConstants.loginText,
-                StyleConstants.customTextStyle22MontserratBold(
-                    color: AppColors.textColor1)),
-          ),
+          imagePadding(),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -135,44 +129,7 @@ class _LoginScreenState extends State<LoginScreen>
                       color: AppColors.textColor1)),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: 0.65 * SizeConfig.imageSizeMultiplier,
-                bottom: 2.60 * SizeConfig.imageSizeMultiplier,
-                left: 22.0,
-                right: 22.0),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                onChanged: (value) {
-                  emailValidation();
-                },
-                maxLength: 100,
-                controller: emailController,
-                decoration: InputDecoration(
-                  counterText: "",
-                  border: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  hintText: 'abc@gmail.com',
-                  errorText: emailValidationMessage,
-                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: AppColors.textColor1),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  errorBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primaryColor1, width: 1.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          paddingEmail(),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -183,50 +140,7 @@ class _LoginScreenState extends State<LoginScreen>
                       color: AppColors.textColor1)),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: 0.65 * SizeConfig.imageSizeMultiplier,
-                left: 22.0,
-                right: 22.0),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: TextField(
-                textInputAction: TextInputAction.done,
-                onChanged: (value) {
-                  passwordValidation();
-                },
-                controller: passwordController,
-                obscureText: isPasswordVisible,
-                decoration: InputDecoration(
-                  suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isPasswordVisible = !isPasswordVisible;
-                        });
-                      },
-                      child: isPasswordVisible
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility)),
-                  border: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  hintText: 'Password',
-                  errorText: passwordValidationMessage,
-                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: AppColors.textColor1),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  errorBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primaryColor1, width: 1.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          paddingPassword(),
           Align(
             alignment: Alignment.topRight,
             child: Padding(
@@ -243,9 +157,103 @@ class _LoginScreenState extends State<LoginScreen>
           ),
           signInButton(
               StringConstants.signIn,
-              StyleConstants.customTextStyle12MontserratBold(color: AppColors.textColor1)),
+              StyleConstants.customTextStyle12MontserratBold(
+                  color: AppColors.textColor1)),
         ],
       ),
+    );
+  }
+
+  Padding paddingPassword() {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: 0.65 * SizeConfig.imageSizeMultiplier, left: 22.0, right: 22.0),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: TextField(
+          textInputAction: TextInputAction.done,
+          onChanged: (value) {
+            passwordValidation();
+          },
+          controller: passwordController,
+          obscureText: isPasswordVisible,
+          decoration: InputDecoration(
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+                child: isPasswordVisible
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility)),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            hintText: 'Password',
+            errorText: passwordValidationMessage,
+            hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                color: AppColors.textColor1),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: AppColors.primaryColor1, width: 1.0),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding paddingEmail() {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: 0.65 * SizeConfig.imageSizeMultiplier,
+          bottom: 2.60 * SizeConfig.imageSizeMultiplier,
+          left: 22.0,
+          right: 22.0),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: TextField(
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
+          onChanged: (value) {
+            emailValidation();
+          },
+          maxLength: 100,
+          controller: emailController,
+          decoration: InputDecoration(
+            counterText: "",
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            hintText: 'abc@gmail.com',
+            errorText: emailValidationMessage,
+            hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                color: AppColors.textColor1),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: AppColors.primaryColor1, width: 1.0),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding imagePadding() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: 3.25 * SizeConfig.imageSizeMultiplier, horizontal: 141.0),
+      child: textWidget(
+          StringConstants.loginText,
+          StyleConstants.customTextStyle22MontserratBold(
+              color: AppColors.textColor1)),
     );
   }
 
@@ -321,7 +329,9 @@ class _LoginScreenState extends State<LoginScreen>
   onTapSingIn() {
     FocusScope.of(context).unfocus();
     setState(() {
-      emailController.text.isEmpty || !emailController.text.isValidEmail() ? isEmailValid = false : isEmailValid = true;
+      emailController.text.isEmpty || !emailController.text.isValidEmail()
+          ? isEmailValid = false
+          : isEmailValid = true;
       passwordController.text.isEmpty
           ? isPasswordValid = false
           : isPasswordValid = true;
@@ -352,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       isLoginView = true;
     });
-    if(message != ""){
+    if (message != "") {
       CommonWidgets().showSuccessSnackBar(message: message, context: context);
     }
   }
@@ -399,6 +409,7 @@ class _LoginScreenState extends State<LoginScreen>
     LoginResponseModel loginResponseModel = response;
     checkUserDataAvailableINDB(loginResponseModel);
   }
+
   //DB Operations
   checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
     var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);

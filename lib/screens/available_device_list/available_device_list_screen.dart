@@ -110,63 +110,79 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
 
   Widget listView(Device device)=> Column(
     children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-              child:  CommonWidgets().image(
-                  image: AssetsConstants.tabletIcon,
-                  width:  1.56 * SizeConfig.imageSizeMultiplier,
-                  height: 2.08 * SizeConfig.imageSizeMultiplier) ,),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  device.deviceName,
-                  textAlign: TextAlign.left,
-                  style: StyleConstants.customTextStyle15MonsterMedium(
-                      color: AppColors.textColor1),
-                ),
-                Text(
-                  '(${getStateName(device.state)})',
-                  textAlign: TextAlign.left,
-                  style: StyleConstants.customTextStyle15MonsterMedium(
-                  color: getStateColor(device.state))),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () => _onButtonClicked(device),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 8.0),
-              padding: const EdgeInsets.all(8.0),
-              height: 35,
-              width: 100,
-              decoration: BoxDecoration(
-                color: getButtonColor(device.state),
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Center(
-                child: Text(
-                  getButtonStateName(device.state),
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-          ),
-        ]),
-      ),
+      buildPad(device),
       const Padding(
         padding: EdgeInsets.only(top: 15),
         child: Divider(),
       ),
     ],
   );
+
+  Padding buildPad(Device device) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: buildRow(device),
+    );
+  }
+
+  Row buildRow(Device device) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+          child:  CommonWidgets().image(
+              image: AssetsConstants.tabletIcon,
+              width:  1.56 * SizeConfig.imageSizeMultiplier,
+              height: 2.08 * SizeConfig.imageSizeMultiplier) ,),
+      buildExpanded(device),
+      buildGestureDetector(device),
+    ]);
+  }
+
+  GestureDetector buildGestureDetector(Device device) {
+    return GestureDetector(
+      onTap: () => _onButtonClicked(device),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.all(8.0),
+        height: 35,
+        width: 100,
+        decoration: BoxDecoration(
+          color: getButtonColor(device.state),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Center(
+          child: Text(
+            getButtonStateName(device.state),
+            style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Expanded buildExpanded(Device device) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            device.deviceName,
+            textAlign: TextAlign.left,
+            style: StyleConstants.customTextStyle15MonsterMedium(
+                color: AppColors.textColor1),
+          ),
+          Text(
+            '(${getStateName(device.state)})',
+            textAlign: TextAlign.left,
+            style: StyleConstants.customTextStyle15MonsterMedium(
+            color: getStateColor(device.state))),
+        ],
+      ),
+    );
+  }
   Widget proceedButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
       onTap: () {

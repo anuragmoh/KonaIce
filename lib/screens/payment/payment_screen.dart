@@ -49,11 +49,11 @@ class PaymentScreen extends StatefulWidget {
 
   const PaymentScreen(
       {Key? key,
-        required this.events,
-        required this.selectedMenuItems,
-        required this.placeOrderRequestModel,
-        required this.billDetails,
-        required this.userName})
+      required this.events,
+      required this.selectedMenuItems,
+      required this.placeOrderRequestModel,
+      required this.billDetails,
+      required this.userName})
       : super(key: key);
 
   @override
@@ -108,7 +108,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   late PaymentPresenter paymentPresenter;
 
   static const MethodChannel cardPaymentChannel =
-  MethodChannel("com.mobisoft.konaicepos/cardPayment");
+      MethodChannel("com.mobisoft.konaicepos/cardPayment");
 
   _PaymentScreenState() {
     orderPresenter = OrderPresenter(this);
@@ -190,28 +190,32 @@ class _PaymentScreenState extends State<PaymentScreen>
     return Scaffold(
       body: Container(
         color: AppColors.textColor3.withOpacity(0.2),
-        child: Column(
-          children: [
-            TopBar(
-              userName: widget.userName,
-              eventName: widget.events.getEventName(),
-              eventAddress: widget.events.getEventAddress(),
-              showCenterWidget: false,
-              onTapCallBack: onTapCallBack,
-              //    onDrawerTap: onDrawerTap,
-              onProfileTap: onProfileChange,
-            ),
-
-            Expanded(child: bodyWidget()),
-            BottomBarWidget(
-              onTapCallBack: onTapBottomListItem,
-              accountImageVisibility: false,
-              isFromDashboard: false,
-            )
-            // CommonWidgets().bottomBar(false),
-          ],
-        ),
+        child: buildMainColumn(),
       ),
+    );
+  }
+
+  Column buildMainColumn() {
+    return Column(
+      children: [
+        TopBar(
+          userName: widget.userName,
+          eventName: widget.events.getEventName(),
+          eventAddress: widget.events.getEventAddress(),
+          showCenterWidget: false,
+          onTapCallBack: onTapCallBack,
+          //    onDrawerTap: onDrawerTap,
+          onProfileTap: onProfileChange,
+        ),
+
+        Expanded(child: bodyWidget()),
+        BottomBarWidget(
+          onTapCallBack: onTapBottomListItem,
+          accountImageVisibility: false,
+          isFromDashboard: false,
+        )
+        // CommonWidgets().bottomBar(false),
+      ],
     );
   }
 
@@ -221,18 +225,18 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   Widget bodyWidget() => Container(
-    color: AppColors.textColor3.withOpacity(0.1),
-    child: bodyWidgetComponent(),
-  );
+        color: AppColors.textColor3.withOpacity(0.1),
+        child: bodyWidgetComponent(),
+      );
 
   Widget bodyWidgetComponent() => Row(children: [
-    leftSideWidget(),
-    rightSideWidget(),
-  ]);
+        leftSideWidget(),
+        rightSideWidget(),
+      ]);
 
   Widget leftSideWidget() => Expanded(
-      child:
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const SizedBox(
           height: 14.0,
         ),
@@ -252,155 +256,167 @@ class _PaymentScreenState extends State<PaymentScreen>
       ]));
 
   Widget leftSideTopComponent(double totalAmount) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-    child: SizedBox(
-      height: 80.0,
-      child:
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InkWell(
-              onTap: () {
-                onTapBackButton();
-              },
-              child: CommonWidgets().image(
-                  image: AssetsConstants.backArrow,
-                  width: 25.0,
-                  height: 25.0),
-            ),
-            const SizedBox(
-              width: 22.0,
-            ),
-            Column(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        child: SizedBox(
+          height: 80.0,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonWidgets().textWidget(
-                    StringConstants.totalAmount,
-                    StyleConstants.customTextStyle12MonsterMedium(
-                      color: AppColors.textColor2,
-                    )),
+                buildInkWell(),
                 const SizedBox(
-                  height: 2.0,
+                  width: 22.0,
                 ),
-                CommonWidgets().textWidget(
-                    '\$${totalAmount.toStringAsFixed(2)}',
-                    StyleConstants.customTextStyle34MontserratBold(
-                        color: AppColors.textColor1))
+                buildColumn(totalAmount),
               ],
             ),
-          ],
-        ),
-        const SizedBox(
-          width: 51.0,
-        ),
-        // Amount to return field
-        Visibility(
-          visible:
-          isPaymentDone == false && paymentModeType == 0 ? true : false,
-          child: Expanded(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonWidgets().textWidget(
-                      StringConstants.amountReceived,
-                      StyleConstants.customTextStyle12MonsterMedium(
-                          color: AppColors.textColor2)),
-                  const SizedBox(
-                    height: 5.0,
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+            const SizedBox(
+              width: 51.0,
+            ),
+            // Amount to return field
+            Visibility(
+              visible:
+                  isPaymentDone == false && paymentModeType == 0 ? true : false,
+              child: Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CommonWidgets().textWidget(
-                          '\$',
-                          StyleConstants.customTextStyle22MonsterMedium(
-                              color:
-                              AppColors.textColor1)),
+                          StringConstants.amountReceived,
+                          StyleConstants.customTextStyle12MonsterMedium(
+                              color: AppColors.textColor2)),
                       const SizedBox(
-                        width: 10.0,
+                        height: 5.0,
                       ),
-                      Container(
-                          decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(8.0)),
-                              color: AppColors.whiteColor,
-                              border: Border.all(
-                                  color:
-                                      AppColors.primaryColor2)),
-                          width: 70.0,
-                          height: 42.0,
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, bottom: 2.0),
-                              child: TextField(
-                                controller: amountReceivedController,
-                                style: StyleConstants
-                                    .customTextStyle22MonsterMedium(
-                                    color:
-                                        AppColors.textColor1),
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                ),
-                                onChanged: (value) {
-                                  if (value.isNotEmpty) {
-                                    onAmountEnter(double.parse(value));
-                                  }
-                                },
-                              ),
-                            ),
-                          )),
-                    ],
-                  )
-                ]),
-          ),
+                      buildRow()
+                    ]),
+              ),
+            ),
+            // Return Amount
+            const SizedBox(
+              width: 15.0,
+            ),
+            Visibility(
+              visible:
+                  isPaymentDone == false && paymentModeType == 0 ? true : false,
+              child: Expanded(
+                child: buildColumn2(),
+              ),
+            ),
+            // Button
+            buttonWidget(
+                isPaymentDone == true
+                    ? StringConstants.newOrder
+                    : StringConstants.proceed,
+                StyleConstants.customTextStyle12MontserratBold(
+                    color: AppColors.textColor1)),
+          ]),
         ),
-        // Return Amount
-        const SizedBox(
-          width: 15.0,
-        ),
-        Visibility(
-          visible:
-          isPaymentDone == false && paymentModeType == 0 ? true : false,
-          child: Expanded(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonWidgets().textWidget(
-                      StringConstants.amountToReturn,
-                      StyleConstants.customTextStyle12MonsterMedium(
-                          color: AppColors.textColor2)),
-                  const SizedBox(height: 10.0),
-                  Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CommonWidgets().textWidget(
-                            '\$',
-                            StyleConstants.customTextStyle22MonsterMedium(
-                                color: AppColors.textColor1)),
-                        CommonWidgets().textWidget(
-                            returnAmount.toStringAsFixed(2),
-                            StyleConstants.customTextStyle22MonsterMedium(
-                                color:
-                                getMaterialColor(AppColors.textColor1)))
-                      ])
-                ]),
-          ),
-        ),
-        // Button
-        buttonWidget(
-            isPaymentDone == true
-                ? StringConstants.newOrder
-                : StringConstants.proceed,
-            StyleConstants.customTextStyle12MontserratBold(
+      );
+
+  Column buildColumn2() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CommonWidgets().textWidget(
+            StringConstants.amountToReturn,
+            StyleConstants.customTextStyle12MonsterMedium(
+                color: AppColors.textColor2)),
+        const SizedBox(height: 10.0),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CommonWidgets().textWidget(
+                '\$',
+                StyleConstants.customTextStyle22MonsterMedium(
+                    color: AppColors.textColor1)),
+            CommonWidgets().textWidget(
+                returnAmount.toStringAsFixed(2),
+                StyleConstants.customTextStyle22MonsterMedium(
+                    color: getMaterialColor(AppColors.textColor1)))
+          ],
+        )
+      ],
+    );
+  }
+
+  Row buildRow() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CommonWidgets().textWidget(
+            '\$',
+            StyleConstants.customTextStyle22MonsterMedium(
                 color: AppColors.textColor1)),
-      ]),
-    ),
-  );
+        const SizedBox(
+          width: 10.0,
+        ),
+        buildContainer(),
+      ],
+    );
+  }
+
+  Container buildContainer() {
+    return Container(
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            color: AppColors.whiteColor,
+            border: Border.all(color: AppColors.primaryColor2)),
+        width: 70.0,
+        height: 42.0,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
+            child: TextField(
+              controller: amountReceivedController,
+              style: StyleConstants.customTextStyle22MonsterMedium(
+                  color: AppColors.textColor1),
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  onAmountEnter(double.parse(value));
+                }
+              },
+            ),
+          ),
+        ));
+  }
+
+  Column buildColumn(double totalAmount) {
+    return Column(
+      children: [
+        CommonWidgets().textWidget(
+            StringConstants.totalAmount,
+            StyleConstants.customTextStyle12MonsterMedium(
+              color: AppColors.textColor2,
+            )),
+        const SizedBox(
+          height: 2.0,
+        ),
+        CommonWidgets().textWidget(
+            '\$${totalAmount.toStringAsFixed(2)}',
+            StyleConstants.customTextStyle34MontserratBold(
+                color: AppColors.textColor1))
+      ],
+    );
+  }
+
+  InkWell buildInkWell() {
+    return InkWell(
+      onTap: () {
+        onTapBackButton();
+      },
+      child: CommonWidgets()
+          .image(image: AssetsConstants.backArrow, width: 25.0, height: 25.0),
+    );
+  }
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
     bool showDisabledButton =
@@ -408,8 +424,8 @@ class _PaymentScreenState extends State<PaymentScreen>
     return GestureDetector(
       onTap: isPaymentDone == false
           ? () {
-        onTapProceed(showDisabledButton);
-      }
+              onTapProceed(showDisabledButton);
+            }
           : onTapNewOrder,
       child: Container(
         decoration: BoxDecoration(
@@ -427,47 +443,46 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   Widget leftBodyComponent() => SingleChildScrollView(
-    child: Column(children: [
-      Visibility(
-          visible: !isPaymentDone,
-          child: Column(
-            children: [
-              paymentModeWidget(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Divider(
-                  color: AppColors.gradientColor1
-                      .withOpacity(0.2),
-                  thickness: 1,
-                ),
-              ),
-            ],
-          )),
-      SingleChildScrollView(
-          child: isPaymentDone
-              ? paymentSuccess(StringConstants.dummyOrder)
-              : const Text('')),
-    ]),
-  );
+        child: Column(children: [
+          Visibility(
+              visible: !isPaymentDone,
+              child: Column(
+                children: [
+                  paymentModeWidget(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Divider(
+                      color: AppColors.gradientColor1.withOpacity(0.2),
+                      thickness: 1,
+                    ),
+                  ),
+                ],
+              )),
+          SingleChildScrollView(
+              child: isPaymentDone
+                  ? paymentSuccess(StringConstants.dummyOrder)
+                  : const Text('')),
+        ]),
+      );
 
   Widget paymentModeWidget() => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 19.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
-            AssetsConstants.cash),
-        paymentModeView(
-            StringConstants.creditCard,
-            PaymentModeConstants.creditCard,
-            AssetsConstants.creditCardScan),
-        paymentModeView(
-            StringConstants.creditCardManual,
-            PaymentModeConstants.creditCardManual,
-            AssetsConstants.creditCard),
-      ],
-    ),
-  );
+        padding: const EdgeInsets.symmetric(vertical: 19.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
+                AssetsConstants.cash),
+            paymentModeView(
+                StringConstants.creditCard,
+                PaymentModeConstants.creditCard,
+                AssetsConstants.creditCardScan),
+            paymentModeView(
+                StringConstants.creditCardManual,
+                PaymentModeConstants.creditCardManual,
+                AssetsConstants.creditCard),
+          ],
+        ),
+      );
 
   Widget paymentModeView(String title, int index, String icon) =>
       GestureDetector(
@@ -478,15 +493,13 @@ class _PaymentScreenState extends State<PaymentScreen>
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: paymentModeType == index
-                      ? AppColors.primaryColor2
-                      : null,
-                  border: Border.all(
-                      color: AppColors.primaryColor2),
+                  color:
+                      paymentModeType == index ? AppColors.primaryColor2 : null,
+                  border: Border.all(color: AppColors.primaryColor2),
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
+                    const EdgeInsets.symmetric(horizontal: 7.0, vertical: 8.0),
                 child: CommonWidgets().image(
                     image: icon,
                     width: 4.25 * SizeConfig.imageSizeMultiplier,
@@ -503,247 +516,244 @@ class _PaymentScreenState extends State<PaymentScreen>
       );
 
   Widget paymentSuccess(String transactionId) => Column(
-    children: [
-      const SizedBox(height: 68.0),
-      CommonWidgets().image(
-          image: AssetsConstants.success,
-          width: 9.3 * SizeConfig.imageSizeMultiplier,
-          height: 9.3 * SizeConfig.imageSizeMultiplier),
-      const SizedBox(height: 21.0),
-      CommonWidgets().textWidget(
-          StringConstants.paymentSuccessful,
-          StyleConstants.customTextStyle22MonsterMedium(
-              color: AppColors.textColor1)),
-      const SizedBox(height: 8.0),
-      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        CommonWidgets().textWidget(
-            '${StringConstants.transactionId}:',
-            StyleConstants.customTextStyle12MontserratSemiBold(
-                color: AppColors.textColor1)),
-        CommonWidgets().textWidget(
-            transactionId,
-            StyleConstants.customTextStyle12MontserratSemiBold(
-                color: AppColors.textColor1)),
-      ]),
-      const SizedBox(height: 38.0),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 135.0),
-        child: Divider(
-          color:
-          AppColors.gradientColor1.withOpacity(0.2),
-          thickness: 1,
-        ),
-      ),
-      const SizedBox(height: 28.0),
-      CommonWidgets().textWidget(
-          StringConstants.howWouldYouLikeToReceiveTheReceipt,
-          StyleConstants.customTextStyle16MonsterMedium(
-              color: AppColors.textColor1)),
-      const SizedBox(height: 12.0),
-      Visibility(
-        visible: false,
-        child: Container(
-          width: 203.0,
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              border: Border.all(
-                  color: AppColors.primaryColor2)),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    receiptMode = 1;
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius:
-                    const BorderRadius.all(Radius.circular(8.0)),
-                    color: receiptMode == 1
-                        ? AppColors.primaryColor2
-                        : null,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 38.0, vertical: 9.0),
-                    child: CommonWidgets().textWidget(
-                        StringConstants.email,
-                        StyleConstants.customTextStyle09MonsterRegular(
-                            color: AppColors.textColor1)),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    receiptMode = 2;
-                  });
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                      const BorderRadius.all(Radius.circular(8.0)),
-                      color: receiptMode == 2
-                          ? AppColors.primaryColor2
-                          : null,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 19.0, vertical: 9.0),
-                      child: CommonWidgets().textWidget(
-                          StringConstants.textMessage,
-                          StyleConstants.customTextStyle09MonsterRegular(
-                              color:
-                              AppColors.textColor1)),
-                    )),
-              ),
-            ],
+        children: [
+          const SizedBox(height: 68.0),
+          CommonWidgets().image(
+              image: AssetsConstants.success,
+              width: 9.3 * SizeConfig.imageSizeMultiplier,
+              height: 9.3 * SizeConfig.imageSizeMultiplier),
+          const SizedBox(height: 21.0),
+          CommonWidgets().textWidget(
+              StringConstants.paymentSuccessful,
+              StyleConstants.customTextStyle22MonsterMedium(
+                  color: AppColors.textColor1)),
+          const SizedBox(height: 8.0),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            CommonWidgets().textWidget(
+                '${StringConstants.transactionId}:',
+                StyleConstants.customTextStyle12MontserratSemiBold(
+                    color: AppColors.textColor1)),
+            CommonWidgets().textWidget(
+                transactionId,
+                StyleConstants.customTextStyle12MontserratSemiBold(
+                    color: AppColors.textColor1)),
+          ]),
+          const SizedBox(height: 38.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 135.0),
+            child: Divider(
+              color: AppColors.gradientColor1.withOpacity(0.2),
+              thickness: 1,
+            ),
           ),
-        ),
+          const SizedBox(height: 28.0),
+          CommonWidgets().textWidget(
+              StringConstants.howWouldYouLikeToReceiveTheReceipt,
+              StyleConstants.customTextStyle16MonsterMedium(
+                  color: AppColors.textColor1)),
+          const SizedBox(height: 12.0),
+          Visibility(
+            visible: false,
+            child: Container(
+              width: 203.0,
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  border: Border.all(color: AppColors.primaryColor2)),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        receiptMode = 1;
+                      });
+                    },
+                    child: buildContainer1(),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        receiptMode = 2;
+                      });
+                    },
+                    child: buildContainer2(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 19.0),
+          receiptMode == 1 ? emailReceiptWidget() : textMessageReceiptWidget(),
+          const SizedBox(height: 20.0),
+        ],
+      );
+
+  Container buildContainer1() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        color: receiptMode == 1 ? AppColors.primaryColor2 : null,
       ),
-      const SizedBox(height: 19.0),
-      receiptMode == 1 ? emailReceiptWidget() : textMessageReceiptWidget(),
-      const SizedBox(height: 20.0),
-    ],
-  );
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 38.0, vertical: 9.0),
+        child: CommonWidgets().textWidget(
+            StringConstants.email,
+            StyleConstants.customTextStyle09MonsterRegular(
+                color: AppColors.textColor1)),
+      ),
+    );
+  }
+
+  Container buildContainer2() {
+    return Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          color: receiptMode == 2 ? AppColors.primaryColor2 : null,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 19.0, vertical: 9.0),
+          child: CommonWidgets().textWidget(
+              StringConstants.textMessage,
+              StyleConstants.customTextStyle09MonsterRegular(
+                  color: AppColors.textColor1)),
+        ));
+  }
 
   Widget emailReceiptWidget() => Container(
-    width: 253.0,
-    height: 47.0,
-    decoration: BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      color: AppColors.gradientColor1,
-      border: Border.all(color: AppColors.gradientColor1),
-    ),
-    child: Row(
-      children: [
-        Container(
-          width: 203.0,
-          height: 45.0,
-          decoration: BoxDecoration(
-            color: AppColors.whiteColor,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            // border: Border.all(color: AppColors.gradientColor1),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
-                  child: TextField(
-                    maxLength: 100,
-                    controller: emailController,
-                    style:
-                    StyleConstants.customTextStyle12MontserratSemiBold(
-                        color: AppColors.textColor1),
-                    decoration: const InputDecoration(
-                      hintText: StringConstants.enterEmailId,
-                      counterText: "",
-                      border: InputBorder.none,
+        width: 253.0,
+        height: 47.0,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          color: AppColors.gradientColor1,
+          border: Border.all(color: AppColors.gradientColor1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 203.0,
+              height: 45.0,
+              decoration: BoxDecoration(
+                color: AppColors.whiteColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                // border: Border.all(color: AppColors.gradientColor1),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 9.0, left: 4.0),
+                      child: TextField(
+                        maxLength: 100,
+                        controller: emailController,
+                        style:
+                            StyleConstants.customTextStyle12MontserratSemiBold(
+                                color: AppColors.textColor1),
+                        decoration: const InputDecoration(
+                          hintText: StringConstants.enterEmailId,
+                          counterText: "",
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+            GestureDetector(
+              onTap: () {
+                emailValidation();
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+                child: CommonWidgets().image(
+                    image: AssetsConstants.send, width: 25.0, height: 25.0),
+              ),
+            )
+          ],
         ),
-        GestureDetector(
-          onTap: () {
-            emailValidation();
-          },
-          child: Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
-            child: CommonWidgets().image(
-                image: AssetsConstants.send, width: 25.0, height: 25.0),
-          ),
-        )
-      ],
-    ),
-  );
+      );
 
   Widget textMessageReceiptWidget() => Container(
-    width: 253.0,
-    height: 47.0,
-    decoration: BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-      color: AppColors.gradientColor1,
-      border: Border.all(color: AppColors.gradientColor1),
-    ),
-    child: Row(
-      children: [
-        Container(
-          width: 203.0,
-          height: 45.0,
-          decoration: BoxDecoration(
-            color: AppColors.whiteColor,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-            // border: Border.all(color: AppColors.gradientColor1),
-          ),
-          child: Row(
-            children: [
-              SizedBox(width: 50.0, child: countryPicker()),
-              Container(
-                width: 1.0,
-                height: 20.0,
-                color: AppColors.primaryColor1,
+        width: 253.0,
+        height: 47.0,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+          color: AppColors.gradientColor1,
+          border: Border.all(color: AppColors.gradientColor1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 203.0,
+              height: 45.0,
+              decoration: BoxDecoration(
+                color: AppColors.whiteColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                // border: Border.all(color: AppColors.gradientColor1),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
-                  child: TextField(
-                    maxLength: 15,
-                    controller: phoneNumberController,
-                    keyboardType: TextInputType.phone,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    style:
-                    StyleConstants.customTextStyle12MontserratSemiBold(
-                        color: AppColors.textColor1),
-                    decoration: const InputDecoration(
-                      counterText: "",
-                      border: InputBorder.none,
+              child: Row(
+                children: [
+                  SizedBox(width: 50.0, child: countryPicker()),
+                  Container(
+                    width: 1.0,
+                    height: 20.0,
+                    color: AppColors.primaryColor1,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
+                      child: TextField(
+                        maxLength: 15,
+                        controller: phoneNumberController,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        style:
+                            StyleConstants.customTextStyle12MontserratSemiBold(
+                                color: AppColors.textColor1),
+                        decoration: const InputDecoration(
+                          counterText: "",
+                          border: InputBorder.none,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+            GestureDetector(
+              onTap: () {
+                smsValidation();
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+                child: CommonWidgets().image(
+                    image: AssetsConstants.send, width: 25.0, height: 25.0),
+              ),
+            )
+          ],
         ),
-        GestureDetector(
-          onTap: () {
-            smsValidation();
-          },
-          child: Padding(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
-            child: CommonWidgets().image(
-                image: AssetsConstants.send, width: 25.0, height: 25.0),
-          ),
-        )
-      ],
-    ),
-  );
+      );
 
   Widget countryPicker() => CountryCodePicker(
-    onChanged: (value) {
-      countryCode = value.toString();
-    },
-    padding: EdgeInsets.zero,
-    textStyle: StyleConstants.customTextStyle12MonsterMedium(
-        color: AppColors.textColor1),
-    // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
-    initialSelection: StringConstants.usCountryCode,
-    showFlag: false,
-    // optional. Shows only country name and flag
-    showCountryOnly: true,
-    // optional. Shows only country name and flag when popup is closed.
-    showOnlyCountryWhenClosed: false,
-    // optional. aligns the flag and the Text left
-    alignLeft: false,
-  );
+        onChanged: (value) {
+          countryCode = value.toString();
+        },
+        padding: EdgeInsets.zero,
+        textStyle: StyleConstants.customTextStyle12MonsterMedium(
+            color: AppColors.textColor1),
+        // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+        initialSelection: StringConstants.usCountryCode,
+        showFlag: false,
+        // optional. Shows only country name and flag
+        showCountryOnly: true,
+        // optional. Shows only country name and flag when popup is closed.
+        showOnlyCountryWhenClosed: false,
+        // optional. aligns the flag and the Text left
+        alignLeft: false,
+      );
 
   onAmountEnter(double value) {
     receivedAmount = value;
@@ -760,60 +770,56 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   // Right side panel design
   Widget rightSideWidget() => Padding(
-    padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
-    child: SingleChildScrollView(
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.307,
-        height: MediaQuery.of(context).size.height * 0.78,
-        decoration: BoxDecoration(
-            color: AppColors.whiteColor,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0))),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 22.0, right: 19.0),
-          child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
-                    child: CommonWidgets().textView(
-                        StringConstants.orderDetails,
-                        StyleConstants.customTextStyle22MontserratBold(
-                            color:
-                            AppColors.textColor1))),
-                customerNameWidget(
-                    customerName:
-                    widget.placeOrderRequestModel.getCustomerName()),
-                const SizedBox(height: 7.0),
-                orderDetailsWidget(
-                    orderId: orderID,
-                    orderDate:
-                    widget.placeOrderRequestModel.getOrderDate()),
-                const SizedBox(height: 8.0),
-                customerDetailsComponent(
-                    eventName: widget.events.getEventName(),
-                    email: widget.placeOrderRequestModel.email ??
-                        StringExtension.empty(),
-                    storeAddress: widget.events.getEventAddress(),
-                    phone: widget.placeOrderRequestModel.getPhoneNumber()),
-                const SizedBox(height: 10.0),
-                // Expanded removed from here.
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Container(
-                        color: AppColors.whiteColor,
-                        child: itemView()),
-                  ),
-                ),
-                DottedLine(
-                    height: 2.0,
-                    color: AppColors.textColor1),
-                componentBill(),
-              ]),
+        padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
+        child: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.307,
+            height: MediaQuery.of(context).size.height * 0.78,
+            decoration: BoxDecoration(
+                color: AppColors.whiteColor,
+                borderRadius: const BorderRadius.all(Radius.circular(8.0))),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0, right: 19.0),
+              child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                        padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
+                        child: CommonWidgets().textView(
+                            StringConstants.orderDetails,
+                            StyleConstants.customTextStyle22MontserratBold(
+                                color: AppColors.textColor1))),
+                    customerNameWidget(
+                        customerName:
+                            widget.placeOrderRequestModel.getCustomerName()),
+                    const SizedBox(height: 7.0),
+                    orderDetailsWidget(
+                        orderId: orderID,
+                        orderDate:
+                            widget.placeOrderRequestModel.getOrderDate()),
+                    const SizedBox(height: 8.0),
+                    customerDetailsComponent(
+                        eventName: widget.events.getEventName(),
+                        email: widget.placeOrderRequestModel.email ??
+                            StringExtension.empty(),
+                        storeAddress: widget.events.getEventAddress(),
+                        phone: widget.placeOrderRequestModel.getPhoneNumber()),
+                    const SizedBox(height: 10.0),
+                    // Expanded removed from here.
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Container(
+                            color: AppColors.whiteColor, child: itemView()),
+                      ),
+                    ),
+                    DottedLine(height: 2.0, color: AppColors.textColor1),
+                    componentBill(),
+                  ]),
+            ),
+          ),
         ),
-      ),
-    ),
-  );
+      );
 
   // customer Name
   Widget customerNameWidget({required String customerName}) =>
@@ -831,10 +837,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   // customer Details
   Widget customerDetailsComponent(
-      {required String eventName,
-        required String email,
-        required String storeAddress,
-        required String phone}) =>
+          {required String eventName,
+          required String email,
+          required String storeAddress,
+          required String phone}) =>
       Column(
         children: [
           Visibility(
@@ -842,7 +848,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
@@ -860,7 +866,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.email}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
@@ -878,7 +884,7 @@ class _PaymentScreenState extends State<PaymentScreen>
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.phone}: ',
                     StyleConstants.customTextStyle09MonsterRegular(
@@ -907,7 +913,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   // Widget orderDetails
   Widget orderDetailsWidget(
-      {required String orderId, required String orderDate}) =>
+          {required String orderId, required String orderDate}) =>
       Column(children: [
         Row(children: [
           CommonWidgets().textView(
@@ -933,118 +939,118 @@ class _PaymentScreenState extends State<PaymentScreen>
       ]);
 
   Widget itemView() => Column(children: [
-    ListView.builder(
-        shrinkWrap: true,
-        itemCount: widget.placeOrderRequestModel.orderItemsList!.length,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          return itemViewListItem(
-              orderItem:
-              widget.placeOrderRequestModel.orderItemsList![index]);
-        }),
-  ]);
+        ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.placeOrderRequestModel.orderItemsList!.length,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              return itemViewListItem(
+                  orderItem:
+                      widget.placeOrderRequestModel.orderItemsList![index]);
+            }),
+      ]);
 
   Widget itemViewListItem({required OrderItemsList orderItem}) => Column(
-    children: [
-      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-        Expanded(
-          flex: 6,
-          child: CommonWidgets().textView(
-              orderItem.name!,
-              StyleConstants.customTextStyle12MonsterRegular(
-                  color: AppColors.textColor1)),
-        ),
-        Expanded(
-          flex: 2,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: CommonWidgets().textView(
-                "${StringConstants.qty} - ${orderItem.quantity!}",
-                StyleConstants.customTextStyle12MonsterRegular(
-                    color: AppColors.textColor1)),
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Expanded(
+              flex: 6,
+              child: CommonWidgets().textView(
+                  orderItem.name!,
+                  StyleConstants.customTextStyle12MonsterRegular(
+                      color: AppColors.textColor1)),
+            ),
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: CommonWidgets().textView(
+                    "${StringConstants.qty} - ${orderItem.quantity!}",
+                    StyleConstants.customTextStyle12MonsterRegular(
+                        color: AppColors.textColor1)),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: CommonWidgets().textView(
+                  "\$${orderItem.getTotalPrice().toStringAsFixed(2)}",
+                  StyleConstants.customTextStyle12MontserratSemiBold(
+                      color: AppColors.textColor1)),
+            ),
+          ]),
+          Visibility(
+            visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
+            child: ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
+                    ? (orderItem.foodExtraItemMappingList![0]
+                            .orderFoodExtraItemDetailDto?.length ??
+                        0)
+                    : 0,
+                itemBuilder: (context, innerIndex) {
+                  return Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: subOrderItemView(orderItem
+                                .foodExtraItemMappingList![0]
+                                .orderFoodExtraItemDetailDto![innerIndex]
+                                .name ??
+                            ''),
+                      ),
+                      const Text(','),
+                      const SizedBox(
+                        width: 3.0,
+                      )
+                    ],
+                  );
+                }),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: CommonWidgets().textView(
-              "\$${orderItem.getTotalPrice().toStringAsFixed(2)}",
-              StyleConstants.customTextStyle12MontserratSemiBold(
-                  color: AppColors.textColor1)),
-        ),
-      ]),
-      Visibility(
-        visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
-        child: ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
-                ? (orderItem.foodExtraItemMappingList![0]
-                .orderFoodExtraItemDetailDto?.length ??
-                0)
-                : 0,
-            itemBuilder: (context, innerIndex) {
-              return Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: subOrderItemView(orderItem
-                        .foodExtraItemMappingList![0]
-                        .orderFoodExtraItemDetailDto![innerIndex]
-                        .name ??
-                        ''),
-                  ),
-                  const Text(','),
-                  const SizedBox(
-                    width: 3.0,
-                  )
-                ],
-              );
-            }),
-      ),
-      const SizedBox(height: 20.0),
-    ],
-  );
+          const SizedBox(height: 20.0),
+        ],
+      );
 
   Widget subOrderItemView(String subItem) => Text(
-    subItem,
-    style: const TextStyle(fontSize: 10.0),
-  );
+        subItem,
+        style: const TextStyle(fontSize: 10.0),
+      );
 
   Widget componentBill() => Column(
-    children: [
-      const SizedBox(height: 14.0),
-      billTextView(StringConstants.foodCost, foodCost),
-      billTextView(StringConstants.salesTax, salesTax),
-      billTextView(StringConstants.subTotal, foodCost + salesTax),
-      billTextView(StringConstants.tip, tip),
-      totalBillView(totalAmount),
-      const SizedBox(height: 22.0),
-    ],
-  );
+        children: [
+          const SizedBox(height: 14.0),
+          billTextView(StringConstants.foodCost, foodCost),
+          billTextView(StringConstants.salesTax, salesTax),
+          billTextView(StringConstants.subTotal, foodCost + salesTax),
+          billTextView(StringConstants.tip, tip),
+          totalBillView(totalAmount),
+          const SizedBox(height: 22.0),
+        ],
+      );
 
   Widget billTextView(String billTitle, double itemAmount) => Column(
-    children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-        CommonWidgets().textView(
-            billTitle,
-            StyleConstants.customTextStyle14MonsterMedium(
-                color: AppColors.textColor1)),
-        Row(
-          children: [
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             CommonWidgets().textView(
-                "\$",
-                StyleConstants.customTextStyle14MontserratBold(
+                billTitle,
+                StyleConstants.customTextStyle14MonsterMedium(
                     color: AppColors.textColor1)),
-            CommonWidgets().textView(
-                itemAmount.toStringAsFixed(2),
-                StyleConstants.customTextStyle14MontserratBold(
-                    color: AppColors.textColor1)),
-          ],
-        ),
-      ]),
-      const SizedBox(height: 21.0),
-    ],
-  );
+            Row(
+              children: [
+                CommonWidgets().textView(
+                    "\$",
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: AppColors.textColor1)),
+                CommonWidgets().textView(
+                    itemAmount.toStringAsFixed(2),
+                    StyleConstants.customTextStyle14MontserratBold(
+                        color: AppColors.textColor1)),
+              ],
+            ),
+          ]),
+          const SizedBox(height: 21.0),
+        ],
+      );
 
   Widget totalBillView(double totalAmount) =>
       Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -1119,9 +1125,9 @@ class _PaymentScreenState extends State<PaymentScreen>
     const String version = AssetsConstants.appVersion;
     final tags = {
       FinixTagsKey.customerEmail.name:
-      widget.placeOrderRequestModel.email ?? StringExtension.empty(),
+          widget.placeOrderRequestModel.email ?? StringExtension.empty(),
       FinixTagsKey.customerName.name:
-      widget.placeOrderRequestModel.getCustomerName(),
+          widget.placeOrderRequestModel.getCustomerName(),
       FinixTagsKey.eventName.name: widget.events.getEventName(),
       FinixTagsKey.eventCode.name: widget.events.getEventCode(),
       FinixTagsKey.environment.name: StringConstants.test,
@@ -1213,7 +1219,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   PayOrderCardRequestModel getPayOrderCardMethodRequestModel() {
     PayOrderCardRequestModel payOrderCardRequestModel =
-    PayOrderCardRequestModel();
+        PayOrderCardRequestModel();
     payOrderCardRequestModel.orderId = orderID;
     payOrderCardRequestModel.paymentMethod = PaymentMethods.card;
     payOrderCardRequestModel.stripeCardId = stripeTokenId;
@@ -1331,7 +1337,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     PayReceipt payReceiptModel = PayReceipt();
     FinixResponseDto finixResponseDto = FinixResponseDto();
     FinixSaleReciptResponseRequest finixSaleReciptResponseRequest =
-    FinixSaleReciptResponseRequest();
+        FinixSaleReciptResponseRequest();
     FinixSaleReceiptRequest finixSaleReceiptRequest = FinixSaleReceiptRequest();
 
     payReceiptModel.orderId = orderID;

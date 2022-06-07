@@ -71,9 +71,10 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                     ),
                     const SizedBox(width: 40),
                     Padding(
-                      padding: const EdgeInsets.only(right: 230.0, bottom: 20.0),
-                      child: CommonWidgets().buttonWidget(StringConstants.confirm,
-                          () {
+                      padding:
+                          const EdgeInsets.only(right: 230.0, bottom: 20.0),
+                      child: CommonWidgets()
+                          .buttonWidget(StringConstants.confirm, () {
                         onTapConfirmButton();
                       }),
                     ),
@@ -127,9 +128,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
-                    DottedLine(
-                        height: 2.0,
-                        color: AppColors.textColor1),
+                    DottedLine(height: 2.0, color: AppColors.textColor1),
                     componentBill(),
                   ],
                 ),
@@ -187,80 +186,88 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: [
-                CommonWidgets().textView(
-                    orderItem.name!,
-                    StyleConstants.customTextStyle14MonsterMedium(
-                        color: AppColors.textColor1)),
-                const SizedBox(width: 5.0),
-                CommonWidgets().textView(
-                    'x',
-                    StyleConstants.customTextStyle14MonsterMedium(
-                        color: AppColors.textColor1)),
-                const SizedBox(width: 5.0),
-                CommonWidgets().textView(
-                    '${orderItem.quantity}',
-                    StyleConstants.customTextStyle14MonsterMedium(
-                        color: AppColors.textColor1)),
-              ],
-            ),
-            Row(
-              children: [
-                CommonWidgets().textView(
-                    "\$",
-                    StyleConstants.customTextStyle14MontserratBold(
-                        color: AppColors.textColor1)),
-                CommonWidgets().textView(
-                    orderItem.getTotalPrice().toStringAsFixed(2),
-                    StyleConstants.customTextStyle14MontserratBold(
-                        color: AppColors.textColor1)),
-              ],
-            ),
+            buildSubRow1(orderItem),
+            buildSubRow2(orderItem),
           ]),
           Visibility(
             visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
-            child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
-                    ? (orderItem.foodExtraItemMappingList![0]
-                            .orderFoodExtraItemDetailDto?.length ??
-                        0)
-                    : 0,
-                itemBuilder: (context, innerIndex) {
-                  return Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: subOrderItemView(orderItem
-                                .foodExtraItemMappingList![0]
-                                .orderFoodExtraItemDetailDto![innerIndex]
-                                .name ??
-                            ''),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5.0),
-                        child: CommonWidgets().textWidget(
-                            "X " +
-                                orderItem
-                                    .foodExtraItemMappingList![0]
-                                    .orderFoodExtraItemDetailDto![innerIndex]
-                                    .quantity
-                                    .toString(),
-                            StyleConstants.customTextStyle10MonsterMedium(
-                                color: AppColors.textColor2)),
-                      ),
-                      const SizedBox(
-                        width: 3.0,
-                      )
-                    ],
-                  );
-                }),
+            child: listViewBuilder(orderItem),
           ),
           const SizedBox(height: 15.0),
         ],
       );
+
+  ListView listViewBuilder(OrderItemsList orderItem) {
+    return ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty
+            ? (orderItem.foodExtraItemMappingList![0]
+                    .orderFoodExtraItemDetailDto?.length ??
+                0)
+            : 0,
+        itemBuilder: (context, innerIndex) {
+          return Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: subOrderItemView(orderItem.foodExtraItemMappingList![0]
+                        .orderFoodExtraItemDetailDto![innerIndex].name ??
+                    ''),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: CommonWidgets().textWidget(
+                    "X " +
+                        orderItem.foodExtraItemMappingList![0]
+                            .orderFoodExtraItemDetailDto![innerIndex].quantity
+                            .toString(),
+                    StyleConstants.customTextStyle10MonsterMedium(
+                        color: AppColors.textColor2)),
+              ),
+              const SizedBox(
+                width: 3.0,
+              )
+            ],
+          );
+        });
+  }
+
+  Row buildSubRow2(OrderItemsList orderItem) {
+    return Row(
+      children: [
+        CommonWidgets().textView(
+            "\$",
+            StyleConstants.customTextStyle14MontserratBold(
+                color: AppColors.textColor1)),
+        CommonWidgets().textView(
+            orderItem.getTotalPrice().toStringAsFixed(2),
+            StyleConstants.customTextStyle14MontserratBold(
+                color: AppColors.textColor1)),
+      ],
+    );
+  }
+
+  Row buildSubRow1(OrderItemsList orderItem) {
+    return Row(
+      children: [
+        CommonWidgets().textView(
+            orderItem.name!,
+            StyleConstants.customTextStyle14MonsterMedium(
+                color: AppColors.textColor1)),
+        const SizedBox(width: 5.0),
+        CommonWidgets().textView(
+            'x',
+            StyleConstants.customTextStyle14MonsterMedium(
+                color: AppColors.textColor1)),
+        const SizedBox(width: 5.0),
+        CommonWidgets().textView(
+            '${orderItem.quantity}',
+            StyleConstants.customTextStyle14MonsterMedium(
+                color: AppColors.textColor1)),
+      ],
+    );
+  }
 
   Widget componentCustomerDetails(
           String customerName, String phoneNumber, String email) =>
@@ -289,60 +296,68 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
               ],
             ),
           ),
-          Visibility(
-            visible: phoneNumber.isNotEmpty,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: CommonWidgets().textView(
-                        '${StringConstants.phone}:',
-                        StyleConstants.customTextStyle14MonsterMedium(
-                            color: AppColors.textColor1)),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: CommonWidgets().textView(
-                        phoneNumber,
-                        StyleConstants.customTextStyle14MonsterMedium(
-                            color: AppColors.textColor1)),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Visibility(
-            visible: email.isNotEmpty && email != "null",
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: CommonWidgets().textView(
-                      '${StringConstants.email}:',
-                      StyleConstants.customTextStyle14MonsterMedium(
-                          color: AppColors.textColor1)),
-                ),
-                Expanded(
-                  flex: 5,
-                  child: CommonWidgets().textView(
-                      email,
-                      StyleConstants.customTextStyle14MonsterMedium(
-                          color: AppColors.textColor1)),
-                ),
-              ],
-            ),
-          ),
+          phoneNumVisibility(phoneNumber),
+          emailVisibility(email),
         ]),
       );
+
+  Visibility emailVisibility(String email) {
+    return Visibility(
+      visible: email.isNotEmpty && email != "null",
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: CommonWidgets().textView(
+                '${StringConstants.email}:',
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: AppColors.textColor1)),
+          ),
+          Expanded(
+            flex: 5,
+            child: CommonWidgets().textView(
+                email,
+                StyleConstants.customTextStyle14MonsterMedium(
+                    color: AppColors.textColor1)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Visibility phoneNumVisibility(String phoneNumber) {
+    return Visibility(
+      visible: phoneNumber.isNotEmpty,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 2,
+              child: CommonWidgets().textView(
+                  '${StringConstants.phone}:',
+                  StyleConstants.customTextStyle14MonsterMedium(
+                      color: AppColors.textColor1)),
+            ),
+            Expanded(
+              flex: 5,
+              child: CommonWidgets().textView(
+                  phoneNumber,
+                  StyleConstants.customTextStyle14MonsterMedium(
+                      color: AppColors.textColor1)),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget subOrderItemView(String subItem) => Text(subItem);
 
   Widget componentBill() => SingleChildScrollView(
-    child: Column(
+        child: Column(
           children: [
             const SizedBox(height: 14.0),
             billTextView(
@@ -467,13 +482,16 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   Widget textWidget(String textTitle, TextStyle textStyle) {
     return Text(textTitle, style: textStyle);
   }
-  getTip(double tip){
+
+  getTip(double tip) {
     orderDetailsModel?.setTip(tip);
     double? receivedTip = orderDetailsModel?.getTip();
     updateTip(receivedTip!);
-    P2PConnectionManager.shared.notifyChangeToStaff(action: CustomerActionConst.tip, data: receivedTip.toString());
+    P2PConnectionManager.shared.notifyChangeToStaff(
+        action: CustomerActionConst.tip, data: receivedTip.toString());
   }
-  updateTip(double tip){
+
+  updateTip(double tip) {
     setState(() {
       tipAmount = tip;
     });

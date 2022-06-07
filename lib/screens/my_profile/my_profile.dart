@@ -156,22 +156,31 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   onTapSaveProfile() async {
     FocusScope.of(context).unfocus();
     setState(() {
-      emailIdController.text.isEmpty
-          ? isEmailValid = false
-          : isEmailValid = true;
-      newPasswordController.text.isEmpty
-          ? isPasswordValid = false
-          : isPasswordValid = true;
-      firstNameController.text.isEmpty
-          ? isFirstNameValid = false
-          : isFirstNameValid = true;
-      lastNameController.text.isEmpty
-          ? isLastNameValid = false
-          : isLastNameValid = true;
-      contactNumberController.text.isEmpty
-          ? isContactValid = false
-          : isContactValid = true;
+      setBoolVars();
     });
+    getMyProfileDetailsToUpdate();
+    String userID = await FunctionalUtils.getUserID();
+
+    callUpdateProfile(userID);
+  }
+
+  void setBoolVars() {
+    emailIdController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
+    newPasswordController.text.isEmpty
+        ? isPasswordValid = false
+        : isPasswordValid = true;
+    firstNameController.text.isEmpty
+        ? isFirstNameValid = false
+        : isFirstNameValid = true;
+    lastNameController.text.isEmpty
+        ? isLastNameValid = false
+        : isLastNameValid = true;
+    contactNumberController.text.isEmpty
+        ? isContactValid = false
+        : isContactValid = true;
+  }
+
+  void getMyProfileDetailsToUpdate() {
     myProfileUpdateRequestModel.firstName = firstNameController.text.toString();
     myProfileUpdateRequestModel.lastName = lastNameController.text.toString();
     myProfileUpdateRequestModel.email = emailIdController.text.toString();
@@ -192,8 +201,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     myProfileUpdateRequestModel.profileImageFileId = "";
     myProfileUpdateRequestModel.defaultTimezone =
         getMyProfile[0].defaultTimezone.toString();
-    String userID = await FunctionalUtils.getUserID();
+  }
 
+  void callUpdateProfile(String userID) {
     if (isEmailValid && isFirstNameValid && isLastNameValid && isContactValid) {
       CheckConnection().connectionState().then((value) {
         if (value == true) {
@@ -251,25 +261,29 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
             ),
           ),
         ),
-        Visibility(
-          visible: editMode ? true : false,
-          child: Row(
-            children: [
-              CommonWidgets().buttonWidgetUnFilled(
-                StringConstants.cancelProfile,
-                onTapCancel,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 23.0),
-                child: CommonWidgets().buttonWidget(
-                  StringConstants.save,
-                  onTapSaveProfile,
-                ),
-              ),
-            ],
-          ),
-        ),
+        buildVisibility(),
       ],
+    );
+  }
+
+  Visibility buildVisibility() {
+    return Visibility(
+      visible: editMode ? true : false,
+      child: Row(
+        children: [
+          CommonWidgets().buttonWidgetUnFilled(
+            StringConstants.cancelProfile,
+            onTapCancel,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 23.0),
+            child: CommonWidgets().buttonWidget(
+              StringConstants.save,
+              onTapSaveProfile,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -283,47 +297,14 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(height: 28.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: CommonWidgets().textWidget(
-                  StringConstants.myProfile,
-                  StyleConstants.customTextStyle22MontserratBold(
-                      color: AppColors.textColor1),
-                  textAlign: TextAlign.start),
-            ),
+            buildPadding(),
             const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 23.0),
               child: CommonWidgets().profileImage(userName, editMode),
             ),
             const SizedBox(height: 33.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      profileDetailsComponent(
-                          StringConstants.firstName,
-                          "",
-                          StringConstants.enterFirstName,
-                          firstNameController,
-                          firstNameValidationMessage,
-                          firstNameValidation,
-                          editMode),
-                    ],
-                  ),
-                  profileDetailsComponent(
-                      StringConstants.lastName,
-                      "",
-                      StringConstants.enterLastName,
-                      lastNameController,
-                      lastNameValidationMessage,
-                      lastNameValidation,
-                      editMode),
-                ],
-              ),
-            ),
+            buildPadding2(),
             const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 23.0),
@@ -347,21 +328,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               ),
             ),
             const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: Row(
-                children: [
-                  profilePasswordDetailsComponent(
-                      StringConstants.password,
-                      "",
-                      StringConstants.password,
-                      newPasswordController,
-                      passwordValidationMessage,
-                      passwordValidation,
-                      editMode),
-                ],
-              ),
-            ),
+            buildPadding3(),
             const SizedBox(
               height: 20.0,
             ),
@@ -373,6 +340,65 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               height: 340.0,
             ),
           ]);
+
+  Padding buildPadding3() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23.0),
+      child: Row(
+        children: [
+          profilePasswordDetailsComponent(
+              StringConstants.password,
+              "",
+              StringConstants.password,
+              newPasswordController,
+              passwordValidationMessage,
+              passwordValidation,
+              editMode),
+        ],
+      ),
+    );
+  }
+
+  Padding buildPadding2() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23.0),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              profileDetailsComponent(
+                  StringConstants.firstName,
+                  "",
+                  StringConstants.enterFirstName,
+                  firstNameController,
+                  firstNameValidationMessage,
+                  firstNameValidation,
+                  editMode),
+            ],
+          ),
+          profileDetailsComponent(
+              StringConstants.lastName,
+              "",
+              StringConstants.enterLastName,
+              lastNameController,
+              lastNameValidationMessage,
+              lastNameValidation,
+              editMode),
+        ],
+      ),
+    );
+  }
+
+  Padding buildPadding() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23.0),
+      child: CommonWidgets().textWidget(
+          StringConstants.myProfile,
+          StyleConstants.customTextStyle22MontserratBold(
+              color: AppColors.textColor1),
+          textAlign: TextAlign.start),
+    );
+  }
 
   Widget profileDetailsComponent(
           String txtName,
@@ -390,44 +416,54 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
               StyleConstants.customTextStyle14MonsterRegular(
                   color: AppColors.textColor1),
               textAlign: TextAlign.left),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              width: 300.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  onChanged: (value) {
-                    validationMethod();
-                  },
-                  enabled: editMode ? true : false,
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: textFiledColor
-                          ? AppColors.whiteColor
-                          : AppColors.denotiveColor5,
-                      hintText: txtHint,
-                      border: InputBorder.none,
-                      labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                          color: AppColors.textColor1)),
-                ),
-              ),
-            ),
-          ),
+          buildEditModePadding(validationMethod, textEditingController,
+              textFiledColor, txtHint, txtValue),
           Text(validationMessage,
               style: StyleConstants.customTextStyle12MonsterRegular(
                   color: AppColors.textColor5),
               textAlign: TextAlign.left)
         ],
       );
+
+  Padding buildEditModePadding(
+      Function validationMethod,
+      TextEditingController textEditingController,
+      bool textFiledColor,
+      String txtHint,
+      String txtValue) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
+      child: Container(
+        height: 40.0,
+        width: 300.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6.0),
+            border: Border.all(
+                color: AppColors.textColor1.withOpacity(0.2), width: 2)),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 2.0),
+          child: TextField(
+            onChanged: (value) {
+              validationMethod();
+            },
+            enabled: editMode ? true : false,
+            controller: textEditingController,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: textFiledColor
+                    ? AppColors.whiteColor
+                    : AppColors.denotiveColor5,
+                hintText: txtHint,
+                border: InputBorder.none,
+                labelText: txtValue,
+                hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                    color: AppColors.textColor1)),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget profilePasswordDetailsComponent(
           String txtName,
@@ -448,47 +484,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           Padding(
             padding: const EdgeInsets.only(
                 top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              width: 300.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  obscureText: isPasswordVisible,
-                  onChanged: (value) {
-                    validationMethod();
-                  },
-                  enabled: editMode ? true : false,
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      suffixIcon: Visibility(
-                        visible: editMode ? true : false,
-                        child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              });
-                            },
-                            child: isPasswordVisible
-                                ? const Icon(Icons.visibility_off)
-                                : const Icon(Icons.visibility)),
-                      ),
-                      filled: true,
-                      fillColor: textFiledColor
-                          ? AppColors.whiteColor
-                          : AppColors.denotiveColor5,
-                      hintText: txtHint,
-                      border: InputBorder.none,
-                      labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                          color: AppColors.textColor1)),
-                ),
-              ),
-            ),
+            child: buildContainer(validationMethod, textEditingController,
+                textFiledColor, txtHint, txtValue),
           ),
           Visibility(
             visible: editMode ? true : false,
@@ -499,6 +496,64 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           )
         ],
       );
+
+  Container buildContainer(
+      Function validationMethod,
+      TextEditingController textEditingController,
+      bool textFiledColor,
+      String txtHint,
+      String txtValue) {
+    return Container(
+      height: 40.0,
+      width: 300.0,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          border: Border.all(
+              color: AppColors.textColor1.withOpacity(0.2), width: 2)),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 2.0),
+        child: buildTextField(validationMethod, textEditingController,
+            textFiledColor, txtHint, txtValue),
+      ),
+    );
+  }
+
+  TextField buildTextField(
+      Function validationMethod,
+      TextEditingController textEditingController,
+      bool textFiledColor,
+      String txtHint,
+      String txtValue) {
+    return TextField(
+      obscureText: isPasswordVisible,
+      onChanged: (value) {
+        validationMethod();
+      },
+      enabled: editMode ? true : false,
+      controller: textEditingController,
+      decoration: InputDecoration(
+          suffixIcon: Visibility(
+            visible: editMode ? true : false,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isPasswordVisible = !isPasswordVisible;
+                  });
+                },
+                child: isPasswordVisible
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility)),
+          ),
+          filled: true,
+          fillColor:
+              textFiledColor ? AppColors.whiteColor : AppColors.denotiveColor5,
+          hintText: txtHint,
+          border: InputBorder.none,
+          labelText: txtValue,
+          hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+              color: AppColors.textColor1)),
+    );
+  }
 
   Widget profileEmailTextFiledComponent(
           String txtName,

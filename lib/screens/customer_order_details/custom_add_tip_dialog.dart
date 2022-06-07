@@ -78,59 +78,63 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                 StyleConstants.customTextStyle12MonsterMedium(
                     color: AppColors.textColor2)),
           ),
-          TextField(
-            controller: tipController,
-            keyboardType: TextInputType.number,
-            maxLength: TextFieldLengthConstant.addTip,
-            style: StyleConstants.customTextStyle22MonsterMedium(
-                color: AppColors.textColor6),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              hintText: StringConstants.enterAmount,
-              errorText: isValidTip ? "" : StringConstants.enterTip,
-              hintStyle: StyleConstants.customTextStyle12MonsterRegular(
-                  color: AppColors.textColor2),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: AppColors.skyBlueBorderColor),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: AppColors.textColor5),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: AppColors.skyBlueBorderColor),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              prefixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: CommonWidgets().textWidget(
-                        StringConstants.symbolDollar,
-                        StyleConstants.customTextStyle22MonsterMedium(
-                            color: AppColors.textColor2)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0.0, horizontal: 15.0),
-                    child: Container(
-                      color: AppColors.skyBlueBorderColor,
-                      width: 1.0,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
+          buildTextField(),
         ],
       ),
     );
+  }
+
+  TextField buildTextField() {
+    return TextField(
+          controller: tipController,
+          keyboardType: TextInputType.number,
+          maxLength: TextFieldLengthConstant.addTip,
+          style: StyleConstants.customTextStyle22MonsterMedium(
+              color: AppColors.textColor6),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            hintText: StringConstants.enterAmount,
+            errorText: isValidTip ? "" : StringConstants.enterTip,
+            hintStyle: StyleConstants.customTextStyle12MonsterRegular(
+                color: AppColors.textColor2),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AppColors.skyBlueBorderColor),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AppColors.textColor5),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AppColors.skyBlueBorderColor),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            prefixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: CommonWidgets().textWidget(
+                      StringConstants.symbolDollar,
+                      StyleConstants.customTextStyle22MonsterMedium(
+                          color: AppColors.textColor2)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 15.0),
+                  child: Container(
+                    color: AppColors.skyBlueBorderColor,
+                    width: 1.0,
+                    height: 30,
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
   }
 
   Widget addTipButton() {
