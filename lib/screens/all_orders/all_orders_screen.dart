@@ -30,8 +30,8 @@ import 'package:kona_ice_pos/utils/utils.dart';
 
 class AllOrdersScreen extends StatefulWidget {
   final Function(
-          SavedOrders, List<SavedOrdersItem>, List<SavedOrdersExtraItems>)
-      onBackTap;
+      SavedOrders, List<SavedOrdersItem>, List<SavedOrdersExtraItems>)
+  onBackTap;
   final Events events;
 
   const AllOrdersScreen(
@@ -56,6 +56,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   int selectedRow = -1;
   bool isApiProcess = false;
   int countOffSet = 0;
+  bool refundBool = false;
 
   _AllOrdersScreenState() {
     allOrderPresenter = AllOrderPresenter(this);
@@ -63,9 +64,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   getSyncOrders(
       {required int lastSync,
-      required String orderStatus,
-      required String eventId,
-      required int offset}) {
+        required String orderStatus,
+        required String eventId,
+        required int offset}) {
     setState(() {
       isApiProcess = true;
     });
@@ -118,178 +119,178 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: savedOrdersList.isNotEmpty
             ? Column(
-                children: [
-                  // topWidget(),
-                  Expanded(child: bodyWidget()),
-                  // bottomWidget(),
-                ],
-              )
+          children: [
+            // topWidget(),
+            Expanded(child: bodyWidget()),
+            // bottomWidget(),
+          ],
+        )
             : Align(
-                alignment: Alignment.center,
-                child: CommonWidgets().textWidget(
-                    StringConstants.noOrdersToDisplay,
-                    StyleConstants.customTextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.textColor1,
-                        fontFamily: FontConstants.montserratSemiBold))),
+            alignment: Alignment.center,
+            child: CommonWidgets().textWidget(
+                StringConstants.noOrdersToDisplay,
+                StyleConstants.customTextStyle(
+                    fontSize: 20.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratSemiBold))),
       ),
     );
   }
 
   Widget topWidget() => Container(
-        height: 100.0,
-        decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(8.0),
-                bottomRight: Radius.circular(8.0))),
-      );
+    height: 100.0,
+    decoration: BoxDecoration(
+        color: AppColors.primaryColor1,
+        borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(8.0),
+            bottomRight: Radius.circular(8.0))),
+  );
 
   Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
-        child: bodyWidgetComponent(),
-      );
+    color: AppColors.textColor3.withOpacity(0.1),
+    child: bodyWidgetComponent(),
+  );
 
   Widget bodyWidgetComponent() => Row(children: [
-        leftSideWidget(),
-        Visibility(visible: selectedRow != -1, child: rightSideWidget()),
-      ]);
+    leftSideWidget(),
+    Visibility(visible: selectedRow != -1, child: rightSideWidget()),
+  ]);
 
   Widget bottomWidget() => Container(
-        height: 43.0,
-        decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
-        child: Align(
-            alignment: Alignment.topRight, child: componentBottomWidget()),
-      );
+    height: 43.0,
+    decoration: BoxDecoration(
+        color: AppColors.primaryColor1,
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
+    child: Align(
+        alignment: Alignment.topRight, child: componentBottomWidget()),
+  );
 
   Widget componentBottomWidget() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 35.0),
-        child: Image.asset(AssetsConstants.switchAccount,
-            width: 30.0, height: 30.0),
-      );
+    padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 35.0),
+    child: Image.asset(AssetsConstants.switchAccount,
+        width: 30.0, height: 30.0),
+  );
 
   Widget leftSideWidget() => Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      child:
+      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         topComponent(),
         Expanded(child: tableHeadRow()),
       ]));
 
   Widget topComponent() => Padding(
-        padding: const EdgeInsets.only(
-            left: 18.8, top: 20.9, right: 17.0, bottom: 21.1),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(children: [
-            const SizedBox(width: 21.0),
-            CommonWidgets().textView(
-                StringConstants.foodOrders,
-                StyleConstants.customTextStyle(
-                    fontSize: 22.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratBold)),
-          ]),
-          Visibility(
-            visible: false,
-            child: Container(
-                decoration: BoxDecoration(
-                  color: getMaterialColor(AppColors.whiteColor),
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      right: 10.0, bottom: 10.0, top: 9.0, left: 9.0),
-                  child: Row(children: [
-                    CommonWidgets().image(
-                        image: AssetsConstants.filter,
-                        width: 3.38 * SizeConfig.imageSizeMultiplier,
-                        height: 3.25 * SizeConfig.imageSizeMultiplier),
-                    const SizedBox(width: 6.0),
-                    CommonWidgets().textView(
-                        StringConstants.filterOrders,
-                        StyleConstants.customTextStyle(
-                            fontSize: 9.0,
-                            color: getMaterialColor(AppColors.primaryColor1),
-                            fontFamily: FontConstants.montserratMedium)),
-                  ]),
-                )),
-          ),
-        ]),
-      );
+    padding: const EdgeInsets.only(
+        left: 18.8, top: 20.9, right: 17.0, bottom: 21.1),
+    child:
+    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Row(children: [
+        const SizedBox(width: 21.0),
+        CommonWidgets().textView(
+            StringConstants.foodOrders,
+            StyleConstants.customTextStyle(
+                fontSize: 22.0,
+                color: AppColors.textColor1,
+                fontFamily: FontConstants.montserratBold)),
+      ]),
+      Visibility(
+        visible: false,
+        child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.whiteColor,
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 10.0, bottom: 10.0, top: 9.0, left: 9.0),
+              child: Row(children: [
+                CommonWidgets().image(
+                    image: AssetsConstants.filter,
+                    width: 3.38 * SizeConfig.imageSizeMultiplier,
+                    height: 3.25 * SizeConfig.imageSizeMultiplier),
+                const SizedBox(width: 6.0),
+                CommonWidgets().textView(
+                    StringConstants.filterOrders,
+                    StyleConstants.customTextStyle(
+                        fontSize: 9.0,
+                        color: AppColors.primaryColor1,
+                        fontFamily: FontConstants.montserratMedium)),
+              ]),
+            )),
+      ),
+    ]),
+  );
 
   Widget tableHeadRow() => Padding(
-        padding: const EdgeInsets.only(left: 15.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          // controller: _scrollController,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: DataTable(
-                    sortAscending: false,
-                    showCheckboxColumn: false,
-                    columnSpacing: 35,
-                    dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
-                    columns: [
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.customerName,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.date,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.payment,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.price,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.status,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                    ],
-                    rows: List.generate(savedOrdersList.length,
-                        (index) => _getDataRow(savedOrdersList[index], index)),
+    padding: const EdgeInsets.only(left: 15.0),
+    child: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      // controller: _scrollController,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 10.0),
+              child: DataTable(
+                sortAscending: false,
+                showCheckboxColumn: false,
+                columnSpacing: 35,
+                dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
+                columns: [
+                  DataColumn(
+                    label: CommonWidgets().textView(
+                        StringConstants.customerName,
+                        StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratBold)),
                   ),
-                ),
-              ],
+                  DataColumn(
+                    label: CommonWidgets().textView(
+                        StringConstants.date,
+                        StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratBold)),
+                  ),
+                  DataColumn(
+                    label: CommonWidgets().textView(
+                        StringConstants.payment,
+                        StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratBold)),
+                  ),
+                  DataColumn(
+                    label: CommonWidgets().textView(
+                        StringConstants.price,
+                        StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratBold)),
+                  ),
+                  DataColumn(
+                    label: CommonWidgets().textView(
+                        StringConstants.status,
+                        StyleConstants.customTextStyle(
+                            fontSize: 12.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratBold)),
+                  ),
+                ],
+                rows: List.generate(savedOrdersList.length,
+                        (index) => _getDataRow(savedOrdersList[index], index)),
+              ),
             ),
-          ),
+          ],
         ),
-      );
+      ),
+    ),
+  );
 
   DataRow _getDataRow(SavedOrders savedOrders, int index) {
     return DataRow(
@@ -317,13 +318,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         savedOrders.customerName,
                         StyleConstants.customTextStyle(
                             fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor4),
+                            color: AppColors.textColor4,
                             fontFamily: FontConstants.montserratBold)),
                     CommonWidgets().textView(
                         savedOrders.orderCode,
                         StyleConstants.customTextStyle(
                             fontSize: 10.0,
-                            color: getMaterialColor(AppColors.textColor1),
+                            color: AppColors.textColor1,
                             fontFamily: FontConstants.montserratMedium))
                   ],
                 ),
@@ -336,13 +337,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   savedOrders.getOrderDate(),
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratMedium)),
               CommonWidgets().textView(
                   savedOrders.getOrderDateTime(),
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratMedium))
             ],
           )),
@@ -351,7 +352,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 savedOrders.payment,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratMedium)),
           ),
           DataCell(
@@ -359,7 +360,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 '\$ ${savedOrders.totalAmount}',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratMedium)),
           ),
           DataCell(
@@ -368,190 +369,196 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   }
 
   Widget circularImage(String imageUrl) => Container(
-        width: 4.55 * SizeConfig.imageSizeMultiplier,
-        height: 4.55 * SizeConfig.imageSizeMultiplier,
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-                fit: BoxFit.cover, image: AssetImage(imageUrl))),
-      );
+    width: 4.55 * SizeConfig.imageSizeMultiplier,
+    height: 4.55 * SizeConfig.imageSizeMultiplier,
+    decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+            fit: BoxFit.cover, image: AssetImage(imageUrl))),
+  );
 
   Widget rightSideWidget() => Padding(
-        padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.307,
-          decoration: BoxDecoration(
-              color: getMaterialColor(AppColors.whiteColor),
-              borderRadius: const BorderRadius.all(Radius.circular(8.0))),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 22.0, right: 19.0),
-            child: Column(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Visibility(
-                    visible: selectedRow != -1 ? true : false,
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
-                        child: CommonWidgets().textView(
-                            StringConstants.orderDetails,
-                            StyleConstants.customTextStyle(
-                                fontSize: 22.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold))),
-                  ),
-                  Visibility(
-                      visible: selectedRow != -1 ? true : false,
-                      child: customerNameWidget(
-                          customerName: selectedRow != -1
-                              ? savedOrdersList[selectedRow].customerName
-                              : 'NA')),
-                  const SizedBox(height: 7.0),
-                  Visibility(
-                    visible: selectedRow != -1 ? true : false,
-                    child: orderDetailsWidget(
-                        orderId: selectedRow != -1
-                            ? savedOrdersList[selectedRow].orderId
-                            : 'NA',
-                        orderDate: selectedRow != -1
-                            ? savedOrdersList[selectedRow].getOrderDateTime()
-                            : "NA"),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Visibility(
-                    visible: selectedRow != -1,
-                    child: customerDetailsComponent(
-                        eventName: widget.events.getEventName(),
-                        email: selectedRow != -1
-                            ? savedOrdersList[selectedRow].email
-                            : StringExtension.empty(),
-                        storeAddress: widget.events.getEventAddress(),
-                        phone: selectedRow != -1
-                            ? savedOrdersList[selectedRow].phoneCountryCode +
-                                savedOrdersList[selectedRow].phoneNumber
-                            : StringExtension.empty()),
-                  ),
-                  const SizedBox(height: 35.0),
-                  Visibility(
-                    visible: selectedRow != -1,
-                    child: Stack(
+    padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
+    child: Container(
+      width: MediaQuery.of(context).size.width * 0.307,
+      decoration: BoxDecoration(
+          color: AppColors.whiteColor,
+          borderRadius: const BorderRadius.all(Radius.circular(8.0))),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 22.0, right: 19.0),
+        child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Visibility(
+                visible: selectedRow != -1 ? true : false,
+                child: Padding(
+                    padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
+                    child: CommonWidgets().textView(
+                        StringConstants.orderDetails,
+                        StyleConstants.customTextStyle(
+                            fontSize: 22.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratBold))),
+              ),
+              Visibility(
+                  visible: selectedRow != -1 ? true : false,
+                  child: customerNameWidget(
+                      customerName: selectedRow != -1
+                          ? savedOrdersList[selectedRow].customerName
+                          : 'NA')),
+              const SizedBox(height: 7.0),
+              Visibility(
+                visible: selectedRow != -1 ? true : false,
+                child: orderDetailsWidget(
+                    orderId: selectedRow != -1
+                        ? savedOrdersList[selectedRow].orderId
+                        : 'NA',
+                    orderDate: selectedRow != -1
+                        ? savedOrdersList[selectedRow].getOrderDateTime()
+                        : "NA"),
+              ),
+              const SizedBox(height: 8.0),
+              Visibility(
+                visible: selectedRow != -1,
+                child: customerDetailsComponent(
+                    eventName: widget.events.getEventName(),
+                    email: selectedRow != -1
+                        ? savedOrdersList[selectedRow].email
+                        : StringExtension.empty(),
+                    storeAddress: widget.events.getEventAddress(),
+                    phone: selectedRow != -1
+                        ? savedOrdersList[selectedRow].phoneCountryCode +
+                        savedOrdersList[selectedRow].phoneNumber
+                        : StringExtension.empty()),
+              ),
+              const SizedBox(height: 35.0),
+              Visibility(
+                visible: selectedRow != -1,
+                child: Stack(
+                  children: [
+                    Row(
                       children: [
-                        Row(
+                        Column(
                           children: [
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isItemClick = true;
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: CommonWidgets().textView(
-                                          StringConstants.items,
-                                          StyleConstants.customTextStyle(
-                                              fontSize: 12.0,
-                                              color: getMaterialColor(
-                                                  AppColors.textColor1),
-                                              fontFamily: FontConstants
-                                                  .montserratBold)),
-                                    )),
-                                const SizedBox(
-                                  height: 11.0,
-                                ),
-                                Container(
-                                  color: getMaterialColor(isItemClick
-                                      ? AppColors.primaryColor2
-                                      : AppColors.whiteColor),
-                                  width: 45.0,
-                                  height: 3.0,
-                                ),
-                              ],
-                            ),
+                            InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    isItemClick = true;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 5.0, right: 5.0),
+                                  child: CommonWidgets().textView(
+                                      StringConstants.items,
+                                      StyleConstants.customTextStyle(
+                                          fontSize: 12.0,
+                                          color:
+                                              AppColors.textColor1,
+                                          fontFamily: FontConstants
+                                              .montserratBold)),
+                                )),
                             const SizedBox(
-                              width: 53.0,
+                              height: 11.0,
                             ),
-                            Visibility(
-                              visible: false,
-                              child: Column(
-                                children: [
-                                  InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isItemClick = false;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 5.0, right: 5.0),
-                                        child: CommonWidgets().textView(
-                                            StringConstants.inProcess,
-                                            StyleConstants.customTextStyle(
-                                                fontSize: 12.0,
-                                                color: getMaterialColor(
-                                                    AppColors.textColor1),
-                                                fontFamily: FontConstants
-                                                    .montserratBold)),
-                                      )),
-                                  const SizedBox(
-                                    height: 11.0,
-                                  ),
-                                  Container(
-                                    color: getMaterialColor(isItemClick
-                                        ? AppColors.whiteColor
-                                        : AppColors.primaryColor2),
-                                    width: 90.0,
-                                    height: 3.0,
-                                  ),
-                                ],
-                              ),
+                            Container(
+                              color: isItemClick
+                                  ? AppColors.primaryColor2
+                                  : AppColors.whiteColor,
+                              width: 45.0,
+                              height: 3.0,
                             ),
                           ],
                         ),
                         const SizedBox(
-                          height: 35.5,
+                          width: 53.0,
                         ),
-                        const Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Divider(
-                              thickness: 1.0,
-                            ),
+                        Visibility(
+                          visible: false,
+                          child: Column(
+                            children: [
+                              InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      isItemClick = false;
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 5.0, right: 5.0),
+                                    child: CommonWidgets().textView(
+                                        StringConstants.inProcess,
+                                        StyleConstants.customTextStyle(
+                                            fontSize: 12.0,
+                                            color:
+                                                AppColors.textColor1,
+                                            fontFamily: FontConstants
+                                                .montserratBold)),
+                                  )),
+                              const SizedBox(
+                                height: 11.0,
+                              ),
+                              Container(
+                                color:isItemClick
+                                    ? AppColors.whiteColor
+                                    : AppColors.primaryColor2,
+                                width: 90.0,
+                                height: 3.0,
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 10.0),
-                  Visibility(
-                    visible: selectedRow != -1,
-                    child: Expanded(
-                        child: SingleChildScrollView(
+                    const SizedBox(
+                      height: 35.5,
+                    ),
+                    const Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Divider(
+                          thickness: 1.0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Visibility(
+                visible: selectedRow != -1,
+                child: Expanded(
+                    child: SingleChildScrollView(
                       child: Container(
-                        color: getMaterialColor(AppColors.whiteColor),
+                        color: AppColors.whiteColor,
                         child: isItemClick ? itemView() : inProgressView(),
                       ),
                     )),
-                  ),
-                  Visibility(
-                    visible: selectedRow != -1,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
-                      child: getRightOrderStatusView(
-                          selectedRow != -1
-                              ? savedOrdersList[selectedRow].orderStatus
-                              : "NA",
-                          selectedRow != -1
-                              ? savedOrdersList[selectedRow].payment
-                              : "NA"),
-                    ),
-                  ),
-                ]),
-          ),
-        ),
-      );
+              ),
+              Visibility(
+                visible: selectedRow != -1,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
+                  child: getRightOrderStatusView(
+                      selectedRow != -1
+                          ? savedOrdersList[selectedRow].orderStatus
+                          : "NA",
+                      selectedRow != -1
+                          ? savedOrdersList[selectedRow].payment
+                          : "NA",
+                      selectedRow != -1
+                          ? savedOrdersList[selectedRow].refundAmount
+                          : "NA",
+                      selectedRow != -1
+                          ? savedOrdersList[selectedRow].paymentTerm
+                          : "NA"),
+                ),
+              ),
+            ]),
+      ),
+    ),
+  );
 
   // customer Name
   Widget customerNameWidget({required String customerName}) =>
@@ -560,23 +567,23 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             '${StringConstants.customerName} - ',
             StyleConstants.customTextStyle(
                 fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor1),
+                color: AppColors.textColor1,
                 fontFamily: FontConstants.montserratRegular)),
         Expanded(
             child: CommonWidgets().textView(
                 customerName,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratBold))),
       ]);
 
   // customer Details
   Widget customerDetailsComponent(
-          {required String eventName,
-          required String email,
-          required String storeAddress,
-          required String phone}) =>
+      {required String eventName,
+        required String email,
+        required String storeAddress,
+        required String phone}) =>
       Column(
         children: [
           Visibility(
@@ -584,19 +591,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.email}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
                         email,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2,
                             fontFamily: FontConstants.montserratMedium))),
               ]),
             ),
@@ -606,19 +613,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.phone}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
                         phone,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2,
                             fontFamily: FontConstants.montserratMedium))),
               ]),
             ),
@@ -628,19 +635,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child:
-                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
                         eventName,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2,
                             fontFamily: FontConstants.montserratMedium))),
               ]),
             ),
@@ -652,14 +659,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   '${StringConstants.eventAddress}: ',
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratRegular)),
               Expanded(
                   child: CommonWidgets().textView(
                       storeAddress,
                       StyleConstants.customTextStyle(
                           fontSize: 9.0,
-                          color: getMaterialColor(AppColors.textColor2),
+                          color: AppColors.textColor2,
                           fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
@@ -668,20 +675,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   // Widget orderDetails
   Widget orderDetailsWidget(
-          {required String orderId, required String orderDate}) =>
+      {required String orderId, required String orderDate}) =>
       Column(children: [
         Row(children: [
           CommonWidgets().textView(
               StringConstants.orderId,
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular)),
           CommonWidgets().textView(
               ' #$orderId',
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
+                  color: AppColors.textColor2,
                   fontFamily: FontConstants.montserratMedium)),
         ]),
         const SizedBox(height: 8.0),
@@ -690,29 +697,29 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               StringConstants.orderDate,
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular)),
           CommonWidgets().textView(
               ' $orderDate',
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
+                  color: AppColors.textColor2,
                   fontFamily: FontConstants.montserratMedium)),
         ]),
       ]);
 
   Widget itemView() => Column(children: [
-        ListView.builder(
-            shrinkWrap: true,
-            itemCount: savedOrderItemList.length,
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return itemViewListItem(
-                  savedOrderItemList[index].itemName,
-                  savedOrderItemList[index].quantity,
-                  savedOrderItemList[index].totalPrice.toDouble());
-            }),
-      ]);
+    ListView.builder(
+        shrinkWrap: true,
+        itemCount: savedOrderItemList.length,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          return itemViewListItem(
+              savedOrderItemList[index].itemName,
+              savedOrderItemList[index].quantity,
+              savedOrderItemList[index].totalPrice.toDouble());
+        }),
+  ]);
 
   Widget itemViewListItem(String itemName, int quantity, double price) =>
       Column(
@@ -724,7 +731,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   itemName,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratRegular)),
             ),
             Expanded(
@@ -733,7 +740,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   "${StringConstants.qty} - $quantity",
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratRegular)),
             ),
             Expanded(
@@ -742,7 +749,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   "\$${price.toStringAsFixed(2)}",
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratRegular)),
             )
           ]),
@@ -751,259 +758,259 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   Widget inProgressView() => Column(
-        children: [
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: 10,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return itemViewListItem('Kiddie', 7, 20);
-              }),
-        ],
-      );
+    children: [
+      ListView.builder(
+          shrinkWrap: true,
+          itemCount: 10,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return itemViewListItem('Kiddie', 7, 20);
+          }),
+    ],
+  );
 
   Widget completedView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.completed,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor2),
-                      fontFamily: FontConstants.montserratMedium)),
-            ],
-          ),
-        ),
-      );
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.denotiveColor2.withOpacity(0.2)),
+    child: Padding(
+      padding: const EdgeInsets.only(
+          top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CommonWidgets().textView(
+              StringConstants.completed,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: AppColors.denotiveColor2,
+                  fontFamily: FontConstants.montserratMedium)),
+        ],
+      ),
+    ),
+  );
 
   Widget completedAndRefundView(dynamic refundAmout) => Column(
-        children: [
-          completedView(),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Visibility(
-            visible: refundBool ? true : false,
-            child: GestureDetector(
-              onTap: onTapRefundButton,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-                    color: refundBool
-                        ? getMaterialColor(AppColors.denotiveColor2)
-                            .withOpacity(0.2)
-                        : getMaterialColor(AppColors.denotiveColor4)
-                            .withOpacity(0.2)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      refundAmout > 0
-                          ? CommonWidgets().textView(
-                              StringConstants.refund,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 9.0,
-                                  color: getMaterialColor(
-                                      AppColors.denotiveColor2),
-                                  fontFamily: FontConstants.montserratMedium))
-                          : CommonWidgets().textView(
-                              StringConstants.refunded,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 9.0,
-                                  color: getMaterialColor(AppColors.textColor1),
-                                  fontFamily: FontConstants.montserratMedium)),
-                    ],
-                  ),
-                ),
+    children: [
+      completedView(),
+      const SizedBox(
+        height: 10.0,
+      ),
+      Visibility(
+        visible: refundBool ? true : false,
+        child: GestureDetector(
+          onTap: onTapRefundButton,
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+                color: refundBool
+                    ? AppColors.denotiveColor2
+                    .withOpacity(0.2)
+                    : AppColors.denotiveColor4
+                    .withOpacity(0.2)),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  refundAmout > 0
+                      ? CommonWidgets().textView(
+                      StringConstants.refund,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color:
+                              AppColors.denotiveColor2,
+                          fontFamily: FontConstants.montserratMedium))
+                      : CommonWidgets().textView(
+                      StringConstants.refunded,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: AppColors.textColor1,
+                          fontFamily: FontConstants.montserratMedium)),
+                ],
               ),
             ),
           ),
-        ],
-      );
+        ),
+      ),
+    ],
+  );
 
   Widget pendingView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor1).withOpacity(0.1)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
-          child: Row(
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.pending,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor1),
-                      fontFamily: FontConstants.montserratMedium)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              CommonWidgets().image(
-                  image: AssetsConstants.redTriangle, width: 6.0, height: 6.0)
-            ],
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.denotiveColor1.withOpacity(0.1)),
+    child: Padding(
+      padding: const EdgeInsets.only(
+          top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
+      child: Row(
+        children: [
+          CommonWidgets().textView(
+              StringConstants.pending,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: AppColors.denotiveColor1,
+                  fontFamily: FontConstants.montserratMedium)),
+          const SizedBox(
+            width: 10.0,
           ),
-        ),
-      );
+          CommonWidgets().image(
+              image: AssetsConstants.redTriangle, width: 6.0, height: 6.0)
+        ],
+      ),
+    ),
+  );
 
   Widget preparingView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor3).withOpacity(0.1)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
-          child: Row(
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.preparing,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor3),
-                      fontFamily: FontConstants.montserratMedium)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              CommonWidgets().image(
-                  image: AssetsConstants.yellowTriangle,
-                  width: 6.0,
-                  height: 6.0)
-            ],
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.denotiveColor3.withOpacity(0.1)),
+    child: Padding(
+      padding: const EdgeInsets.only(
+          top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
+      child: Row(
+        children: [
+          CommonWidgets().textView(
+              StringConstants.preparing,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: AppColors.denotiveColor3,
+                  fontFamily: FontConstants.montserratMedium)),
+          const SizedBox(
+            width: 10.0,
           ),
-        ),
-      );
+          CommonWidgets().image(
+              image: AssetsConstants.yellowTriangle,
+              width: 6.0,
+              height: 6.0)
+        ],
+      ),
+    ),
+  );
 
   Widget savedView() => Container(
-        height: 25.0,
-        width: 80.0,
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
+    height: 25.0,
+    width: 80.0,
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.primaryColor1.withOpacity(0.1)),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(
+          width: 15.0,
+        ),
+        CommonWidgets().textView(
+            StringConstants.saved,
+            StyleConstants.customTextStyle(
+                fontSize: 9.0,
+                color: AppColors.primaryColor1,
+                fontFamily: FontConstants.montserratMedium)),
+        const SizedBox(
+          width: 15.0,
+        ),
+      ],
+    ),
+  );
+
+  Widget rightCompletedView() => Container(
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.denotiveColor2.withOpacity(0.2)),
+    child: Padding(
+      padding: const EdgeInsets.only(
+          top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CommonWidgets().textView(
+              StringConstants.completed,
+              StyleConstants.customTextStyle(
+                  fontSize: 16.0,
+                  color: AppColors.denotiveColor2,
+                  fontFamily: FontConstants.montserratMedium)),
+        ],
+      ),
+    ),
+  );
+
+  Widget rightPendingView() => Container(
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.denotiveColor1.withOpacity(0.1)),
+    child: Padding(
+      padding: const EdgeInsets.only(
+          top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
+      child: Row(
+        children: [
+          CommonWidgets().textView(
+              StringConstants.pending,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: AppColors.denotiveColor1,
+                  fontFamily: FontConstants.montserratMedium)),
+          const SizedBox(
+            width: 10.0,
+          ),
+          CommonWidgets().image(
+              image: AssetsConstants.redTriangle, width: 6.0, height: 6.0)
+        ],
+      ),
+    ),
+  );
+
+  Widget rightPreparingView() => Container(
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+        color: AppColors.denotiveColor3.withOpacity(0.1)),
+    child: Padding(
+      padding: const EdgeInsets.only(
+          top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
+      child: Row(
+        children: [
+          CommonWidgets().textView(
+              StringConstants.preparing,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: AppColors.denotiveColor3,
+                  fontFamily: FontConstants.montserratMedium)),
+          const SizedBox(
+            width: 10.0,
+          ),
+          CommonWidgets().image(
+              image: AssetsConstants.yellowTriangle,
+              width: 6.0,
+              height: 6.0)
+        ],
+      ),
+    ),
+  );
+
+  Widget rightSavedView() => GestureDetector(
+    onTap: onTapResumeButton,
+    child: Container(
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+          color:
+          AppColors.primaryColor1.withOpacity(0.1)),
+      child: Padding(
+        padding: const EdgeInsets.only(
+            top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(
-              width: 15.0,
-            ),
             CommonWidgets().textView(
-                StringConstants.saved,
+                StringConstants.resume,
                 StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.primaryColor1),
-                    fontFamily: FontConstants.montserratMedium)),
-            const SizedBox(
-              width: 15.0,
-            ),
+                    fontSize: 16.0,
+                    color: AppColors.primaryColor1,
+                    fontFamily: FontConstants.montserratBold)),
           ],
         ),
-      );
-
-  Widget rightCompletedView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.completed,
-                  StyleConstants.customTextStyle(
-                      fontSize: 16.0,
-                      color: getMaterialColor(AppColors.denotiveColor2),
-                      fontFamily: FontConstants.montserratMedium)),
-            ],
-          ),
-        ),
-      );
-
-  Widget rightPendingView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor1).withOpacity(0.1)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
-          child: Row(
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.pending,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor1),
-                      fontFamily: FontConstants.montserratMedium)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              CommonWidgets().image(
-                  image: AssetsConstants.redTriangle, width: 6.0, height: 6.0)
-            ],
-          ),
-        ),
-      );
-
-  Widget rightPreparingView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor3).withOpacity(0.1)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
-          child: Row(
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.preparing,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor3),
-                      fontFamily: FontConstants.montserratMedium)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              CommonWidgets().image(
-                  image: AssetsConstants.yellowTriangle,
-                  width: 6.0,
-                  height: 6.0)
-            ],
-          ),
-        ),
-      );
-
-  Widget rightSavedView() => GestureDetector(
-        onTap: onTapResumeButton,
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-              color:
-                  getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CommonWidgets().textView(
-                    StringConstants.resume,
-                    StyleConstants.customTextStyle(
-                        fontSize: 16.0,
-                        color: getMaterialColor(AppColors.primaryColor1),
-                        fontFamily: FontConstants.montserratBold)),
-              ],
-            ),
-          ),
-        ),
-      );
+      ),
+    ),
+  );
 
   //Action Events
   onTapResumeButton() {
@@ -1013,7 +1020,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   onTapRefundButton() {
     showDialog(
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
           return RefundPopup(amount: savedOrdersList[selectedRow].totalAmount);
@@ -1068,7 +1075,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  Widget getRightOrderStatusView(String status, String paymentStatus) {
+  Widget getRightOrderStatusView(String status, String paymentStatus,
+      dynamic refundAmout, String paymentTerm) {
+    refundAmout ??= 0;
+    if (paymentTerm == "menu") {
+      refundBool = true;
+    }
+    debugPrint('<><><><><><>$refundAmout');
     debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
@@ -1191,7 +1204,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           totalAmount: event.orderInvoice!.total!,
           payment: event.paymentStatus!,
           orderStatus: event.orderStatus!,
-          deleted: false));
+          deleted: false,
+          paymentTerm: event.paymentTerm.toString(),
+          refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount));
       for (var item in event.orderItemsList!) {
         await SavedOrdersItemsDAO().insert(SavedOrdersItem(
             orderId: event.id!,
@@ -1206,14 +1221,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           for (var extraItemMappingList in item.foodExtraItemMappingList!) {
             if (extraItemMappingList.orderFoodExtraItemDetailDto != null) {
               for (var extraItem
-                  in extraItemMappingList.orderFoodExtraItemDetailDto!) {
+              in extraItemMappingList.orderFoodExtraItemDetailDto!) {
                 await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(
                     orderId: event.id!,
                     itemId: item.itemId.toString(),
                     extraFoodItemId: extraItem.id!,
                     extraFoodItemName: extraItem.foodExtraItemName!,
                     extraFoodItemCategoryId:
-                        extraItemMappingList.foodExtraCategoryId!,
+                    extraItemMappingList.foodExtraCategoryId!,
                     quantity: extraItem.quantity!,
                     unitPrice: extraItem.unitPrice!,
                     totalPrice: extraItem.totalAmount!,

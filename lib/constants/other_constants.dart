@@ -10,6 +10,7 @@ class PaymentMethods {
   static const creditCard = "CARD_FINIX_CREDIT_CARD";
   static const qrCode = "QR_CODE";
   static const cash = "CASH";
+  static const card = "CARD";
 }
 
 class TextFieldLengthConstant {

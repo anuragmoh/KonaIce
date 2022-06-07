@@ -27,6 +27,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   String cvvValidationMessage = "";
   String demoCardNumber = "";
   bool isCardNumberValid = false;
+  bool isZipCodeValid = false;
   bool isExpiryValid = false;
   bool isYearValid = false;
   bool isCvvValid = false;
@@ -68,7 +69,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
 
   Widget showCustomMenuPopup() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child: customMenuPopUpComponent(),
     );
@@ -86,8 +87,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 title: StringConstants.addCreditCardDetails,
                 onTapCloseButton: onTapCloseButton),
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
+              padding: const EdgeInsets.only(top: 25.0, left: 23.0),
               child: profileDetailsComponent(
                   StringConstants.cardNumber,
                   "",
@@ -97,60 +97,63 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   cardValidation,
                   18),
             ),
-            buildRow1(),
-            buildRow2(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: cardExpiryComponent(
+                        StringConstants.cardExpiryMonthYear,
+                        "",
+                        StringConstants.cardExpiryMonthYear,
+                        dateExpiryController,
+                        cardDateValidationMessage,
+                        dateValidation,
+                        7),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: profileDetailsComponent(
+                        StringConstants.cardCvcMsg,
+                        "",
+                        StringConstants.cardCvcMsg,
+                        cvvController,
+                        cvvValidationMessage,
+                        cvvValidation,
+                        3),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 23.0),
+              child: profileDetailsComponent(
+                  StringConstants.enterZipcode,
+                  "",
+                  StringConstants.enterZipcode,
+                  zipCodeController,
+                  zipcodeValidationMessage,
+                  zipCodeValidation,
+                  6),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CommonWidgets().buttonWidget(
+                  StringConstants.pay + " " + "\$" + widget.totalAmount,
+                  onTapConfirmManualCardPayment,
+                ),
+              ],
+            ),
             const SizedBox(
               height: 20.0,
             )
           ],
         ),
       ),
-    );
-  }
-
-  Row buildRow2() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CommonWidgets().buttonWidget(
-          StringConstants.pay + " " + "\$" + widget.totalAmount,
-          onTapConfirmManualCardPayment,
-        ),
-      ],
-    );
-  }
-
-  Row buildRow1() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
-            child: cardExpiryComponent(
-                ConstatKeys.cardExpiry,
-                "",
-                StringConstants.cardExpiryMsg,
-                dateExpiryController,
-                cardDateValidationMessage,
-                dateValidation,
-                5),
-          ),
-        ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: profileDetailsComponent(
-                StringConstants.cardCvc,
-                "",
-                StringConstants.cardCvcMsg,
-                cvcController,
-                cardCvvValidationMessage,
-                cvvValidation,
-                3),
-          ),
-        ),
-      ],
     );
   }
 
@@ -169,7 +172,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               txtName,
               StyleConstants.customTextStyle(
                   fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
           Padding(
@@ -180,7 +183,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
+                      color: AppColors.textColor1
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
@@ -201,7 +204,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratRegular)),
                 ),
               ),
@@ -217,13 +220,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       );
 
   Widget profileDetailsComponent(
-          String txtName,
-          String txtValue,
-          String txtHint,
-          TextEditingController textEditingController,
-          String validationMessage,
-          Function validationMethod,
-          int maxLength) =>
+      String txtName,
+      String txtValue,
+      String txtHint,
+      TextEditingController textEditingController,
+      String validationMessage,
+      Function validationMethod,
+      int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -231,7 +234,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               txtName,
               StyleConstants.customTextStyle(
                   fontSize: 14.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
           Padding(
@@ -242,7 +245,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
+                      color: AppColors.textColor1
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
@@ -255,7 +258,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   },
                   controller: textEditingController,
                   decoration: InputDecoration(
-
                       counterText: "",
                       filled: true,
                       hintText: txtHint,
@@ -263,7 +265,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                       labelText: txtValue,
                       hintStyle: StyleConstants.customTextStyle(
                           fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1,
                           fontFamily: FontConstants.montserratRegular)),
                 ),
               ),
@@ -294,6 +296,20 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         cardNumberValidationMessage = "";
       });
       isCardNumberValid = true;
+    }
+  }
+
+  zipCodeValidation() {
+    if (zipCodeController.text.isEmpty) {
+      setState(() {
+        zipcodeValidationMessage = StringConstants.enterZipcode;
+      });
+      isZipCodeValid = false;
+    } else {
+      setState(() {
+        zipcodeValidationMessage = "";
+      });
+      isZipCodeValid = true;
     }
   }
 
@@ -333,6 +349,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         isExpiryValid = true;
       }
     }
+
+  }
 
   cvvValidation() {
     if (cvvController.text.isEmpty) {
