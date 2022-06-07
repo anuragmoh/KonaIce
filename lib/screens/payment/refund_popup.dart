@@ -4,15 +4,9 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/general_error_model.dart';
-import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
-import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dialog/dialog_helper.dart';
-import 'package:kona_ice_pos/utils/function_utils.dart';
-import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RefundPopup extends StatefulWidget {
   num amount;
@@ -137,37 +131,51 @@ class _RefundPopup extends State<RefundPopup> {
                   color: getMaterialColor(AppColors.textColor1),
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  maxLength: maxLength,
-                  onChanged: (value) {
-                    amountValidation();
-                  },
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      counterText: "",
-                      filled: true,
-                      border: InputBorder.none,
-                      hintStyle: StyleConstants.customTextStyle(
-                          fontSize: 15.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratRegular)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CommonWidgets().textWidget(
+                  StringConstants.symbolDollar,
+                  StyleConstants.customTextStyle(
+                      fontSize: 18.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular),
+                  textAlign: TextAlign.left),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 5.0, bottom: 0.0, left: 5.0, right: 22.0),
+                  child: Container(
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6.0),
+                        border: Border.all(
+                            color: getMaterialColor(AppColors.textColor1)
+                                .withOpacity(0.2),
+                            width: 2)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 2.0),
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        maxLength: maxLength,
+                        onChanged: (value) {
+                          amountValidation();
+                        },
+                        controller: textEditingController,
+                        decoration: InputDecoration(
+                            counterText: "",
+                            filled: true,
+                            border: InputBorder.none,
+                            hintStyle: StyleConstants.customTextStyle(
+                                fontSize: 15.0,
+                                color: getMaterialColor(AppColors.textColor1),
+                                fontFamily: FontConstants.montserratRegular)),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
           Text(validationMessage,
               style: StyleConstants.customTextStyle(

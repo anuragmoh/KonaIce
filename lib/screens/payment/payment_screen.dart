@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
+import 'package:kona_ice_pos/constants/app_constant.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
@@ -138,7 +139,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       } else if (call.method == "paymentStatus") {
         _paymentStatus(call.arguments.toString());
       } else if (call.method == "getPaymentToken") {
-        _getPaymentToken(call.arguments.toString());
+        _getPaymentToken(call.arguments.first);
       }
     });
   }
@@ -1118,25 +1119,25 @@ class _PaymentScreenState extends State<PaymentScreen>
     const String application = AssetsConstants.test;
     const String version = AssetsConstants.appVersion;
     final tags = {
-      finixTagsKey.customerEmail:
+      FinixTagsKey.customerEmail.name:
           widget.placeOrderRequestModel.email ?? StringExtension.empty(),
-      finixTagsKey.customerName:
+      FinixTagsKey.customerName.name:
           widget.placeOrderRequestModel.getCustomerName(),
-      finixTagsKey.eventName: widget.events.getEventName(),
-      finixTagsKey.eventCode: widget.events.getEventCode(),
-      finixTagsKey.environment: StringConstants.test,
-      finixTagsKey.paymentMethod: StringConstants.bbpos
+      FinixTagsKey.eventName.name: widget.events.getEventName(),
+      FinixTagsKey.eventCode.name: widget.events.getEventCode(),
+      FinixTagsKey.environment.name: StringConstants.test,
+      FinixTagsKey.paymentMethod.name: StringConstants.bbpos
     };
     final values = {
-      finixTagsKey.username: finixUsername,
-      finixTagsKey.password: finixPassword,
-      finixTagsKey.application: application,
-      finixTagsKey.version: version,
-      finixTagsKey.merchantId: finixMerchantId,
-      finixTagsKey.deviceID: finixdeviceId,
-      finixTagsKey.amount: totalAmount,
-      finixTagsKey.serialNumber: finixSerialNumber,
-      finixTagsKey.tags: tags
+      FinixTagsKey.username.name: finixUsername,
+      FinixTagsKey.password.name: finixPassword,
+      FinixTagsKey.application.name: application,
+      FinixTagsKey.version.name: version,
+      FinixTagsKey.merchantId.name: finixMerchantId,
+      FinixTagsKey.deviceID.name: finixdeviceId,
+      FinixTagsKey.amount.name: totalAmount,
+      FinixTagsKey.serialNumber.name: finixSerialNumber,
+      FinixTagsKey.tags.name: tags
     };
     await cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }

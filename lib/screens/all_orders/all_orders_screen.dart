@@ -56,7 +56,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   int selectedRow = -1;
   bool isApiProcess = false;
   int countOffSet = 0;
-  bool refundBool = true;
+  bool refundBool = false;
 
   _AllOrdersScreenState() {
     allOrderPresenter = AllOrderPresenter(this);
@@ -546,6 +546,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                               : "NA",
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].payment
+                              : "NA",
+                          selectedRow != -1
+                              ? savedOrdersList[selectedRow].refundAmount
+                              : "NA",
+                          selectedRow != -1
+                              ? savedOrdersList[selectedRow].paymentTerm
                               : "NA"),
                     ),
                   ),
@@ -784,43 +790,46 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget completedAndRefundView() => Column(
+  Widget completedAndRefundView(dynamic refundAmout) => Column(
         children: [
           completedView(),
           const SizedBox(
             height: 10.0,
           ),
-          GestureDetector(
-            onTap: onTapRefundButton,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-                  color: refundBool
-                      ? getMaterialColor(AppColors.denotiveColor2)
-                          .withOpacity(0.2)
-                      : getMaterialColor(AppColors.denotiveColor4)
-                          .withOpacity(0.2)),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    refundBool
-                        ? CommonWidgets().textView(
-                            StringConstants.refund,
-                            StyleConstants.customTextStyle(
-                                fontSize: 9.0,
-                                color:
-                                    getMaterialColor(AppColors.denotiveColor2),
-                                fontFamily: FontConstants.montserratMedium))
-                        : CommonWidgets().textView(
-                            StringConstants.refunded,
-                            StyleConstants.customTextStyle(
-                                fontSize: 9.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratMedium)),
-                  ],
+          Visibility(
+            visible: refundBool ? true : false,
+            child: GestureDetector(
+              onTap: onTapRefundButton,
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+                    color: refundBool
+                        ? getMaterialColor(AppColors.denotiveColor2)
+                            .withOpacity(0.2)
+                        : getMaterialColor(AppColors.denotiveColor4)
+                            .withOpacity(0.2)),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      refundAmout > 0
+                          ? CommonWidgets().textView(
+                              StringConstants.refund,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 9.0,
+                                  color: getMaterialColor(
+                                      AppColors.denotiveColor2),
+                                  fontFamily: FontConstants.montserratMedium))
+                          : CommonWidgets().textView(
+                              StringConstants.refunded,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 9.0,
+                                  color: getMaterialColor(AppColors.textColor1),
+                                  fontFamily: FontConstants.montserratMedium)),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -1066,7 +1075,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  Widget getRightOrderStatusView(String status, String paymentStatus) {
+  Widget getRightOrderStatusView(String status, String paymentStatus,
+      dynamic refundAmout, String paymentTerm) {
+    refundAmout ??= 0;
+    if (paymentTerm == "menu") {
+      refundBool = true;
+    }
+    debugPrint('<><><><><><>$refundAmout');
     debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
@@ -1076,7 +1091,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else if (status == StringConstants.orderStatusNew) {
         return rightCompletedView();
       } else if (status == StringConstants.orderStatusCompleted) {
-        return completedAndRefundView();
+        return completedAndRefundView(refundAmout);
       } else {
         debugPrint('>>>>>>>>>>>>>');
         return rightPendingView();

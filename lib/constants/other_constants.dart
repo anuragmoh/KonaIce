@@ -32,22 +32,3 @@ class PaymentConstants {
       "pk_test_51HAHBII8e4AZvX0hDfF8Val3sayQM2bhGzCoMIR6qATFhKNnGf5yAMigUvgu2Ni3nKoIrQMj9yDG25hFd8hWczRx00tWiUlhI7";
 }
 
-enum finixTagsKey {
-  customerEmail,
-  customerName,
-  eventName,
-  eventCode,
-  environment,
-  paymentMethod,
-  username,
-  password,
-  application,
-  version,
-  merchantId,
-  deviceID,
-  amount,
-  serialNumber,
-  tags
-}
-
-enum CardDetails { cardNumber, expirationMonth, expirationYear, zipcode, cvv }

@@ -17,7 +17,7 @@ class UrlConstants {
   static const placeOrder = '/api/v2/secure/orders-stripe/staff-user';
   static const payOrder = '/api/v2/secure/orders-payment/staff-user';
   static const finixSendReceipt =
-      '/api/v2/secure/orders/{orderId}/finix/receipt';
+      '/api/v2/secure/orders/{orderId}/send-receipt';
   static const refundPayment = '/api/v2/secure/orders/{orderId}/finix/refund';
   static const finixMannualPay = '';
 
