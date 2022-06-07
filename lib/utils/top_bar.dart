@@ -168,6 +168,10 @@ class _TopBarState extends State<TopBar> {
       );
 
   Widget centerWidget() {
+    return buildContainer();
+  }
+
+  Container buildContainer() {
     return Container(
       width: 244.0,
       decoration: BoxDecoration(
@@ -183,29 +187,7 @@ class _TopBarState extends State<TopBar> {
 
               widget.onTapCallBack(isProduct);
             },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                color: isProduct
-                    ? AppColors.primaryColor2
-                    : null,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 38.0, vertical: 9.0),
-                child: CommonWidgets().textWidget(
-                    StringConstants.product,
-                    isProduct
-                        ? StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: AppColors.textColor1,
-                            fontFamily: FontConstants.montserratBold)
-                        : StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: AppColors.whiteColor,
-                            fontFamily: FontConstants.montserratMedium)),
-              ),
-            ),
+            child: buildContainer2(),
           ),
           GestureDetector(
             onTap: () {
@@ -214,31 +196,55 @@ class _TopBarState extends State<TopBar> {
               });
               widget.onTapCallBack(isProduct);
             },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                color: !isProduct
-                    ? AppColors.primaryColor2
-                    : null,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 36.5, vertical: 9.0),
-                child: CommonWidgets().textWidget(
-                    StringConstants.orders,
-                    !isProduct
-                        ? StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: AppColors.textColor1,
-                            fontFamily: FontConstants.montserratBold)
-                        : StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: AppColors.whiteColor,
-                            fontFamily: FontConstants.montserratMedium)),
-              ),
-            ),
+            child: buildContainer3(),
           ),
         ],
+      ),
+    );
+  }
+
+  Container buildContainer3() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        color: !isProduct ? AppColors.primaryColor2 : null,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 36.5, vertical: 9.0),
+        child: CommonWidgets().textWidget(
+            StringConstants.orders,
+            !isProduct
+                ? StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratBold)
+                : StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.whiteColor,
+                    fontFamily: FontConstants.montserratMedium)),
+      ),
+    );
+  }
+
+  Container buildContainer2() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        color: isProduct ? AppColors.primaryColor2 : null,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 38.0, vertical: 9.0),
+        child: CommonWidgets().textWidget(
+            StringConstants.product,
+            isProduct
+                ? StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratBold)
+                : StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.whiteColor,
+                    fontFamily: FontConstants.montserratMedium)),
       ),
     );
   }

@@ -623,18 +623,22 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     );
     PlacesDetailsResponse detail =
         await _places.getDetailsByPlaceId(p.placeId.toString());
-
     setState(() {
       lat = detail.result.geometry!.location.lat;
       long = detail.result.geometry!.location.lng;
     });
-
     debugPrint("Result ${detail.result.addressComponents[0].longName}");
 
     debugPrint(
         "Picked lat and long : ${detail.result.geometry!.location.lat} & ${detail.result.geometry!.location.lng}");
     debugPrint("Picked location: ${detail.result.formattedAddress}");
+    buildAddComponents(detail);
+    setState(() {
+      isApiProcess = false;
+    });
+  }
 
+  void buildAddComponents(PlacesDetailsResponse detail) {
     for (int i = 0; i < detail.result.addressComponents.length; i++) {
       try {
         for (int j = 0;
@@ -694,9 +698,6 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       } catch (e) {
       }
     }
-    setState(() {
-      isApiProcess = false;
-    });
   }
 
   getLocation() async {

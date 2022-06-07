@@ -80,38 +80,42 @@ class _HomeScreenState extends State<HomeScreen>
 
   refreshDataOnRequest() async {
     await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
-      if (value != null) {
-        int lastSyncTime = int.parse(value.value);
-        CheckConnection().connectionState().then((value) {
-          if (value == true) {
-            //eventList.clear();
-            setState(() {
-              isApiProcess = true;
-            });
-            _syncPresenter.syncData(lastSyncTime);
-          } else {
-            loadDataFromDb();
-            CommonWidgets().showErrorSnackBar(
-                errorMessage: StringConstants.noInternetConnection,
-                context: context);
-          }
-        });
-      } else {
-        CheckConnection().connectionState().then((value) {
-          if (value == true) {
-            setState(() {
-              isApiProcess = true;
-            });
-            _syncPresenter.syncData(0);
-          } else {
-            loadDataFromDb();
-            CommonWidgets().showErrorSnackBar(
-                errorMessage: StringConstants.noInternetConnection,
-                context: context);
-          }
-        });
-      }
+      refreshDB(value);
     });
+  }
+
+  void refreshDB(Session? value) {
+    if (value != null) {
+      int lastSyncTime = int.parse(value.value);
+      CheckConnection().connectionState().then((value) {
+        if (value == true) {
+          //eventList.clear();
+          setState(() {
+            isApiProcess = true;
+          });
+          _syncPresenter.syncData(lastSyncTime);
+        } else {
+          loadDataFromDb();
+          CommonWidgets().showErrorSnackBar(
+              errorMessage: StringConstants.noInternetConnection,
+              context: context);
+        }
+      });
+    } else {
+      CheckConnection().connectionState().then((value) {
+        if (value == true) {
+          setState(() {
+            isApiProcess = true;
+          });
+          _syncPresenter.syncData(0);
+        } else {
+          loadDataFromDb();
+          CommonWidgets().showErrorSnackBar(
+              errorMessage: StringConstants.noInternetConnection,
+              context: context);
+        }
+      });
+    }
   }
 
   loadDataFromDb() async {
@@ -190,8 +194,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget mainUi(BuildContext context) {
     return Scaffold(
-      body: Container(
-          color: AppColors.textColor3, child: body()),
+      body: Container(color: AppColors.textColor3, child: body()),
     );
   }
 
@@ -245,92 +248,7 @@ class _HomeScreenState extends State<HomeScreen>
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(8.0),
         child: eventList.isNotEmpty
-            ? ListView.builder(
-                itemCount: eventList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var eventDetails = eventList[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        onTapEventItem(eventDetails);
-                      },
-                      child: Card(
-                          elevation: 0.0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                16.0, 12.0, 16.0, 18.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 10.0),
-                                  child: CommonWidgets().textWidget(
-                                      eventDetails.getEventName(),
-                                      StyleConstants.customTextStyle16MontserratBold(
-                                          color:
-                                              AppColors.textColor1)),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: Row(
-                                    children: [
-                                      CommonWidgets().image(
-                                          image:
-                                              AssetsConstants.locationPinIcon,
-                                          width: 2 *
-                                              SizeConfig.imageSizeMultiplier,
-                                          height: 2.47 *
-                                              SizeConfig.imageSizeMultiplier),
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 8.0),
-                                          child: CommonWidgets()
-                                              .textMultiLineWidget(eventDetails.getEventAddress(),
-                                                  StyleConstants.customTextStyle12MonsterMedium(
-                                                      color:
-                                                          AppColors.textColor4)),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Row(
-                                  children: [
-                                    CommonWidgets().image(
-                                        image: AssetsConstants.dateIcon,
-                                        width:
-                                            2 * SizeConfig.imageSizeMultiplier,
-                                        height: 2.47 *
-                                            SizeConfig.imageSizeMultiplier),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: CommonWidgets().textWidget(
-                                        eventDetails.getEventDate(),
-                                        StyleConstants.customTextStyle12MonsterMedium(
-                                            color: AppColors.textColor4),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 40),
-                                      child: CommonWidgets().textWidget(
-                                        eventDetails.getEventTime(),
-                                        StyleConstants.customTextStyle12MonsterMedium(
-                                            color:
-                                                AppColors.textColor4),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          )),
-                    ),
-                  );
-                })
+            ? builListViewBuilder()
             : Center(
                 child: ListView(
                   children: [
@@ -343,6 +261,90 @@ class _HomeScreenState extends State<HomeScreen>
                   ],
                 ),
               ),
+      ),
+    );
+  }
+
+  ListView builListViewBuilder() {
+    return ListView.builder(
+      itemCount: eventList.length,
+      itemBuilder: (BuildContext context, int index) {
+        var eventDetails = eventList[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 20.0),
+          child: GestureDetector(
+            onTap: () {
+              onTapEventItem(eventDetails);
+            },
+            child: buildCard(eventDetails),
+          ),
+        );
+      },
+    );
+  }
+
+  Card buildCard(Events eventDetails) {
+    return Card(
+      elevation: 0.0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 18.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: CommonWidgets().textWidget(
+                  eventDetails.getEventName(),
+                  StyleConstants.customTextStyle16MontserratBold(
+                      color: AppColors.textColor1)),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Row(
+                children: [
+                  CommonWidgets().image(
+                      image: AssetsConstants.locationPinIcon,
+                      width: 2 * SizeConfig.imageSizeMultiplier,
+                      height: 2.47 * SizeConfig.imageSizeMultiplier),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: CommonWidgets().textMultiLineWidget(
+                          eventDetails.getEventAddress(),
+                          StyleConstants.customTextStyle12MonsterMedium(
+                              color: AppColors.textColor4)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                CommonWidgets().image(
+                    image: AssetsConstants.dateIcon,
+                    width: 2 * SizeConfig.imageSizeMultiplier,
+                    height: 2.47 * SizeConfig.imageSizeMultiplier),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: CommonWidgets().textWidget(
+                    eventDetails.getEventDate(),
+                    StyleConstants.customTextStyle12MonsterMedium(
+                        color: AppColors.textColor4),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 40),
+                  child: CommonWidgets().textWidget(
+                    eventDetails.getEventTime(),
+                    StyleConstants.customTextStyle12MonsterMedium(
+                        color: AppColors.textColor4),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -203,6 +203,10 @@ class Events {
       required this.confirmedEmailSent});
 
   Map<String, dynamic> toMap() {
+    return buildMap();
+  }
+
+  Map<String, dynamic> buildMap() {
     return {
       "id": id,
       "event_code": eventCode,

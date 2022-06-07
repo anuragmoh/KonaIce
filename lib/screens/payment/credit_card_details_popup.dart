@@ -58,6 +58,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     cardNumberController.dispose();
     cvcController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Loader(
@@ -101,52 +102,60 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   cardValidation,
                   15),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
-                    child: cardExpiryComponent(
-                        ConstatKeys.cardExpiry,
-                        "",
-                        StringConstants.cardExpiryMsg,
-                        dateExpiryController,
-                        cardDateValidationMessage,
-                        dateValidation,
-                        5),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: profileDetailsComponent(
-                        StringConstants.cardCvc,
-                        "",
-                        StringConstants.cardCvcMsg,
-                        cvcController,
-                        cardCvvValidationMessage,
-                        cvvValidation,
-                        3),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CommonWidgets().buttonWidget(
-                  StringConstants.pay + " " + "\$" + widget.totalAmount,
-                  onTapConfirmManualCardPayment,
-                ),
-              ],
-            ),
+            buildRow1(),
+            buildRow2(),
             const SizedBox(
               height: 20.0,
             )
           ],
         ),
       ),
+    );
+  }
+
+  Row buildRow2() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CommonWidgets().buttonWidget(
+          StringConstants.pay + " " + "\$" + widget.totalAmount,
+          onTapConfirmManualCardPayment,
+        ),
+      ],
+    );
+  }
+
+  Row buildRow1() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, bottom: 10.0),
+            child: cardExpiryComponent(
+                ConstatKeys.cardExpiry,
+                "",
+                StringConstants.cardExpiryMsg,
+                dateExpiryController,
+                cardDateValidationMessage,
+                dateValidation,
+                5),
+          ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: profileDetailsComponent(
+                StringConstants.cardCvc,
+                "",
+                StringConstants.cardCvcMsg,
+                cvcController,
+                cardCvvValidationMessage,
+                cvvValidation,
+                3),
+          ),
+        ),
+      ],
     );
   }
 
@@ -168,48 +177,60 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                   color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: AppColors.textColor1
-                          .withOpacity(0.2),
-                      width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  maxLength: maxLength,
-                  onChanged: (value) {
-                    validationMethod();
-                    debugPrint('============>');
-                  },
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      counterText: "",
-                      filled: true,
-                      hintText: txtHint,
-                      border: InputBorder.none,
-                      labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle(
-                          fontSize: 15.0,
-                          color: AppColors.textColor1,
-                          fontFamily: FontConstants.montserratRegular)),
-                ),
-              ),
-            ),
-          ),
-          Text(validationMessage,
-              style: StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: AppColors.textColor5,
-                  fontFamily: FontConstants.montserratRegular),
-              textAlign: TextAlign.left)
+          buildPadding(maxLength, validationMethod, textEditingController,
+              txtHint, txtValue),
+          buildText(validationMessage),
         ],
       );
+
+  Text buildText(String validationMessage) {
+    return Text(validationMessage,
+        style: StyleConstants.customTextStyle(
+            fontSize: 12.0,
+            color: AppColors.textColor5,
+            fontFamily: FontConstants.montserratRegular),
+        textAlign: TextAlign.left);
+  }
+
+  Padding buildPadding(
+      int maxLength,
+      Function validationMethod,
+      TextEditingController textEditingController,
+      String txtHint,
+      String txtValue) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
+      child: Container(
+        height: 40.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6.0),
+            border: Border.all(
+                color: AppColors.textColor1.withOpacity(0.2), width: 2)),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 2.0),
+          child: TextField(
+            maxLength: maxLength,
+            onChanged: (value) {
+              validationMethod();
+              debugPrint('============>');
+            },
+            controller: textEditingController,
+            decoration: InputDecoration(
+                counterText: "",
+                filled: true,
+                hintText: txtHint,
+                border: InputBorder.none,
+                labelText: txtValue,
+                hintStyle: StyleConstants.customTextStyle(
+                    fontSize: 15.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratRegular)),
+          ),
+        ),
+      ),
+    );
+  }
 
   Widget cardExpiryComponent(
           String txtName,
@@ -237,9 +258,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: AppColors.textColor1
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
@@ -263,12 +282,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               ),
             ),
           ),
-          Text(validationMessage,
-              style: StyleConstants.customTextStyle(
-                  fontSize: 12.0,
-                  color: AppColors.textColor5,
-                  fontFamily: FontConstants.montserratRegular),
-              textAlign: TextAlign.left)
+          buildText(validationMessage)
         ],
       );
 

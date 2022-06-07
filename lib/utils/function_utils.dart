@@ -22,45 +22,20 @@ class FunctionalUtils {
   static int clockInTimestamp = 0;
 
   static saveUserDetailInDB({required LoginResponseModel userModel}) {
-    if (userModel.id != null) {
-      SessionDAO()
-          .insert(Session(key: DatabaseKeys.userID, value: userModel.id!));
-    }
+    userIdDetails(userModel);
 
-    if (userModel.firstName != null) {
-      SessionDAO().insert(
-          Session(key: DatabaseKeys.firstName, value: userModel.firstName!));
-    }
+    buildUserName(userModel);
 
-    if (userModel.lastName != null) {
-      SessionDAO().insert(
-          Session(key: DatabaseKeys.lastName, value: userModel.lastName!));
-    }
+    buildUserEmailPhone(userModel);
 
-    if (userModel.email != null) {
-      SessionDAO()
-          .insert(Session(key: DatabaseKeys.email, value: userModel.email!));
-    }
+    buildUserDet(userModel);
 
-    if (userModel.phoneNum != null) {
-      SessionDAO().insert(
-          Session(key: DatabaseKeys.phoneNum, value: userModel.phoneNum!));
-    }
+    buildUserFinixDetails(userModel);
 
-    if (userModel.numCountryCode != null) {
-      SessionDAO().insert(Session(
-          key: DatabaseKeys.numCountryCode, value: userModel.numCountryCode!));
-    }
+    saveUserDetails(userModel);
+  }
 
-    if (userModel.profileImageFileId != null) {
-      SessionDAO().insert(Session(
-          key: DatabaseKeys.profileImageFileId,
-          value: userModel.profileImageFileId!));
-    }
-    if (userModel.merchantId != null) {
-      SessionDAO().insert(
-          Session(key: DatabaseKeys.merchantId, value: userModel.merchantId!));
-    }
+  static void buildUserFinixDetails(LoginResponseModel userModel) {
     if (userModel.deviceId != null) {
       SessionDAO().insert(
           Session(key: DatabaseKeys.deviceId, value: userModel.deviceId!));
@@ -78,6 +53,9 @@ class FunctionalUtils {
       SessionDAO().insert(Session(
           key: DatabaseKeys.finixPassword, value: userModel.finixPassword!));
     }
+  }
+
+  static void saveUserDetails(LoginResponseModel userModel) {
     if (userModel.franchiseId != null) {
       SessionDAO().insert(Session(
           key: DatabaseKeys.franchiseId, value: userModel.franchiseId!));
@@ -91,6 +69,54 @@ class FunctionalUtils {
       }
 
       saveUserDetailInDBPartA(userModel: userModel);
+    }
+  }
+
+  static void buildUserDet(LoginResponseModel userModel) {
+    if (userModel.numCountryCode != null) {
+      SessionDAO().insert(Session(
+          key: DatabaseKeys.numCountryCode, value: userModel.numCountryCode!));
+    }
+
+    if (userModel.profileImageFileId != null) {
+      SessionDAO().insert(Session(
+          key: DatabaseKeys.profileImageFileId,
+          value: userModel.profileImageFileId!));
+    }
+    if (userModel.merchantId != null) {
+      SessionDAO().insert(
+          Session(key: DatabaseKeys.merchantId, value: userModel.merchantId!));
+    }
+  }
+
+  static void buildUserEmailPhone(LoginResponseModel userModel) {
+    if (userModel.email != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.email, value: userModel.email!));
+    }
+
+    if (userModel.phoneNum != null) {
+      SessionDAO().insert(
+          Session(key: DatabaseKeys.phoneNum, value: userModel.phoneNum!));
+    }
+  }
+
+  static void buildUserName(LoginResponseModel userModel) {
+    if (userModel.firstName != null) {
+      SessionDAO().insert(
+          Session(key: DatabaseKeys.firstName, value: userModel.firstName!));
+    }
+
+    if (userModel.lastName != null) {
+      SessionDAO().insert(
+          Session(key: DatabaseKeys.lastName, value: userModel.lastName!));
+    }
+  }
+
+  static void userIdDetails(LoginResponseModel userModel) {
+    if (userModel.id != null) {
+      SessionDAO()
+          .insert(Session(key: DatabaseKeys.userID, value: userModel.id!));
     }
   }
 

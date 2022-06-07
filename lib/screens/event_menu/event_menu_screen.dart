@@ -145,7 +145,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   getAllItems(String eventId) async {
     // Event Id need to pass
     setState(() {
-      isPaymentScreen=false;
+      isPaymentScreen = false;
     });
     var result = await ItemDAO().getAllItemsByEventId(eventId);
     if (result != null) {
@@ -211,7 +211,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   @override
   Widget build(BuildContext context) {
     debugPrint(isPaymentScreen.toString());
-    if(!isPaymentScreen) {
+    if (!isPaymentScreen) {
       updateCustomerName();
       calculateTotal();
       updateOrderDataToCustomer();
@@ -322,8 +322,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
             borderRadius: BorderRadius.circular(8.0),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color:
-                      AppColors.textColor1.withOpacity(0.2),
+                  color: AppColors.textColor1.withOpacity(0.2),
                   blurRadius: 8.0,
                   offset: const Offset(0, 2))
             ]),
@@ -405,95 +404,100 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: menuObject.isItemSelected
-                  ? [
-                      AppColors.gradientColor1,
-                      AppColors.gradientColor2
-                    ]
-                  : [
-                      AppColors.whiteColor,
-                      AppColors.whiteColor
-                    ]),
+                  ? [AppColors.gradientColor1, AppColors.gradientColor2]
+                  : [AppColors.whiteColor, AppColors.whiteColor]),
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Flexible(
-                        flex: 5,
-                        child: Column(
-                          mainAxisAlignment: (menuObject.isItemHasExtras() &&
-                                  menuObject.isItemSelected)
-                              ? MainAxisAlignment.start
-                              : MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  bottom: 3.0, right: 3.0),
-                              child: Text(
-                                menuObject.name,
-                                style: StyleConstants
-                                    .customTextStyle16MontserratSemiBold(
-                                        color: menuObject.isItemSelected
-                                                ? AppColors.whiteColor
-                                                : AppColors.textColor1),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
-                            ),
-                            CommonWidgets().textWidget(
-                                '\$${menuObject.price}',
-                                StyleConstants.customTextStyle12MonsterMedium(
-                                    color: 
-                                        menuObject.isItemSelected
-                                            ? AppColors.whiteColor
-                                            : AppColors.textColor2))
-                          ],
-                        ),
-                      ),
-                      Flexible(
-                        flex: menuObject.isItemSelected ? 1 : 0,
-                        child: Visibility(
-                          visible: menuObject.isItemSelected,
-                          child: CommonWidgets().textWidget(
-                              '${menuObject.selectedItemQuantity}',
-                              StyleConstants.customTextStyle16MonsterRegular(
-                                  color:
-                                      AppColors.whiteColor)),
-                        ),
-                      ),
-                    ],
+        child: buildMainPadding(menuObject, index));
+  }
+
+  Padding buildMainPadding(Item menuObject, int index) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Flexible(
+                    flex: 5,
+                    child: buildColumn(menuObject),
                   ),
-                ),
+                  buildFlexibleWidget(menuObject),
+                ],
               ),
-              Visibility(
-                visible:
-                    menuObject.isItemSelected && menuObject.isItemHasExtras(),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: InkWell(
-                    onTap: () {
-                      onTapFoodExtras(index);
-                    },
-                    child: CommonWidgets().textWidget(
-                        StringConstants.addFoodItems,
-                        StyleConstants.customTextStyle12MonsterMedium(
-                            color: AppColors.textColor3)),
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
-        ));
+          builVisibilityWidget(menuObject, index),
+        ],
+      ),
+    );
+  }
+
+  Column buildColumn(Item menuObject) {
+    return Column(
+      mainAxisAlignment:
+          (menuObject.isItemHasExtras() && menuObject.isItemSelected)
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 3.0, right: 3.0),
+          child: Text(
+            menuObject.name,
+            style: StyleConstants.customTextStyle16MontserratSemiBold(
+                color: menuObject.isItemSelected
+                    ? AppColors.whiteColor
+                    : AppColors.textColor1),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        ),
+        CommonWidgets().textWidget(
+            '\$${menuObject.price}',
+            StyleConstants.customTextStyle12MonsterMedium(
+                color: menuObject.isItemSelected
+                    ? AppColors.whiteColor
+                    : AppColors.textColor2))
+      ],
+    );
+  }
+
+  Flexible buildFlexibleWidget(Item menuObject) {
+    return Flexible(
+      flex: menuObject.isItemSelected ? 1 : 0,
+      child: Visibility(
+        visible: menuObject.isItemSelected,
+        child: CommonWidgets().textWidget(
+            '${menuObject.selectedItemQuantity}',
+            StyleConstants.customTextStyle16MonsterRegular(
+                color: AppColors.whiteColor)),
+      ),
+    );
+  }
+
+  Visibility builVisibilityWidget(Item menuObject, int index) {
+    return Visibility(
+      visible: menuObject.isItemSelected && menuObject.isItemHasExtras(),
+      child: Padding(
+        padding: const EdgeInsets.only(top: 4.0),
+        child: InkWell(
+          onTap: () {
+            onTapFoodExtras(index);
+          },
+          child: CommonWidgets().textWidget(
+              StringConstants.addFoodItems,
+              StyleConstants.customTextStyle12MonsterMedium(
+                  color: AppColors.textColor3)),
+        ),
+      ),
+    );
   }
 
   Widget addNewMenuItem() {
@@ -628,49 +632,61 @@ class _EventMenuScreenState extends State<EventMenuScreen>
           onTapAddFoodExtras(index);
         }
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 2.0),
-            child: CommonWidgets().textWidget(
-                menuObjet.name,
-                StyleConstants.customTextStyle12MonsterMedium(
-                    color: AppColors.textColor4)),
-          ),
-          Row(
-            children: [
-              Visibility(
-                visible: (menuObjet.selectedExtras).isNotEmpty,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
-                  child: CommonWidgets().textWidget(
-                      menuObjet.getExtraItemsName(),
-                      StyleConstants.customTextStyle09MonsterMedium(
-                          color: AppColors.textColor2)),
-                ),
-              ),
-              const SizedBox(
-                width: 20.0,
-              ),
-            ],
-          ),
-          Visibility(
-            visible: menuObjet.isItemHasExtras(),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: CommonWidgets().textWidget(
-                  StringConstants.addFoodItemsExtras,
-                  StyleConstants.customTextStyle09MonsterMedium(
-                      color: AppColors.primaryColor1)),
-            ),
-          ),
-          CommonWidgets().textWidget(
-              '${StringConstants.symbolDollar}${menuObjet.getTotalPrice().toStringAsFixed(2)}',
-              StyleConstants.customTextStyle16MontserratBold(
-                  color: AppColors.textColor1)),
-        ],
+      child: buildColumn2(menuObjet),
+    );
+  }
+
+  Column buildColumn2(Item menuObjet) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 2.0),
+          child: CommonWidgets().textWidget(
+              menuObjet.name,
+              StyleConstants.customTextStyle12MonsterMedium(
+                  color: AppColors.textColor4)),
+        ),
+        buildRow(menuObjet),
+        buildAddExtraFoodItemsVisibility(menuObjet),
+        CommonWidgets().textWidget(
+            '${StringConstants.symbolDollar}${menuObjet.getTotalPrice().toStringAsFixed(2)}',
+            StyleConstants.customTextStyle16MontserratBold(
+                color: AppColors.textColor1)),
+      ],
+    );
+  }
+
+  Visibility buildAddExtraFoodItemsVisibility(Item menuObjet) {
+    return Visibility(
+      visible: menuObjet.isItemHasExtras(),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 2.0),
+        child: CommonWidgets().textWidget(
+            StringConstants.addFoodItemsExtras,
+            StyleConstants.customTextStyle09MonsterMedium(
+                color: AppColors.primaryColor1)),
       ),
+    );
+  }
+
+  Row buildRow(Item menuObjet) {
+    return Row(
+      children: [
+        Visibility(
+          visible: (menuObjet.selectedExtras).isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 6.0, bottom: 4.0),
+            child: CommonWidgets().textWidget(
+                menuObjet.getExtraItemsName(),
+                StyleConstants.customTextStyle09MonsterMedium(
+                    color: AppColors.textColor2)),
+          ),
+        ),
+        const SizedBox(
+          width: 20.0,
+        ),
+      ],
     );
   }
 
@@ -696,7 +712,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               hintText: StringConstants.addTip,
               imageName: AssetsConstants.dollarIcon,
               controller: addTipTextFieldController),
-
           orderBillDetailContainer(),
         ],
       ),
@@ -758,8 +773,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         height: 3.34 * SizeConfig.heightSizeMultiplier,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(
-                color: AppColors.whiteBorderColor)),
+            border: Border.all(color: AppColors.whiteBorderColor)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -808,9 +822,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
             color: index == selectedCategoryIndex
                 ? AppColors.primaryColor2
                 : AppColors.whiteColor,
-            border: Border.all(
-                width: 1.0,
-                color: AppColors.whiteBorderColor),
+            border: Border.all(width: 1.0, color: AppColors.whiteBorderColor),
             borderRadius: BorderRadius.circular(20.0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
@@ -835,8 +847,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         decoration: BoxDecoration(
           color: AppColors.whiteColor,
           shape: BoxShape.circle,
-          border: Border.all(
-              width: 1.0, color: AppColors.whiteBorderColor),
+          border: Border.all(width: 1.0, color: AppColors.whiteBorderColor),
         ),
         child: Center(
           child: plusSymbolText(),
@@ -1063,7 +1074,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   onTapClearButton() {
-    DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo,StringConstants.confirmMessage);
+    DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo,
+        StringConstants.confirmMessage);
   }
 
   onConfirmTapYes() {
@@ -1378,7 +1390,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                     {orderID = value["orderID"]}
                 }
             });
-
   }
 
   //API Call

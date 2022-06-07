@@ -29,29 +29,14 @@ class BottomBarWidget extends StatefulWidget {
 }
 
 class _BottomBarWidgetState extends State<BottomBarWidget> {
-  // late BottomBarMenu bottomBarMenu=Bottombarme;
   BottomBarMenuClass bottomBarMenuClass = BottomBarMenuClass();
   final service = ServiceNotifier();
-/*  _BottomBarWidgetState() {
-    bottomBarMenu = BottomBarMenu();
-  }*/
-
   int currentIndex = 0;
-/*  List<Widget> bodyWidgets = [
-    const HomeScreen(),
-    const NotificationScreen(),
-    const SettingScreen(),
-    const AccountSwitchScreen(),
-  ];*/
   List<BottomItems> bottomItemList = [
     BottomItems(
         title: StringConstants.home,
         basicImage: AssetsConstants.homeUnSelectedIcon,
         selectedImage: AssetsConstants.homeSelectedIcon),
-/*    BottomItems(
-        title: StringConstants.notification,
-        basicImage: AssetsConstants.notificationUnSelectedIcon,
-        selectedImage: AssetsConstants.notificationSelectedIcon),*/
     BottomItems(
         title: StringConstants.settings,
         basicImage: AssetsConstants.settingsUnSelectedIcon,
@@ -85,56 +70,61 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
     return Padding(
       padding: const EdgeInsets.only(left: 21.0),
       child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: bottomItemList.length,
-          scrollDirection: Axis.horizontal,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  // onTapBottomListItem(index);
-                  // bottomBarMenuClass.changeIndex(index);
-                  currentIndex = index;
-                  widget.onTapCallBack(index);
-                  print('bottombar$index');
-                });
-                service.increment(index);
-                if (!widget.isFromDashboard) {
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                }
-              },
-              child: Row(
-                children: [
-                  Container(
-                    color: AppColors.primaryColor1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: CommonWidgets().image(
-                          image: ServiceNotifier.count == index
-                              ? bottomItemList[index].selectedImage
-                              : bottomItemList[index].basicImage,
-                          width: 3.38 * SizeConfig.imageSizeMultiplier,
-                          height: 3.38 * SizeConfig.imageSizeMultiplier),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 35.0),
-                    child: CommonWidgets().textWidget(
-                        bottomItemList[index].title,
-                        StyleConstants.customTextStyle(
-                            fontSize: 13.0,
-                            color: ServiceNotifier.count == index
-                                ? AppColors.primaryColor2
-                                : AppColors.whiteColor,
-                            fontFamily: currentIndex == index
-                                ? FontConstants.montserratSemiBold
-                                : FontConstants.montserratMedium)),
-                  )
-                ],
-              ),
-            );
-          }),
+        shrinkWrap: true,
+        itemCount: bottomItemList.length,
+        scrollDirection: Axis.horizontal,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: buildWidget,
+      ),
+    );
+  }
+
+  Widget buildWidget(BuildContext context, int index) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentIndex = index;
+          widget.onTapCallBack(index);
+          print('bottombar$index');
+        });
+        service.increment(index);
+        if (!widget.isFromDashboard) {
+          Navigator.popUntil(context, (route) => route.isFirst);
+        }
+      },
+      child: buildRow(index),
+    );
+  }
+
+  Row buildRow(int index) {
+    return Row(
+      children: [
+        Container(
+          color: AppColors.primaryColor1,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: CommonWidgets().image(
+                image: ServiceNotifier.count == index
+                    ? bottomItemList[index].selectedImage
+                    : bottomItemList[index].basicImage,
+                width: 3.38 * SizeConfig.imageSizeMultiplier,
+                height: 3.38 * SizeConfig.imageSizeMultiplier),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 35.0),
+          child: CommonWidgets().textWidget(
+              bottomItemList[index].title,
+              StyleConstants.customTextStyle(
+                  fontSize: 13.0,
+                  color: ServiceNotifier.count == index
+                      ? AppColors.primaryColor2
+                      : AppColors.whiteColor,
+                  fontFamily: currentIndex == index
+                      ? FontConstants.montserratSemiBold
+                      : FontConstants.montserratMedium)),
+        )
+      ],
     );
   }
 
