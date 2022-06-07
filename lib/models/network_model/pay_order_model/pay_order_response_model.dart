@@ -3,31 +3,24 @@ import 'dart:convert';
 PayOrderResponseModel payOrderResponseModelFromJson(String str) =>
     PayOrderResponseModel.fromJson(json.decode(str));
 
-String? payOrderResponseModelToJson(PayOrderResponseModel data) =>
-    json.encode(data.toJson());
-
 class PayOrderResponseModel {
   PayOrderResponseModel({
     this.status,
     this.messageKey,
-    //  this.orderItemsInvoiceDto,
   });
 
   String? status;
   String? messageKey;
-  // OrderItemsInvoiceDto? orderItemsInvoiceDto;
 
   factory PayOrderResponseModel.fromJson(Map<String?, dynamic> json) =>
       PayOrderResponseModel(
         status: json["Status"],
         messageKey: json["messageKey"],
-        //  orderItemsInvoiceDto: OrderItemsInvoiceDto.fromJson(json["orderItemsInvoiceDto"]),
       );
 
   Map<String?, dynamic> toJson() => {
         "Status": status,
         "messageKey": messageKey,
-        // "orderItemsInvoiceDto": orderItemsInvoiceDto!.toJson(),
       };
 }
 

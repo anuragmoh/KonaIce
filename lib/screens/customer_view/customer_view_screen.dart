@@ -7,7 +7,6 @@ import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class CustomerViewScreen extends StatefulWidget {
   const CustomerViewScreen({Key? key}) : super(key: key);

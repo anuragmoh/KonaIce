@@ -1,14 +1,7 @@
-// To parse this JSON data, do
-//
-//     final payOrderResponseCardModel = payOrderResponseCardModelFromJson(jsonString);
-
 import 'dart:convert';
 
 PayOrderResponseCardModel payOrderResponseCardModelFromJson(String str) =>
     PayOrderResponseCardModel.fromJson(json.decode(str));
-
-String payOrderResponseCardModelToJson(PayOrderResponseCardModel data) =>
-    json.encode(data.toJson());
 
 class PayOrderResponseCardModel {
   PayOrderResponseCardModel({

@@ -3,9 +3,6 @@ import 'dart:convert';
 AllOrderResponse allOrderResponseFromJson(String str) =>
     AllOrderResponse.fromJson(json.decode(str));
 
-String allOrderResponseToJson(AllOrderResponse data) =>
-    json.encode(data.toJson());
-
 class AllOrderResponse {
   AllOrderResponse({
     this.count,

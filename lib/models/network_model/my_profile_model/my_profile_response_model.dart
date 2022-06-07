@@ -1,14 +1,7 @@
-// To parse this JSON data, do
-//
-//     final myProfileResponseModel = myProfileResponseModelFromJson(jsonString);
-
 import 'dart:convert';
 
 MyProfileResponseModel myProfileResponseModelFromJson(String str) =>
     MyProfileResponseModel.fromJson(json.decode(str));
-
-String myProfileResponseModelToJson(MyProfileResponseModel data) =>
-    json.encode(data.toJson());
 
 class MyProfileResponseModel {
   MyProfileResponseModel({
@@ -28,9 +21,7 @@ class MyProfileResponseModel {
      this.activated,
      this.emailVerified,
      this.phoneNumberVerified,
-    // this.timezone,
      this.roles,
-    // required this.files,
      this.code,
      this.franchisePhoneNumber,
      this.connectAccountLink,
@@ -40,11 +31,9 @@ class MyProfileResponseModel {
      this.defaultTimezone,
      this.billingName,
      this.billingAddress,
-    // this.billingCountry,
      this.billingState,
      this.billingCity,
      this.billingZipCode,
-    // this.addressLine2,
      this.addressLine1,
      this.country,
      this.city,
@@ -68,9 +57,7 @@ class MyProfileResponseModel {
   bool? activated;
   bool? emailVerified;
   bool? phoneNumberVerified;
-  // dynamic timezone;
   List<Role>? roles;
-  // Files files;
   String? code;
   String? franchisePhoneNumber;
   String? connectAccountLink;
@@ -84,7 +71,6 @@ class MyProfileResponseModel {
   String? billingState;
   String? billingCity;
   String? billingZipCode;
-  // dynamic addressLine2;
   String? addressLine1;
   String? country;
   String? city;

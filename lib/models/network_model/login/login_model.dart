@@ -1,11 +1,5 @@
 import 'dart:convert';
 
-LoginRequestModel loginRequestModelFromJson(String str) =>
-    LoginRequestModel.fromJson(json.decode(str));
-
-String loginRequestModelToJson(LoginRequestModel data) =>
-    json.encode(data.toJson());
-
 class LoginRequestModel {
   LoginRequestModel({
     this.email,
@@ -57,9 +51,6 @@ class LoginRequestModel {
 
 LoginResponseModel loginResponseModelFromJson(String str) =>
     LoginResponseModel.fromJson(json.decode(str));
-
-String loginResponseModelToJson(LoginResponseModel data) =>
-    json.encode(data.toJson());
 
 class LoginResponseModel {
   LoginResponseModel({

@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-P2PCardDetailsModel p2PCardDetailsModelFromJson(String str) =>
-    P2PCardDetailsModel.fromJson(json.decode(str));
-
 String p2PCardDetailsModelToJson(P2PCardDetailsModel data) =>
     json.encode(data.toJson());
 

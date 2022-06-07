@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+
 import 'constants/app_colors.dart';
 
 void main() {
@@ -38,8 +39,4 @@ class MyApp extends StatelessWidget {
       });
     });
   }
-}
-
-class App {
-  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }

@@ -5,10 +5,9 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
+import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
-import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import '../../utils/size_configuration.dart';
 

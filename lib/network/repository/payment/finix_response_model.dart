@@ -1,14 +1,7 @@
-// To parse this JSON data, do
-//
-//     final FinixResponseModel = finixResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 FinixResponseModel finixResponseFromJson(String str) =>
     FinixResponseModel.fromJson(json.decode(str));
-
-String finixResponseToJson(FinixResponseModel data) =>
-    json.encode(data.toJson());
 
 class FinixResponseModel {
   FinixResponseModel({

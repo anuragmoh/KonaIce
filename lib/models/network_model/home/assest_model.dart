@@ -1,14 +1,7 @@
-// To parse this JSON data, do
-//
-//     final assetsModelResponse = assetsModelResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 AssetsResponseModel assetsModelResponseFromJson(String str) =>
     AssetsResponseModel.fromJson(json.decode(str));
-
-String assetsModelResponseToJson(AssetsResponseModel data) =>
-    json.encode(data.toJson());
 
 class AssetsResponseModel {
   AssetsResponseModel({

@@ -1,13 +1,4 @@
-// To parse this JSON data, do
-//
-//     final payReceipt = payReceiptFromJson(jsonString);
 
-import 'dart:convert';
-
-PayReceipt payReceiptFromJson(String str) =>
-    PayReceipt.fromJson(json.decode(str));
-
-String payReceiptToJson(PayReceipt data) => json.encode(data.toJson());
 
 class PayReceipt {
   PayReceipt({

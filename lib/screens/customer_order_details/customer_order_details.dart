@@ -13,7 +13,7 @@ import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
+
 import 'custom_add_tip_dialog.dart';
 
 // ignore: must_be_immutable

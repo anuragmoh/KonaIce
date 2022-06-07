@@ -3,9 +3,6 @@ import 'dart:convert';
 PlaceOrderResponseModel placeOrderResponseModelFromJson(String str) =>
     PlaceOrderResponseModel.fromJson(json.decode(str));
 
-String? placeOrderResponseModelToJson(PlaceOrderResponseModel data) =>
-    json.encode(data.toJson());
-
 class PlaceOrderResponseModel {
   PlaceOrderResponseModel({
     this.id,

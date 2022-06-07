@@ -6,7 +6,6 @@ import '../../constants/other_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../constants/style_constants.dart';
 import '../../utils/common_widgets.dart';
-import '../../utils/utils.dart';
 
 // ignore: must_be_immutable
 class CustomerAddTipDialog extends StatefulWidget {

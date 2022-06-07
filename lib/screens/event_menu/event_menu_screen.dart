@@ -20,6 +20,7 @@ import 'package:kona_ice_pos/models/data_models/item_categories.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders_items.dart';
+import 'package:kona_ice_pos/models/network_model/search_customer/customer_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/event/event_presenter.dart';
@@ -28,7 +29,6 @@ import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
-import 'package:kona_ice_pos/models/network_model/search_customer/customer_model.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
@@ -42,7 +42,7 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
+
 import '../../models/network_model/order_model/order_request_model.dart';
 import '../../models/network_model/order_model/order_response_model.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class StyleConstants {
   static customTextStyle(
