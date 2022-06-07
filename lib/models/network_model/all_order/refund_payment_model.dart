@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-RefundPaymentModel refundPaymentModelFromJson(String str) => RefundPaymentModel.fromJson(json.decode(str));
+RefundPaymentModel refundPaymentModelFromJson(String str) =>
+    RefundPaymentModel.fromJson(json.decode(str));
 
-String refundPaymentModelToJson(RefundPaymentModel data) => json.encode(data.toJson());
+String refundPaymentModelToJson(RefundPaymentModel data) =>
+    json.encode(data.toJson());
 
 class RefundPaymentModel {
   RefundPaymentModel({
@@ -15,11 +17,12 @@ class RefundPaymentModel {
 
   double? refundAmount;
 
-  factory RefundPaymentModel.fromJson(Map<String, dynamic> json) => RefundPaymentModel(
-    refundAmount: json["refundAmount"].toDouble(),
-  );
+  factory RefundPaymentModel.fromJson(Map<String, dynamic> json) =>
+      RefundPaymentModel(
+        refundAmount: json["refundAmount"].toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "refundAmount": refundAmount,
-  };
+        "refundAmount": refundAmount,
+      };
 }

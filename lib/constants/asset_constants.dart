@@ -1,5 +1,6 @@
 class AssetsConstants {
-  static const appVersion='1.0';
+  static const appVersion = '1.0';
+  static const test = 'test';
   static const assetsPath = 'assets/images/';
   static const assetsTopBarIconsPath = assetsPath + 'top_bar_icons/';
   static const assetsBottomBarIconsPath = assetsPath + 'bottom_bar_icons/';
@@ -54,4 +55,7 @@ class AssetsConstants {
   static const removeCardAnimationPath = assetsAnimationsPath + 'removeCard.json';
 
   static const defaultProfileImage = assetsPath + 'default_profile_icon.png';
+  static const assetsAnimationsPath = 'assets/animations/';
+  static const insertCardAnimationPath =
+      assetsAnimationsPath + 'insertCard.json';
 }

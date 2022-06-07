@@ -1,5 +1,6 @@
 import UIKit
 import Flutter
+import PaymentsSDK
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -41,6 +42,17 @@ import Flutter
                                                  tags:tags )
                 self.loadPaymentView(paymentModel)
                 result("")
+            case "getPaymentToken":
+                guard let args = call.arguments as? [String: Any] else { return }
+                let cardNumber = args["cardNumber"] as? String ?? ""
+                let expMonth = args["expirationMonth"] as? Int ?? 0
+                let expYear = args["expirationYear"] as? Int ?? 0
+                let cvv = args["cvv"] as? Int ?? 0
+                let zipcode = args["zipcode"] as? String ?? ""
+                
+                self.getFinixPaymentToken(cardNumber: cardNumber, expMonth: expMonth, expYear: expYear, cvv: cvv, zipcode: zipcode) { token in
+                    self.cardPaymentChannel.invokeMethod("getPaymentToken", arguments: [token])
+                }
             default: result(FlutterMethodNotImplemented)
             }
         })
@@ -66,5 +78,27 @@ extension AppDelegate {
             return nil
         }
         return appDelegate
+    }
+    
+    func getFinixPaymentToken(cardNumber: String, expMonth: Int, expYear: Int, cvv: Int, zipcode: String, onCompletion: @escaping (String) -> Void) {
+        
+        let tokenizer = Tokenizer(host: FinixConstants.hostUrl, applicationId: FinixConstants.applicationId)
+        var address = Address()
+        address.postal_code = zipcode
+        
+        tokenizer.createToken(cardNumber: cardNumber,
+                              paymentType: PaymentType.PAYMENT_CARD,
+                              expirationMonth: expMonth,
+                              expirationYear: expYear,
+                              securityCode: String(cvv),
+                              address: address) { (token, error) in
+            guard let token = token else {
+                print(error!.localizedDescription)
+                onCompletion("")
+                return
+            }
+            onCompletion(token.id)
+        }
+        
     }
 }

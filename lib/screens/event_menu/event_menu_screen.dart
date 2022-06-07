@@ -1487,7 +1487,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         totalAmount: totalAmount,
         payment: "NA",
         orderStatus: "saved",
-        deleted: false));
+        deleted: false,
+        paymentTerm: "NA",
+        refundAmount: 0.0));
 
     // Insert Items into DB
     List<OrderItemsList> orderItem = getOrderItemList();

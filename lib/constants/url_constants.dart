@@ -17,7 +17,9 @@ class UrlConstants {
   static const placeOrder = '/api/v2/secure/orders-stripe/staff-user';
   static const payOrder = '/api/v2/secure/orders-payment/staff-user';
   static const finixSendReceipt =
-      '/api/v2/secure/orders/{orderId}/finix/receipt';
+      '/api/v2/secure/orders/{orderId}/send-receipt';
+  static const refundPayment = '/api/v2/secure/orders/{orderId}/finix/refund';
+  static const finixMannualPay = '';
 
   static const assets =
       '/api/v1/secure/assets/grid-data?limit=9999&applyActivatedStatus=true&activated=true';
@@ -40,6 +42,10 @@ class UrlConstants {
 
   static getFinixSendReceipt({required String orderId}) {
     return finixSendReceipt.replaceAll('{orderId}', orderId);
+  }
+
+  static getRefundPayment({required String orderId}) {
+    return refundPayment.replaceAll('{orderId}', orderId);
   }
 
   static getCustomerList({required String searchText}) {

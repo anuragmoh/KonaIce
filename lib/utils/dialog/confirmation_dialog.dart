@@ -10,7 +10,10 @@ class ConfirmationDialog extends StatefulWidget {
   final String confirmMessage;
 
   const ConfirmationDialog(
-      {Key? key, required this.onTapYes, required this.onTapNo,required this.confirmMessage})
+      {Key? key,
+      required this.onTapYes,
+      required this.onTapNo,
+      required this.confirmMessage})
       : super(key: key);
 
   @override

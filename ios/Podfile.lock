@@ -5,8 +5,6 @@ PODS:
   - device_info (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - flutter_native_splash (0.0.1):
-    - Flutter
   - flutter_nearby_connections (0.0.1):
     - Flutter
     - SwiftyJSON (~> 4.0)
@@ -19,10 +17,11 @@ PODS:
   - geolocator_apple (1.2.0):
     - Flutter
   - lottie-ios (3.3.0)
-  - package_info (0.0.1):
+  - package_info_plus (0.4.5):
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
+  - PaymentsSDK (1.0.11)
   - ReachabilitySwift (5.0.0)
   - sqflite_sqlcipher (0.0.1):
     - Flutter
@@ -39,20 +38,21 @@ DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
-  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
   - flutter_nearby_connections (from `.symlinks/plugins/flutter_nearby_connections/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - geocoding (from `.symlinks/plugins/geocoding/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
   - lottie-ios
-  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - PaymentsSDK (~> 1.0.11)
   - sqflite_sqlcipher (from `.symlinks/plugins/sqflite_sqlcipher/ios`)
 
 SPEC REPOS:
   trunk:
     - FMDB
     - lottie-ios
+    - PaymentsSDK
     - ReachabilitySwift
     - SQLCipher
     - SwiftyJSON
@@ -64,8 +64,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
-  flutter_native_splash:
-    :path: ".symlinks/plugins/flutter_native_splash/ios"
   flutter_nearby_connections:
     :path: ".symlinks/plugins/flutter_nearby_connections/ios"
   flutter_secure_storage:
@@ -74,8 +72,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/geocoding/ios"
   geolocator_apple:
     :path: ".symlinks/plugins/geolocator_apple/ios"
-  package_info:
-    :path: ".symlinks/plugins/package_info/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
   sqflite_sqlcipher:
@@ -85,20 +83,20 @@ SPEC CHECKSUMS:
   connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
   flutter_nearby_connections: 68c6cb88dcbf781e74adac01f4e93b853a30ee34
   flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   lottie-ios: 6ac74dcc09904798f59b18cb3075c089d76be9ae
-  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  PaymentsSDK: ce9f3005cfaac2bbff3c29ef68686b8c852d9ef4
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   sqflite_sqlcipher: 70eb7fd8d4f0b0352d0bde5cf345b810737f54bb
   SQLCipher: 1ab0b9486a77d141e72e92ff30681926ed79c07a
   SwiftyJSON: 6faa0040f8b59dead0ee07436cbf76b73c08fd08
 
-PODFILE CHECKSUM: a160070154d6ecca9c72e3f835dc37c1463e9cb3
+PODFILE CHECKSUM: 7791a3edab0f777d3454f46dcac7d14ae9029ea6
 
 COCOAPODS: 1.11.3
