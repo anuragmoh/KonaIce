@@ -106,6 +106,8 @@ class _PaymentScreenState extends State<PaymentScreen>
   bool isApiProcess = false;
   PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
   late PaymentPresenter paymentPresenter;
+ bool manualCardShowProccedButton=false;
+  bool showDisabledButton=true;
 
   static const MethodChannel cardPaymentChannel =
       MethodChannel("com.mobisoft.konaicepos/cardPayment");
@@ -404,8 +406,9 @@ class _PaymentScreenState extends State<PaymentScreen>
       );
 
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
-    bool showDisabledButton =
-        !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;
+ /*    showDisabledButton =
+        !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;*/
+    debugPrint('>>>>>>>>>>>>>$showDisabledButton');
     return GestureDetector(
       onTap: isPaymentDone == false
           ? () {
@@ -749,14 +752,21 @@ class _PaymentScreenState extends State<PaymentScreen>
   onAmountEnter(double value) {
     receivedAmount = value;
     if (value > totalAmount) {
+
       setState(() {
         returnAmount = value - totalAmount;
+
       });
     } else {
       setState(() {
         returnAmount = 0.0;
       });
     }
+    setState(() {
+      showDisabledButton =
+          !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;
+    });
+
   }
 
   // Right side panel design
@@ -1066,6 +1076,10 @@ class _PaymentScreenState extends State<PaymentScreen>
       updateSelectedPaymentMode();
     });
     if (paymentModeType == PaymentModeConstants.creditCardManual) {
+      setState(() {
+        showDisabledButton=true;
+      });
+
       showDialog(
           barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
           context: context,
@@ -1076,6 +1090,10 @@ class _PaymentScreenState extends State<PaymentScreen>
         bool valueForApi = value[ConstantKeys.cardValue];
         debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
+
+          setState(() {
+            showDisabledButton=true;
+          });
           String cardNumberStr = value[ConstantKeys.cardNumber];
           String cardExpiry = value[ConstantKeys.cardExpiry];
           int cardExpiryMonth = value[ConstantKeys.cardMonth];
@@ -1084,13 +1102,15 @@ class _PaymentScreenState extends State<PaymentScreen>
           int valCardExpiry = int.parse(cardExpiry);
           int valCardCvv = int.parse(cardCvv);
           String zipcode = zipcodeString;
-          debugPrint('>>>>>>>>>$cardExpiry');
           onTapConfirmPayment(cardNumberStr, valCardExpiry, valCardCvv,
               cardExpiryMonth, zipcode);
         }
       });
     }
     if (paymentModeType == PaymentModeConstants.creditCard) {
+      setState(() {
+        showDisabledButton=false;
+      });
       performCardPayment();
     }
     getEmailIdPhoneNumber();
@@ -1140,10 +1160,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       FinixTagsKey.tags.name: tags
     };
     await cardPaymentChannel.invokeListMethod('performCardPayment', values);
-  }
-
-  onTapCloseButton() {
-    Navigator.of(context).pop();
   }
 
   onTapNewOrder() {
