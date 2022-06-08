@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/common/base_method.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ValidationPopup extends StatefulWidget {
   String validationMessage;
@@ -18,37 +17,7 @@ class ValidationPopup extends StatefulWidget {
 }
 
 class _ValidationPopup extends State<ValidationPopup> {
-  String menuName = StringConstants.customMenuPackage;
-  bool isEditingMenuName = false;
-  var amountTextFieldController = TextEditingController();
-  var menuNameTextFieldController = TextEditingController();
-  String cardNumberValidationMessage = "";
-  String cardDateValidationMessage = "";
-  String cardCvvValidationMessage = "";
-  String cardNumber = "4111111111111111",
-      cardCvc = "123",
-      cardExpiryYear = "22",
-      cardExpiryMonth = "12";
-  String stripeTokenId = "", stripePaymentMethodId = "";
-  String demoCardNumber = "";
-  bool isCardNumberValid = false;
-  bool isExpiryValid = false;
-  bool isCvcValid = false;
-  bool isApiProcess = false;
-  late PaymentPresenter paymentPresenter;
-  TextEditingController dateExpiryController = TextEditingController();
-  var maskFormatter = MaskTextInputFormatter(
-      mask: '##/##',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
-
-  TextEditingController cardNumberController = TextEditingController();
-  TextEditingController cvcController = TextEditingController();
-
-  _PaymentFailPopupPopupState() {
-    // paymentPresenter = PaymentPresenter(this);
-  }
-
+  BaseMethod baseMethod = BaseMethod();
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +31,11 @@ class _ValidationPopup extends State<ValidationPopup> {
   @override
   void dispose(){
     super.dispose();
-    amountTextFieldController.dispose();
-    menuNameTextFieldController.dispose();
-    dateExpiryController.dispose();
-    cardNumberController.dispose();
-    cvcController.dispose();
+    baseMethod.amountTextFieldController.dispose();
+    baseMethod.menuNameTextFieldController.dispose();
+    baseMethod.dateExpiryController.dispose();
+    baseMethod.cardNumberController.dispose();
+    baseMethod.cvcController.dispose();
   }
 
 
