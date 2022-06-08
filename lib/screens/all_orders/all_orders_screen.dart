@@ -58,6 +58,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   int countOffSet = 0;
   bool refundBool = false;
   bool paymentModeCardBool = false;
+  String paymentModeCard = "";
 
   _AllOrdersScreenState() {
     allOrderPresenter = AllOrderPresenter(this);
@@ -431,6 +432,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         phone: selectedRow != -1
                             ? savedOrdersList[selectedRow].phoneCountryCode +
                                 savedOrdersList[selectedRow].phoneNumber
+                            : StringExtension.empty(),
+                        posPaymentMethod: selectedRow != -1
+                            ? savedOrdersList[selectedRow].posPaymentMethod
                             : StringExtension.empty()),
                   ),
                   const SizedBox(height: 35.0),
@@ -552,7 +556,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                               ? savedOrdersList[selectedRow].refundAmount
                               : "NA",
                           selectedRow != -1
-                              ? savedOrdersList[selectedRow].paymentTerm
+                              ? savedOrdersList[selectedRow].posPaymentMethod
                               : "NA"),
                     ),
                   ),
@@ -584,7 +588,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           {required String eventName,
           required String email,
           required String storeAddress,
-          required String phone}) =>
+          required String phone,
+          required String posPaymentMethod}) =>
       Column(
         children: [
           Visibility(
@@ -679,15 +684,15 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratRegular)),
             Expanded(
-                child: paymentModeCardBool == true
+                child: posPaymentMethod== "CASH"
                     ? CommonWidgets().textView(
-                    StringConstants.paymentModeCard,
+                        StringConstants.paymentModeCash,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
                             color: getMaterialColor(AppColors.textColor2),
                             fontFamily: FontConstants.montserratMedium))
                     : CommonWidgets().textView(
-                    StringConstants.paymentModeCash,
+                        StringConstants.paymentModeCard,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
                             color: getMaterialColor(AppColors.textColor2),
@@ -837,7 +842,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      refundAmout > 0
+                      refundAmout == 0
                           ? CommonWidgets().textView(
                               StringConstants.refund,
                               StyleConstants.customTextStyle(
@@ -1099,14 +1104,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   }
 
   Widget getRightOrderStatusView(String status, String paymentStatus,
-      dynamic refundAmout, String paymentTerm) {
+      dynamic refundAmout, String posPaymentMethod) {
     refundAmout ??= 0;
-
-    if (paymentTerm == "menu") {
+    if (posPaymentMethod != "CASH") {
       refundBool = true;
-      paymentModeCardBool = true;
+    }else{
+      refundBool = false;
     }
-    debugPrint('<><><><><><>$paymentTerm');
+    debugPrint('<><><><><><posRefund>${refundAmout}');
     debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
@@ -1213,7 +1218,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           orderCode: event.orderCode!,
           orderId: event.id!,
           customerName: customerName,
-          email: event.email.toString(),
           phoneNumber: event.phoneNumber.toString(),
           phoneCountryCode: event.phoneNumCountryCode.toString(),
           address1: event.addressLine1.toString(),
@@ -1231,7 +1235,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           orderStatus: event.orderStatus!,
           deleted: false,
           paymentTerm: event.paymentTerm.toString(),
-          refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount));
+          refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount,
+          posPaymentMethod: event.posPaymentMethod.toString()));
       for (var item in event.orderItemsList!) {
         await SavedOrdersItemsDAO().insert(SavedOrdersItem(
             orderId: event.id!,

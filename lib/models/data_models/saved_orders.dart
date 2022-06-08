@@ -25,6 +25,7 @@ class SavedOrders {
   bool deleted;
   String paymentTerm;
   dynamic refundAmount;
+  String posPaymentMethod;
 
   SavedOrders(
       {required this.eventId,
@@ -50,7 +51,7 @@ class SavedOrders {
       required this.orderStatus,
       required this.deleted,
       required this.paymentTerm,
-      required this.refundAmount});
+      required this.refundAmount, this.posPaymentMethod="NA"});
 
   Map<String, dynamic> toMap() {
     return {
@@ -77,7 +78,8 @@ class SavedOrders {
       "orderStatus": orderStatus,
       "deleted": deleted,
       "paymentTerm": paymentTerm,
-      "refundAmount": refundAmount
+      "refundAmount": refundAmount,
+      "posPaymentMethod": posPaymentMethod
     };
   }
 
@@ -105,8 +107,9 @@ class SavedOrders {
         payment: map["payment"],
         orderStatus: map["order_status"],
         deleted: map["deleted"] == 1,
-        paymentTerm: map["paymentTerm"].toString(),
-        refundAmount: map["refundAmount"]);
+        paymentTerm: map["payment_term"],
+        refundAmount: map["refund_amount"],
+        posPaymentMethod: map["pos_payment_method"]);
   }
 
   @override
@@ -135,7 +138,8 @@ class SavedOrders {
     orderStatus:$orderStatus,
     deleted:$deleted,
     paymentTerm:$paymentTerm,
-    refundAmount:$refundAmount
+    refundAmount:$refundAmount,
+    posPaymentMethod:$posPaymentMethod
     """;
   }
 

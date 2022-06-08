@@ -408,7 +408,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   Widget buttonWidget(String buttonText, TextStyle textStyle) {
  /*    showDisabledButton =
         !isPaymentDone && receivedAmount < totalAmount && paymentModeType <= 0;*/
-    debugPrint('>>>>>>>>>>>>>$showDisabledButton');
+    debugPrint('------>>$showDisabledButton');
     return GestureDetector(
       onTap: isPaymentDone == false
           ? () {
@@ -1270,6 +1270,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     });
 
     if (response is GeneralSuccessModel) {
+      // showDisabledButton=false;
       GeneralSuccessModel responseModel = response;
       CommonWidgets().showSuccessSnackBar(
           message: responseModel.general![0].message ??

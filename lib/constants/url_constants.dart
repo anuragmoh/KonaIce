@@ -14,7 +14,7 @@ class UrlConstants {
 
   static const syncData = '/api/v2/secure/event-menu-sync';
 
-  static const placeOrder = '/api/v2/secure/orders-stripe/staff-user';
+  static const placeOrder = '/api/v2/secure/orders/staff-user';
   static const payOrder = '/api/v2/secure/orders-payment/staff-user';
   static const finixSendReceipt =
       '/api/v2/secure/orders/{orderId}/send-receipt';
