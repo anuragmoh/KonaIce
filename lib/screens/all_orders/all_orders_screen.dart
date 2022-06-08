@@ -27,6 +27,8 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 
+import '../../models/network_model/order_model/order_response_model.dart';
+
 class AllOrdersScreen extends StatefulWidget {
   final Function(
           SavedOrders, List<SavedOrdersItem>, List<SavedOrdersExtraItems>)
@@ -1233,7 +1235,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     getAllSavedOrders(widget.events.id);
   }
 
-  Future<void> insertOrders(Datum event, String customerName) async {
+  Future<void> insertOrders(PlaceOrderResponseModel event, String customerName) async {
     await SavedOrdersDAO().insert(SavedOrders(
         eventId: event.eventId!,
         cardId: event.id!,
@@ -1261,7 +1263,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount));
   }
 
-  Future<void> orderItemsList(Datum event) async {
+  Future<void> orderItemsList(PlaceOrderResponseModel event) async {
     for (var item in event.orderItemsList!) {
       await SavedOrdersItemsDAO().insert(SavedOrdersItem(
           orderId: event.id!,
@@ -1278,7 +1280,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  Future<void> foodExtraItemMapList(OrderItemsList item, Datum event) async {
+  Future<void> foodExtraItemMapList(OrderItemsDetailList item, PlaceOrderResponseModel event) async {
     for (var extraItemMappingList in item.foodExtraItemMappingList!) {
       if (extraItemMappingList.orderFoodExtraItemDetailDto != null) {
         for (var extraItem
