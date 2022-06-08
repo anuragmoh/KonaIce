@@ -17,9 +17,9 @@ class RefundPopup extends StatefulWidget {
 }
 
 class _RefundPopup extends State<RefundPopup> {
-  TextEditingController totalAmoutController = TextEditingController();
-  bool isTotalAmoutValid = true;
-  String amoutValidationMessage = "";
+  TextEditingController _totalAmoutController = TextEditingController();
+  bool _isTotalAmoutValid = true;
+  String _amoutValidationMessage = "";
   _RefundPopup() {
     // paymentPresenter = PaymentPresenter(this);
   }
@@ -27,7 +27,7 @@ class _RefundPopup extends State<RefundPopup> {
   @override
   void initState() {
     super.initState();
-    totalAmoutController =
+    _totalAmoutController =
         TextEditingController(text: widget.amount.toString());
   }
 
@@ -36,19 +36,19 @@ class _RefundPopup extends State<RefundPopup> {
     return Dialog(
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: showCustomMenuPopup(),
+      child: _showCustomMenuPopup(),
     );
   }
 
-  Widget showCustomMenuPopup() {
+  Widget _showCustomMenuPopup() {
     return Dialog(
       backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
-  Widget customMenuPopUpComponent() {
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.43,
@@ -58,15 +58,15 @@ class _RefundPopup extends State<RefundPopup> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.refund,
-                onTapCloseButton: onTapCloseButton),
+                onTapCloseButton: _onTapCloseButton),
             Padding(
               padding:
                   const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
-              child: amountComponent(
+              child: _amountComponent(
                   StringConstants.totalAmountBlank,
-                  totalAmoutController,
-                  amoutValidationMessage,
-                  amountValidation,
+                  _totalAmoutController,
+                  _amoutValidationMessage,
+                  _amountValidation,
                   10),
             ),
             const SizedBox(
@@ -77,7 +77,7 @@ class _RefundPopup extends State<RefundPopup> {
               children: [
                 CommonWidgets().buttonWidget(
                   StringConstants.confirm,
-                  onTapConfirmButton,
+                  _onTapConfirmButton,
                 ),
               ],
             ),
@@ -90,31 +90,31 @@ class _RefundPopup extends State<RefundPopup> {
     );
   }
 
-  onTapConfirmButton() {
-    debugPrint('.............$isTotalAmoutValid');
-    if (isTotalAmoutValid == true) {
-      DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo,
+  _onTapConfirmButton() {
+    debugPrint('.............$_isTotalAmoutValid');
+    if (_isTotalAmoutValid == true) {
+      DialogHelper.confirmationDialog(context, _onConfirmTapYes, _onConfirmTapNo,
           StringConstants.confirmAmountMessage);
     }
   }
 
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop();
   }
 
-  onConfirmTapYes() {
+  _onConfirmTapYes() {
     Map<String, dynamic> myData = Map();
     myData['value'] = true;
-    myData['totalAmount'] = totalAmoutController.text;
+    myData['totalAmount'] = _totalAmoutController.text;
     Navigator.of(context).pop();
     Navigator.pop(context, myData);
   }
 
-  onConfirmTapNo() {
+  _onConfirmTapNo() {
     Navigator.of(context).pop();
   }
 
-  Widget amountComponent(
+  Widget _amountComponent(
           String txtName,
           TextEditingController textEditingController,
           String validationMessage,
@@ -158,7 +158,7 @@ class _RefundPopup extends State<RefundPopup> {
                         keyboardType: TextInputType.number,
                         maxLength: maxLength,
                         onChanged: (value) {
-                          amountValidation();
+                          _amountValidation();
                         },
                         controller: textEditingController,
                         decoration: InputDecoration(
@@ -185,24 +185,24 @@ class _RefundPopup extends State<RefundPopup> {
         ],
       );
 
-  amountValidation() {
-    int myInt = int.parse(totalAmoutController.text);
-    if (totalAmoutController.text.isEmpty) {
+  _amountValidation() {
+    int myInt = int.parse(_totalAmoutController.text);
+    if (_totalAmoutController.text.isEmpty) {
       setState(() {
-        amoutValidationMessage = StringConstants.totalAmountBlank;
+        _amoutValidationMessage = StringConstants.totalAmountBlank;
       });
-      isTotalAmoutValid = false;
+      _isTotalAmoutValid = false;
     }
     if (widget.amount < myInt) {
       setState(() {
-        amoutValidationMessage = StringConstants.totalAmountBlank;
+        _amoutValidationMessage = StringConstants.totalAmountBlank;
       });
-      isTotalAmoutValid = false;
+      _isTotalAmoutValid = false;
     } else {
       setState(() {
-        amoutValidationMessage = "";
+        _amoutValidationMessage = "";
       });
-      isTotalAmoutValid = true;
+      _isTotalAmoutValid = true;
     }
   }
 }

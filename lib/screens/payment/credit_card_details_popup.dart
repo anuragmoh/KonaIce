@@ -19,27 +19,24 @@ class CreditCardDetailsPopup extends StatefulWidget {
 }
 
 class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
-  String cardNumberValidationMessage = "";
-  String zipcodeValidationMessage = "";
-  String cardDateValidationMessage = "";
-  String cardYearValidationMessage = "";
-  String cvvValidationMessage = "";
-  String demoCardNumber = "";
-  bool isCardNumberValid = false;
-  bool isZipCodeValid = false;
-  bool isExpiryValid = false;
-  bool isYearValid = false;
-  bool isCvvValid = false;
-  int yearOfExpiryInt = 0;
-  var month, year;
-  String spliitYear = "";
-  late PaymentPresenter paymentPresenter;
-  TextEditingController dateExpiryController = TextEditingController();
-  TextEditingController cardNumberController = TextEditingController();
-  TextEditingController cvvController = TextEditingController();
-  TextEditingController zipCodeController = TextEditingController();
-  // {cardNumber: 4111111111111111, expirationYear: 2023, expirationMonth: 12, cvv: 123, zipcode: 90404}
-  var maskFormatter = MaskTextInputFormatter(
+  String _cardNumberValidationMessage = "";
+  String _zipcodeValidationMessage = "";
+  String _cardDateValidationMessage = "";
+  String _cvvValidationMessage = "";
+  bool _isCardNumberValid = false;
+  bool _isZipCodeValid = false;
+  bool _isExpiryValid = false;
+  bool _isYearValid = false;
+  bool _isCvvValid = false;
+  int _yearOfExpiryInt = 0;
+  var _month, _year;
+  String _spliitYear = "";
+  late PaymentPresenter _paymentPresenter;
+  TextEditingController _dateExpiryController = TextEditingController();
+  TextEditingController _cardNumberController = TextEditingController();
+  TextEditingController _cvvController = TextEditingController();
+  TextEditingController _zipCodeController = TextEditingController();
+  var _maskFormatter = MaskTextInputFormatter(
       mask: '##/##',
       filter: {"#": RegExp(r'[0-9]')},
       type: MaskAutoCompletionType.lazy);
@@ -53,8 +50,8 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     String date = dateToday.toString().substring(0, 10);
     var yearOfDate = date.split('-');
     String yearOfExpiryString = yearOfDate[0];
-    spliitYear = yearOfExpiryString.toString().substring(0, 2);
-    yearOfExpiryInt = int.parse(spliitYear);
+    _spliitYear = yearOfExpiryString.toString().substring(0, 2);
+    _yearOfExpiryInt = int.parse(_spliitYear);
   }
 
   @override
@@ -62,19 +59,19 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     return Dialog(
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: showCustomMenuPopup(),
+      child: _showCustomMenuPopup(),
     );
   }
 
-  Widget showCustomMenuPopup() {
+  Widget _showCustomMenuPopup() {
     return Dialog(
       backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
-  Widget customMenuPopUpComponent() {
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.43,
@@ -84,16 +81,16 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.addCreditCardDetails,
-                onTapCloseButton: onTapCloseButton),
+                onTapCloseButton: _onTapCloseButton),
             Padding(
               padding: const EdgeInsets.only(top: 25.0, left: 23.0),
-              child: profileDetailsComponent(
+              child: _profileDetailsComponent(
                   StringConstants.cardNumber,
                   "",
                   StringConstants.cardNumber,
-                  cardNumberController,
-                  cardNumberValidationMessage,
-                  cardValidation,
+                  _cardNumberController,
+                  _cardNumberValidationMessage,
+                  _cardValidation,
                   18),
             ),
             Row(
@@ -102,26 +99,26 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0),
-                    child: cardExpiryComponent(
+                    child: _cardExpiryComponent(
                         StringConstants.cardExpiryMonthYear,
                         "",
                         StringConstants.cardExpiryMonthYear,
-                        dateExpiryController,
-                        cardDateValidationMessage,
-                        dateValidation,
+                        _dateExpiryController,
+                        _cardDateValidationMessage,
+                        _dateValidation,
                         7),
                   ),
                 ),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 10.0),
-                    child: profileDetailsComponent(
+                    child: _profileDetailsComponent(
                         StringConstants.cardCvcMsg,
                         "",
                         StringConstants.cardCvcMsg,
-                        cvvController,
-                        cvvValidationMessage,
-                        cvvValidation,
+                        _cvvController,
+                        _cvvValidationMessage,
+                        _cvvValidation,
                         3),
                   ),
                 ),
@@ -129,13 +126,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 23.0),
-              child: profileDetailsComponent(
+              child: _profileDetailsComponent(
                   StringConstants.enterZipcode,
                   "",
                   StringConstants.enterZipcode,
-                  zipCodeController,
-                  zipcodeValidationMessage,
-                  zipCodeValidation,
+                  _zipCodeController,
+                  _zipcodeValidationMessage,
+                  _zipCodeValidation,
                   6),
             ),
             Row(
@@ -143,7 +140,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               children: [
                 CommonWidgets().buttonWidget(
                   StringConstants.pay + " " + "\$" + widget.totalAmount,
-                  onTapConfirmManualCardPayment,
+                  _onTapConfirmManualCardPayment,
                 ),
               ],
             ),
@@ -156,7 +153,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
     );
   }
 
-  Widget cardExpiryComponent(
+  Widget _cardExpiryComponent(
       String txtName,
       String txtValue,
       String txtHint,
@@ -188,7 +185,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: TextField(
-                  inputFormatters: [maskFormatter],
+                  inputFormatters: [_maskFormatter],
                   keyboardType: TextInputType.number,
                   maxLength: maxLength,
                   onChanged: (value) {
@@ -218,7 +215,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         ],
       );
 
-  Widget profileDetailsComponent(
+  Widget _profileDetailsComponent(
       String txtName,
       String txtValue,
       String txtHint,
@@ -280,119 +277,119 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       );
 
   //Action
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop(false);
   }
 
-  cardValidation() {
-    if (cardNumberController.text.isEmpty) {
+  _cardValidation() {
+    if (_cardNumberController.text.isEmpty) {
       setState(() {
-        cardNumberValidationMessage = StringConstants.cardNumber;
+        _cardNumberValidationMessage = StringConstants.cardNumber;
       });
       return false;
     } else {
       setState(() {
-        cardNumberValidationMessage = "";
+        _cardNumberValidationMessage = "";
       });
-      isCardNumberValid = true;
+      _isCardNumberValid = true;
     }
   }
 
-  zipCodeValidation() {
-    if (zipCodeController.text.isEmpty) {
+  _zipCodeValidation() {
+    if (_zipCodeController.text.isEmpty) {
       setState(() {
-        zipcodeValidationMessage = StringConstants.enterZipcode;
+        _zipcodeValidationMessage = StringConstants.enterZipcode;
       });
-      isZipCodeValid = false;
+      _isZipCodeValid = false;
     } else {
       setState(() {
-        zipcodeValidationMessage = "";
+        _zipcodeValidationMessage = "";
       });
-      isZipCodeValid = true;
+      _isZipCodeValid = true;
     }
   }
 
-  dateValidation() {
+  _dateValidation() {
     try {
-      String s = dateExpiryController.text;
+      String s = _dateExpiryController.text;
       int idx = s.indexOf("/");
-      month = int.parse(s.substring(0, idx).trim());
-      year = int.parse(s.substring(idx + 1).trim());
+      _month = int.parse(s.substring(0, idx).trim());
+      _year = int.parse(s.substring(idx + 1).trim());
     } catch (error) {
       debugPrint(error.toString());
     }
 
-    if (dateExpiryController.text.isEmpty) {
+    if (_dateExpiryController.text.isEmpty) {
       setState(() {
-        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
+        _cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
-      isExpiryValid = false;
+      _isExpiryValid = false;
     }
-    if (dateExpiryController.text.length < 5) {
-      debugPrint('>>>>>>>>${dateExpiryController.text.length}');
+    if (_dateExpiryController.text.length < 5) {
+      debugPrint('>>>>>>>>${_dateExpiryController.text.length}');
       setState(() {
-        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
+        _cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
-      isExpiryValid = false;
+      _isExpiryValid = false;
     }
-    if (month!=null) {
-      if (month > 12) {
+    if (_month!=null) {
+      if (_month > 12) {
         setState(() {
-          cardDateValidationMessage = StringConstants.cardExpiryCheckkMsg;
+          _cardDateValidationMessage = StringConstants.cardExpiryCheckkMsg;
         });
-        isExpiryValid = false;
+        _isExpiryValid = false;
       } else {
         setState(() {
-          cardDateValidationMessage = "";
+          _cardDateValidationMessage = "";
         });
-        isExpiryValid = true;
+        _isExpiryValid = true;
       }
     }
 
   }
 
-  cvvValidation() {
-    if (cvvController.text.isEmpty) {
+  _cvvValidation() {
+    if (_cvvController.text.isEmpty) {
       setState(() {
-        cvvValidationMessage = StringConstants.cvvEnterMsg;
+        _cvvValidationMessage = StringConstants.cvvEnterMsg;
       });
       return false;
     } else {
       setState(() {
-        cvvValidationMessage = "";
+        _cvvValidationMessage = "";
       });
-      isCvvValid = true;
+      _isCvvValid = true;
     }
   }
 
-  void onTapConfirmManualCardPayment() {
-    String stringValueYear = year.toString();
-    if (isExpiryValid == false) {
+  void _onTapConfirmManualCardPayment() {
+    String stringValueYear = _year.toString();
+    if (_isExpiryValid == false) {
       setState(() {
-        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
+        _cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
-      isExpiryValid = false;
+      _isExpiryValid = false;
     }
-    if (dateExpiryController.text.isEmpty) {
+    if (_dateExpiryController.text.isEmpty) {
       setState(() {
-        cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
+        _cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
-      isYearValid = false;
+      _isYearValid = false;
     }
-    if (cardNumberController.text.isEmpty) {
+    if (_cardNumberController.text.isEmpty) {
       setState(() {
-        cardNumberValidationMessage = StringConstants.cardExpiryEnterMsg;
+        _cardNumberValidationMessage = StringConstants.cardExpiryEnterMsg;
       });
-      isCardNumberValid = false;
+      _isCardNumberValid = false;
     }
-    if (isCardNumberValid && isExpiryValid && isCvvValid && isZipCodeValid) {
+    if (_isCardNumberValid && _isExpiryValid && _isCvvValid && _isZipCodeValid) {
       Map<String, dynamic> myData = {};
       myData[ConstantKeys.cardValue] = true;
-      myData[ConstantKeys.cardNumber] = cardNumberController.text;
-      myData[ConstantKeys.cardExpiry] = spliitYear + stringValueYear;
-      myData[ConstantKeys.cardCvv] = cvvController.text;
-      myData[ConstantKeys.cardMonth] = month;
-      myData[ConstantKeys.zipcode] = zipCodeController.text;
+      myData[ConstantKeys.cardNumber] = _cardNumberController.text;
+      myData[ConstantKeys.cardExpiry] = _spliitYear + stringValueYear;
+      myData[ConstantKeys.cardCvv] = _cvvController.text;
+      myData[ConstantKeys.cardMonth] = _month;
+      myData[ConstantKeys.zipcode] = _zipCodeController.text;
       Navigator.pop(context, myData);
     }
   }

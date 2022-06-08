@@ -25,29 +25,29 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements ResponseContractor{
-  bool isApiProcess = false;
-  bool isEmailValid = true;
-  String emailValidationMessage = "";
-  TextEditingController emailController = TextEditingController();
+  bool _isApiProcess = false;
+  bool _isEmailValid = true;
+  String _emailValidationMessage = "";
+  TextEditingController _emailController = TextEditingController();
 
-  late UserPresenter userPresenter;
-  ForgotPasswordRequestModel forgotPasswordRequestModel=ForgotPasswordRequestModel();
+  late UserPresenter _userPresenter;
+  ForgotPasswordRequestModel _forgotPasswordRequestModel=ForgotPasswordRequestModel();
 
   _ForgetPasswordScreenState() {
-    userPresenter = UserPresenter(this);
+    _userPresenter = UserPresenter(this);
   }
     forgotPasswordApiCall(){
 
     widget.forgotPasswordLoader(true);
-      forgotPasswordRequestModel.email=emailController.text.toString();
-      userPresenter.forgotPassword(forgotPasswordRequestModel);
+      _forgotPasswordRequestModel.email=_emailController.text.toString();
+      _userPresenter.forgotPassword(_forgotPasswordRequestModel);
     }
 
 
   @override
   void dispose() {
     super.dispose();
-    emailController.dispose();
+    _emailController.dispose();
   }
   @override
   Widget build(BuildContext context) {
@@ -85,10 +85,10 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               padding: const EdgeInsets.only(left: 4.0),
               child: TextField(
                 onChanged: (value){
-                  emailValidation();
+                  _emailValidation();
                 },
                 maxLength: 100,
-                controller: emailController,
+                controller: _emailController,
                 decoration: InputDecoration(
                   counterText: "",
                   border: const OutlineInputBorder(
@@ -96,7 +96,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
                     BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
                   hintText: 'abc@gmail.com',
-                  errorText: emailValidationMessage,
+                  errorText: _emailValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
                       color: AppColors.textColor1),
                   focusedBorder: const OutlineInputBorder(
@@ -114,7 +114,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
           Padding(
             padding:  EdgeInsets.only(bottom:0.65*SizeConfig.imageSizeMultiplier),
             child: GestureDetector(
-              onTap: onTapSignIn,
+              onTap: _onTapSignIn,
               child: RichText(
                   text: TextSpan(
                     children: [
@@ -130,16 +130,16 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
               ),
             )
           ),
-          submitButton(StringConstants.submit, StyleConstants.customTextStyle12MontserratBold(color: AppColors.textColor1)),
+          _submitButton(StringConstants.submit, StyleConstants.customTextStyle12MontserratBold(color: AppColors.textColor1)),
         ],
       ),
     );
   }
-  Widget submitButton(String buttonText, TextStyle textStyle){
+  Widget _submitButton(String buttonText, TextStyle textStyle){
     return Padding(
       padding:  EdgeInsets.only(bottom: 4.55*SizeConfig.imageSizeMultiplier, top: 4.55*SizeConfig.imageSizeMultiplier),
       child: GestureDetector(
-        onTap:  onTapSubmit,
+        onTap:  _onTapSubmit,
         child: Container(
           decoration: BoxDecoration(
             color: AppColors.primaryColor2,
@@ -153,36 +153,36 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
       ),
     );
   }
-  emailValidation() {
-    if (emailController.text.isEmpty) {
+  _emailValidation() {
+    if (_emailController.text.isEmpty) {
       setState(() {
-        emailValidationMessage = StringConstants.emptyValidEmail;
+        _emailValidationMessage = StringConstants.emptyValidEmail;
       });
       return false;
     }
-    if (!emailController.text.isValidEmail()) {
+    if (!_emailController.text.isValidEmail()) {
       setState(() {
-        emailValidationMessage = StringConstants.enterValidEmail;
+        _emailValidationMessage = StringConstants.enterValidEmail;
       });
       return false;
     }
-    if (emailController.text.isValidEmail()) {
+    if (_emailController.text.isValidEmail()) {
       setState(() {
-        emailValidationMessage = "";
+        _emailValidationMessage = "";
       });
       return true;
     }
   }
 
   //Actions
- onTapSubmit() {
+ _onTapSubmit() {
    FunctionalUtils.hideKeyboard();
    setState(() {
-     emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
+     _emailController.text.isEmpty ? _isEmailValid = false : _isEmailValid = true;
    });
 
-   emailValidation();
-   if (isEmailValid) {
+   _emailValidation();
+   if (_isEmailValid) {
      CheckConnection().connectionState().then((value){
        if(value == true){
          forgotPasswordApiCall();
@@ -195,7 +195,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements 
 
  }
 
- onTapSignIn() {
+ _onTapSignIn() {
    widget.navigateBackToLoginView("");
  }
 

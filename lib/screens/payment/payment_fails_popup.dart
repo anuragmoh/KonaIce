@@ -18,7 +18,7 @@ class PaymentFailPopup extends StatefulWidget {
 }
 
 class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
-  BaseMethod baseMethod = BaseMethod();
+  BaseMethod _baseMethod = BaseMethod();
   _PaymentFailPopupPopupState() {
   }
 
@@ -27,27 +27,27 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
     return Dialog(
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: showCustomMenuPopup(),
+      child: _showCustomMenuPopup(),
     );
   }
   @override
   void dispose() {
     super.dispose();
-    baseMethod.amountTextFieldController.dispose();
-    baseMethod.menuNameTextFieldController.dispose();
-    baseMethod.dateExpiryController.dispose();
-    baseMethod.cardNumberController.dispose();
-    baseMethod.cvcController.dispose();
+    _baseMethod.amountTextFieldController.dispose();
+    _baseMethod.menuNameTextFieldController.dispose();
+    _baseMethod.dateExpiryController.dispose();
+    _baseMethod.cardNumberController.dispose();
+    _baseMethod.cvcController.dispose();
   }
-  Widget showCustomMenuPopup() {
+  Widget _showCustomMenuPopup() {
     return Dialog(
       backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
-  Widget customMenuPopUpComponent() {
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.43,
@@ -57,7 +57,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.paymentFail,
-                onTapCloseButton: onTapCloseButton),
+                onTapCloseButton: _onTapCloseButton),
             Padding(
               padding:
                   const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
@@ -77,7 +77,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
               children: [
                 CommonWidgets().buttonWidget(
                   StringConstants.okay,
-                  onTapCloseButton,
+                  _onTapCloseButton,
                 ),
               ],
             ),
@@ -90,7 +90,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
     );
   }
 
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop(false);
   }
 }

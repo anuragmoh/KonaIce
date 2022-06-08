@@ -15,31 +15,31 @@ class CustomMenuPopup extends StatefulWidget {
 }
 
 class _CustomMenuPopupState extends State<CustomMenuPopup> {
-  String menuName = StringConstants.customMenuPackage;
-  bool isEditingMenuName = false;
-  var amountTextFieldController = TextEditingController();
-  var menuNameTextFieldController = TextEditingController();
+  String _menuName = StringConstants.customMenuPackage;
+  bool _isEditingMenuName = false;
+  var _amountTextFieldController = TextEditingController();
+  var _menuNameTextFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return showCustomMenuPopup();
+    return _showCustomMenuPopup();
   }
 
-  Widget showCustomMenuPopup() {
+  Widget _showCustomMenuPopup() {
     return Dialog(
       backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    amountTextFieldController.dispose();
-    menuNameTextFieldController.dispose();
+    _amountTextFieldController.dispose();
+    _menuNameTextFieldController.dispose();
   }
-  Widget customMenuPopUpComponent() {
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.43,
@@ -49,17 +49,17 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.customMenu,
-                onTapCloseButton: onTapCloseButton),
-            isEditingMenuName ? customMenuNameEditable() : customMenuName(),
-            amountTextFieldContainer(),
-            addMenuPopUpButton()
+                onTapCloseButton: _onTapCloseButton),
+            _isEditingMenuName ? _customMenuNameEditable() : _customMenuName(),
+            _amountTextFieldContainer(),
+            _addMenuPopUpButton()
           ],
         ),
       ),
     );
   }
 
-  Widget customMenuNameEditable() {
+  Widget _customMenuNameEditable() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15.0, 18.0, 14.0, 18.0),
       child: Row(
@@ -67,34 +67,34 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Expanded(child: customMenuNameTextFieldContainer()),
-          saveNameButton()
+          Expanded(child: _customMenuNameTextFieldContainer()),
+          _saveNameButton()
         ],
       ),
     );
   }
 
-  Widget customMenuName() {
+  Widget _customMenuName() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 24, 24, 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CommonWidgets().textWidget(
-              menuName,
+              _menuName,
               StyleConstants.customTextStyle(
                   fontSize: 12.0,
                   color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratSemiBold)),
-          editNameButton(),
+          _editNameButton(),
         ],
       ),
     );
   }
 
-  Widget customMenuNameTextFieldContainer() {
+  Widget _customMenuNameTextFieldContainer() {
     return TextField(
-      controller: menuNameTextFieldController,
+      controller: _menuNameTextFieldController,
       style: StyleConstants.customTextStyle(
           fontSize: 12.0,
           color: AppColors.textColor1,
@@ -115,7 +115,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     );
   }
 
-  Widget amountTextFieldContainer() {
+  Widget _amountTextFieldContainer() {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Column(
@@ -131,15 +131,15 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
                     color: AppColors.textColor2,
                     fontFamily: FontConstants.montserratMedium)),
           ),
-          buildTextField(),
+          _buildTextField(),
         ],
       ),
     );
   }
 
-  TextField buildTextField() {
+  TextField _buildTextField() {
     return TextField(
-          controller: amountTextFieldController,
+          controller: _amountTextFieldController,
           keyboardType: TextInputType.number,
           style: StyleConstants.customTextStyle(
               fontSize: 22.0,
@@ -165,15 +165,15 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
             prefixIcon: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                buildPadding1(),
-                buildPadding2(),
+                _buildPadding1(),
+                _buildPadding2(),
               ],
             ),
           ),
         );
   }
 
-  Padding buildPadding1() {
+  Padding _buildPadding1() {
     return Padding(
                 padding: const EdgeInsets.only(left: 15),
                 child: CommonWidgets().textWidget(
@@ -185,7 +185,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
               );
   }
 
-  Padding buildPadding2() {
+  Padding _buildPadding2() {
     return Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 0.0, horizontal: 15.0),
@@ -197,9 +197,9 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
               );
   }
 
-  Widget editNameButton() {
+  Widget _editNameButton() {
     return GestureDetector(
-      onTap: onTapEditNameButton,
+      onTap: _onTapEditNameButton,
       child: SizedBox(
         width: 40.0,
         height: 40.0,
@@ -211,7 +211,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     );
   }
 
-  Widget addMenuPopUpButton() {
+  Widget _addMenuPopUpButton() {
     return GestureDetector(
       onTap: onTapAddCustomMenu,
       child: Padding(
@@ -219,7 +219,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         child: Container(
           height: 40.0,
           decoration: BoxDecoration(
-              color: isEditingMenuName
+              color: _isEditingMenuName
                   ? AppColors.denotiveColor5
                   : AppColors.primaryColor2,
               borderRadius: BorderRadius.circular(20.0)),
@@ -237,9 +237,9 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     );
   }
 
-  Widget saveNameButton() {
+  Widget _saveNameButton() {
     return GestureDetector(
-      onTap: onTapSaveButton,
+      onTap: _onTapSaveButton,
       child: Padding(
         padding: const EdgeInsets.only(left: 7.0),
         child: Container(
@@ -264,22 +264,22 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
   }
 
   //Action
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop();
   }
 
-  onTapEditNameButton() {
+  _onTapEditNameButton() {
     setState(() {
-      isEditingMenuName = true;
+      _isEditingMenuName = true;
     });
   }
 
-  onTapSaveButton() {
+  _onTapSaveButton() {
     FunctionalUtils.hideKeyboard();
     setState(() {
-      if (menuNameTextFieldController.text.isNotEmpty) {
-        menuName = menuNameTextFieldController.text;
-        isEditingMenuName = false;
+      if (_menuNameTextFieldController.text.isNotEmpty) {
+        _menuName = _menuNameTextFieldController.text;
+        _isEditingMenuName = false;
       }
     });
   }

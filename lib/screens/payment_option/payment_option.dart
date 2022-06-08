@@ -25,20 +25,20 @@ class PaymentOption extends StatefulWidget {
 
 class _PaymentOptionState extends State<PaymentOption>
     implements P2PContractor {
-  int paymentModeType = -1;
-  String paymentStatus = "";
-  bool isAnimation=false;
+  int _paymentModeType = -1;
+  String _paymentStatus = "";
+  bool _isAnimation=false;
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
-  bool isApiProcess = false;
+  bool _isApiProcess = false;
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
         body: Container(
       color: AppColors.textColor3.withOpacity(0.2),
@@ -52,7 +52,7 @@ class _PaymentOptionState extends State<PaymentOption>
                 children: [
                   Column(
                     children: [
-                      paymentOption(0.0),
+                      _paymentOption(0.0),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Divider(
@@ -61,7 +61,7 @@ class _PaymentOptionState extends State<PaymentOption>
                           thickness: 1,
                         ),
                       ),
-                      paymentModeWidget(),
+                      _paymentModeWidget(),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Divider(
@@ -74,8 +74,8 @@ class _PaymentOptionState extends State<PaymentOption>
                   ),
                   Center(
                     child: Visibility(
-                        visible: (paymentModeType == PaymentModeConstants.creditCard && isAnimation)||(paymentModeType == PaymentModeConstants.creditCardManual && isAnimation),
-                        child: Lottie.asset(paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
+                        visible: (_paymentModeType == PaymentModeConstants.creditCard && _isAnimation)||(_paymentModeType == PaymentModeConstants.creditCardManual && _isAnimation),
+                        child: Lottie.asset(_paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:_paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
                             height: 150, width: 150)),
                   ),
                 ],
@@ -88,7 +88,7 @@ class _PaymentOptionState extends State<PaymentOption>
     ));
   }
 
-  Widget paymentOption(double totalAmount) => Padding(
+  Widget _paymentOption(double totalAmount) => Padding(
         padding:
             const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 30, top: 20),
         child: SizedBox(
@@ -99,7 +99,7 @@ class _PaymentOptionState extends State<PaymentOption>
               children: [
                 InkWell(
                   onTap: () {
-                    onTapBackButton();
+                    _onTapBackButton();
                   },
                   child: CommonWidgets().image(
                       image: AssetsConstants.backArrow,
@@ -122,17 +122,17 @@ class _PaymentOptionState extends State<PaymentOption>
         ),
       );
 
-  Widget paymentModeWidget() => Padding(
+  Widget _paymentModeWidget() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 19.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
+            _paymentModeView(StringConstants.cash, PaymentModeConstants.cash,
                 AssetsConstants.cash),
-            paymentModeView(StringConstants.creditCard,
+            _paymentModeView(StringConstants.creditCard,
                 PaymentModeConstants.creditCard, AssetsConstants.creditCard),
             // paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
-            paymentModeView(
+            _paymentModeView(
                 StringConstants.creditCardManual,
                 PaymentModeConstants.creditCardManual,
                 AssetsConstants.creditCardScan),
@@ -140,16 +140,16 @@ class _PaymentOptionState extends State<PaymentOption>
         ),
       );
 
-  Widget paymentModeView(String title, int index, String icon) =>
+  Widget _paymentModeView(String title, int index, String icon) =>
       GestureDetector(
         onTap: () {
-          onTapPaymentMode(index);
+          _onTapPaymentMode(index);
         },
         child: Row(
           children: [
             Container(
               decoration: BoxDecoration(
-                  color: paymentModeType == index
+                  color: _paymentModeType == index
                       ? AppColors.primaryColor2
                       : null,
                   border: Border.all(
@@ -178,57 +178,57 @@ class _PaymentOptionState extends State<PaymentOption>
   //Action Event
   onTapCashMode() {}
 
-  onTapPaymentMode(int index) {
-    paymentStatus = 'insert';
+  _onTapPaymentMode(int index) {
+    _paymentStatus = 'insert';
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.paymentStatus,
-        data: paymentStatus.toString());
+        data: _paymentStatus.toString());
     setState(() {
-      paymentModeType = index;
-      updateSelectedPaymentMode();
+      _paymentModeType = index;
+      _updateSelectedPaymentMode();
     });
     setState(() {
-      paymentModeType = index;
-      updateSelectedPaymentMode();
+      _paymentModeType = index;
+      _updateSelectedPaymentMode();
     });
-    if (paymentModeType == PaymentModeConstants.creditCard) {
+    if (_paymentModeType == PaymentModeConstants.creditCard) {
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {
-          paymentModeType = -1;
+          _paymentModeType = -1;
         });
       });
     }
-    else if (paymentModeType == PaymentModeConstants.creditCardManual) {
-      paymentStatus = 'progress';
+    else if (_paymentModeType == PaymentModeConstants.creditCardManual) {
+      _paymentStatus = 'progress';
       P2PConnectionManager.shared.updateData(
           action: StaffActionConst.paymentStatus,
-          data: paymentStatus.toString());
+          data: _paymentStatus.toString());
     }
   }
 
-  onTapBackButton() {
-    editAndUpdateOrder();
-    showOrderDetailsScreen();
+  _onTapBackButton() {
+    _editAndUpdateOrder();
+    _showOrderDetailsScreen();
   }
 
   //Navigation
-  showPaymentSuccessScreen() {
+  _showPaymentSuccessScreen() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const OrderComplete()));
   }
 
-  showOrderDetailsScreen() {
+  _showOrderDetailsScreen() {
     Navigator.of(context).pop();
   }
 
   //data for p2pConnection to Staff
-  updateSelectedPaymentMode() {
+  _updateSelectedPaymentMode() {
     P2PConnectionManager.shared.updateData(
         action: CustomerActionConst.paymentModeSelected,
-        data: paymentModeType.toString());
+        data: _paymentModeType.toString());
   }
 
-  editAndUpdateOrder() {
+  _editAndUpdateOrder() {
     P2PConnectionManager.shared
         .updateData(action: CustomerActionConst.editOrderDetails);
   }
@@ -238,25 +238,25 @@ class _PaymentOptionState extends State<PaymentOption>
     if (response.action == StaffActionConst.paymentModeSelected) {
       String modeType = response.data;
       setState(() {
-        paymentModeType = int.parse(modeType);
+        _paymentModeType = int.parse(modeType);
       });
     } else if (response.action == StaffActionConst.editOrderDetails) {
-      showOrderDetailsScreen();
+      _showOrderDetailsScreen();
     } else if (response.action == StaffActionConst.paymentCompleted) {
       setState(() {
-        isApiProcess = false;
+        _isApiProcess = false;
       });
-      showPaymentSuccessScreen();
+      _showPaymentSuccessScreen();
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
     }else if (response.action ==
         StaffActionConst.paymentStatus) {
       setState(() {
-        isAnimation=true;
+        _isAnimation=true;
       });
       setState(() {
-        paymentStatus=response.data.toString();
+        _paymentStatus=response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
     }else if (response.action ==
@@ -265,10 +265,10 @@ class _PaymentOptionState extends State<PaymentOption>
     }else if (response.action ==
         StaffActionConst.paymentStatus) {
       setState(() {
-        isAnimation=true;
+        _isAnimation=true;
       });
       setState(() {
-        paymentStatus=response.data.toString();
+        _paymentStatus=response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
     }

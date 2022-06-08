@@ -20,7 +20,7 @@ class AccountSwitchScreen extends StatefulWidget {
 }
 
 class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
-  bool isStaffModeSelected = true;
+  bool _isStaffModeSelected = true;
 
   @override
   void initState() {
@@ -73,7 +73,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
               alignment: Alignment.center,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: proceedButton(
+                child: _proceedButton(
                     StringConstants.proceed,
                     StyleConstants.customTextStyle(
                         fontSize: 12.0,
@@ -96,22 +96,22 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
         children: [
           GestureDetector(
               onTap: () {
-                onTapSelectionMode(staffSelected: true);
+                _onTapSelectionMode(staffSelected: true);
               },
-              child: selectionModeContainer(AssetsConstants.staffMode,
-                  StringConstants.staffMode, isStaffModeSelected)),
+              child: _selectionModeContainer(AssetsConstants.staffMode,
+                  StringConstants.staffMode, _isStaffModeSelected)),
           GestureDetector(
               onTap: () {
-                onTapSelectionMode(staffSelected: false);
+                _onTapSelectionMode(staffSelected: false);
               },
-              child: selectionModeContainer(AssetsConstants.customerMode,
-                  StringConstants.customerMode, !isStaffModeSelected)),
+              child: _selectionModeContainer(AssetsConstants.customerMode,
+                  StringConstants.customerMode, !_isStaffModeSelected)),
         ],
       ),
     );
   }
 
-  Widget selectionModeContainer(
+  Widget _selectionModeContainer(
       String imagePath, String modeText, bool modeSelected) {
     return Container(
       width: 152,
@@ -156,10 +156,10 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
     );
   }
 
-  Widget proceedButton(String buttonText, TextStyle textStyle) {
+  Widget _proceedButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
       onTap: () {
-        onTapProceedButton();
+        _onTapProceedButton();
       },
       child: Container(
         width: 210,
@@ -178,28 +178,28 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
   }
 
   //Action Event
-  onTapProceedButton() {
-    storeInformation();
+  _onTapProceedButton() {
+    _storeInformation();
   }
 
-  onTapSelectionMode({required bool staffSelected}) {
+  _onTapSelectionMode({required bool staffSelected}) {
     setState(() {
-      isStaffModeSelected = staffSelected;
+      _isStaffModeSelected = staffSelected;
     });
   }
 
   //Store Info
-  storeInformation() async {
+  _storeInformation() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.selectedMode,
-        value: isStaffModeSelected
+        value: _isStaffModeSelected
             ? StringConstants.staffMode
             : StringConstants.customerMode));
-    if (!isStaffModeSelected) {
+    if (!_isStaffModeSelected) {
       await P2PConnectionManager.shared.startService(isStaffView: false);
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => isStaffModeSelected
+        builder: (context) => _isStaffModeSelected
             ? const AvailableDeviceListScreen()
             : SplashScreen()));
   }

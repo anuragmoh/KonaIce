@@ -50,53 +50,53 @@ class _HomeScreenState extends State<HomeScreen>
   late SyncPresenter _syncPresenter;
 
   _HomeScreenState() {
-    clockInOutPresenter = ClockInOutPresenter(this);
+    _clockInOutPresenter = ClockInOutPresenter(this);
     _syncPresenter = SyncPresenter(this);
   }
 
-  String currentDate =
+  String _currentDate =
       Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDay);
-  String clockInTime = StringConstants.defaultClockInTime;
-  late DateTime startDateTime;
-  Timer? clockInTimer;
-  bool isClockIn = false;
-  bool isApiProcess = false;
-  bool isCreateAdhocEventButtonEnable = false;
-  List<Events> eventList = [];
+  String _clockInTime = StringConstants.defaultClockInTime;
+  late DateTime _startDateTime;
+  Timer? _clockInTimer;
+  bool _isClockIn = false;
+  bool _isApiProcess = false;
+  bool _isCreateAdhocEventButtonEnable = false;
+  List<Events> _eventList = [];
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
-  List<POsSyncEventDataDtoList> pOsSyncEventDataDtoList = [];
-  List<POsSyncItemCategoryDataDtoList> pOsSyncItemCategoryDataDtoList = [];
-  List<POsSyncEventItemDataDtoList> pOsSyncEventItemDataDtoList = [];
-  List<POsSyncEventItemExtrasDataDtoList> pOsSyncEventItemExtrasDataDtoList =
+  List<POsSyncEventDataDtoList> _pOsSyncEventDataDtoList = [];
+  List<POsSyncItemCategoryDataDtoList> _pOsSyncItemCategoryDataDtoList = [];
+  List<POsSyncEventItemDataDtoList> _pOsSyncEventItemDataDtoList = [];
+  List<POsSyncEventItemExtrasDataDtoList> _pOsSyncEventItemExtrasDataDtoList =
       [];
-  List<POsSyncEventDataDtoList> pOsSyncDeletedEventDataDtoList = [];
-  List<POsSyncItemCategoryDataDtoList> pOsSyncDeletedItemCategoryDataDtoList =
+  List<POsSyncEventDataDtoList> _pOsSyncDeletedEventDataDtoList = [];
+  List<POsSyncItemCategoryDataDtoList> _pOsSyncDeletedItemCategoryDataDtoList =
       [];
-  List<POsSyncEventItemDataDtoList> pOsSyncDeletedEventItemDataDtoList = [];
+  List<POsSyncEventItemDataDtoList> _pOsSyncDeletedEventItemDataDtoList = [];
   List<POsSyncEventItemExtrasDataDtoList>
-      pOsSyncDeletedEventItemExtrasDataDtoList = [];
+      _pOsSyncDeletedEventItemExtrasDataDtoList = [];
 
-  late ClockInOutPresenter clockInOutPresenter;
-  ClockInOutRequestModel clockInOutRequestModel = ClockInOutRequestModel();
+  late ClockInOutPresenter _clockInOutPresenter;
+  ClockInOutRequestModel _clockInOutRequestModel = ClockInOutRequestModel();
 
-  refreshDataOnRequest() async {
+  _refreshDataOnRequest() async {
     await SessionDAO().getValueForKey(DatabaseKeys.events).then((value) {
-      refreshDB(value);
+      _refreshDB(value);
     });
   }
 
-  void refreshDB(Session? value) {
+  void _refreshDB(Session? value) {
     if (value != null) {
       int lastSyncTime = int.parse(value.value);
       CheckConnection().connectionState().then((value) {
         if (value == true) {
           //eventList.clear();
           setState(() {
-            isApiProcess = true;
+            _isApiProcess = true;
           });
           _syncPresenter.syncData(lastSyncTime);
         } else {
-          loadDataFromDb();
+          _loadDataFromDb();
           CommonWidgets().showErrorSnackBar(
               errorMessage: StringConstants.noInternetConnection,
               context: context);
@@ -106,11 +106,11 @@ class _HomeScreenState extends State<HomeScreen>
       CheckConnection().connectionState().then((value) {
         if (value == true) {
           setState(() {
-            isApiProcess = true;
+            _isApiProcess = true;
           });
           _syncPresenter.syncData(0);
         } else {
-          loadDataFromDb();
+          _loadDataFromDb();
           CommonWidgets().showErrorSnackBar(
               errorMessage: StringConstants.noInternetConnection,
               context: context);
@@ -119,9 +119,9 @@ class _HomeScreenState extends State<HomeScreen>
     }
   }
 
-  loadDataFromDb() async {
+  _loadDataFromDb() async {
     setState(() {
-      eventList.clear();
+      _eventList.clear();
     });
     var result = await EventsDAO().getTodayEvent(
         Date.getStartOfDateTimeStamp(date: DateTime.now()),
@@ -129,31 +129,31 @@ class _HomeScreenState extends State<HomeScreen>
     // var result = await EventsDAO().getValues();
     if (result != null) {
       setState(() {
-        eventList.addAll(result);
+        _eventList.addAll(result);
       });
     } else {
       setState(() {
-        eventList.clear();
+        _eventList.clear();
       });
     }
   }
 
-  getAdhocEventDate() async {
+  _getAdhocEventDate() async {
     var result = await SessionDAO().getValueForKey(DatabaseKeys.adhocEvent);
     if (result != null) {
       String lastValue = result.value;
       if (lastValue == Date.getTimeStampFromDate()) {
         setState(() {
-          isCreateAdhocEventButtonEnable = false;
+          _isCreateAdhocEventButtonEnable = false;
         });
       } else {
         setState(() {
-          isCreateAdhocEventButtonEnable = true;
+          _isCreateAdhocEventButtonEnable = true;
         });
       }
     } else {
       setState(() {
-        isCreateAdhocEventButtonEnable = true;
+        _isCreateAdhocEventButtonEnable = true;
       });
     }
   }
@@ -161,20 +161,20 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     super.initState();
-    refreshDataOnRequest();
-    getAdhocEventDate();
+    _refreshDataOnRequest();
+    _getAdhocEventDate();
     if (FunctionalUtils.clockInTimestamp == 0) {
-      callClockInOutDetailsAPI();
+      _callClockInOutDetailsAPI();
     } else {
       setState(() {
-        isApiProcess = false;
-        isClockIn = true;
+        _isApiProcess = false;
+        _isClockIn = true;
         var timeStamp = FunctionalUtils.clockInTimestamp;
-        startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
-        isClockIn ? startTimer() : stopTimer();
+        _startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
+        _isClockIn ? _startTimer() : _stopTimer();
       });
     }
-    callClockInOutDetailsAPI();
+    _callClockInOutDetailsAPI();
     if (!P2PConnectionManager.shared.isServiceStarted) {
       P2PConnectionManager.shared.startService(isStaffView: true);
     }
@@ -185,21 +185,21 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void dispose() {
     super.dispose();
-    stopTimer();
+    _stopTimer();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
-      body: Container(color: AppColors.textColor3, child: body()),
+      body: Container(color: AppColors.textColor3, child: _body()),
     );
   }
 
-  Widget body() {
+  Widget _body() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20.0, 20.0, 23.0, 20.0),
       child: Column(
@@ -208,22 +208,22 @@ class _HomeScreenState extends State<HomeScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              createEventButton(
+              _createEventButton(
                   StringConstants.createAdhocEvent,
                   StyleConstants.customTextStyle12MontserratBold(
                       color: AppColors.textColor1)),
               CommonWidgets().textWidget(
-                  currentDate,
+                  _currentDate,
                   StyleConstants.customTextStyle16MontserratBold(
                       color: AppColors.textColor1)),
-              clockInOutButton(
-                  isClockIn
+              _clockInOutButton(
+                  _isClockIn
                       ? StringConstants.clockOut
                       : StringConstants.clockIn,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
                       color: AppColors.whiteColor,
-                      fontFamily: isClockIn
+                      fontFamily: _isClockIn
                           ? FontConstants.montserratBold
                           : FontConstants.montserratMedium),
                   StyleConstants.customTextStyle12MonsterMedium(
@@ -232,24 +232,24 @@ class _HomeScreenState extends State<HomeScreen>
           ),
           Expanded(
               child: FractionallySizedBox(
-                  widthFactor: eventList.isNotEmpty ? 0.68 : 1.0,
+                  widthFactor: _eventList.isNotEmpty ? 0.68 : 1.0,
                   alignment: Alignment.topLeft,
-                  child: listViewContainer()))
+                  child: _listViewContainer()))
         ],
       ),
     );
   }
 
-  Widget listViewContainer() {
+  Widget _listViewContainer() {
     return RefreshIndicator(
       onRefresh: () async {
-        refreshDataOnRequest();
+        _refreshDataOnRequest();
       },
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(8.0),
-        child: eventList.isNotEmpty
-            ? builListViewBuilder()
+        child: _eventList.isNotEmpty
+            ? _builListViewBuilder()
             : Center(
                 child: ListView(
                   children: [
@@ -266,25 +266,25 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  ListView builListViewBuilder() {
+  ListView _builListViewBuilder() {
     return ListView.builder(
-      itemCount: eventList.length,
+      itemCount: _eventList.length,
       itemBuilder: (BuildContext context, int index) {
-        var eventDetails = eventList[index];
+        var eventDetails = _eventList[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 20.0),
           child: GestureDetector(
             onTap: () {
-              onTapEventItem(eventDetails);
+              _onTapEventItem(eventDetails);
             },
-            child: buildCard(eventDetails),
+            child: _buildCard(eventDetails),
           ),
         );
       },
     );
   }
 
-  Card buildCard(Events eventDetails) {
+  Card _buildCard(Events eventDetails) {
     return Card(
       elevation: 0.0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6.0)),
@@ -350,12 +350,12 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget createEventButton(String buttonText, TextStyle textStyle) {
+  Widget _createEventButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
-      onTap: isCreateAdhocEventButtonEnable ? onTapCreateEventButton : null,
+      onTap: _isCreateAdhocEventButtonEnable ? _onTapCreateEventButton : null,
       child: Container(
         decoration: BoxDecoration(
-            color: isCreateAdhocEventButtonEnable
+            color: _isCreateAdhocEventButtonEnable
                 ? AppColors.primaryColor2
                 : AppColors.denotiveColor4,
             borderRadius: BorderRadius.circular(30.0)),
@@ -369,15 +369,15 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget clockInOutButton(
+  Widget _clockInOutButton(
       String buttonText, TextStyle textStyle, TextStyle timeTextStyle) {
     return GestureDetector(
-      onTap: onTapClockInOutButton,
+      onTap: _onTapClockInOutButton,
       child: Container(
         height: 4.19 * SizeConfig.heightSizeMultiplier,
         decoration: BoxDecoration(
           color:
-              isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2,
+              _isClockIn ? AppColors.denotiveColor1 : AppColors.denotiveColor2,
           borderRadius: BorderRadius.circular(21.5),
         ),
         child: Padding(
@@ -396,9 +396,9 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
                     CommonWidgets().textWidget(buttonText, textStyle),
                     Visibility(
-                        visible: isClockIn,
+                        visible: _isClockIn,
                         child: CommonWidgets()
-                            .textWidget(clockInTime, timeTextStyle))
+                            .textWidget(_clockInTime, timeTextStyle))
                   ],
                 ),
               )
@@ -410,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   //Action Events
-  onTapCreateEventButton() async {
+  _onTapCreateEventButton() async {
     await showDialog(
         barrierDismissible: false,
         barrierLabel:
@@ -423,17 +423,17 @@ class _HomeScreenState extends State<HomeScreen>
           return const CreateAdhocEvent();
         }).then((value) {
       if (value) {
-        refreshDataOnRequest();
-        getAdhocEventDate();
+        _refreshDataOnRequest();
+        _getAdhocEventDate();
       }
     });
   }
 
-  onTapClockInOutButton() {
-    callClockInOutAPI();
+  _onTapClockInOutButton() {
+    _callClockInOutAPI();
   }
 
-  onTapEventItem(Events events) {
+  _onTapEventItem(Events events) {
     Navigator.of(context)
         .push(MaterialPageRoute(
             builder: (context) => EventMenuScreen(events: events)))
@@ -444,42 +444,42 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  startTimer() {
-    clockInTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  _startTimer() {
+    _clockInTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        clockInTime = Date.getDateInHrMinSec(date: startDateTime);
+        _clockInTime = Date.getDateInHrMinSec(date: _startDateTime);
       });
     });
   }
 
-  stopTimer() {
+  _stopTimer() {
     setState(() {
-      if (clockInTimer != null) {
-        clockInTimer!.cancel();
-        clockInTime = StringConstants.defaultClockInTime;
+      if (_clockInTimer != null) {
+        _clockInTimer!.cancel();
+        _clockInTime = StringConstants.defaultClockInTime;
       }
     });
   }
 
   //API Call
-  callClockInOutAPI() async {
+  _callClockInOutAPI() async {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    clockInOutRequestModel.dutyStatus = !isClockIn;
+    _clockInOutRequestModel.dutyStatus = !_isClockIn;
     String userID = await FunctionalUtils.getUserID();
-    clockInOutPresenter.clockInOutUpdate(clockInOutRequestModel, userID);
+    _clockInOutPresenter.clockInOutUpdate(_clockInOutRequestModel, userID);
   }
 
-  callClockInOutDetailsAPI() async {
+  _callClockInOutDetailsAPI() async {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
 
     String startTimestamp = Date.getStartOfDateTimeStamp(date: DateTime.now());
     String endTimestamp = Date.getEndOfDateTimeStamp(date: DateTime.now());
     String userID = await FunctionalUtils.getUserID();
-    clockInOutPresenter.clockInOutDetails(
+    _clockInOutPresenter.clockInOutDetails(
         userID: userID,
         startTimestamp: startTimestamp,
         endTimestamp: endTimestamp);
@@ -488,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -506,29 +506,29 @@ class _HomeScreenState extends State<HomeScreen>
     if (clockInOutDetailsModel != null &&
         clockInOutDetailsModel.clockInAt != null) {
       setState(() {
-        isApiProcess = false;
+        _isApiProcess = false;
         var timeStamp = clockInOutDetailsModel.clockInAt ??
             DateTime.now().millisecondsSinceEpoch;
-        startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
+        _startDateTime = Date.getDateFromTimeStamp(timestamp: timeStamp);
         FunctionalUtils.clockInTimestamp = timeStamp;
-        isClockIn = true;
+        _isClockIn = true;
       });
     } else {
       setState(() {
-        isApiProcess = false;
+        _isApiProcess = false;
         FunctionalUtils.clockInTimestamp = 0;
-        startDateTime = Date.getDateFromTimeStamp(
+        _startDateTime = Date.getDateFromTimeStamp(
             timestamp: DateTime.now().millisecondsSinceEpoch);
-        isClockIn = false;
+        _isClockIn = false;
       });
     }
-    isClockIn ? startTimer() : stopTimer();
+    _isClockIn ? _startTimer() : _stopTimer();
   }
 
   @override
   void showErrorForUpdateClockIN(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -537,18 +537,18 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void showSuccessForUpdateClockIN(response) {
-    if (!isClockIn) {
+    if (!_isClockIn) {
       setState(() {
-        isApiProcess = false;
+        _isApiProcess = false;
         //isClockIn = !isClockIn;
       });
-      callClockInOutDetailsAPI();
+      _callClockInOutDetailsAPI();
     } else {
       setState(() {
-        isApiProcess = false;
-        isClockIn = !isClockIn;
+        _isApiProcess = false;
+        _isClockIn = !_isClockIn;
         FunctionalUtils.clockInTimestamp = 0;
-        startDateTime = Date.getDateFromTimeStamp(
+        _startDateTime = Date.getDateFromTimeStamp(
             timestamp: DateTime.now().millisecondsSinceEpoch);
       });
     }
@@ -557,7 +557,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void showSyncError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
     CommonWidgets().showErrorSnackBar(
         errorMessage: exception.message ?? StringConstants.somethingWentWrong,
@@ -567,52 +567,52 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void showSyncSuccess(response) {
     _syncEventMenuResponseModel.clear();
-    pOsSyncEventDataDtoList.clear();
-    pOsSyncItemCategoryDataDtoList.clear();
-    pOsSyncEventItemDataDtoList.clear();
-    pOsSyncEventItemExtrasDataDtoList.clear();
-    pOsSyncDeletedEventDataDtoList.clear();
-    pOsSyncDeletedItemCategoryDataDtoList.clear();
-    pOsSyncDeletedEventItemDataDtoList.clear();
-    pOsSyncDeletedEventItemExtrasDataDtoList.clear();
+    _pOsSyncEventDataDtoList.clear();
+    _pOsSyncItemCategoryDataDtoList.clear();
+    _pOsSyncEventItemDataDtoList.clear();
+    _pOsSyncEventItemExtrasDataDtoList.clear();
+    _pOsSyncDeletedEventDataDtoList.clear();
+    _pOsSyncDeletedItemCategoryDataDtoList.clear();
+    _pOsSyncDeletedEventItemDataDtoList.clear();
+    _pOsSyncDeletedEventItemExtrasDataDtoList.clear();
 
     setState(() {
-      isApiProcess = false;
-      eventList.clear();
+      _isApiProcess = false;
+      _eventList.clear();
       _syncEventMenuResponseModel.add(response);
     });
-    storeDataIntoDB();
+    _storeDataIntoDB();
   }
 
-  void storeDataIntoDB() async {
+  void _storeDataIntoDB() async {
     setState(() {
-      pOsSyncEventDataDtoList
+      _pOsSyncEventDataDtoList
           .addAll(_syncEventMenuResponseModel[0].pOsSyncEventDataDtoList);
-      pOsSyncItemCategoryDataDtoList.addAll(
+      _pOsSyncItemCategoryDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncItemCategoryDataDtoList);
-      pOsSyncEventItemDataDtoList
+      _pOsSyncEventItemDataDtoList
           .addAll(_syncEventMenuResponseModel[0].pOsSyncEventItemDataDtoList);
-      pOsSyncEventItemExtrasDataDtoList.addAll(
+      _pOsSyncEventItemExtrasDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncEventItemExtrasDataDtoList);
-      pOsSyncDeletedEventDataDtoList.addAll(
+      _pOsSyncDeletedEventDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncDeletedEventDataDtoList);
-      pOsSyncDeletedItemCategoryDataDtoList.addAll(
+      _pOsSyncDeletedItemCategoryDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncDeletedItemCategoryDataDtoList);
-      pOsSyncDeletedEventItemDataDtoList.addAll(
+      _pOsSyncDeletedEventItemDataDtoList.addAll(
           _syncEventMenuResponseModel[0].pOsSyncDeletedEventItemDataDtoList);
-      pOsSyncDeletedEventItemExtrasDataDtoList.addAll(
+      _pOsSyncDeletedEventItemExtrasDataDtoList.addAll(
           _syncEventMenuResponseModel[0]
               .pOsSyncDeletedEventItemExtrasDataDtoList);
     });
 
-    await deleteEventSync();
-    insertEventSync();
+    await _deleteEventSync();
+    _insertEventSync();
   }
 
-  Future<void> deleteEventSync() async {
-    if (pOsSyncDeletedEventDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedEventDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedEventDataDtoList[i].eventId ??
+  Future<void> _deleteEventSync() async {
+    if (_pOsSyncDeletedEventDataDtoList.isNotEmpty) {
+      for (int i = 0; i < _pOsSyncDeletedEventDataDtoList.length; i++) {
+        String eventID = _pOsSyncDeletedEventDataDtoList[i].eventId ??
             StringExtension.empty();
         await EventsDAO().clearEventsByEventID(eventID: eventID);
         await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
@@ -622,19 +622,19 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
 
-    if (pOsSyncDeletedItemCategoryDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedItemCategoryDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedItemCategoryDataDtoList[i].eventId ??
+    if (_pOsSyncDeletedItemCategoryDataDtoList.isNotEmpty) {
+      for (int i = 0; i < _pOsSyncDeletedItemCategoryDataDtoList.length; i++) {
+        String eventID = _pOsSyncDeletedItemCategoryDataDtoList[i].eventId ??
             StringExtension.empty();
         await ItemCategoriesDAO().clearCategoriesByEventID(eventID: eventID);
       }
     }
 
-    if (pOsSyncDeletedEventItemDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncDeletedEventItemDataDtoList.length; i++) {
-        String eventID = pOsSyncDeletedEventItemDataDtoList[i].eventId ??
+    if (_pOsSyncDeletedEventItemDataDtoList.isNotEmpty) {
+      for (int i = 0; i < _pOsSyncDeletedEventItemDataDtoList.length; i++) {
+        String eventID = _pOsSyncDeletedEventItemDataDtoList[i].eventId ??
             StringExtension.empty();
-        String itemID = pOsSyncDeletedEventItemDataDtoList[i].itemId ??
+        String itemID = _pOsSyncDeletedEventItemDataDtoList[i].itemId ??
             StringExtension.empty();
         await ItemDAO().clearItemsByEventID(eventID: eventID);
         await FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(
@@ -642,112 +642,114 @@ class _HomeScreenState extends State<HomeScreen>
       }
     }
 
-    if (pOsSyncDeletedEventItemExtrasDataDtoList.isNotEmpty) {
+    if (_pOsSyncDeletedEventItemExtrasDataDtoList.isNotEmpty) {
       for (int i = 0;
-          i < pOsSyncDeletedEventItemExtrasDataDtoList.length;
+          i < _pOsSyncDeletedEventItemExtrasDataDtoList.length;
           i++) {
-        String eventID = pOsSyncDeletedEventItemExtrasDataDtoList[i].eventId ??
+        String eventID = _pOsSyncDeletedEventItemExtrasDataDtoList[i].eventId ??
             StringExtension.empty();
-        String itemID = pOsSyncDeletedEventItemExtrasDataDtoList[i].itemId ??
+        String itemID = _pOsSyncDeletedEventItemExtrasDataDtoList[i].itemId ??
             StringExtension.empty();
         await FoodExtraItemsDAO().clearFoodExtraItemsByEventIDAndItemID(
             eventID: eventID, itemID: itemID);
       }
     }
   }
+
   BaseMethod _baseMethod = BaseMethod();
-  Future<void> insertEventSync() async {
-    if (pOsSyncEventDataDtoList.isNotEmpty) {
-      await _baseMethod.insertData(pOsSyncEventDataDtoList);
+  Future<void> _insertEventSync() async {
+    if (_pOsSyncEventDataDtoList.isNotEmpty) {
+      await _baseMethod.insertData(_pOsSyncEventDataDtoList);
     }
-    updateLastEventSync();
-    loadDataFromDb();
-    if (pOsSyncItemCategoryDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncItemCategoryDataDtoList.length; i++) {
+    _updateLastEventSync();
+    _loadDataFromDb();
+    if (_pOsSyncItemCategoryDataDtoList.isNotEmpty) {
+      for (int i = 0; i < _pOsSyncItemCategoryDataDtoList.length; i++) {
         await ItemCategoriesDAO().insert(ItemCategories(
-            id: pOsSyncItemCategoryDataDtoList[i].categoryId!,
-            eventId: pOsSyncItemCategoryDataDtoList[i].eventId!,
-            categoryCode: pOsSyncItemCategoryDataDtoList[i].categoryCode != null
-                ? pOsSyncItemCategoryDataDtoList[i].categoryCode!
-                : "empty",
-            categoryName: pOsSyncItemCategoryDataDtoList[i].categoryName!,
-            description: pOsSyncItemCategoryDataDtoList[i].categoryName!,
+            id: _pOsSyncItemCategoryDataDtoList[i].categoryId!,
+            eventId: _pOsSyncItemCategoryDataDtoList[i].eventId!,
+            categoryCode:
+                _pOsSyncItemCategoryDataDtoList[i].categoryCode != null
+                    ? _pOsSyncItemCategoryDataDtoList[i].categoryCode!
+                    : "empty",
+            categoryName: _pOsSyncItemCategoryDataDtoList[i].categoryName!,
+            description: _pOsSyncItemCategoryDataDtoList[i].categoryName!,
             activated: false,
-            createdBy: pOsSyncItemCategoryDataDtoList[i].createdBy!,
-            createdAt: pOsSyncItemCategoryDataDtoList[i].createdAt!,
-            updatedBy: pOsSyncItemCategoryDataDtoList[i].updatedBy!,
-            updatedAt: pOsSyncItemCategoryDataDtoList[i].updatedAt!,
-            deleted: pOsSyncItemCategoryDataDtoList[i].deleted!,
+            createdBy: _pOsSyncItemCategoryDataDtoList[i].createdBy!,
+            createdAt: _pOsSyncItemCategoryDataDtoList[i].createdAt!,
+            updatedBy: _pOsSyncItemCategoryDataDtoList[i].updatedBy!,
+            updatedAt: _pOsSyncItemCategoryDataDtoList[i].updatedAt!,
+            deleted: _pOsSyncItemCategoryDataDtoList[i].deleted!,
             franchiseId: "empty"));
       }
     }
-    updateLastCategoriesSync();
-    if (pOsSyncEventItemExtrasDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncEventItemExtrasDataDtoList.length; i++) {
+    _updateLastCategoriesSync();
+    if (_pOsSyncEventItemExtrasDataDtoList.isNotEmpty) {
+      for (int i = 0; i < _pOsSyncEventItemExtrasDataDtoList.length; i++) {
         await FoodExtraItemsDAO().insert(FoodExtraItems(
-            id: pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
+            id: _pOsSyncEventItemExtrasDataDtoList[i].foodExtraItemId!,
             foodExtraItemCategoryId: '0',
-            itemId: pOsSyncEventItemExtrasDataDtoList[i].itemId!,
-            eventId: pOsSyncEventItemExtrasDataDtoList[i].eventId!,
-            itemName: pOsSyncEventItemExtrasDataDtoList[i].itemName!,
-            sellingPrice: pOsSyncEventItemExtrasDataDtoList[i].sellingPrice!,
+            itemId: _pOsSyncEventItemExtrasDataDtoList[i].itemId!,
+            eventId: _pOsSyncEventItemExtrasDataDtoList[i].eventId!,
+            itemName: _pOsSyncEventItemExtrasDataDtoList[i].itemName!,
+            sellingPrice: _pOsSyncEventItemExtrasDataDtoList[i].sellingPrice!,
             selection: "empty",
-            sequence: pOsSyncEventItemExtrasDataDtoList[i].sequence!,
-            imageFileId: pOsSyncEventItemExtrasDataDtoList[i].imageFileId!,
-            minQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].minQtyAllowed!,
-            maxQtyAllowed: pOsSyncEventItemExtrasDataDtoList[i].maxQtyAllowed!,
+            sequence: _pOsSyncEventItemExtrasDataDtoList[i].sequence!,
+            imageFileId: _pOsSyncEventItemExtrasDataDtoList[i].imageFileId!,
+            minQtyAllowed: _pOsSyncEventItemExtrasDataDtoList[i].minQtyAllowed!,
+            maxQtyAllowed: _pOsSyncEventItemExtrasDataDtoList[i].maxQtyAllowed!,
             activated: false,
-            createdBy: pOsSyncEventItemExtrasDataDtoList[i].createdBy!,
-            createdAt: pOsSyncEventItemExtrasDataDtoList[i].createdAt!,
-            updatedBy: pOsSyncEventItemExtrasDataDtoList[i].updatedBy!,
-            updatedAt: pOsSyncEventItemExtrasDataDtoList[i].updatedAt!,
-            deleted: pOsSyncEventItemExtrasDataDtoList[i].deleted!));
+            createdBy: _pOsSyncEventItemExtrasDataDtoList[i].createdBy!,
+            createdAt: _pOsSyncEventItemExtrasDataDtoList[i].createdAt!,
+            updatedBy: _pOsSyncEventItemExtrasDataDtoList[i].updatedBy!,
+            updatedAt: _pOsSyncEventItemExtrasDataDtoList[i].updatedAt!,
+            deleted: _pOsSyncEventItemExtrasDataDtoList[i].deleted!));
       }
     }
-    updateLastItemExtrasSync();
-    if (pOsSyncEventItemDataDtoList.isNotEmpty) {
-      for (int i = 0; i < pOsSyncEventItemDataDtoList.length; i++) {
+    _updateLastItemExtrasSync();
+    if (_pOsSyncEventItemDataDtoList.isNotEmpty) {
+      for (int i = 0; i < _pOsSyncEventItemDataDtoList.length; i++) {
         await ItemDAO().insert(Item(
-            id: pOsSyncEventItemDataDtoList[i].itemId!,
-            eventId: pOsSyncEventItemDataDtoList[i].eventId!,
-            itemCategoryId: pOsSyncEventItemDataDtoList[i].itemCategoryId!,
-            itemCode: pOsSyncEventItemDataDtoList[i].itemCode!,
+            id: _pOsSyncEventItemDataDtoList[i].itemId!,
+            eventId: _pOsSyncEventItemDataDtoList[i].eventId!,
+            itemCategoryId: _pOsSyncEventItemDataDtoList[i].itemCategoryId!,
+            itemCode: _pOsSyncEventItemDataDtoList[i].itemCode!,
             imageFileId: "empty",
-            name: pOsSyncEventItemDataDtoList[i].name!,
-            description: pOsSyncEventItemDataDtoList[i].description!,
-            price: pOsSyncEventItemDataDtoList[i].price!,
+            name: _pOsSyncEventItemDataDtoList[i].name!,
+            description: _pOsSyncEventItemDataDtoList[i].description!,
+            price: _pOsSyncEventItemDataDtoList[i].price!,
             activated: false,
-            sequence: pOsSyncEventItemDataDtoList[i].sequence!,
-            createdBy: pOsSyncEventItemDataDtoList[i].createdBy!,
-            createdAt: pOsSyncEventItemDataDtoList[i].createdAt!,
-            updatedBy: pOsSyncEventItemDataDtoList[i].updatedBy!,
-            updatedAt: pOsSyncEventItemDataDtoList[i].updatedAt!,
-            deleted: pOsSyncEventItemDataDtoList[i].deleted!,
+            sequence: _pOsSyncEventItemDataDtoList[i].sequence!,
+            createdBy: _pOsSyncEventItemDataDtoList[i].createdBy!,
+            createdAt: _pOsSyncEventItemDataDtoList[i].createdAt!,
+            updatedBy: _pOsSyncEventItemDataDtoList[i].updatedBy!,
+            updatedAt: _pOsSyncEventItemDataDtoList[i].updatedAt!,
+            deleted: _pOsSyncEventItemDataDtoList[i].deleted!,
             franchiseId: "empty"));
       }
     }
-    updateLastItemSync();
+    _updateLastItemSync();
   }
 
-  Future<void> updateLastEventSync() async {
+  Future<void> _updateLastEventSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.events,
         value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
-  Future<void> updateLastItemSync() async {
+  Future<void> _updateLastItemSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.items,
         value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
-  Future<void> updateLastCategoriesSync() async {
+  Future<void> _updateLastCategoriesSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.categories,
         value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
-  Future<void> updateLastItemExtrasSync() async {
+  Future<void> _updateLastItemExtrasSync() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.itemExtras,
         value: DateTime.now().millisecondsSinceEpoch.toString()));

@@ -48,19 +48,18 @@ class AllOrdersScreen extends StatefulWidget {
 
 class _AllOrdersScreenState extends State<AllOrdersScreen>
     implements ResponseContractor {
-  bool isItemClick = true;
-  List<SavedOrders> savedOrdersList = [];
-  List<SavedOrdersItem> savedOrderItemList = [];
-  List<SavedOrdersExtraItems> savedOrderExtraItemList = [];
-  late AllOrderPresenter allOrderPresenter;
-  List<AllOrderResponse> allOrdersList = [];
-  int selectedRow = -1;
-  bool isApiProcess = false;
-  int countOffSet = 0;
-  bool refundBool = false;
+  bool _isItemClick = true;
+  List<SavedOrders> _savedOrdersList = [];
+  List<SavedOrdersItem> _savedOrderItemList = [];
+  List<SavedOrdersExtraItems> _savedOrderExtraItemList = [];
+  late AllOrderPresenter _allOrderPresenter;
+  int _selectedRow = -1;
+  bool _isApiProcess = false;
+  int _countOffSet = 0;
+  bool _refundBool = false;
 
   _AllOrdersScreenState() {
-    allOrderPresenter = AllOrderPresenter(this);
+    _allOrderPresenter = AllOrderPresenter(this);
   }
 
   getSyncOrders(
@@ -69,9 +68,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       required String eventId,
       required int offset}) {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    allOrderPresenter.getSyncOrder(
+    _allOrderPresenter.getSyncOrder(
         orderStatus: orderStatus,
         eventId: eventId,
         offset: offset,
@@ -87,7 +86,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  getData() {
+  _getData() {
     CheckConnection().connectionState().then((value) {
       if (value!) {
         getLastSync().then((value) {
@@ -95,13 +94,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               lastSync: value,
               orderStatus: "",
               eventId: widget.events.id,
-              offset: countOffSet);
+              offset: _countOffSet);
         });
       } else {
         CommonWidgets().showErrorSnackBar(
             errorMessage: StringConstants.noInternetConnection,
             context: context);
-        getAllSavedOrders(widget.events.id);
+        _getAllSavedOrders(widget.events.id);
       }
     });
   }
@@ -109,23 +108,23 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   @override
   void initState() {
     super.initState();
-    getData();
+    _getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: AppColors.textColor3.withOpacity(0.2),
-        child: savedOrdersList.isNotEmpty
+        child: _savedOrdersList.isNotEmpty
             ? Column(
                 children: [
                   // topWidget(),
-                  Expanded(child: bodyWidget()),
+                  Expanded(child: _bodyWidget()),
                   // bottomWidget(),
                 ],
               )
@@ -150,40 +149,24 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 bottomRight: Radius.circular(8.0))),
       );
 
-  Widget bodyWidget() => Container(
+  Widget _bodyWidget() => Container(
         color: AppColors.textColor3.withOpacity(0.1),
-        child: bodyWidgetComponent(),
+        child: _bodyWidgetComponent(),
       );
 
-  Widget bodyWidgetComponent() => Row(children: [
-        leftSideWidget(),
-        Visibility(visible: selectedRow != -1, child: rightSideWidget()),
+  Widget _bodyWidgetComponent() => Row(children: [
+        _leftSideWidget(),
+        Visibility(visible: _selectedRow != -1, child: _rightSideWidget()),
       ]);
 
-  Widget bottomWidget() => Container(
-        height: 43.0,
-        decoration: BoxDecoration(
-            color: AppColors.primaryColor1,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
-        child: Align(
-            alignment: Alignment.topRight, child: componentBottomWidget()),
-      );
-
-  Widget componentBottomWidget() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 35.0),
-        child: Image.asset(AssetsConstants.switchAccount,
-            width: 30.0, height: 30.0),
-      );
-
-  Widget leftSideWidget() => Expanded(
+  Widget _leftSideWidget() => Expanded(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        topComponent(),
-        Expanded(child: tableHeadRow()),
+        _topComponent(),
+        Expanded(child: _tableHeadRow()),
       ]));
 
-  Widget topComponent() => Padding(
+  Widget _topComponent() => Padding(
         padding: const EdgeInsets.only(
             left: 18.8, top: 20.9, right: 17.0, bottom: 21.1),
         child:
@@ -225,7 +208,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ]),
       );
 
-  Widget tableHeadRow() => Padding(
+  Widget _tableHeadRow() => Padding(
         padding: const EdgeInsets.only(left: 15.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -242,14 +225,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     columnSpacing: 35,
                     dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
                     columns: [
-                      nameDataColumn(),
-                      dateDataColumn(),
-                      paymentDataColumn(),
-                      priceDataColumn(),
-                      statusDataColumn(),
+                      _nameDataColumn(),
+                      _dateDataColumn(),
+                      _paymentDataColumn(),
+                      _priceDataColumn(),
+                      _statusDataColumn(),
                     ],
-                    rows: List.generate(savedOrdersList.length,
-                        (index) => _getDataRow(savedOrdersList[index], index)),
+                    rows: List.generate(_savedOrdersList.length,
+                        (index) => _getDataRow(_savedOrdersList[index], index)),
                   ),
                 ),
               ],
@@ -258,7 +241,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  DataColumn statusDataColumn() {
+  DataColumn _statusDataColumn() {
     return DataColumn(
       label: CommonWidgets().textView(
           StringConstants.status,
@@ -269,7 +252,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  DataColumn priceDataColumn() {
+  DataColumn _priceDataColumn() {
     return DataColumn(
       label: CommonWidgets().textView(
           StringConstants.price,
@@ -280,7 +263,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  DataColumn paymentDataColumn() {
+  DataColumn _paymentDataColumn() {
     return DataColumn(
       label: CommonWidgets().textView(
           StringConstants.payment,
@@ -291,7 +274,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  DataColumn dateDataColumn() {
+  DataColumn _dateDataColumn() {
     return DataColumn(
       label: CommonWidgets().textView(
           StringConstants.date,
@@ -302,7 +285,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  DataColumn nameDataColumn() {
+  DataColumn _nameDataColumn() {
     return DataColumn(
       label: CommonWidgets().textView(
           StringConstants.customerName,
@@ -317,24 +300,24 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     return DataRow(
         onSelectChanged: (value) {
           setState(() {
-            selectedRow = index;
+            _selectedRow = index;
           });
-          getItemByOrderId(savedOrders.orderId);
+          _getItemByOrderId(savedOrders.orderId);
         },
-        color: selectedRow == index
+        color: _selectedRow == index
             ? MaterialStateProperty.all(Colors.white)
             : null,
         cells: <DataCell>[
-          buildDataCell(savedOrders),
-          buildDataCell2(savedOrders),
-          buildDataCell3(savedOrders),
-          buildDataCell4(savedOrders),
+          _buildDataCell(savedOrders),
+          _buildDataCell2(savedOrders),
+          _buildDataCell3(savedOrders),
+          _buildDataCell4(savedOrders),
           DataCell(
-              getOrderStatusView(savedOrders.orderStatus, savedOrders.payment))
+              _getOrderStatusView(savedOrders.orderStatus, savedOrders.payment))
         ]);
   }
 
-  DataCell buildDataCell4(SavedOrders savedOrders) {
+  DataCell _buildDataCell4(SavedOrders savedOrders) {
     return DataCell(
       CommonWidgets().textView(
           '\$ ${savedOrders.totalAmount}',
@@ -345,7 +328,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  DataCell buildDataCell3(SavedOrders savedOrders) {
+  DataCell _buildDataCell3(SavedOrders savedOrders) {
     return DataCell(
       CommonWidgets().textView(
           savedOrders.payment,
@@ -356,7 +339,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  DataCell buildDataCell2(SavedOrders savedOrders) {
+  DataCell _buildDataCell2(SavedOrders savedOrders) {
     return DataCell(Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -377,12 +360,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     ));
   }
 
-  DataCell buildDataCell(SavedOrders savedOrders) {
+  DataCell _buildDataCell(SavedOrders savedOrders) {
     return DataCell(Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          circularImage(AssetsConstants.defaultProfileImage),
+          _circularImage(AssetsConstants.defaultProfileImage),
           const SizedBox(width: 8.0),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -405,7 +388,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ]));
   }
 
-  Widget circularImage(String imageUrl) => Container(
+  Widget _circularImage(String imageUrl) => Container(
         width: 4.55 * SizeConfig.imageSizeMultiplier,
         height: 4.55 * SizeConfig.imageSizeMultiplier,
         decoration: BoxDecoration(
@@ -414,7 +397,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 fit: BoxFit.cover, image: AssetImage(imageUrl))),
       );
 
-  Widget rightSideWidget() => Padding(
+  Widget _rightSideWidget() => Padding(
         padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.307,
@@ -427,20 +410,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildOrderDetailsVisibility(),
+                  _buildOrderDetailsVisibility(),
                   Visibility(
-                      visible: selectedRow != -1 ? true : false,
-                      child: customerNameWidget(
-                          customerName: selectedRow != -1
-                              ? savedOrdersList[selectedRow].customerName
+                      visible: _selectedRow != -1 ? true : false,
+                      child: _customerNameWidget(
+                          customerName: _selectedRow != -1
+                              ? _savedOrdersList[_selectedRow].customerName
                               : 'NA')),
                   const SizedBox(height: 7.0),
-                  visibilityOrderDateTime(),
+                  _visibilityOrderDateTime(),
                   const SizedBox(height: 8.0),
-                  visibilityEventName(),
+                  _visibilityEventName(),
                   const SizedBox(height: 35.0),
                   Visibility(
-                    visible: selectedRow != -1,
+                    visible: _selectedRow != -1,
                     child: Stack(
                       children: [
                         Row(
@@ -450,7 +433,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                                 InkWell(
                                     onTap: () {
                                       setState(() {
-                                        isItemClick = true;
+                                        _isItemClick = true;
                                       });
                                     },
                                     child: Padding(
@@ -468,7 +451,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                                   height: 11.0,
                                 ),
                                 Container(
-                                  color: isItemClick
+                                  color: _isItemClick
                                       ? AppColors.primaryColor2
                                       : AppColors.whiteColor,
                                   width: 45.0,
@@ -486,7 +469,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                                   InkWell(
                                       onTap: () {
                                         setState(() {
-                                          isItemClick = false;
+                                          _isItemClick = false;
                                         });
                                       },
                                       child: Padding(
@@ -504,7 +487,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                                     height: 11.0,
                                   ),
                                   Container(
-                                    color: isItemClick
+                                    color: _isItemClick
                                         ? AppColors.whiteColor
                                         : AppColors.primaryColor2,
                                     width: 90.0,
@@ -530,75 +513,78 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     ),
                   ),
                   const SizedBox(height: 10.0),
-                  visibilityStatus(),
-                  visibilitySelectedRow(),
+                  _visibilityStatus(),
+                  _visibilitySelectedRow(),
                 ]),
           ),
         ),
       );
 
-  Visibility visibilitySelectedRow() {
+  Visibility _visibilitySelectedRow() {
     return Visibility(
-      visible: selectedRow != -1,
+      visible: _selectedRow != -1,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
-        child: getRightOrderStatusView(
-            selectedRow != -1 ? savedOrdersList[selectedRow].orderStatus : "NA",
-            selectedRow != -1 ? savedOrdersList[selectedRow].payment : "NA",
-            selectedRow != -1
-                ? savedOrdersList[selectedRow].refundAmount
+        child: _getRightOrderStatusView(
+            _selectedRow != -1
+                ? _savedOrdersList[_selectedRow].orderStatus
                 : "NA",
-            selectedRow != -1
-                ? savedOrdersList[selectedRow].paymentTerm
+            _selectedRow != -1 ? _savedOrdersList[_selectedRow].payment : "NA",
+            _selectedRow != -1
+                ? _savedOrdersList[_selectedRow].refundAmount
+                : "NA",
+            _selectedRow != -1
+                ? _savedOrdersList[_selectedRow].paymentTerm
                 : "NA"),
       ),
     );
   }
 
-  Visibility visibilityStatus() {
+  Visibility _visibilityStatus() {
     return Visibility(
-      visible: selectedRow != -1,
+      visible: _selectedRow != -1,
       child: Expanded(
           child: SingleChildScrollView(
         child: Container(
           color: AppColors.whiteColor,
-          child: isItemClick ? itemView() : inProgressView(),
+          child: _isItemClick ? _itemView() : _inProgressView(),
         ),
       )),
     );
   }
 
-  Visibility visibilityEventName() {
+  Visibility _visibilityEventName() {
     return Visibility(
-      visible: selectedRow != -1,
-      child: customerDetailsComponent(
+      visible: _selectedRow != -1,
+      child: _customerDetailsComponent(
           eventName: widget.events.getEventName(),
-          email: selectedRow != -1
-              ? savedOrdersList[selectedRow].email
+          email: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].email
               : StringExtension.empty(),
           storeAddress: widget.events.getEventAddress(),
-          phone: selectedRow != -1
-              ? savedOrdersList[selectedRow].phoneCountryCode +
-                  savedOrdersList[selectedRow].phoneNumber
+          phone: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].phoneCountryCode +
+                  _savedOrdersList[_selectedRow].phoneNumber
               : StringExtension.empty()),
     );
   }
 
-  Visibility visibilityOrderDateTime() {
+  Visibility _visibilityOrderDateTime() {
     return Visibility(
-      visible: selectedRow != -1 ? true : false,
-      child: orderDetailsWidget(
-          orderId:
-              selectedRow != -1 ? savedOrdersList[selectedRow].orderId : 'NA',
-          orderDate: selectedRow != -1
-              ? savedOrdersList[selectedRow].getOrderDateTime()
+      visible: _selectedRow != -1 ? true : false,
+      child: _orderDetailsWidget(
+          orderId: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].orderId
+              : 'NA',
+          orderDate: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].getOrderDateTime()
               : "NA"),
     );
   }
 
-  Visibility buildOrderDetailsVisibility() {
+  Visibility _buildOrderDetailsVisibility() {
     return Visibility(
-      visible: selectedRow != -1 ? true : false,
+      visible: _selectedRow != -1 ? true : false,
       child: Padding(
           padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
           child: CommonWidgets().textView(
@@ -611,7 +597,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   }
 
   // customer Name
-  Widget customerNameWidget({required String customerName}) =>
+  Widget _customerNameWidget({required String customerName}) =>
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         CommonWidgets().textView(
             '${StringConstants.customerName} - ',
@@ -629,7 +615,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       ]);
 
   // customer Details
-  Widget customerDetailsComponent(
+  Widget _customerDetailsComponent(
           {required String eventName,
           required String email,
           required String storeAddress,
@@ -724,7 +710,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   // Widget orderDetails
-  Widget orderDetailsWidget(
+  Widget _orderDetailsWidget(
           {required String orderId, required String orderDate}) =>
       Column(children: [
         Row(children: [
@@ -758,20 +744,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ]),
       ]);
 
-  Widget itemView() => Column(children: [
+  Widget _itemView() => Column(children: [
         ListView.builder(
             shrinkWrap: true,
-            itemCount: savedOrderItemList.length,
+            itemCount: _savedOrderItemList.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return itemViewListItem(
-                  savedOrderItemList[index].itemName,
-                  savedOrderItemList[index].quantity,
-                  savedOrderItemList[index].totalPrice.toDouble());
+              return _itemViewListItem(
+                  _savedOrderItemList[index].itemName,
+                  _savedOrderItemList[index].quantity,
+                  _savedOrderItemList[index].totalPrice.toDouble());
             }),
       ]);
 
-  Widget itemViewListItem(String itemName, int quantity, double price) =>
+  Widget _itemViewListItem(String itemName, int quantity, double price) =>
       Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -807,19 +793,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ],
       );
 
-  Widget inProgressView() => Column(
+  Widget _inProgressView() => Column(
         children: [
           ListView.builder(
               shrinkWrap: true,
               itemCount: 10,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return itemViewListItem('Kiddie', 7, 20);
+                return _itemViewListItem('Kiddie', 7, 20);
               }),
         ],
       );
 
-  Widget completedView() => Container(
+  Widget _completedView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: AppColors.denotiveColor2.withOpacity(0.2)),
@@ -840,20 +826,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget completedAndRefundView(dynamic refundAmout) => Column(
+  Widget _completedAndRefundView(dynamic refundAmout) => Column(
         children: [
-          completedView(),
+          _completedView(),
           const SizedBox(
             height: 10.0,
           ),
           Visibility(
-            visible: refundBool ? true : false,
+            visible: _refundBool ? true : false,
             child: GestureDetector(
-              onTap: onTapRefundButton,
+              onTap: _onTapRefundButton,
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-                    color: refundBool
+                    color: _refundBool
                         ? AppColors.denotiveColor2.withOpacity(0.2)
                         : AppColors.denotiveColor4.withOpacity(0.2)),
                 child: Padding(
@@ -884,32 +870,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ],
       );
 
-  Widget pendingView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: AppColors.denotiveColor1.withOpacity(0.1)),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
-          child: Row(
-            children: [
-              CommonWidgets().textView(
-                  StringConstants.pending,
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: AppColors.denotiveColor1,
-                      fontFamily: FontConstants.montserratMedium)),
-              const SizedBox(
-                width: 10.0,
-              ),
-              CommonWidgets().image(
-                  image: AssetsConstants.redTriangle, width: 6.0, height: 6.0)
-            ],
-          ),
-        ),
-      );
-
-  Widget preparingView() => Container(
+  Widget _preparingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: AppColors.denotiveColor3.withOpacity(0.1)),
@@ -936,7 +897,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget savedView() => Container(
+  Widget _savedView() => Container(
         height: 25.0,
         width: 80.0,
         decoration: BoxDecoration(
@@ -961,7 +922,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget rightCompletedView() => Container(
+  Widget _rightCompletedView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: AppColors.denotiveColor2.withOpacity(0.2)),
@@ -982,7 +943,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget rightPendingView() => Container(
+  Widget _rightPendingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: AppColors.denotiveColor1.withOpacity(0.1)),
@@ -1007,7 +968,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget rightPreparingView() => Container(
+  Widget _rightPreparingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: AppColors.denotiveColor3.withOpacity(0.1)),
@@ -1034,8 +995,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget rightSavedView() => GestureDetector(
-        onTap: onTapResumeButton,
+  Widget _rightSavedView() => GestureDetector(
+        onTap: _onTapResumeButton,
         child: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(12.5)),
@@ -1059,126 +1020,127 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   //Action Events
-  onTapResumeButton() {
-    widget.onBackTap(savedOrdersList[selectedRow], savedOrderItemList,
-        savedOrderExtraItemList);
+  _onTapResumeButton() {
+    widget.onBackTap(_savedOrdersList[_selectedRow], _savedOrderItemList,
+        _savedOrderExtraItemList);
   }
 
-  onTapRefundButton() {
+  _onTapRefundButton() {
     showDialog(
         barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
-          return RefundPopup(amount: savedOrdersList[selectedRow].totalAmount);
+          return RefundPopup(
+              amount: _savedOrdersList[_selectedRow].totalAmount);
         }).then((value) {
       String amount = value['totalAmount'];
       double totalAmount = double.parse(amount);
-      refundPaymentApiCall(totalAmount);
+      _refundPaymentApiCall(totalAmount);
     });
   }
 
   //Refund Payment Api call
-  refundPaymentApiCall(double totalAmount) {
+  _refundPaymentApiCall(double totalAmount) {
     RefundPaymentModel refundPaymentModel = RefundPaymentModel();
     refundPaymentModel.refundAmount = totalAmount;
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    allOrderPresenter.refundPayment(
-        savedOrdersList[selectedRow].orderId, refundPaymentModel);
+    _allOrderPresenter.refundPayment(
+        _savedOrdersList[_selectedRow].orderId, refundPaymentModel);
   }
 
   // Get data from local db function start from here
-  getAllSavedOrders(String eventId) async {
+  _getAllSavedOrders(String eventId) async {
     setState(() {
-      savedOrdersList.clear();
+      _savedOrdersList.clear();
     });
     var result = await SavedOrdersDAO().getOrdersList(eventId);
     if (result != null) {
       setState(() {
-        savedOrdersList.addAll(result);
+        _savedOrdersList.addAll(result);
       });
     } else {
-      savedOrdersList.clear();
+      _savedOrdersList.clear();
     }
   }
 
-  Widget getOrderStatusView(String status, String paymentStatus) {
+  Widget _getOrderStatusView(String status, String paymentStatus) {
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
-        return savedView();
+        return _savedView();
       } else if (status == StringConstants.orderStatusPreparing) {
-        return preparingView();
+        return _preparingView();
       } else if (status == StringConstants.orderStatusNew) {
-        return completedView();
+        return _completedView();
       } else if (status == StringConstants.orderStatusCompleted) {
-        return completedView();
+        return _completedView();
       } else {
-        return inProgressView();
+        return _inProgressView();
       }
     } else {
-      return savedView();
+      return _savedView();
     }
   }
 
-  Widget getRightOrderStatusView(String status, String paymentStatus,
+  Widget _getRightOrderStatusView(String status, String paymentStatus,
       dynamic refundAmout, String paymentTerm) {
     refundAmout ??= 0;
     if (paymentTerm == "menu") {
-      refundBool = true;
+      _refundBool = true;
     }
     debugPrint('<><><><><><>$refundAmout');
     debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
-        return rightSavedView();
+        return _rightSavedView();
       } else if (status == StringConstants.orderStatusPreparing) {
-        return rightPreparingView();
+        return _rightPreparingView();
       } else if (status == StringConstants.orderStatusNew) {
-        return rightCompletedView();
+        return _rightCompletedView();
       } else if (status == StringConstants.orderStatusCompleted) {
-        return completedAndRefundView(refundAmout);
+        return _completedAndRefundView(refundAmout);
       } else {
         debugPrint('>>>>>>>>>>>>>');
-        return rightPendingView();
+        return _rightPendingView();
       }
     } else {
-      return rightSavedView();
+      return _rightSavedView();
     }
   }
 
-  getItemByOrderId(String orderId) async {
+  _getItemByOrderId(String orderId) async {
     setState(() {
-      savedOrderItemList.clear();
+      _savedOrderItemList.clear();
     });
     var result = await SavedOrdersItemsDAO().getItemList(orderId: orderId);
     if (result != null) {
       setState(() {
-        savedOrderItemList.addAll(result);
+        _savedOrderItemList.addAll(result);
       });
-      getAllFoodExtras();
+      _getAllFoodExtras();
     } else {
       setState(() {
-        savedOrderItemList.clear();
+        _savedOrderItemList.clear();
       });
     }
   }
 
-  getAllFoodExtras() async {
-    if (savedOrderItemList.isNotEmpty) {
-      savedOrderExtraItemList.clear();
-      for (var item in savedOrderItemList) {
-        await getExtraFoodItems(item.itemId, item.orderId);
+  _getAllFoodExtras() async {
+    if (_savedOrderItemList.isNotEmpty) {
+      _savedOrderExtraItemList.clear();
+      for (var item in _savedOrderItemList) {
+        await _getExtraFoodItems(item.itemId, item.orderId);
       }
     }
   }
 
-  getExtraFoodItems(String itemId, String orderId) async {
+  _getExtraFoodItems(String itemId, String orderId) async {
     var result = await SavedOrdersExtraItemsDAO()
         .getExtraItemList(itemId: itemId, orderId: orderId);
     if (result != null) {
       setState(() {
-        savedOrderExtraItemList.addAll(result);
+        _savedOrderExtraItemList.addAll(result);
       });
     }
   }
@@ -1186,7 +1148,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -1196,7 +1158,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   @override
   void showSuccess(response) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
 
     if (response is GeneralSuccessModel) {
@@ -1206,36 +1168,37 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               StringConstants.eventCreatedSuccessfully,
           context: context);
     } else {
-      ordersInsertIntoDb(response);
+      _ordersInsertIntoDb(response);
     }
   }
 
-  updateLastSync() async {
+  _updateLastSync() async {
     SessionDAO().insert(Session(
         key: DatabaseKeys.allOrders,
         value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
-  ordersInsertIntoDb(AllOrderResponse response) async {
-    List<AllOrderResponse> allOrdersList = [];
+  _ordersInsertIntoDb(AllOrderResponse response) async {
+    List<AllOrderResponse> _allOrdersList = [];
     setState(() {
-      allOrdersList.add(response);
+      _allOrdersList.add(response);
     });
 
-    for (var event in allOrdersList[0].data!) {
+    for (var event in _allOrdersList[0].data!) {
       String customerName = event.firstName != null
           ? "${event.firstName} " + event.lastName!
           : StringConstants.guestCustomer;
 
       // Insert Order into DB
-      await insertOrders(event, customerName);
-      await orderItemsList(event);
+      await _insertOrders(event, customerName);
+      await _orderItemsList(event);
     }
-    updateLastSync();
-    getAllSavedOrders(widget.events.id);
+    _updateLastSync();
+    _getAllSavedOrders(widget.events.id);
   }
 
-  Future<void> insertOrders(PlaceOrderResponseModel event, String customerName) async {
+  Future<void> _insertOrders(
+      PlaceOrderResponseModel event, String customerName) async {
     await SavedOrdersDAO().insert(SavedOrders(
         eventId: event.eventId!,
         cardId: event.id!,
@@ -1263,7 +1226,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount));
   }
 
-  Future<void> orderItemsList(PlaceOrderResponseModel event) async {
+  Future<void> _orderItemsList(PlaceOrderResponseModel event) async {
     for (var item in event.orderItemsList!) {
       await SavedOrdersItemsDAO().insert(SavedOrdersItem(
           orderId: event.id!,
@@ -1275,12 +1238,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           itemCategoryId: item.itemCategoryId.toString(),
           deleted: false));
       if (item.foodExtraItemMappingList != null) {
-        await foodExtraItemMapList(item, event);
+        await _foodExtraItemMapList(item, event);
       }
     }
   }
 
-  Future<void> foodExtraItemMapList(OrderItemsDetailList item, PlaceOrderResponseModel event) async {
+  Future<void> _foodExtraItemMapList(
+      OrderItemsDetailList item, PlaceOrderResponseModel event) async {
     for (var extraItemMappingList in item.foodExtraItemMappingList!) {
       if (extraItemMappingList.orderFoodExtraItemDetailDto != null) {
         for (var extraItem

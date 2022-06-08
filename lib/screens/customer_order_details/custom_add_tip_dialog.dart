@@ -18,23 +18,23 @@ class CustomerAddTipDialog extends StatefulWidget {
 }
 
 class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
-  bool isValidTip = true;
-  TextEditingController tipController = TextEditingController();
+  bool _isValidTip = true;
+  TextEditingController _tipController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return showCustomAddTipDialog();
+    return _showCustomAddTipDialog();
   }
 
-  Widget showCustomAddTipDialog() {
+  Widget _showCustomAddTipDialog() {
     return Dialog(
       backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
-  Widget customMenuPopUpComponent() {
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: SizedBox(
@@ -46,9 +46,9 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.addTip,
-                onTapCloseButton: onTapCloseButton),
-            amountTextFieldContainer(),
-            addTipButton(),
+                onTapCloseButton: _onTapCloseButton),
+            _amountTextFieldContainer(),
+            _addTipButton(),
           ],
         ),
       ),
@@ -57,14 +57,14 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   @override
   void dispose() {
     super.dispose();
-    tipController.dispose();
+    _tipController.dispose();
   }
   //Action
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop();
   }
 
-  Widget amountTextFieldContainer() {
+  Widget _amountTextFieldContainer() {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Column(
@@ -78,15 +78,15 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
                 StyleConstants.customTextStyle12MonsterMedium(
                     color: AppColors.textColor2)),
           ),
-          buildTextField(),
+          _buildTextField(),
         ],
       ),
     );
   }
 
-  TextField buildTextField() {
+  TextField _buildTextField() {
     return TextField(
-          controller: tipController,
+          controller: _tipController,
           keyboardType: TextInputType.number,
           maxLength: TextFieldLengthConstant.addTip,
           style: StyleConstants.customTextStyle22MonsterMedium(
@@ -94,7 +94,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
           decoration: InputDecoration(
             contentPadding: EdgeInsets.zero,
             hintText: StringConstants.enterAmount,
-            errorText: isValidTip ? "" : StringConstants.enterTip,
+            errorText: _isValidTip ? "" : StringConstants.enterTip,
             hintStyle: StyleConstants.customTextStyle12MonsterRegular(
                 color: AppColors.textColor2),
             enabledBorder: OutlineInputBorder(
@@ -137,10 +137,10 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
         );
   }
 
-  Widget addTipButton() {
+  Widget _addTipButton() {
     return GestureDetector(
       onTap: () {
-        onTapAddButton();
+        _onTapAddButton();
       },
       child: Align(
         alignment: Alignment.center,
@@ -167,18 +167,18 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
     );
   }
 
-  onTapAddButton() {
+  _onTapAddButton() {
     //debugPrint("Tip from dialog ${tipController.text.toString()}");
     setState(() {
-      isValidTip = tipController.text.isEmpty ? false : true;
+      _isValidTip = _tipController.text.isEmpty ? false : true;
     });
-    if (tipController.text.isNotEmpty) {
+    if (_tipController.text.isNotEmpty) {
       widget.callBack(double.parse(
-          tipController.text.isEmpty ? '0.0' : tipController.text.toString()));
+          _tipController.text.isEmpty ? '0.0' : _tipController.text.toString()));
       Navigator.of(context).pop();
     } else {
       setState(() {
-        isValidTip = false;
+        _isValidTip = false;
       });
     }
   }

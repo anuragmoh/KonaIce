@@ -16,14 +16,14 @@ class OrderComplete extends StatefulWidget {
 }
 
 class _OrderCompleteState extends State<OrderComplete> {
-  bool isMovedToNextScreen = false;
+  bool _isMovedToNextScreen = false;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 5), () {
-      if (!isMovedToNextScreen) {
-        showSplashScreen();
+      if (!_isMovedToNextScreen) {
+        _showSplashScreen();
       }
     });
   }
@@ -36,7 +36,7 @@ class _OrderCompleteState extends State<OrderComplete> {
         child: Column(
           children: [
             CommonWidgets().topEmptyBar(),
-            Expanded(child: paymentSuccess()),
+            Expanded(child: _paymentSuccess()),
             CommonWidgets().bottomEmptyBar(),
           ],
         ),
@@ -44,7 +44,7 @@ class _OrderCompleteState extends State<OrderComplete> {
     );
   }
 
-  Widget paymentSuccess() => Column(
+  Widget _paymentSuccess() => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -84,19 +84,19 @@ class _OrderCompleteState extends State<OrderComplete> {
                   vertical: 3.90 * SizeConfig.heightSizeMultiplier),
               child: CommonWidgets().buttonWidget(
                 StringConstants.okay,
-                onTapOkay,
+                _onTapOkay,
               ),
             ),
           )
         ],
       );
 
-  onTapOkay() {
-    showSplashScreen();
+  _onTapOkay() {
+    _showSplashScreen();
   }
 
   //Navigation
-  showSplashScreen() {
+  _showSplashScreen() {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => SplashScreen()));
   }

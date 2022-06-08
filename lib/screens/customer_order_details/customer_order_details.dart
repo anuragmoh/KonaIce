@@ -28,11 +28,11 @@ class CustomerOrderDetails extends StatefulWidget {
 
 class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     implements P2PContractor {
-  P2POrderDetailsModel? orderDetailsModel;
-  String currentDate =
+  P2POrderDetailsModel? _orderDetailsModel;
+  String _currentDate =
       Date.getTodaysDate(formatValue: DateFormatsConstant.ddMMMYYYYDayhhmmaa);
 
-  double tipAmount = 0.0;
+  double _tipAmount = 0.0;
 
   _CustomerOrderDetailsState() {
     P2PConnectionManager.shared.getP2PContractor(this);
@@ -41,8 +41,8 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   @override
   initState() {
     super.initState();
-    orderDetailsModel = widget.orderDetailsModel;
-    updateTip(orderDetailsModel!.tip!);
+    _orderDetailsModel = widget.orderDetailsModel;
+    _updateTip(_orderDetailsModel!.tip!);
   }
 
   @override
@@ -58,7 +58,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             child: Column(
               children: [
                 CommonWidgets().topEmptyBar(),
-                Expanded(child: bodyWidget()),
+                Expanded(child: _bodyWidget()),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -66,7 +66,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                       padding: const EdgeInsets.only(bottom: 20.0),
                       child: CommonWidgets().buttonWidgetUnFilled(
                         StringConstants.addTip,
-                        onAddTipButtonTap,
+                        _onAddTipButtonTap,
                       ),
                     ),
                     const SizedBox(width: 40),
@@ -75,7 +75,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                           const EdgeInsets.only(right: 230.0, bottom: 20.0),
                       child: CommonWidgets()
                           .buttonWidget(StringConstants.confirm, () {
-                        onTapConfirmButton();
+                        _onTapConfirmButton();
                       }),
                     ),
                   ],
@@ -89,17 +89,17 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     );
   }
 
-  Widget bodyWidget() => Container(
+  Widget _bodyWidget() => Container(
         color: AppColors.textColor3.withOpacity(0.1),
-        child: bodyWidgetComponent(),
+        child: _bodyWidgetComponent(),
       );
 
-  Widget splashIcon() {
+  Widget _splashIcon() {
     return CommonWidgets()
         .image(image: AssetsConstants.konaIcon, width: 100.0, height: 60.0);
   }
 
-  Widget bodyWidgetComponent() => Padding(
+  Widget _bodyWidgetComponent() => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 237.0, vertical: 20.0),
         child: Container(
           decoration: BoxDecoration(
@@ -108,12 +108,12 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
           child: Column(
             children: [
               const SizedBox(height: 20.0),
-              splashIcon(),
-              componentHead(currentDate),
-              componentCustomerDetails(
-                  orderDetailsModel!.orderRequestModel!.getCustomerName(),
-                  orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
-                  orderDetailsModel!.orderRequestModel?.email ??
+              _splashIcon(),
+              _componentHead(_currentDate),
+              _componentCustomerDetails(
+                  _orderDetailsModel!.orderRequestModel!.getCustomerName(),
+                  _orderDetailsModel!.orderRequestModel!.getPhoneNumber(),
+                  _orderDetailsModel!.orderRequestModel?.email ??
                       StringExtension.empty()),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 19.0),
@@ -123,13 +123,13 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                 ),
               ),
               Expanded(
-                  child: SingleChildScrollView(child: componentOrderItem())),
+                  child: SingleChildScrollView(child: _componentOrderItem())),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Column(
                   children: [
                     DottedLine(height: 2.0, color: AppColors.textColor1),
-                    componentBill(),
+                    _componentBill(),
                   ],
                 ),
               )
@@ -138,7 +138,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         ),
       );
 
-  Widget componentHead(String orderDate) => Padding(
+  Widget _componentHead(String orderDate) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -155,7 +155,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         ),
       );
 
-  Widget componentOrderItem() => Padding(
+  Widget _componentOrderItem() => Padding(
         padding: const EdgeInsets.only(left: 20.0, right: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,12 +167,12 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: orderDetailsModel!
+                itemCount: _orderDetailsModel!
                         .orderRequestModel?.orderItemsList?.length ??
                     0,
                 itemBuilder: (context, index) {
-                  return orderItemView(
-                      orderItem: orderDetailsModel!
+                  return _orderItemView(
+                      orderItem: _orderDetailsModel!
                           .orderRequestModel!.orderItemsList![index]);
                 }),
             // DottedLine(
@@ -182,22 +182,22 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         ),
       );
 
-  Widget orderItemView({required OrderItemsList orderItem}) => Column(
+  Widget _orderItemView({required OrderItemsList orderItem}) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            buildSubRow1(orderItem),
-            buildSubRow2(orderItem),
+            _buildSubRow1(orderItem),
+            _buildSubRow2(orderItem),
           ]),
           Visibility(
             visible: (orderItem.foodExtraItemMappingList ?? []).isNotEmpty,
-            child: listViewBuilder(orderItem),
+            child: _listViewBuilder(orderItem),
           ),
           const SizedBox(height: 15.0),
         ],
       );
 
-  ListView listViewBuilder(OrderItemsList orderItem) {
+  ListView _listViewBuilder(OrderItemsList orderItem) {
     return ListView.builder(
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -211,7 +211,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0),
-                child: subOrderItemView(orderItem.foodExtraItemMappingList![0]
+                child: _subOrderItemView(orderItem.foodExtraItemMappingList![0]
                         .orderFoodExtraItemDetailDto![innerIndex].name ??
                     ''),
               ),
@@ -233,7 +233,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         });
   }
 
-  Row buildSubRow2(OrderItemsList orderItem) {
+  Row _buildSubRow2(OrderItemsList orderItem) {
     return Row(
       children: [
         CommonWidgets().textView(
@@ -248,7 +248,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     );
   }
 
-  Row buildSubRow1(OrderItemsList orderItem) {
+  Row _buildSubRow1(OrderItemsList orderItem) {
     return Row(
       children: [
         CommonWidgets().textView(
@@ -269,7 +269,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     );
   }
 
-  Widget componentCustomerDetails(
+  Widget _componentCustomerDetails(
           String customerName, String phoneNumber, String email) =>
       Padding(
         padding: const EdgeInsets.only(left: 20.0),
@@ -296,12 +296,12 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
               ],
             ),
           ),
-          phoneNumVisibility(phoneNumber),
-          emailVisibility(email),
+          _phoneNumVisibility(phoneNumber),
+          _emailVisibility(email),
         ]),
       );
 
-  Visibility emailVisibility(String email) {
+  Visibility _emailVisibility(String email) {
     return Visibility(
       visible: email.isNotEmpty && email != "null",
       child: Row(
@@ -326,7 +326,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     );
   }
 
-  Visibility phoneNumVisibility(String phoneNumber) {
+  Visibility _phoneNumVisibility(String phoneNumber) {
     return Visibility(
       visible: phoneNumber.isNotEmpty,
       child: Padding(
@@ -354,30 +354,30 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
     );
   }
 
-  Widget subOrderItemView(String subItem) => Text(subItem);
+  Widget _subOrderItemView(String subItem) => Text(subItem);
 
-  Widget componentBill() => SingleChildScrollView(
+  Widget _componentBill() => SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 14.0),
-            billTextView(
-                StringConstants.foodCost, orderDetailsModel!.foodCost ?? 0.0),
-            billTextView(
-                StringConstants.salesTax, orderDetailsModel!.salesTax ?? 0.0),
-            billTextView(StringConstants.subTotal, getSubTotal()),
+            _billTextView(
+                StringConstants.foodCost, _orderDetailsModel!.foodCost ?? 0.0),
+            _billTextView(
+                StringConstants.salesTax, _orderDetailsModel!.salesTax ?? 0.0),
+            _billTextView(StringConstants.subTotal, _getSubTotal()),
             //  billTextView(StringConstants.discount, orderDetailsModel!.discount ?? 0.0),
-            billTextView(StringConstants.tip, tipAmount),
+            _billTextView(StringConstants.tip, _tipAmount),
             Divider(
               thickness: 1,
               color: AppColors.textColor1,
             ),
             const SizedBox(height: 18.0),
-            totalBillView(orderDetailsModel?.totalAmount ?? 0.0),
+            _totalBillView(_orderDetailsModel?.totalAmount ?? 0.0),
             const SizedBox(height: 22.0),
           ],
         ),
       );
-  Widget billTextView(String billTitle, double itemAmount) => Column(
+  Widget _billTextView(String billTitle, double itemAmount) => Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             CommonWidgets().textView(
@@ -401,7 +401,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
         ],
       );
 
-  Widget totalBillView(double totalAmount) =>
+  Widget _totalBillView(double totalAmount) =>
       Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         CommonWidgets().textView(
             StringConstants.total,
@@ -419,29 +419,29 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
       ]);
 
   //Action Event
-  onTapConfirmButton() {
-    updateConfirmOrderToStaff();
-    showPaymentScreen();
+  _onTapConfirmButton() {
+    _updateConfirmOrderToStaff();
+    _showPaymentScreen();
   }
 
-  double getSubTotal() {
-    return (orderDetailsModel!.foodCost ?? 0.0) +
-        (orderDetailsModel!.salesTax ?? 0.0);
+  double _getSubTotal() {
+    return (_orderDetailsModel!.foodCost ?? 0.0) +
+        (_orderDetailsModel!.salesTax ?? 0.0);
   }
 
   //Navigation
-  showPaymentScreen() {
+  _showPaymentScreen() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const PaymentOption()))
         .then((value) => {P2PConnectionManager.shared.getP2PContractor(this)});
   }
 
-  showSplashScreen() {
+  _showSplashScreen() {
     Navigator.of(context).pop();
   }
 
   //data for p2pConnection
-  updateConfirmOrderToStaff() {
+  _updateConfirmOrderToStaff() {
     P2PConnectionManager.shared
         .updateData(action: CustomerActionConst.orderConfirmed);
   }
@@ -449,51 +449,51 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
   @override
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == StaffActionConst.orderModelUpdated) {
-      orderDetailsModel = P2POrderDetailsModel();
+      _orderDetailsModel = P2POrderDetailsModel();
       P2POrderDetailsModel modelObjc =
           p2POrderDetailsModelFromJson(response.data);
       if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
         setState(() {
-          orderDetailsModel = modelObjc;
+          _orderDetailsModel = modelObjc;
         });
       } else {
-        showSplashScreen();
+        _showSplashScreen();
       }
     } else if (response.action == StaffActionConst.chargeOrderBill) {
-      showPaymentScreen();
+      _showPaymentScreen();
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
-      showSplashScreen();
+      _showSplashScreen();
     } else if (response.action == StaffActionConst.tip) {
-      updateTip(double.parse(response.data));
+      _updateTip(double.parse(response.data));
     }
   }
 
-  onAddTipButtonTap() {
+  _onAddTipButtonTap() {
     showDialog(
         barrierDismissible: false,
         barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
-          return CustomerAddTipDialog(callBack: getTip);
+          return CustomerAddTipDialog(callBack: _getTip);
         });
   }
 
-  Widget textWidget(String textTitle, TextStyle textStyle) {
+  Widget _textWidget(String textTitle, TextStyle textStyle) {
     return Text(textTitle, style: textStyle);
   }
 
-  getTip(double tip) {
-    orderDetailsModel?.setTip(tip);
-    double? receivedTip = orderDetailsModel?.getTip();
-    updateTip(receivedTip!);
+  _getTip(double tip) {
+    _orderDetailsModel?.setTip(tip);
+    double? receivedTip = _orderDetailsModel?.getTip();
+    _updateTip(receivedTip!);
     P2PConnectionManager.shared.notifyChangeToStaff(
         action: CustomerActionConst.tip, data: receivedTip.toString());
   }
 
-  updateTip(double tip) {
+  _updateTip(double tip) {
     setState(() {
-      tipAmount = tip;
+      _tipAmount = tip;
     });
   }
 }

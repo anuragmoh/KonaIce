@@ -57,136 +57,136 @@ class EventMenuScreen extends StatefulWidget {
 
 class _EventMenuScreenState extends State<EventMenuScreen>
     implements OrderResponseContractor, P2PContractor {
-  late OrderPresenter orderPresenter;
-  late EventPresenter eventPresenter;
-  PlaceOrderResponseModel placeOrderResponseModel = PlaceOrderResponseModel();
+  late OrderPresenter _orderPresenter;
+  late EventPresenter _eventPresenter;
+  PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
 
   _EventMenuScreenState() {
-    orderPresenter = OrderPresenter(this);
-    eventPresenter = EventPresenter(this);
+    _orderPresenter = OrderPresenter(this);
+    _eventPresenter = EventPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
   }
 
-  bool isApiProcess = false;
+  bool _isApiProcess = false;
 
-  List<ItemCategories> itemCategoriesList = [];
-  List<FoodExtraItems> foodExtraItemList = [];
+  List<ItemCategories> _itemCategoriesList = [];
+  List<FoodExtraItems> _foodExtraItemList = [];
 
-  bool isProduct = true;
+  bool _isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool isSearchCustomer = false;
-  TextEditingController addTipTextFieldController = TextEditingController();
-  TextEditingController addDiscountTextFieldController =
+  bool _isSearchCustomer = false;
+  TextEditingController _addTipTextFieldController = TextEditingController();
+  TextEditingController _addDiscountTextFieldController =
       TextEditingController();
-  TextEditingController applyCouponTextFieldController =
+  TextEditingController _applyCouponTextFieldController =
       TextEditingController();
 
-  int selectedCategoryIndex = 1;
-  int currentIndex = 0;
-  bool isPaymentScreen = false;
+  int _selectedCategoryIndex = 1;
+  int _currentIndex = 0;
+  bool _isPaymentScreen = false;
 
-  List<Item> dbItemList = [];
-  List<Item> itemList = [];
-  List<Item> selectedMenuItems = [];
-  String customerName = StringConstants.addCustomer;
-  CustomerDetails? customer;
-  double tip = 0.0;
-  double salesTax = 0.0;
-  double discount = 0.0;
+  List<Item> _dbItemList = [];
+  List<Item> _itemList = [];
+  List<Item> _selectedMenuItems = [];
+  String _customerName = StringConstants.addCustomer;
+  CustomerDetails? _customer;
+  double _tip = 0.0;
+  double _salesTax = 0.0;
+  double _discount = 0.0;
   double totalAmount = 0.0;
-  String orderID = '';
-  String orderCode = '';
+  String _orderID = '';
+  String _orderCode = '';
 
   double get totalAmountOfSelectedItems {
-    if (selectedMenuItems.isEmpty) {
+    if (_selectedMenuItems.isEmpty) {
       return 0.0;
     } else {
       double sum = 0;
-      for (var element in selectedMenuItems) {
+      for (var element in _selectedMenuItems) {
         sum += element.getTotalPrice();
       }
       return sum;
     }
   }
 
-  String userName = StringExtension.empty();
+  String _userName = StringExtension.empty();
 
-  onTapCallBack(bool callBackValue) {
+  _onTapCallBack(bool callBackValue) {
     setState(() {
-      isProduct = callBackValue;
+      _isProduct = callBackValue;
     });
   }
 
-  onTapBottomListItem(int index) {
+  _onTapBottomListItem(int index) {
     setState(() {
-      currentIndex = index;
+      _currentIndex = index;
     });
   }
 
   // LocalDB call start from here.
-  getItemCategoriesByEventId(String eventId) async {
+  _getItemCategoriesByEventId(String eventId) async {
     // Event Id need to pass
     var result = await ItemCategoriesDAO().getCategoriesByEventId(eventId);
     if (result != null) {
       setState(() {
-        itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
+        _itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
             eventId: eventId, name: StringConstants.customMenu));
-        itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
+        _itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
             eventId: eventId, name: StringConstants.allCategories));
-        itemCategoriesList.addAll(result);
+        _itemCategoriesList.addAll(result);
       });
     } else {
       setState(() {
-        itemCategoriesList.clear();
+        _itemCategoriesList.clear();
       });
     }
   }
 
-  getAllItems(String eventId) async {
+  _getAllItems(String eventId) async {
     // Event Id need to pass
     setState(() {
-      isPaymentScreen = false;
+      _isPaymentScreen = false;
     });
     var result = await ItemDAO().getAllItemsByEventId(eventId);
     if (result != null) {
       setState(() {
-        itemList.clear();
-        dbItemList.clear();
-        itemList.addAll(result);
-        dbItemList.addAll(itemList);
-        debugPrint("=======$itemList");
+        _itemList.clear();
+        _dbItemList.clear();
+        _itemList.addAll(result);
+        _dbItemList.addAll(_itemList);
+        debugPrint("=======$_itemList");
       });
     } else {
       setState(() {
-        itemList.clear();
+        _itemList.clear();
       });
     }
   }
 
-  getItemsByCategory(String categoryId) async {
+  _getItemsByCategory(String categoryId) async {
     // Category Id need to pass
     var result = await ItemDAO().getAllItemsByCategories(categoryId);
     if (result != null) {
       setState(() {
-        itemList.addAll(result);
+        _itemList.addAll(result);
       });
     } else {
       setState(() {
-        itemList.clear();
+        _itemList.clear();
       });
     }
   }
 
-  getExtraFoodItem() async {
+  _getExtraFoodItem() async {
     var result =
         await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
     if (result != null) {
       setState(() {
-        foodExtraItemList.addAll(result);
+        _foodExtraItemList.addAll(result);
       });
     } else {
       setState(() {
-        foodExtraItemList.clear();
+        _foodExtraItemList.clear();
       });
     }
   }
@@ -194,8 +194,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   @override
   void initState() {
     super.initState();
-    getItemCategoriesByEventId(widget.events.id);
-    getAllItems(widget.events.id);
+    _getItemCategoriesByEventId(widget.events.id);
+    _getAllItems(widget.events.id);
     getUserName();
     // setSalesTax();
   }
@@ -203,24 +203,24 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   @override
   void dispose() {
     super.dispose();
-    addTipTextFieldController.dispose();
-    addDiscountTextFieldController.dispose();
-    applyCouponTextFieldController.dispose();
+    _addTipTextFieldController.dispose();
+    _addDiscountTextFieldController.dispose();
+    _applyCouponTextFieldController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(isPaymentScreen.toString());
-    if (!isPaymentScreen) {
-      updateCustomerName();
-      calculateTotal();
-      updateOrderDataToCustomer();
+    debugPrint(_isPaymentScreen.toString());
+    if (!_isPaymentScreen) {
+      _updateCustomerName();
+      _calculateTotal();
+      _updateOrderDataToCustomer();
     }
 
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -232,20 +232,20 @@ class _EventMenuScreenState extends State<EventMenuScreen>
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TopBar(
-                userName: userName,
+                userName: _userName,
                 eventName: widget.events.getEventName(),
                 eventAddress: widget.events.getEventAddress(),
                 showCenterWidget: true,
-                onTapCallBack: onTapCallBack,
+                onTapCallBack: _onTapCallBack,
                 //onDrawerTap: onDrawerTap,
-                onProfileTap: onProfileChange,
-                isProduct: isProduct),
+                onProfileTap: _onProfileChange,
+                isProduct: _isProduct),
             Expanded(
-              child: isProduct
-                  ? body()
+              child: _isProduct
+                  ? _body()
                   : AllOrdersScreen(
                       onBackTap: (saveOrders, orderItemList, extraItemList) {
-                        onBackFromAllOrder(
+                        _onBackFromAllOrder(
                             savedOrder: saveOrders,
                             savedOrderItemList: orderItemList,
                             savedOrderExtraItemList: extraItemList);
@@ -253,9 +253,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                       events: widget.events),
             ),
             Visibility(
-              visible: selectedMenuItems.isEmpty ? true : false,
+              visible: _selectedMenuItems.isEmpty ? true : false,
               child: BottomBarWidget(
-                onTapCallBack: onTapBottomListItem,
+                onTapCallBack: _onTapBottomListItem,
                 accountImageVisibility: false,
                 isFromDashboard: false,
               ),
@@ -266,16 +266,16 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget body() {
-    return itemList.isNotEmpty
+  Widget _body() {
+    return _itemList.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
               children: [
-                Expanded(child: leftContainer()),
+                Expanded(child: _leftContainer()),
                 Padding(
                   padding: const EdgeInsets.only(left: 20.0),
-                  child: rightContainer(),
+                  child: _rightContainer(),
                 ),
               ],
             ),
@@ -288,7 +288,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                     color: AppColors.textColor1)));
   }
 
-  Widget leftContainer() {
+  Widget _leftContainer() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -296,23 +296,23 @@ class _EventMenuScreenState extends State<EventMenuScreen>
           padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
           child: Row(
             children: [
-              Flexible(child: categoriesListContainer()),
+              Flexible(child: _categoriesListContainer()),
               Visibility(
                 visible: false,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 8),
-                  child: addCategoriesButton(),
+                  child: _addCategoriesButton(),
                 ),
               )
             ],
           ),
         ),
-        Expanded(child: menuGridContainer())
+        Expanded(child: _menuGridContainer())
       ],
     );
   }
 
-  Widget rightContainer() {
+  Widget _rightContainer() {
     return SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.24,
@@ -326,78 +326,78 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   blurRadius: 8.0,
                   offset: const Offset(0, 2))
             ]),
-        child: isSearchCustomer
-            ? searchCustomerContainer()
-            : rightCartViewContainer(),
+        child: _isSearchCustomer
+            ? _searchCustomerContainer()
+            : _rightCartViewContainer(),
       ),
     );
   }
 
   //Add to cart Container
-  Widget rightCartViewContainer() {
+  Widget _rightCartViewContainer() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Align(alignment: Alignment.topRight, child: clearButton()),
-        customerDetails(),
+        Align(alignment: Alignment.topRight, child: _clearButton()),
+        _customerDetails(),
         Expanded(
-            child: selectedMenuItems.isNotEmpty
+            child: _selectedMenuItems.isNotEmpty
                 ? CustomScrollView(
                     slivers: [
-                      SliverToBoxAdapter(child: selectedItemList()),
+                      SliverToBoxAdapter(child: _selectedItemList()),
                       SliverFillRemaining(
                         hasScrollBody: false,
                         fillOverscroll: true,
-                        child: couponContainer(),
+                        child: _couponContainer(),
                       )
                     ],
                   )
-                : emptyCartView()),
-        chargeButton(),
-        saveAndNewOrderButton()
+                : _emptyCartView()),
+        _chargeButton(),
+        _saveAndNewOrderButton()
       ],
     );
   }
 
-  Widget searchCustomerContainer() {
+  Widget _searchCustomerContainer() {
     return SearchCustomers(
-      onTapCustomer: onTapCustomerName,
+      onTapCustomer: _onTapCustomerName,
     );
   }
 
-  Widget categoriesListContainer() {
+  Widget _categoriesListContainer() {
     return SizedBox(
       height: 40.0,
       child: ListView.builder(
-          itemCount: itemCategoriesList.length,
+          itemCount: _itemCategoriesList.length,
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: categoriesNameButton(index));
+                child: _categoriesNameButton(index));
           }),
     );
   }
 
-  Widget menuGridContainer() {
+  Widget _menuGridContainer() {
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 5,
             crossAxisSpacing: 8.0,
             mainAxisSpacing: 8.0,
             childAspectRatio: 139 / 80),
-        itemCount: itemList.length,
+        itemCount: _itemList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
-                onTapGridItem(index);
+                _onTapGridItem(index);
               },
-              child: menuItem(index));
+              child: _menuItem(index));
         });
   }
 
-  Widget menuItem(int index) {
-    Item menuObject = itemList[index];
+  Widget _menuItem(int index) {
+    Item menuObject = _itemList[index];
     return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -408,10 +408,10 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   : [AppColors.whiteColor, AppColors.whiteColor]),
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: buildMainPadding(menuObject, index));
+        child: _buildMainPadding(menuObject, index));
   }
 
-  Padding buildMainPadding(Item menuObject, int index) {
+  Padding _buildMainPadding(Item menuObject, int index) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
       child: Column(
@@ -426,20 +426,20 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                 children: [
                   Flexible(
                     flex: 5,
-                    child: buildColumn(menuObject),
+                    child: _buildColumn(menuObject),
                   ),
-                  buildFlexibleWidget(menuObject),
+                  _buildFlexibleWidget(menuObject),
                 ],
               ),
             ),
           ),
-          builVisibilityWidget(menuObject, index),
+          _builVisibilityWidget(menuObject, index),
         ],
       ),
     );
   }
 
-  Column buildColumn(Item menuObject) {
+  Column _buildColumn(Item menuObject) {
     return Column(
       mainAxisAlignment:
           (menuObject.isItemHasExtras() && menuObject.isItemSelected)
@@ -469,7 +469,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Flexible buildFlexibleWidget(Item menuObject) {
+  Flexible _buildFlexibleWidget(Item menuObject) {
     return Flexible(
       flex: menuObject.isItemSelected ? 1 : 0,
       child: Visibility(
@@ -482,14 +482,14 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Visibility builVisibilityWidget(Item menuObject, int index) {
+  Visibility _builVisibilityWidget(Item menuObject, int index) {
     return Visibility(
       visible: menuObject.isItemSelected && menuObject.isItemHasExtras(),
       child: Padding(
         padding: const EdgeInsets.only(top: 4.0),
         child: InkWell(
           onTap: () {
-            onTapFoodExtras(index);
+            _onTapFoodExtras(index);
           },
           child: CommonWidgets().textWidget(
               StringConstants.addFoodItems,
@@ -500,7 +500,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget addNewMenuItem() {
+  Widget _addNewMenuItem() {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
@@ -511,7 +511,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 3.0),
-            child: plusSymbolText(),
+            child: _plusSymbolText(),
           ),
           SizedBox(
             width: 70.0,
@@ -528,16 +528,16 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget plusSymbolText() {
+  Widget _plusSymbolText() {
     return CommonWidgets().textWidget(
         StringConstants.plusSymbol,
         StyleConstants.customTextStyle16MontserratBold(
             color: AppColors.primaryColor1));
   }
 
-  Widget customerDetails() {
+  Widget _customerDetails() {
     return GestureDetector(
-      onTap: onTapAddCustomer,
+      onTap: _onTapAddCustomer,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 9.0, vertical: 2.0),
         child: Row(
@@ -551,13 +551,13 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                 child: CommonWidgets().textWidget(
-                    customerName,
+                    _customerName,
                     StyleConstants.customTextStyle16MontserratBold(
                         color: AppColors.textColor1)),
               ),
             ),
             Visibility(
-              visible: invalidCustomerName(),
+              visible: _invalidCustomerName(),
               child: CommonWidgets().textWidget(
                   StringConstants.plusSymbol,
                   StyleConstants.customTextStyle16MontserratBold(
@@ -569,7 +569,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget emptyCartView() {
+  Widget _emptyCartView() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -586,13 +586,13 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget selectedItemList() {
+  Widget _selectedItemList() {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: selectedMenuItems.length,
+          itemCount: _selectedMenuItems.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
@@ -600,20 +600,21 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(flex: 5, child: selectedItemDetailsComponent(index)),
+                  Expanded(
+                      flex: 5, child: _selectedItemDetailsComponent(index)),
                   Expanded(
                     flex: 3,
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: CommonWidgets()
                           .quantityIncrementDecrementContainer(
-                              quantity:
-                                  selectedMenuItems[index].selectedItemQuantity,
+                              quantity: _selectedMenuItems[index]
+                                  .selectedItemQuantity,
                               onTapPlus: () {
-                                onTapIncrementCountButton(index);
+                                _onTapIncrementCountButton(index);
                               },
                               onTapMinus: () {
-                                onTapDecrementCountButton(index);
+                                _onTapDecrementCountButton(index);
                               }),
                     ),
                   ),
@@ -624,19 +625,19 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget selectedItemDetailsComponent(index) {
-    Item menuObjet = selectedMenuItems[index];
+  Widget _selectedItemDetailsComponent(index) {
+    Item menuObjet = _selectedMenuItems[index];
     return GestureDetector(
       onTap: () {
         if (menuObjet.isItemHasExtras()) {
-          onTapAddFoodExtras(index);
+          _onTapAddFoodExtras(index);
         }
       },
-      child: buildColumn2(menuObjet),
+      child: _buildColumn2(menuObjet),
     );
   }
 
-  Column buildColumn2(Item menuObjet) {
+  Column _buildColumn2(Item menuObjet) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -647,8 +648,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               StyleConstants.customTextStyle12MonsterMedium(
                   color: AppColors.textColor4)),
         ),
-        buildRow(menuObjet),
-        buildAddExtraFoodItemsVisibility(menuObjet),
+        _buildRow(menuObjet),
+        _buildAddExtraFoodItemsVisibility(menuObjet),
         CommonWidgets().textWidget(
             '${StringConstants.symbolDollar}${menuObjet.getTotalPrice().toStringAsFixed(2)}',
             StyleConstants.customTextStyle16MontserratBold(
@@ -657,7 +658,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Visibility buildAddExtraFoodItemsVisibility(Item menuObjet) {
+  Visibility _buildAddExtraFoodItemsVisibility(Item menuObjet) {
     return Visibility(
       visible: menuObjet.isItemHasExtras(),
       child: Padding(
@@ -670,7 +671,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Row buildRow(Item menuObjet) {
+  Row _buildRow(Item menuObjet) {
     return Row(
       children: [
         Visibility(
@@ -690,7 +691,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget couponContainer() {
+  Widget _couponContainer() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
       child: Column(
@@ -704,46 +705,46 @@ class _EventMenuScreenState extends State<EventMenuScreen>
           ),
           Visibility(
               visible: false,
-              child: commonTextFieldContainer(
+              child: _commonTextFieldContainer(
                   hintText: StringConstants.applyCoupon,
                   imageName: AssetsConstants.couponIcon,
-                  controller: applyCouponTextFieldController)),
-          commonTextFieldContainer(
+                  controller: _applyCouponTextFieldController)),
+          _commonTextFieldContainer(
               hintText: StringConstants.addTip,
               imageName: AssetsConstants.dollarIcon,
-              controller: addTipTextFieldController),
-          orderBillDetailContainer(),
+              controller: _addTipTextFieldController),
+          _orderBillDetailContainer(),
         ],
       ),
     );
   }
 
-  Widget orderBillDetailContainer() {
+  Widget _orderBillDetailContainer() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          commonOrderBillComponents(
+          _commonOrderBillComponents(
               text: StringConstants.foodCost,
               price: totalAmountOfSelectedItems),
-          commonOrderBillComponents(
-              text: StringConstants.salesTax, price: getSalesTax()),
-          commonOrderBillComponents(
-              text: StringConstants.subTotal, price: getSubTotal()),
-          commonOrderBillComponents(text: StringConstants.tip, price: tip),
+          _commonOrderBillComponents(
+              text: StringConstants.salesTax, price: _getSalesTax()),
+          _commonOrderBillComponents(
+              text: StringConstants.subTotal, price: _getSubTotal()),
+          _commonOrderBillComponents(text: StringConstants.tip, price: _tip),
           Visibility(
             visible: false,
-            child: commonOrderBillComponents(
-                text: StringConstants.discount, price: discount),
+            child: _commonOrderBillComponents(
+                text: StringConstants.discount, price: _discount),
           ),
         ],
       ),
     );
   }
 
-  Widget commonOrderBillComponents(
+  Widget _commonOrderBillComponents(
       {required String text, required double price}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -763,7 +764,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget commonTextFieldContainer(
+  Widget _commonTextFieldContainer(
       {required String hintText,
       required String imageName,
       required TextEditingController controller}) {
@@ -800,7 +801,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                         color: AppColors.textColor2),
                   ),
                   onEditingComplete: () {
-                    onCompleteTextFieldEditing();
+                    _onCompleteTextFieldEditing();
                   },
                 ),
               ),
@@ -811,15 +812,15 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget categoriesNameButton(int index) {
+  Widget _categoriesNameButton(int index) {
     return InkWell(
       onTap: () {
-        onTapCategoriesButton(index: index);
+        _onTapCategoriesButton(index: index);
       },
       child: Container(
         height: 40.0,
         decoration: BoxDecoration(
-            color: index == selectedCategoryIndex
+            color: index == _selectedCategoryIndex
                 ? AppColors.primaryColor2
                 : AppColors.whiteColor,
             border: Border.all(width: 1.0, color: AppColors.whiteBorderColor),
@@ -827,8 +828,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 12.0),
           child: CommonWidgets().textWidget(
-              itemCategoriesList[index].categoryName,
-              index == selectedCategoryIndex
+              _itemCategoriesList[index].categoryName,
+              index == _selectedCategoryIndex
                   ? StyleConstants.customTextStyle12MontserratBold(
                       color: AppColors.textColor1)
                   : StyleConstants.customTextStyle12MonsterMedium(
@@ -838,9 +839,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget addCategoriesButton() {
+  Widget _addCategoriesButton() {
     return InkWell(
-      onTap: onTapAddCategoryButton,
+      onTap: _onTapAddCategoryButton,
       child: Container(
         width: 35,
         height: 35,
@@ -850,17 +851,17 @@ class _EventMenuScreenState extends State<EventMenuScreen>
           border: Border.all(width: 1.0, color: AppColors.whiteBorderColor),
         ),
         child: Center(
-          child: plusSymbolText(),
+          child: _plusSymbolText(),
         ),
       ),
     );
   }
 
-  Widget clearButton() {
+  Widget _clearButton() {
     return GestureDetector(
       onTap: () {
-        if (selectedMenuItems.isNotEmpty) {
-          onTapClearButton();
+        if (_selectedMenuItems.isNotEmpty) {
+          _onTapClearButton();
         }
       },
       child: Padding(
@@ -873,11 +874,11 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget chargeButton() {
+  Widget _chargeButton() {
     return GestureDetector(
       onTap: () {
-        if (selectedMenuItems.isNotEmpty) {
-          onTapChargeButton();
+        if (_selectedMenuItems.isNotEmpty) {
+          _onTapChargeButton();
         }
       },
       child: Padding(
@@ -885,7 +886,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         child: Container(
           height: 40.0,
           decoration: BoxDecoration(
-              color: selectedMenuItems.isEmpty
+              color: _selectedMenuItems.isEmpty
                   ? AppColors.denotiveColor5
                   : AppColors.primaryColor2,
               borderRadius: BorderRadius.circular(20.0)),
@@ -901,7 +902,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                       StringConstants.charge,
                       StyleConstants.customTextStyle(
                           fontSize: 16.0,
-                          color: selectedMenuItems.isEmpty
+                          color: _selectedMenuItems.isEmpty
                               ? AppColors.textColor4
                               : AppColors.textColor1,
                           fontFamily: FontConstants.montserratBold),
@@ -913,7 +914,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                       '${StringConstants.symbolDollar}${totalAmount.toStringAsFixed(2)}',
                       StyleConstants.customTextStyle(
                           fontSize: 23.3,
-                          color: selectedMenuItems.isEmpty
+                          color: _selectedMenuItems.isEmpty
                               ? AppColors.textColor4
                               : AppColors.textColor1,
                           fontFamily: FontConstants.montserratBold),
@@ -927,7 +928,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     );
   }
 
-  Widget saveAndNewOrderButton() {
+  Widget _saveAndNewOrderButton() {
     return Padding(
       padding: const EdgeInsets.only(left: 9.0, right: 9.0, bottom: 15.0),
       child: Row(
@@ -935,27 +936,27 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         children: [
           InkWell(
             onTap: () {
-              if (selectedMenuItems.isNotEmpty) {
-                onTapSaveButton();
+              if (_selectedMenuItems.isNotEmpty) {
+                _onTapSaveButton();
               }
             },
             child: CommonWidgets().textWidget(
                 StringConstants.saveOrder,
                 StyleConstants.customTextStyle12MontserratSemiBold(
-                    color: selectedMenuItems.isEmpty
+                    color: _selectedMenuItems.isEmpty
                         ? AppColors.denotiveColor4
                         : AppColors.textColor6)),
           ),
           InkWell(
             onTap: () {
-              if (selectedMenuItems.isNotEmpty) {
-                onTapNewOrderButton();
+              if (_selectedMenuItems.isNotEmpty) {
+                _onTapNewOrderButton();
               }
             },
             child: CommonWidgets().textWidget(
                 StringConstants.newOrder,
                 StyleConstants.customTextStyle12MontserratSemiBold(
-                    color: selectedMenuItems.isEmpty
+                    color: _selectedMenuItems.isEmpty
                         ? AppColors.denotiveColor4
                         : AppColors.textColor7)),
           )
@@ -965,7 +966,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   //FoodExtra popup
-  showAddFoodExtrasPopUp(int index, bool selectedFromMenu) async {
+  _showAddFoodExtrasPopUp(int index, bool selectedFromMenu) async {
     await showDialog(
         barrierDismissible: false,
         barrierColor: AppColors.textColor1.withOpacity(0.7),
@@ -973,14 +974,14 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         builder: (context) {
           return FoodExtraPopup(
               item: selectedFromMenu
-                  ? itemList[index]
-                  : selectedMenuItems[index]);
+                  ? _itemList[index]
+                  : _selectedMenuItems[index]);
         });
     setState(() {});
   }
 
   //Custom Menu popup
-  showCustomMenuPopup() {
+  _showCustomMenuPopup() {
     showDialog(
         barrierDismissible: false,
         barrierColor: AppColors.textColor1.withOpacity(0.7),
@@ -988,245 +989,245 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         builder: (context) {
           return const CustomMenuPopup();
         }).then((value) {
-      onTapCategoriesButton(index: 1);
+      _onTapCategoriesButton(index: 1);
     });
   }
 
   //Other functions
   getUserName() async {
-    userName = await FunctionalUtils.getUserName();
+    _userName = await FunctionalUtils.getUserName();
     setState(() {});
   }
 
-  double getSalesTax() {
-    salesTax =
+  double _getSalesTax() {
+    _salesTax =
         (widget.events.salesTax.toDouble() / 100) * totalAmountOfSelectedItems;
-    return salesTax;
+    return _salesTax;
   }
 
-  double getSubTotal() {
-    return totalAmountOfSelectedItems + getSalesTax();
+  double _getSubTotal() {
+    return totalAmountOfSelectedItems + _getSalesTax();
   }
 
-  updateCustomerName() {
-    if (customerName == StringConstants.addCustomer &&
-        selectedMenuItems.isNotEmpty) {
-      customerName = StringConstants.guestCustomer;
-    } else if (customerName == StringConstants.guestCustomer &&
-        selectedMenuItems.isEmpty) {
-      customerName = StringConstants.addCustomer;
+  _updateCustomerName() {
+    if (_customerName == StringConstants.addCustomer &&
+        _selectedMenuItems.isNotEmpty) {
+      _customerName = StringConstants.guestCustomer;
+    } else if (_customerName == StringConstants.guestCustomer &&
+        _selectedMenuItems.isEmpty) {
+      _customerName = StringConstants.addCustomer;
     }
   }
 
-  bool invalidCustomerName() {
-    return (customerName == StringConstants.addCustomer ||
-        customerName == StringConstants.guestCustomer);
+  bool _invalidCustomerName() {
+    return (_customerName == StringConstants.addCustomer ||
+        _customerName == StringConstants.guestCustomer);
   }
 
-  calculateTotal() {
+  _calculateTotal() {
     setState(() {
-      if (selectedMenuItems.isNotEmpty) {
+      if (_selectedMenuItems.isNotEmpty) {
         totalAmount =
-            totalAmountOfSelectedItems + tip + getSalesTax() - discount;
+            totalAmountOfSelectedItems + _tip + _getSalesTax() - _discount;
       } else {
         totalAmount = 0.0;
       }
     });
   }
 
-  clearCart() {
+  _clearCart() {
     setState(() {
-      selectedMenuItems.clear();
-      itemList.clear();
-      tip = 0.0;
-      discount = 0.0;
-      addTipTextFieldController.clear();
-      addDiscountTextFieldController.clear();
-      customerName = StringConstants.addCustomer;
-      orderID = '';
-      customer = null;
-      getAllItems(widget.events.id);
+      _selectedMenuItems.clear();
+      _itemList.clear();
+      _tip = 0.0;
+      _discount = 0.0;
+      _addTipTextFieldController.clear();
+      _addDiscountTextFieldController.clear();
+      _customerName = StringConstants.addCustomer;
+      _orderID = '';
+      _customer = null;
+      _getAllItems(widget.events.id);
     });
   }
 
   //Action Event
-  onTapAddCategoryButton() {}
+  _onTapAddCategoryButton() {}
 
-  onTapCategoriesButton({required int index}) {
-    if (index != selectedCategoryIndex) {
+  _onTapCategoriesButton({required int index}) {
+    if (index != _selectedCategoryIndex) {
       setState(() {
-        selectedCategoryIndex = index;
+        _selectedCategoryIndex = index;
         if (index == 0) {
-          showCustomMenuPopup();
+          _showCustomMenuPopup();
         } else if (index == 1) {
-          itemList.clear();
-          itemList.addAll(dbItemList);
+          _itemList.clear();
+          _itemList.addAll(_dbItemList);
         } else {
-          itemList.clear();
-          var list = dbItemList
+          _itemList.clear();
+          var list = _dbItemList
               .where((element) =>
-                  element.itemCategoryId == itemCategoriesList[index].id)
+                  element.itemCategoryId == _itemCategoriesList[index].id)
               .toList();
-          itemList.addAll(list);
+          _itemList.addAll(list);
         }
       });
     }
   }
 
-  onTapClearButton() {
-    DialogHelper.confirmationDialog(context, onConfirmTapYes, onConfirmTapNo,
+  _onTapClearButton() {
+    DialogHelper.confirmationDialog(context, _onConfirmTapYes, _onConfirmTapNo,
         StringConstants.confirmMessage);
   }
 
-  onConfirmTapYes() {
-    if (orderID == "") {
-      clearCart();
+  _onConfirmTapYes() {
+    if (_orderID == "") {
+      _clearCart();
     } else {
-      deleteOrder();
+      _deleteOrder();
     }
-    onConfirmTapNo();
+    _onConfirmTapNo();
   }
 
-  onConfirmTapNo() {
+  _onConfirmTapNo() {
     Navigator.of(context).pop();
   }
 
-  onTapChargeButton() {
-    isPaymentScreen = true;
-    moveCustomerToPaymentScreen();
-    showPaymentScreen();
+  _onTapChargeButton() {
+    _isPaymentScreen = true;
+    _moveCustomerToPaymentScreen();
+    _showPaymentScreen();
   }
 
-  onTapSaveButton() {
-    if (orderID.isEmpty) {
-      callPlaceOrderAPI();
+  _onTapSaveButton() {
+    if (_orderID.isEmpty) {
+      _callPlaceOrderAPI();
     } else {
-      saveOrderIntoLocalDB(orderID, orderCode);
+      _saveOrderIntoLocalDB(_orderID, _orderCode);
     }
   }
 
-  onTapNewOrderButton() {
+  _onTapNewOrderButton() {
     DialogHelper.newOrderConfirmationDialog(
-        context, onTapDialogSave, onTapDialogCancel);
+        context, _onTapDialogSave, _onTapDialogCancel);
   }
 
-  onTapDialogSave() {
+  _onTapDialogSave() {
     Navigator.of(context).pop();
-    callPlaceOrderAPI();
+    _callPlaceOrderAPI();
   }
 
-  onTapDialogCancel() {
+  _onTapDialogCancel() {
     Navigator.of(context).pop();
-    clearCart();
+    _clearCart();
   }
 
-  onTapIncrementCountButton(index) {
+  _onTapIncrementCountButton(index) {
     setState(() {
-      selectedMenuItems[index].selectedItemQuantity += 1;
+      _selectedMenuItems[index].selectedItemQuantity += 1;
     });
   }
 
-  onTapDecrementCountButton(index) {
+  _onTapDecrementCountButton(index) {
     setState(() {
-      selectedMenuItems[index].selectedItemQuantity -= 1;
-      if (selectedMenuItems[index].selectedItemQuantity == 0) {
-        selectedMenuItems[index].isItemSelected = false;
-        selectedMenuItems.removeAt(index);
+      _selectedMenuItems[index].selectedItemQuantity -= 1;
+      if (_selectedMenuItems[index].selectedItemQuantity == 0) {
+        _selectedMenuItems[index].isItemSelected = false;
+        _selectedMenuItems.removeAt(index);
       }
     });
   }
 
-  onTapAddCustomer() {
+  _onTapAddCustomer() {
     setState(() {
-      isSearchCustomer = true;
+      _isSearchCustomer = true;
     });
   }
 
-  onTapGridItem(int index) {
+  _onTapGridItem(int index) {
     setState(() {
-      if (itemList[index].isItemSelected) {
-        itemList[index].selectedItemQuantity = 0;
-        selectedMenuItems.remove(itemList[index]);
-        itemList[index].removeAllExtraItems();
+      if (_itemList[index].isItemSelected) {
+        _itemList[index].selectedItemQuantity = 0;
+        _selectedMenuItems.remove(_itemList[index]);
+        _itemList[index].removeAllExtraItems();
       } else {
-        itemList[index].selectedItemQuantity = 1;
-        selectedMenuItems.add(itemList[index]);
-        itemList[index].selectedExtras = [];
+        _itemList[index].selectedItemQuantity = 1;
+        _selectedMenuItems.add(_itemList[index]);
+        _itemList[index].selectedExtras = [];
       }
 
-      itemList[index].isItemSelected = !itemList[index].isItemSelected;
+      _itemList[index].isItemSelected = !_itemList[index].isItemSelected;
     });
     // }
   }
 
-  onTapFoodExtras(int index) {
-    showAddFoodExtrasPopUp(index, true);
+  _onTapFoodExtras(int index) {
+    _showAddFoodExtrasPopUp(index, true);
   }
 
-  onTapAddFoodExtras(int index) {
-    showAddFoodExtrasPopUp(index, false);
+  _onTapAddFoodExtras(int index) {
+    _showAddFoodExtrasPopUp(index, false);
   }
 
-  onTapCustomerName(CustomerDetails? customerObj) {
+  _onTapCustomerName(CustomerDetails? customerObj) {
     setState(() {
       if (customerObj != null) {
-        customerName = customerObj.getFullName();
+        _customerName = customerObj.getFullName();
       }
-      customer = customerObj;
-      isSearchCustomer = false;
+      _customer = customerObj;
+      _isSearchCustomer = false;
     });
   }
 
-  onCompleteTextFieldEditing() {
-    String tipText = addTipTextFieldController.text;
-    updateTipToCustomer(tipText.toString());
-    String discountText = addDiscountTextFieldController.text;
+  _onCompleteTextFieldEditing() {
+    String tipText = _addTipTextFieldController.text;
+    _updateTipToCustomer(tipText.toString());
+    String discountText = _addDiscountTextFieldController.text;
     setState(() {
-      tip = double.parse(tipText.isEmpty ? '0.0' : tipText);
-      discount = double.parse(discountText.isEmpty ? '0.0' : discountText);
+      _tip = double.parse(tipText.isEmpty ? '0.0' : tipText);
+      _discount = double.parse(discountText.isEmpty ? '0.0' : discountText);
     });
     FocusScope.of(context).unfocus();
   }
 
-  onDrawerTap() {
+  _onDrawerTap() {
     _scaffoldKey.currentState!.openEndDrawer();
   }
 
-  onProfileChange() {
+  _onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
   }
 
-  onBackFromAllOrder(
+  _onBackFromAllOrder(
       {required SavedOrders savedOrder,
       required List<SavedOrdersItem> savedOrderItemList,
       required List<SavedOrdersExtraItems> savedOrderExtraItemList}) async {
-    await clearCart();
+    await _clearCart();
     setState(() {
-      isProduct = true;
+      _isProduct = true;
     });
     Future.delayed(const Duration(milliseconds: 500), () {
       setState(() {
-        tip = savedOrder.tip.toDouble();
-        addTipTextFieldController.text = savedOrder.tip.toString();
-        discount = savedOrder.discount.toDouble();
-        addDiscountTextFieldController.text = savedOrder.discount.toString();
-        customerName = savedOrder.customerName;
-        orderID = savedOrder.orderId;
+        _tip = savedOrder.tip.toDouble();
+        _addTipTextFieldController.text = savedOrder.tip.toString();
+        _discount = savedOrder.discount.toDouble();
+        _addDiscountTextFieldController.text = savedOrder.discount.toString();
+        _customerName = savedOrder.customerName;
+        _orderID = savedOrder.orderId;
         //  salesTax = setSalesTax();
         if (savedOrder.customerName != StringConstants.guestCustomer) {
-          customer = CustomerDetails();
-          List<String> names = customerName.split(' ');
+          _customer = CustomerDetails();
+          List<String> names = _customerName.split(' ');
           if (names.length > 1) {
-            customer!.firstName = names[0];
-            customer!.lastName = names[1];
+            _customer!.firstName = names[0];
+            _customer!.lastName = names[1];
           }
-          customer!.email = savedOrder.email;
-          customer!.phoneNum = savedOrder.phoneNumber;
-          customer!.numCountryCode = savedOrder.phoneCountryCode;
+          _customer!.email = savedOrder.email;
+          _customer!.phoneNum = savedOrder.phoneNumber;
+          _customer!.numCountryCode = savedOrder.phoneCountryCode;
         }
         for (var itemSaveOrder in savedOrderItemList) {
-          for (var item in itemList) {
+          for (var item in _itemList) {
             if (item.id == itemSaveOrder.itemId) {
               item.selectedItemQuantity = itemSaveOrder.quantity;
               item.isItemSelected = true;
@@ -1243,7 +1244,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   }
                 }
               }
-              selectedMenuItems.add(item);
+              _selectedMenuItems.add(item);
               break;
             }
           }
@@ -1253,48 +1254,48 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   //data for p2pConnection
-  showOrderScreenToCustomer() {
+  _showOrderScreenToCustomer() {
     P2PConnectionManager.shared
         .updateData(action: StaffActionConst.eventSelected);
   }
 
-  updateOrderDataToCustomer() {
+  _updateOrderDataToCustomer() {
     P2POrderDetailsModel dataModel = P2POrderDetailsModel();
-    dataModel.orderRequestModel = getOrderRequestModel();
+    dataModel.orderRequestModel = _getOrderRequestModel();
     dataModel.orderRequestModel!.addressLongitude = 0.0;
     dataModel.orderRequestModel!.addressLatitude = 0.0;
-    dataModel.discount = discount;
-    dataModel.tip = tip;
+    dataModel.discount = _discount;
+    dataModel.tip = _tip;
     dataModel.totalAmount = totalAmount;
     dataModel.foodCost = totalAmountOfSelectedItems;
-    dataModel.salesTax = getSalesTax();
+    dataModel.salesTax = _getSalesTax();
     P2PConnectionManager.shared.updateDataWithObject(
         action: StaffActionConst.orderModelUpdated, dataObject: dataModel);
   }
 
-  moveCustomerToPaymentScreen() {
+  _moveCustomerToPaymentScreen() {
     P2PConnectionManager.shared
         .updateData(action: StaffActionConst.chargeOrderBill);
   }
 
   //data required for next screen
-  PlaceOrderRequestModel getOrderRequestModel() {
+  PlaceOrderRequestModel _getOrderRequestModel() {
     PlaceOrderRequestModel orderRequestModel = PlaceOrderRequestModel();
     orderRequestModel.eventId = widget.events.id;
     orderRequestModel.cardId = "9db195092bc44d9db117f03a5a541025";
     orderRequestModel.campaignId = "";
 
-    if (orderID.isNotEmpty) {
-      orderRequestModel.id = orderID;
+    if (_orderID.isNotEmpty) {
+      orderRequestModel.id = _orderID;
     }
 
     //addCustomer Details
-    if (customer != null) {
-      orderRequestModel.firstName = customer!.firstName;
-      orderRequestModel.lastName = customer!.lastName;
-      orderRequestModel.email = customer!.email;
-      orderRequestModel.phoneNumCountryCode = customer!.numCountryCode;
-      orderRequestModel.phoneNumber = customer!.phoneNum;
+    if (_customer != null) {
+      orderRequestModel.firstName = _customer!.firstName;
+      orderRequestModel.lastName = _customer!.lastName;
+      orderRequestModel.email = _customer!.email;
+      orderRequestModel.phoneNumCountryCode = _customer!.numCountryCode;
+      orderRequestModel.phoneNumber = _customer!.phoneNum;
       orderRequestModel.addressLine1 = "";
       orderRequestModel.addressLine2 = "";
       orderRequestModel.country = "";
@@ -1312,14 +1313,14 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
     orderRequestModel.allowPromoNotifications = false;
     orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
-    orderRequestModel.orderItemsList = getOrderItemList();
+    orderRequestModel.orderItemsList = _getOrderItemList();
 
     return orderRequestModel;
   }
 
-  List<OrderItemsList> getOrderItemList() {
+  List<OrderItemsList> _getOrderItemList() {
     List<OrderItemsList> orderList = [];
-    for (var item in selectedMenuItems) {
+    for (var item in _selectedMenuItems) {
       OrderItemsList orderItem = OrderItemsList();
       orderItem.name = item.name;
       orderItem.itemId = item.id;
@@ -1331,14 +1332,14 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       orderItem.key = "";
       orderItem.values = "";
       orderItem.foodExtraItemMappingList = item.selectedExtras.isNotEmpty
-          ? getExtraItemsList(item.selectedExtras)
+          ? _getExtraItemsList(item.selectedExtras)
           : [];
       orderList.add(orderItem);
     }
     return orderList;
   }
 
-  List<FoodExtraItemMappingList> getExtraItemsList(
+  List<FoodExtraItemMappingList> _getExtraItemsList(
       List<FoodExtraItems> selectedExtras) {
     List<FoodExtraItemMappingList> extrasList = [];
     FoodExtraItemMappingList mappingObj = FoodExtraItemMappingList();
@@ -1362,49 +1363,49 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   //Navigation
-  showPaymentScreen() {
-    PlaceOrderRequestModel requestModel = getOrderRequestModel();
+  _showPaymentScreen() {
+    PlaceOrderRequestModel requestModel = _getOrderRequestModel();
     Map billDetails = {
-      'tip': tip,
-      "discount": discount,
+      'tip': _tip,
+      "discount": _discount,
       'totalAmount': totalAmount,
       'foodCost': totalAmountOfSelectedItems,
-      'salesTax': getSalesTax()
+      'salesTax': _getSalesTax()
     };
     Navigator.of(context)
         .push(MaterialPageRoute(
             builder: (context) => PaymentScreen(
                   events: widget.events,
                   placeOrderRequestModel: requestModel,
-                  selectedMenuItems: selectedMenuItems,
+                  selectedMenuItems: _selectedMenuItems,
                   billDetails: billDetails,
-                  userName: userName,
+                  userName: _userName,
                 )))
         .then((value) => {
               P2PConnectionManager.shared.getP2PContractor(this),
               if (value != null)
                 {
                   if (value["isOrderComplete"] == "True")
-                    {clearCart()}
+                    {_clearCart()}
                   else if (value["orderID"] != "NA")
-                    {orderID = value["orderID"]}
+                    {_orderID = value["orderID"]}
                 }
             });
   }
 
   //API Call
-  callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
-    PlaceOrderRequestModel requestModel = getOrderRequestModel();
-    orderPresenter.placeOrder(requestModel);
+  _callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+    PlaceOrderRequestModel requestModel = _getOrderRequestModel();
+    _orderPresenter.placeOrder(requestModel);
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
   }
 
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
     CommonWidgets().showErrorSnackBar(
         errorMessage: exception.message ?? StringConstants.somethingWentWrong,
@@ -1415,19 +1416,19 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   void showSuccess(response) {
     GeneralSuccessModel responseModel = response;
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
     CommonWidgets().showSuccessSnackBar(
         message: responseModel.general![0].message ??
             StringConstants.eventCreatedSuccessfully,
         context: context);
-    clearCart();
+    _clearCart();
   }
 
   @override
   void showErrorForPlaceOrder(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -1437,29 +1438,29 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   @override
   void showSuccessForPlaceOrder(response) {
     // TODO: implement showSuccessForPay
-    placeOrderResponseModel = response;
-    if (placeOrderResponseModel.id != null) {
+    _placeOrderResponseModel = response;
+    if (_placeOrderResponseModel.id != null) {
       setState(() {
-        isApiProcess = false;
-        orderID = placeOrderResponseModel.id!;
-        orderCode = placeOrderResponseModel.orderCode!;
-        saveOrderIntoLocalDB(orderID, orderCode);
+        _isApiProcess = false;
+        _orderID = _placeOrderResponseModel.id!;
+        _orderCode = _placeOrderResponseModel.orderCode!;
+        _saveOrderIntoLocalDB(_orderID, _orderCode);
       });
     }
   }
 
-  saveOrderIntoLocalDB(String orderId, String orderCode) async {
+  _saveOrderIntoLocalDB(String orderId, String orderCode) async {
     var result = await SavedOrdersDAO().getOrder(orderId);
     if (result != null) {
-      await SavedOrdersDAO().clearEventDataByOrderID(orderID);
-      insertSavedOrderData(orderId, orderCode);
+      await SavedOrdersDAO().clearEventDataByOrderID(_orderID);
+      _insertSavedOrderData(orderId, orderCode);
     } else {
-      insertSavedOrderData(orderId, orderCode);
+      _insertSavedOrderData(orderId, orderCode);
     }
   }
 
-  insertSavedOrderData(String orderId, String orderCode) async {
-    PlaceOrderRequestModel orderRequestModel = getOrderRequestModel();
+  _insertSavedOrderData(String orderId, String orderCode) async {
+    PlaceOrderRequestModel orderRequestModel = _getOrderRequestModel();
     String customerName = orderRequestModel.firstName != null
         ? "${orderRequestModel.firstName} " + orderRequestModel.lastName!
         : StringConstants.guestCustomer;
@@ -1481,8 +1482,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         city: orderRequestModel.city.toString(),
         zipCode: orderRequestModel.zipCode.toString(),
         orderDate: orderRequestModel.orderDate!,
-        tip: tip,
-        discount: discount,
+        tip: _tip,
+        discount: _discount,
         foodCost: totalAmountOfSelectedItems,
         totalAmount: totalAmount,
         payment: "NA",
@@ -1492,7 +1493,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         refundAmount: 0.0));
 
     // Insert Items into DB
-    List<OrderItemsList> orderItem = getOrderItemList();
+    List<OrderItemsList> orderItem = _getOrderItemList();
     for (var items in orderItem) {
       await SavedOrdersItemsDAO().insert(SavedOrdersItem(
           orderId: orderId,
@@ -1506,7 +1507,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     }
 
     // Insert extra item into DB
-    for (var items in selectedMenuItems) {
+    for (var items in _selectedMenuItems) {
       if (items.selectedExtras.isNotEmpty) {
         for (var extra in items.selectedExtras) {
           await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(
@@ -1522,7 +1523,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         }
       }
     }
-    clearCart();
+    _clearCart();
     CommonWidgets().showSuccessSnackBar(
         message: StringConstants.savedOrderSuccess, context: context);
   }
@@ -1531,27 +1532,27 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   @override
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == CustomerActionConst.orderConfirmed) {
-      showPaymentScreen();
+      _showPaymentScreen();
     } else if (response.action == CustomerActionConst.tip) {
       setState(() {
-        tip = double.parse(response.data);
+        _tip = double.parse(response.data);
       });
-      addTipTextFieldController.text = response.data;
+      _addTipTextFieldController.text = response.data;
     }
   }
 
-  updateTipToCustomer(String tip) {
+  _updateTipToCustomer(String tip) {
     P2PConnectionManager.shared
         .notifyChangeToStaff(action: StaffActionConst.tip, data: tip);
   }
 
   // Delete Order function start from here
-  deleteOrder() async {
+  _deleteOrder() async {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    await SavedOrdersDAO().clearEventDataByOrderID(orderID).then((value) {
-      eventPresenter.deleteOrder(orderId: orderID);
+    await SavedOrdersDAO().clearEventDataByOrderID(_orderID).then((value) {
+      _eventPresenter.deleteOrder(orderId: _orderID);
     });
   }
 }
