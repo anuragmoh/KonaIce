@@ -1,14 +1,7 @@
-// To parse this JSON data, do
-//
-//     final generalSuccessModel = generalSuccessModelFromJson(jsonString);
-
 import 'dart:convert';
 
 GeneralSuccessModel generalSuccessModelFromJson(String str) =>
     GeneralSuccessModel.fromJson(json.decode(str));
-
-String generalSuccessModelToJson(GeneralSuccessModel data) =>
-    json.encode(data.toJson());
 
 class GeneralSuccessModel {
   GeneralSuccessModel({

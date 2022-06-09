@@ -3,9 +3,6 @@ import 'dart:convert';
 PlaceOrderResponseModel placeOrderResponseModelFromJson(String str) =>
     PlaceOrderResponseModel.fromJson(json.decode(str));
 
-String? placeOrderResponseModelToJson(PlaceOrderResponseModel data) =>
-    json.encode(data.toJson());
-
 class PlaceOrderResponseModel {
   PlaceOrderResponseModel({
     this.id,
@@ -111,11 +108,11 @@ class PlaceOrderResponseModel {
   String? eventId;
   String? franchiseId;
   String? orderCode;
-  dynamic anonymousId;
-  dynamic campaignId;
+  String? anonymousId;
+  String? campaignId;
   String? firstName;
   String? lastName;
-  dynamic email;
+  String? email;
   String? phoneNumCountryCode;
   String? phoneNumber;
   String? addressLine1;
@@ -124,19 +121,19 @@ class PlaceOrderResponseModel {
   String? state;
   String? city;
   String? zipCode;
-  dynamic key;
-  dynamic values;
-  dynamic specialInstructions;
+  String? key;
+  String? values;
+  String? specialInstructions;
   String? orderStatus;
   String? paymentStatus;
-  dynamic countryName;
+  String? countryName;
   String? stateName;
-  dynamic refundAmount;
-  dynamic recipientName;
+  String? refundAmount;
+  String? recipientName;
   bool? campaignShareRefund;
   bool? orderAmountRefund;
   bool? totalRefund;
-  dynamic addressLocation;
+  String? addressLocation;
   double? addressLatitude;
   double? addressLongitude;
   String? paymentTerm;
@@ -146,22 +143,22 @@ class PlaceOrderResponseModel {
   bool? preOrder;
   String? orderAttribute;
   bool? partialRefund;
-  dynamic adminRefundAmount;
-  dynamic franchiseRefundAmount;
+  String? adminRefundAmount;
+  String? franchiseRefundAmount;
   String? userId;
   String? paymentModule;
   String? createdByRoleCode;
-  dynamic subAccountId;
-  dynamic userAddressId;
+  String? subAccountId;
+  String? userAddressId;
   List<OrderItemsDetailList>? orderItemsList;
   String? franchisePhoneNumber;
   OrderInvoice? orderInvoice;
   String? franchiseAddressLine2;
-  dynamic stripePublishableKey;
-  dynamic franchiseState;
-  dynamic connectedStripeAccountId;
+  String? stripePublishableKey;
+  String? franchiseState;
+  String? connectedStripeAccountId;
   String? franchiseAddressLine1;
-  dynamic clientSecret;
+  String? clientSecret;
   String? franchiseName;
   String? franchiseCode;
   String? franchiseEmail;
@@ -183,10 +180,10 @@ class PlaceOrderResponseModel {
   String? additionalPaymentFieldLabel;
   double? minimumOrderAmount;
   bool? displayAdditionalPaymentField;
-  dynamic campaign;
+  String? campaign;
   bool? displayGratuityField;
-  dynamic comments;
-  dynamic transactionId;
+  String? comments;
+  String? transactionId;
   String? locationNotes;
   int? minimumDeliveryTime;
   String? deliveryMessage;

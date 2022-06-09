@@ -12,7 +12,6 @@ import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
@@ -23,13 +22,13 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen>
     implements ResponseContractor {
-  late UserPresenter userPresenter;
+  late UserPresenter _userPresenter;
 
   _SettingScreenState() {
-    userPresenter = UserPresenter(this);
+    _userPresenter = UserPresenter(this);
   }
 
-  bool isApiProcess = false;
+  bool _isApiProcess = false;
 
   @override
   void initState() {
@@ -40,42 +39,42 @@ class _SettingScreenState extends State<SettingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3),
-        child: Center(child: body()),
+        color: AppColors.textColor3,
+        child: Center(child: _body()),
       ),
     );
   }
 
-  Widget body() {
+  Widget _body() {
     return CommonWidgets().buttonWidget(StringConstants.signOut, () {
-      onTapSignOutButton();
+      _onTapSignOutButton();
     });
   }
 
   //Action Event
-  onTapSignOutButton() {
-    callLogoutApi();
+  _onTapSignOutButton() {
+    _callLogoutApi();
   }
 
   //API Call
-  callLogoutApi() {
+  _callLogoutApi() {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
 
-    userPresenter.logOut();
+    _userPresenter.logOut();
   }
 
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -86,15 +85,15 @@ class _SettingScreenState extends State<SettingScreen>
   void showSuccess(response) {
     final service = ServiceNotifier();
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       service.increment(0);
     });
-    deleteUserInformation();
+    _deleteUserInformation();
   }
 
   //DB Operations
 
-  deleteUserInformation() async {
+  _deleteUserInformation() async {
     await SessionDAO().delete(DatabaseKeys.sessionKey);
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));

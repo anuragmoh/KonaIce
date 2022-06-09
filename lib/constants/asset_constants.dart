@@ -4,8 +4,9 @@ class AssetsConstants {
   static const assetsPath = 'assets/images/';
   static const assetsTopBarIconsPath = assetsPath + 'top_bar_icons/';
   static const assetsBottomBarIconsPath = assetsPath + 'bottom_bar_icons/';
+  static const assetsAnimationsPath = 'assets/animations/';
 
-  static const konaIcon = assetsPath + 'ic_konaice_icon.png';
+  static const konaIcon = assetsPath +'ic_konaice_icon.png';
   static const clockInOutIcon = assetsPath + 'clock_in_out.png';
   static const locationPinIcon = assetsPath + 'location_pin.png';
   static const dateIcon = assetsPath + 'date.png';
@@ -17,23 +18,15 @@ class AssetsConstants {
   static const staffMode = assetsPath + 'staff_selection_mode.png';
   static const customerMode = assetsPath + 'user_selection_mode.png';
 
-  static const homeUnSelectedIcon =
-      assetsBottomBarIconsPath + 'home_unselected.png';
-  static const homeSelectedIcon =
-      assetsBottomBarIconsPath + 'home_selected.png';
-  static const notificationUnSelectedIcon =
-      assetsBottomBarIconsPath + 'notification_unselected.png';
-  static const notificationSelectedIcon =
-      assetsBottomBarIconsPath + 'notification_selected.png';
-  static const settingsUnSelectedIcon =
-      assetsBottomBarIconsPath + 'settings_unselected.png';
-  static const settingsSelectedIcon =
-      assetsBottomBarIconsPath + 'settings_selected.png';
-  static const switchAccountUnSelectedIcon =
-      assetsBottomBarIconsPath + 'ic_switch_account_unselected.png';
+  static const homeUnSelectedIcon = assetsBottomBarIconsPath + 'home_unselected.png';
+  static const homeSelectedIcon = assetsBottomBarIconsPath + 'home_selected.png';
+  static const notificationUnSelectedIcon = assetsBottomBarIconsPath + 'notification_unselected.png';
+  static const notificationSelectedIcon = assetsBottomBarIconsPath + 'notification_selected.png';
+  static const settingsUnSelectedIcon = assetsBottomBarIconsPath + 'settings_unselected.png';
+  static const settingsSelectedIcon = assetsBottomBarIconsPath + 'settings_selected.png';
+  static const switchAccountUnSelectedIcon = assetsBottomBarIconsPath +'ic_switch_account_unselected.png';
   static const topBarAppIcon = assetsTopBarIconsPath + 'top_bar_app_icon.png';
-  static const dropDownArrowIcon =
-      assetsTopBarIconsPath + 'drop_down_arrow.png';
+  static const dropDownArrowIcon = assetsTopBarIconsPath + 'drop_down_arrow.png';
 
   static const switchAccount = assetsPath + 'ic_switch_account.png';
 
@@ -57,9 +50,10 @@ class AssetsConstants {
   static const popupCloseIcon = assetsPath + 'close.png';
   static const tabletIcon = assetsPath + 'tablet_icon.png';
   static const creditCardScan = assetsPath + 'ic_credit_card_scan.png';
+  static const insertCardAnimationPath = assetsAnimationsPath + 'insertCard.json';
+  static const progressAnimationPath = assetsAnimationsPath + 'progress.json';
+  static const removeCardAnimationPath = assetsAnimationsPath + 'removeCard.json';
 
   static const defaultProfileImage = assetsPath + 'default_profile_icon.png';
-  static const assetsAnimationsPath = 'assets/animations/';
-  static const insertCardAnimationPath =
-      assetsAnimationsPath + 'insertCard.json';
+
 }

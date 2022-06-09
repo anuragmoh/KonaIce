@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -6,8 +7,6 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:badges/badges.dart';
 
 class TopBar extends StatefulWidget {
   final String userName;
@@ -45,7 +44,7 @@ class _TopBarState extends State<TopBar> {
     return Container(
       height: 85.0,
       decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
+          color: AppColors.primaryColor1,
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(8.0),
               bottomRight: Radius.circular(8.0))),
@@ -108,7 +107,7 @@ class _TopBarState extends State<TopBar> {
           '3',
           style: StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.whiteColor),
+              color: AppColors.whiteColor,
               fontFamily: FontConstants.montserratSemiBold),
         ),
         child: CommonWidgets().image(
@@ -141,7 +140,7 @@ class _TopBarState extends State<TopBar> {
                           eventName,
                           StyleConstants.customTextStyle(
                               fontSize: 16.0,
-                              color: getMaterialColor(AppColors.whiteColor),
+                              color: AppColors.whiteColor,
                               fontFamily: FontConstants.montserratBold)),
                     ),
                     Visibility(
@@ -159,7 +158,7 @@ class _TopBarState extends State<TopBar> {
                   softWrap: false,
                   style: StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.whiteColor),
+                      color: AppColors.whiteColor,
                       fontFamily: FontConstants.montserratRegular),
                 ),
               ],
@@ -169,11 +168,15 @@ class _TopBarState extends State<TopBar> {
       );
 
   Widget centerWidget() {
+    return buildContainer();
+  }
+
+  Container buildContainer() {
     return Container(
       width: 244.0,
       decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          border: Border.all(color: getMaterialColor(AppColors.primaryColor2))),
+          border: Border.all(color: AppColors.primaryColor2)),
       child: Row(
         children: [
           GestureDetector(
@@ -184,29 +187,7 @@ class _TopBarState extends State<TopBar> {
 
               widget.onTapCallBack(isProduct);
             },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                color: isProduct
-                    ? getMaterialColor(AppColors.primaryColor2)
-                    : null,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 38.0, vertical: 9.0),
-                child: CommonWidgets().textWidget(
-                    StringConstants.product,
-                    isProduct
-                        ? StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratBold)
-                        : StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.whiteColor),
-                            fontFamily: FontConstants.montserratMedium)),
-              ),
-            ),
+            child: buildContainer2(),
           ),
           GestureDetector(
             onTap: () {
@@ -215,31 +196,55 @@ class _TopBarState extends State<TopBar> {
               });
               widget.onTapCallBack(isProduct);
             },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                color: !isProduct
-                    ? getMaterialColor(AppColors.primaryColor2)
-                    : null,
-              ),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 36.5, vertical: 9.0),
-                child: CommonWidgets().textWidget(
-                    StringConstants.orders,
-                    !isProduct
-                        ? StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor1),
-                            fontFamily: FontConstants.montserratBold)
-                        : StyleConstants.customTextStyle(
-                            fontSize: 12.0,
-                            color: getMaterialColor(AppColors.whiteColor),
-                            fontFamily: FontConstants.montserratMedium)),
-              ),
-            ),
+            child: buildContainer3(),
           ),
         ],
+      ),
+    );
+  }
+
+  Container buildContainer3() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        color: !isProduct ? AppColors.primaryColor2 : null,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 36.5, vertical: 9.0),
+        child: CommonWidgets().textWidget(
+            StringConstants.orders,
+            !isProduct
+                ? StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratBold)
+                : StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.whiteColor,
+                    fontFamily: FontConstants.montserratMedium)),
+      ),
+    );
+  }
+
+  Container buildContainer2() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        color: isProduct ? AppColors.primaryColor2 : null,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 38.0, vertical: 9.0),
+        child: CommonWidgets().textWidget(
+            StringConstants.product,
+            isProduct
+                ? StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratBold)
+                : StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.whiteColor,
+                    fontFamily: FontConstants.montserratMedium)),
       ),
     );
   }

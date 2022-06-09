@@ -10,18 +10,17 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/network_model/login/login_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/forget_password/forget_password_screen.dart';
-import 'package:kona_ice_pos/models/network_model/login/login_model.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -32,41 +31,48 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     implements ResponseContractor {
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-  late UserPresenter userPresenter;
-  LoginRequestModel loginRequestModel = LoginRequestModel();
+  late UserPresenter _userPresenter;
+  LoginRequestModel _loginRequestModel = LoginRequestModel();
 
   _LoginScreenState() {
-    userPresenter = UserPresenter(this);
+    _userPresenter = UserPresenter(this);
   }
-  bool isEmailValid = true;
-  bool isPasswordValid = true;
-  bool isPasswordVisible = true;
-  bool isLoginView = true;
-  bool isApiProcess = false;
-  String osVersion = '';
-  String deviceName = '';
-  String emailValidationMessage = "";
-  String passwordValidationMessage = "";
+  bool _isEmailValid = true;
+  bool _isPasswordValid = true;
+  bool _isPasswordVisible = true;
+  bool _isLoginView = true;
+  bool _isApiProcess = false;
+  String _osVersion = '';
+  String _deviceName = '';
+  String _emailValidationMessage = "";
+  String _passwordValidationMessage = "";
 
   @override
   void initState() {
     super.initState();
-    removeModeSelectionScreen();
+    _removeModeSelectionScreen();
   }
 
   @override
   Widget build(BuildContext context) {
-    getDeviceInfo();
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    _getDeviceInfo();
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
@@ -77,13 +83,13 @@ class _LoginScreenState extends State<LoginScreen>
                 padding: EdgeInsets.only(
                     top: 6.77 * SizeConfig.imageSizeMultiplier,
                     bottom: 5.07 * SizeConfig.imageSizeMultiplier),
-                child: icon(),
+                child: _icon(),
               ),
-              isLoginView
-                  ? loginContainer()
+              _isLoginView
+                  ? _loginContainer()
                   : ForgetPasswordScreen(
-                      navigateBackToLoginView: onTapFromForgetPasswordView,
-                      forgotPasswordLoader: onForgotPasswordScreenLoader,
+                      navigateBackToLoginView: _onTapFromForgetPasswordView,
+                      forgotPasswordLoader: _onForgotPasswordScreenLoader,
                     ), // loginContainer(),
             ],
           ),
@@ -92,174 +98,179 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  onForgotPasswordScreenLoader(bool isLoaderOn) {
+  _onForgotPasswordScreenLoader(bool isLoaderOn) {
     setState(() {
-      isApiProcess = isLoaderOn;
+      _isApiProcess = isLoaderOn;
     });
   }
 
-  Widget icon() {
+  Widget _icon() {
     return CommonWidgets().image(
         image: AssetsConstants.konaIcon,
         width: 20.96 * SizeConfig.imageSizeMultiplier,
         height: 15.62 * SizeConfig.imageSizeMultiplier);
   }
 
-  Widget loginContainer() {
+  Widget _loginContainer() {
     return Container(
       width: 360,
       decoration:
           StyleConstants.customBoxShadowDecorationStyle(circularRadius: 3.6),
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: 3.25 * SizeConfig.imageSizeMultiplier,
-                horizontal: 141.0),
-            child: textWidget(
-                StringConstants.loginText,
-                StyleConstants.customTextStyle22MontserratBold(
-                    color: getMaterialColor(AppColors.textColor1))),
-          ),
+          _imagePadding(),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 23.0),
-              child: textWidget(
+              child: _textWidget(
                   StringConstants.emailId,
                   StyleConstants.customTextStyle14MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: 0.65 * SizeConfig.imageSizeMultiplier,
-                bottom: 2.60 * SizeConfig.imageSizeMultiplier,
-                left: 22.0,
-                right: 22.0),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                onChanged: (value) {
-                  emailValidation();
-                },
-                maxLength: 100,
-                controller: emailController,
-                decoration: InputDecoration(
-                  counterText: "",
-                  border: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  hintText: StringConstants.hintEmail,
-                  errorText: emailValidationMessage,
-                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1)),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  errorBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primaryColor1, width: 1.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _paddingEmail(),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 23.0),
-              child: textWidget(
+              child: _textWidget(
                   StringConstants.password,
                   StyleConstants.customTextStyle14MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1)),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(
-                top: 0.65 * SizeConfig.imageSizeMultiplier,
-                left: 22.0,
-                right: 22.0),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 4.0),
-              child: TextField(
-                textInputAction: TextInputAction.done,
-                onChanged: (value) {
-                  passwordValidation();
-                },
-                controller: passwordController,
-                obscureText: isPasswordVisible,
-                decoration: InputDecoration(
-                  suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isPasswordVisible = !isPasswordVisible;
-                        });
-                      },
-                      child: isPasswordVisible
-                          ? const Icon(Icons.visibility_off)
-                          : const Icon(Icons.visibility)),
-                  border: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  hintText: StringConstants.password,
-                  errorText: passwordValidationMessage,
-                  hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                      color: getMaterialColor(AppColors.textColor1)),
-                  focusedBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.textColor2, width: 1.0),
-                  ),
-                  errorBorder: const OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.primaryColor1, width: 1.0),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _paddingPassword(),
           Align(
             alignment: Alignment.topRight,
             child: Padding(
               padding: EdgeInsets.only(
                   right: 21.0, bottom: 2.60 * SizeConfig.imageSizeMultiplier),
               child: InkWell(
-                onTap: onTapForgotPassword,
-                child: textWidget(
+                onTap: _onTapForgotPassword,
+                child: _textWidget(
                     StringConstants.forgotPassword,
                     StyleConstants.customTextStyle12MontserratBold(
-                        color: getMaterialColor(AppColors.denotiveColor4))),
+                        color: AppColors.denotiveColor4)),
               ),
             ),
           ),
-          signInButton(
+          _signInButton(
               StringConstants.signIn,
               StyleConstants.customTextStyle12MontserratBold(
-                  color: getMaterialColor(AppColors.textColor1))),
+                  color: AppColors.textColor1)),
         ],
       ),
     );
   }
 
-  Widget textWidget(String textTitle, TextStyle textStyle) {
+  Padding _paddingPassword() {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: 0.65 * SizeConfig.imageSizeMultiplier, left: 22.0, right: 22.0),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: TextField(
+          textInputAction: TextInputAction.done,
+          onChanged: (value) {
+            _passwordValidation();
+          },
+          controller: _passwordController,
+          obscureText: _isPasswordVisible,
+          decoration: InputDecoration(
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
+                child: _isPasswordVisible
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility)),
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            hintText: 'Password',
+            errorText: _passwordValidationMessage,
+            hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                color: AppColors.textColor1),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: AppColors.primaryColor1, width: 1.0),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _paddingEmail() {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: 0.65 * SizeConfig.imageSizeMultiplier,
+          bottom: 2.60 * SizeConfig.imageSizeMultiplier,
+          left: 22.0,
+          right: 22.0),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 4.0),
+        child: TextField(
+          keyboardType: TextInputType.emailAddress,
+          textInputAction: TextInputAction.next,
+          onChanged: (value) {
+            _emailValidation();
+          },
+          maxLength: 100,
+          controller: _emailController,
+          decoration: InputDecoration(
+            counterText: "",
+            border: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            hintText: 'abc@gmail.com',
+            errorText: _emailValidationMessage,
+            hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                color: AppColors.textColor1),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.textColor2, width: 1.0),
+            ),
+            errorBorder: const OutlineInputBorder(
+              borderSide:
+                  BorderSide(color: AppColors.primaryColor1, width: 1.0),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Padding _imagePadding() {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          vertical: 3.25 * SizeConfig.imageSizeMultiplier, horizontal: 141.0),
+      child: _textWidget(
+          StringConstants.loginText,
+          StyleConstants.customTextStyle22MontserratBold(
+              color: AppColors.textColor1)),
+    );
+  }
+
+  Widget _textWidget(String textTitle, TextStyle textStyle) {
     return Text(textTitle, style: textStyle);
   }
 
-  Widget signInButton(String buttonText, TextStyle textStyle) {
+  Widget _signInButton(String buttonText, TextStyle textStyle) {
     return Padding(
       padding: EdgeInsets.only(bottom: 5.72 * SizeConfig.imageSizeMultiplier),
       child: GestureDetector(
         onTap: () {
-          onTapSingIn();
+          _onTapSingIn();
         },
         child: Container(
           decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor2),
+            color: AppColors.primaryColor2,
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
@@ -273,63 +284,65 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
-  emailValidation() {
-    if (emailController.text.isEmpty) {
+  _emailValidation() {
+    if (_emailController.text.isEmpty) {
       setState(() {
-        emailValidationMessage = StringConstants.emptyValidEmail;
+        _emailValidationMessage = StringConstants.emptyValidEmail;
       });
       return false;
     }
-    if (!emailController.text.isValidEmail()) {
+    if (!_emailController.text.isValidEmail()) {
       setState(() {
-        emailValidationMessage = StringConstants.enterValidEmail;
+        _emailValidationMessage = StringConstants.enterValidEmail;
       });
       return false;
     }
-    if (emailController.text.isValidEmail()) {
+    if (_emailController.text.isValidEmail()) {
       setState(() {
-        emailValidationMessage = "";
+        _emailValidationMessage = "";
       });
       return true;
     }
   }
 
-  passwordValidation() {
-    if (passwordController.text.isEmpty) {
+  _passwordValidation() {
+    if (_passwordController.text.isEmpty) {
       setState(() {
-        passwordValidationMessage = StringConstants.emptyValidPassword;
+        _passwordValidationMessage = StringConstants.emptyValidPassword;
       });
       return false;
     }
-    if (!passwordController.text.isValidPassword()) {
+    if (!_passwordController.text.isValidPassword()) {
       setState(() {
-        passwordValidationMessage = "";
+        _passwordValidationMessage = "";
       });
       return false;
     }
-    if (passwordController.text.isValidPassword()) {
+    if (_passwordController.text.isValidPassword()) {
       setState(() {
-        passwordValidationMessage = "";
+        _passwordValidationMessage = "";
       });
       return true;
     }
   }
 
-  onTapSingIn() {
+  _onTapSingIn() {
     FocusScope.of(context).unfocus();
     setState(() {
-      emailController.text.isEmpty ? isEmailValid = false : isEmailValid = true;
-      passwordController.text.isEmpty
-          ? isPasswordValid = false
-          : isPasswordValid = true;
+      _emailController.text.isEmpty || !_emailController.text.isValidEmail()
+          ? _isEmailValid = false
+          : _isEmailValid = true;
+      _passwordController.text.isEmpty
+          ? _isPasswordValid = false
+          : _isPasswordValid = true;
     });
-    emailValidation();
-    passwordValidation();
+    _emailValidation();
+    _passwordValidation();
 
-    if (isEmailValid && isPasswordValid) {
+    if (_isEmailValid && _isPasswordValid) {
       CheckConnection().connectionState().then((value) {
         if (value == true) {
-          callLoginApi();
+          _callLoginApi();
         } else {
           CommonWidgets().showErrorSnackBar(
               errorMessage: StringConstants.noInternetConnection,
@@ -339,15 +352,15 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  onTapForgotPassword() {
+  _onTapForgotPassword() {
     setState(() {
-      isLoginView = false;
+      _isLoginView = false;
     });
   }
 
-  onTapFromForgetPasswordView(String message) {
+  _onTapFromForgetPasswordView(String message) {
     setState(() {
-      isLoginView = true;
+      _isLoginView = true;
     });
     if (message != "") {
       CommonWidgets().showSuccessSnackBar(message: message, context: context);
@@ -355,33 +368,33 @@ class _LoginScreenState extends State<LoginScreen>
   }
 
   //API Calls
-  callLoginApi() {
+  _callLoginApi() {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    loginRequestModel.email = emailController.text.toString();
-    loginRequestModel.password = passwordController.text.toString();
-    loginRequestModel.deviceId = deviceName;
-    loginRequestModel.deviceType = Platform.operatingSystem;
-    loginRequestModel.deviceModel = deviceName;
-    loginRequestModel.os = Platform.operatingSystem;
-    loginRequestModel.osVersion = osVersion;
-    loginRequestModel.appVersion = AssetsConstants.appVersion;
-    loginRequestModel.deviceName = deviceName;
-    userPresenter.login(loginRequestModel);
+    _loginRequestModel.email = _emailController.text.toString();
+    _loginRequestModel.password = _passwordController.text.toString();
+    _loginRequestModel.deviceId = _deviceName;
+    _loginRequestModel.deviceType = Platform.operatingSystem;
+    _loginRequestModel.deviceModel = _deviceName;
+    _loginRequestModel.os = Platform.operatingSystem;
+    _loginRequestModel.osVersion = _osVersion;
+    _loginRequestModel.appVersion = AssetsConstants.appVersion;
+    _loginRequestModel.deviceName = _deviceName;
+    _userPresenter.login(_loginRequestModel);
   }
 
-  getDeviceInfo() async {
+  _getDeviceInfo() async {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    osVersion = iosInfo.systemVersion;
-    deviceName = iosInfo.localizedModel;
+    _osVersion = iosInfo.systemVersion;
+    _deviceName = iosInfo.localizedModel;
   }
 
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -391,23 +404,24 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void showSuccess(response) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
     LoginResponseModel loginResponseModel = response;
-    checkUserDataAvailableINDB(loginResponseModel);
+    _checkUserDataAvailableINDB(loginResponseModel);
   }
 
   //DB Operations
-  checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
+  _checkUserDataAvailableINDB(LoginResponseModel loginResponseModel) async {
     var sessionObj = await SessionDAO().getValueForKey(DatabaseKeys.userID);
     if (sessionObj != null && sessionObj.value == loginResponseModel.id) {
+      debugPrint("old user");
     } else {
       await FunctionalUtils.clearAllDBData();
     }
-    storeInformation(loginResponseModel);
+    _storeInformation(loginResponseModel);
   }
 
-  storeInformation(LoginResponseModel loginResponseModel) async {
+  _storeInformation(LoginResponseModel loginResponseModel) async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.sessionKey, value: loginResponseModel.sessionKey!));
     await FunctionalUtils.saveUserDetailInDB(userModel: loginResponseModel);
@@ -415,7 +429,7 @@ class _LoginScreenState extends State<LoginScreen>
         MaterialPageRoute(builder: (context) => const AccountSwitchScreen()));
   }
 
-  removeModeSelectionScreen() async {
+  _removeModeSelectionScreen() async {
     await SessionDAO().delete(DatabaseKeys.selectedMode);
   }
 }

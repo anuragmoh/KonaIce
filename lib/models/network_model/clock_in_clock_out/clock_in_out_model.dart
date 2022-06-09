@@ -1,11 +1,5 @@
 import 'dart:convert';
 
-ClockInOutRequestModel clockInOutRequestModelFromJson(String str) =>
-    ClockInOutRequestModel.fromJson(json.decode(str));
-
-String clockInOutRequestModelToJson(ClockInOutRequestModel data) =>
-    json.encode(data.toJson());
-
 class ClockInOutRequestModel {
   ClockInOutRequestModel({
     this.dutyStatus,
@@ -28,10 +22,6 @@ List<ClockInOutDetailsResponseModel> clockInOutDetailsResponseModelFromJson(
     List<ClockInOutDetailsResponseModel>.from(json
         .decode(str)
         .map((x) => ClockInOutDetailsResponseModel.fromJson(x)));
-
-String clockInOutDetailsResponseModelToJson(
-        List<ClockInOutDetailsResponseModel> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ClockInOutDetailsResponseModel {
   ClockInOutDetailsResponseModel({

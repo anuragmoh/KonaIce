@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
@@ -9,8 +10,8 @@ import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/screens/payment_option/P2PCardDetailsModel.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 
 import 'p2p_models/p2p_order_details_model.dart';
 
