@@ -1,10 +1,4 @@
-import 'dart:convert';
 
-PayOrderRequestModel payOrderRequestModelFromJson(String str) =>
-    PayOrderRequestModel.fromJson(json.decode(str));
-
-String payOrderRequestModelToJson(PayOrderRequestModel data) =>
-    json.encode(data.toJson());
 
 class PayOrderRequestModel {
   PayOrderRequestModel({
@@ -30,12 +24,6 @@ class PayOrderRequestModel {
         "orderId": orderId,
       };
 }
-
-PayOrderCardRequestModel payOrderCardRequestModelFromJson(String str) =>
-    PayOrderCardRequestModel.fromJson(json.decode(str));
-
-String payOrderCardRequestModelToJson(PayOrderCardRequestModel data) =>
-    json.encode(data.toJson());
 
 class PayOrderCardRequestModel {
   PayOrderCardRequestModel({

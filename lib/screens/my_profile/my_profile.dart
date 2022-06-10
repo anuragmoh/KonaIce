@@ -21,7 +21,6 @@ import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class MyProfile extends StatefulWidget {
   const MyProfile({Key? key}) : super(key: key);
@@ -31,49 +30,61 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> implements ResponseContractor {
-  int currentIndex = 0;
-  bool isApiProcess = false;
-  bool isPasswordVisible = true;
-  bool editMode = false;
-  var userName = '';
-  String emailValidationMessage = "",
-      firstNameValidationMessage = "",
-      lastNameValidationMessage = "",
-      contactNumberValidationMessage = "",
-      passwordValidationMessage = "";
-  bool isEmailValid = true;
-  bool isFirstNameValid = true;
-  bool isLastNameValid = true;
-  bool isContactValid = true;
-  bool isPasswordValid = true;
+  int _currentIndex = 0;
+  bool _isApiProcess = false;
+  bool _isPasswordVisible = true;
+  bool _editMode = false;
+  var _userName = '';
+  String _emailValidationMessage = "",
+      _firstNameValidationMessage = "",
+      _lastNameValidationMessage = "",
+      _contactNumberValidationMessage = "",
+      _passwordValidationMessage = "";
+  bool _isEmailValid = true;
+  bool _isFirstNameValid = true;
+  bool _isLastNameValid = true;
+  bool _isContactValid = true;
+  bool _isPasswordValid = true;
 
-  MyProfileUpdateRequestModel myProfileUpdateRequestModel =
+  MyProfileUpdateRequestModel _myProfileUpdateRequestModel =
       MyProfileUpdateRequestModel();
-  late UserPresenter userPresenter;
-  List<MyProfileResponseModel> getMyProfile = [];
+  late UserPresenter _userPresenter;
+  List<MyProfileResponseModel> _getMyProfile = [];
 
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController contactNumberController = TextEditingController();
-  TextEditingController emailIdController = TextEditingController();
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _contactNumberController = TextEditingController();
+  TextEditingController _emailIdController = TextEditingController();
 
-  TextEditingController oldPasswordController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController _oldPasswordController = TextEditingController();
+  TextEditingController _newPasswordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
 
   _MyProfileState() {
-    userPresenter = UserPresenter(this);
+    _userPresenter = UserPresenter(this);
   }
 
-  getMyProfileDetails() async {
+  @override
+  void dispose() {
+    super.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _contactNumberController.dispose();
+    _emailIdController.dispose();
+    _oldPasswordController.dispose();
+    _newPasswordController.dispose();
+    _confirmPasswordController.dispose();
+  }
+
+  _getMyProfileDetails() async {
     String userID = await FunctionalUtils.getUserID();
 
     CheckConnection().connectionState().then((value) {
       if (value == true) {
         setState(() {
-          isApiProcess = true;
+          _isApiProcess = true;
         });
-        userPresenter.getMyProfile(userID);
+        _userPresenter.getMyProfile(userID);
       } else {
         CommonWidgets().showErrorSnackBar(
             errorMessage: StringConstants.noInternetConnection,
@@ -85,7 +96,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   @override
   void initState() {
     super.initState();
-    getMyProfileDetails();
+    _getMyProfileDetails();
     ServiceNotifier().increment(2);
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
@@ -94,33 +105,23 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    firstNameController.dispose();
-    lastNameController.dispose();
-    contactNumberController.dispose();
-    emailIdController.dispose();
-    newPasswordController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            CommonWidgets().dashboardTopBar(topBarComponent()),
-            Expanded(child: bodyWidget()),
+            CommonWidgets().dashboardTopBar(_topBarComponent()),
+            Expanded(child: _bodyWidget()),
             BottomBarWidget(
-              onTapCallBack: onTapBottomListItem,
+              onTapCallBack: _onTapBottomListItem,
               accountImageVisibility: false,
               isFromDashboard: false,
             )
@@ -130,75 +131,85 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     );
   }
 
-  onTapBottomListItem(int index) {
+  _onTapBottomListItem(int index) {
     setState(() {
-      currentIndex = index;
+      _currentIndex = index;
     });
   }
 
-  onTapChangePassword() {
+  _onTapChangePassword() {
     setState(() {
-      if (editMode == false) {
-        editMode = true;
+      if (_editMode == false) {
+        _editMode = true;
       } else {
-        editMode = false;
+        _editMode = false;
       }
     });
   }
 
-  onTapCancel() {
+  _onTapCancel() {
     setState(() {
-      editMode = false;
+      _editMode = false;
     });
   }
 
-  onTapSaveProfile() async {
+  _onTapSaveProfile() async {
     FocusScope.of(context).unfocus();
     setState(() {
-      emailIdController.text.isEmpty
-          ? isEmailValid = false
-          : isEmailValid = true;
-      newPasswordController.text.isEmpty
-          ? isPasswordValid = false
-          : isPasswordValid = true;
-      firstNameController.text.isEmpty
-          ? isFirstNameValid = false
-          : isFirstNameValid = true;
-      lastNameController.text.isEmpty
-          ? isLastNameValid = false
-          : isLastNameValid = true;
-      contactNumberController.text.isEmpty
-          ? isContactValid = false
-          : isContactValid = true;
+      _setBoolVars();
     });
-    myProfileUpdateRequestModel.firstName = firstNameController.text.toString();
-    myProfileUpdateRequestModel.lastName = lastNameController.text.toString();
-    myProfileUpdateRequestModel.email = emailIdController.text.toString();
-    myProfileUpdateRequestModel.phoneNum =
-        contactNumberController.text.toString();
-    myProfileUpdateRequestModel.numCountryCode =
-        getMyProfile[0].numCountryCode.toString();
-    myProfileUpdateRequestModel.password =
-        newPasswordController.text.toString();
-    myProfileUpdateRequestModel.franchiseName =
-        getMyProfile[0].franchiseName.toString();
-    myProfileUpdateRequestModel.franchiseEmail =
-        getMyProfile[0].franchiseEmail.toString();
-    myProfileUpdateRequestModel.franchisePhoneNumber =
-        getMyProfile[0].franchisePhoneNumber.toString();
-    myProfileUpdateRequestModel.franchisePhoneNumCountryCode =
-        getMyProfile[0].franchisePhoneNumCountryCode.toString();
-    myProfileUpdateRequestModel.profileImageFileId = "";
-    myProfileUpdateRequestModel.defaultTimezone =
-        getMyProfile[0].defaultTimezone.toString();
+    _getMyProfileDetailsToUpdate();
     String userID = await FunctionalUtils.getUserID();
 
-    if (isEmailValid && isFirstNameValid && isLastNameValid && isContactValid) {
+    _callUpdateProfile(userID);
+  }
+
+  void _setBoolVars() {
+    _emailIdController.text.isEmpty ? _isEmailValid = false : _isEmailValid = true;
+    _newPasswordController.text.isEmpty
+        ? _isPasswordValid = false
+        : _isPasswordValid = true;
+    _firstNameController.text.isEmpty
+        ? _isFirstNameValid = false
+        : _isFirstNameValid = true;
+    _lastNameController.text.isEmpty
+        ? _isLastNameValid = false
+        : _isLastNameValid = true;
+    _contactNumberController.text.isEmpty
+        ? _isContactValid = false
+        : _isContactValid = true;
+  }
+
+  void _getMyProfileDetailsToUpdate() {
+    _myProfileUpdateRequestModel.firstName = _firstNameController.text.toString();
+    _myProfileUpdateRequestModel.lastName = _lastNameController.text.toString();
+    _myProfileUpdateRequestModel.email = _emailIdController.text.toString();
+    _myProfileUpdateRequestModel.phoneNum =
+        _contactNumberController.text.toString();
+    _myProfileUpdateRequestModel.numCountryCode =
+        _getMyProfile[0].numCountryCode.toString();
+    _myProfileUpdateRequestModel.password =
+        _newPasswordController.text.toString();
+    _myProfileUpdateRequestModel.franchiseName =
+        _getMyProfile[0].franchiseName.toString();
+    _myProfileUpdateRequestModel.franchiseEmail =
+        _getMyProfile[0].franchiseEmail.toString();
+    _myProfileUpdateRequestModel.franchisePhoneNumber =
+        _getMyProfile[0].franchisePhoneNumber.toString();
+    _myProfileUpdateRequestModel.franchisePhoneNumCountryCode =
+        _getMyProfile[0].franchisePhoneNumCountryCode.toString();
+    _myProfileUpdateRequestModel.profileImageFileId = "";
+    _myProfileUpdateRequestModel.defaultTimezone =
+        _getMyProfile[0].defaultTimezone.toString();
+  }
+
+  void _callUpdateProfile(String userID) {
+    if (_isEmailValid && _isFirstNameValid && _isLastNameValid && _isContactValid) {
       CheckConnection().connectionState().then((value) {
         if (value == true) {
-          isApiProcess = true;
-          editMode = false;
-          userPresenter.updateProfile(userID, myProfileUpdateRequestModel);
+          _isApiProcess = true;
+          _editMode = false;
+          _userPresenter.updateProfile(userID, _myProfileUpdateRequestModel);
         } else {
           CommonWidgets().showErrorSnackBar(
               errorMessage: StringConstants.noInternetConnection,
@@ -208,172 +219,188 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
     }
   }
 
-  Widget topBarComponent() {
+  Widget _topBarComponent() {
     return Padding(
       padding: const EdgeInsets.only(left: 19.0, right: 22.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          konaTopBarIcon(),
+          _konaTopBarIcon(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 18),
               child: CommonWidgets().textWidget(
                   StringConstants.dashboard,
                   StyleConstants.customTextStyle16MontserratBold(
-                      color: getMaterialColor(AppColors.whiteColor))),
+                      color: AppColors.whiteColor)),
             ),
           ),
-          CommonWidgets().profileComponent(userName),
+          CommonWidgets().profileComponent(_userName),
         ],
       ),
     );
   }
 
-  Widget konaTopBarIcon() {
+  Widget _konaTopBarIcon() {
     return CommonWidgets().image(
         image: AssetsConstants.topBarAppIcon,
         width: 4.03 * SizeConfig.imageSizeMultiplier,
         height: 4.03 * SizeConfig.imageSizeMultiplier);
   }
 
-  Widget changeProfileButtons() {
+  Widget _changeProfileButtons() {
     return Row(
       children: [
         Visibility(
-          visible: editMode ? false : true,
+          visible: _editMode ? false : true,
           child: Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: CommonWidgets().buttonWidget(
               StringConstants.edit,
-              onTapChangePassword,
+              _onTapChangePassword,
             ),
           ),
         ),
-        Visibility(
-          visible: editMode ? true : false,
-          child: Row(
-            children: [
-              CommonWidgets().buttonWidgetUnFilled(
-                StringConstants.cancelProfile,
-                onTapCancel,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 23.0),
-                child: CommonWidgets().buttonWidget(
-                  StringConstants.save,
-                  onTapSaveProfile,
-                ),
-              ),
-            ],
-          ),
-        ),
+        _buildVisibility(),
       ],
     );
   }
 
-  Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
-        child: SingleChildScrollView(child: bodyWidgetComponent()),
+  Visibility _buildVisibility() {
+    return Visibility(
+      visible: _editMode ? true : false,
+      child: Row(
+        children: [
+          CommonWidgets().buttonWidgetUnFilled(
+            StringConstants.cancelProfile,
+            _onTapCancel,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 23.0),
+            child: CommonWidgets().buttonWidget(
+              StringConstants.save,
+              _onTapSaveProfile,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bodyWidget() => Container(
+        color: AppColors.textColor3.withOpacity(0.1),
+        child: SingleChildScrollView(child: _bodyWidgetComponent()),
       );
 
-  Widget bodyWidgetComponent() => Column(
+  Widget _bodyWidgetComponent() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(height: 28.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: CommonWidgets().textWidget(
-                  StringConstants.myProfile,
-                  StyleConstants.customTextStyle22MontserratBold(
-                      color: getMaterialColor(AppColors.textColor1)),
-                  textAlign: TextAlign.start),
-            ),
+            _buildPadding(),
             const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: CommonWidgets().profileImage(userName, editMode),
+              child: CommonWidgets().profileImage(_userName, _editMode),
             ),
             const SizedBox(height: 33.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      profileDetailsComponent(
-                          StringConstants.firstName,
-                          "",
-                          StringConstants.enterFirstName,
-                          firstNameController,
-                          firstNameValidationMessage,
-                          firstNameValidation,
-                          editMode),
-                    ],
-                  ),
-                  profileDetailsComponent(
-                      StringConstants.lastName,
-                      "",
-                      StringConstants.enterLastName,
-                      lastNameController,
-                      lastNameValidationMessage,
-                      lastNameValidation,
-                      editMode),
-                ],
-              ),
-            ),
+            _buildPadding2(),
             const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 23.0),
               child: Row(
                 children: [
-                  profileDetailsComponent(
+                  _profileDetailsComponent(
                       StringConstants.contactNumber,
                       "",
                       StringConstants.enterContactNumber,
-                      contactNumberController,
-                      contactNumberValidationMessage,
-                      phoneNumberValidation,
-                      editMode),
-                  profileEmailTextFiledComponent(
+                      _contactNumberController,
+                      _contactNumberValidationMessage,
+                      _phoneNumberValidation,
+                      _editMode),
+                  _profileEmailTextFiledComponent(
                       StringConstants.emailId,
                       "",
                       StringConstants.enterEmailId,
-                      emailIdController,
-                      editMode),
+                      _emailIdController,
+                      _editMode),
                 ],
               ),
             ),
             const SizedBox(height: 20.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 23.0),
-              child: Row(
-                children: [
-                  profilePasswordDetailsComponent(
-                      StringConstants.password,
-                      "",
-                      StringConstants.password,
-                      newPasswordController,
-                      passwordValidationMessage,
-                      passwordValidation,
-                      editMode),
-                ],
-              ),
-            ),
+            _buildPadding3(),
             const SizedBox(
               height: 20.0,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 23.0),
-              child: changeProfileButtons(),
+              child: _changeProfileButtons(),
             ),
             const SizedBox(
               height: 340.0,
             ),
           ]);
 
-  Widget profileDetailsComponent(
+  Padding _buildPadding3() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23.0),
+      child: Row(
+        children: [
+          _profilePasswordDetailsComponent(
+              StringConstants.password,
+              "",
+              StringConstants.password,
+              _newPasswordController,
+              _passwordValidationMessage,
+              _passwordValidation,
+              _editMode),
+        ],
+      ),
+    );
+  }
+
+  Padding _buildPadding2() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23.0),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              _profileDetailsComponent(
+                  StringConstants.firstName,
+                  "",
+                  StringConstants.enterFirstName,
+                  _firstNameController,
+                  _firstNameValidationMessage,
+                  _firstNameValidation,
+                  _editMode),
+            ],
+          ),
+          _profileDetailsComponent(
+              StringConstants.lastName,
+              "",
+              StringConstants.enterLastName,
+              _lastNameController,
+              _lastNameValidationMessage,
+              _lastNameValidation,
+              _editMode),
+        ],
+      ),
+    );
+  }
+
+  Padding _buildPadding() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 23.0),
+      child: CommonWidgets().textWidget(
+          StringConstants.myProfile,
+          StyleConstants.customTextStyle22MontserratBold(
+              color: AppColors.textColor1),
+          textAlign: TextAlign.start),
+    );
+  }
+
+  Widget _profileDetailsComponent(
           String txtName,
           String txtValue,
           String txtHint,
@@ -387,50 +414,58 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           CommonWidgets().textWidget(
               txtName,
               StyleConstants.customTextStyle14MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1)),
+                  color: AppColors.textColor1),
               textAlign: TextAlign.left),
-          Padding(
-            padding: const EdgeInsets.only(
-                top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              width: 300.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  onChanged: (value) {
-                    validationMethod();
-                  },
-                  enabled: editMode ? true : false,
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: textFiledColor
-                          ? AppColors.whiteColor
-                          : AppColors.denotiveColor5,
-                      hintText: txtHint,
-                      border: InputBorder.none,
-                      labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                          color: getMaterialColor(AppColors.textColor1))),
-                ),
-              ),
-            ),
-          ),
+          _buildEditModePadding(validationMethod, textEditingController,
+              textFiledColor, txtHint, txtValue),
           Text(validationMessage,
               style: StyleConstants.customTextStyle12MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor5)),
+                  color: AppColors.textColor5),
               textAlign: TextAlign.left)
         ],
       );
 
-  Widget profilePasswordDetailsComponent(
+  Padding _buildEditModePadding(
+      Function validationMethod,
+      TextEditingController textEditingController,
+      bool textFiledColor,
+      String txtHint,
+      String txtValue) {
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
+      child: Container(
+        height: 40.0,
+        width: 300.0,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6.0),
+            border: Border.all(
+                color: AppColors.textColor1.withOpacity(0.2), width: 2)),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 2.0),
+          child: TextField(
+            onChanged: (value) {
+              validationMethod();
+            },
+            enabled: _editMode ? true : false,
+            controller: textEditingController,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: textFiledColor
+                    ? AppColors.whiteColor
+                    : AppColors.denotiveColor5,
+                hintText: txtHint,
+                border: InputBorder.none,
+                labelText: txtValue,
+                hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+                    color: AppColors.textColor1)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _profilePasswordDetailsComponent(
           String txtName,
           String txtValue,
           String txtHint,
@@ -444,66 +479,83 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           CommonWidgets().textWidget(
               txtName,
               StyleConstants.customTextStyle14MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1)),
+                  color: AppColors.textColor1),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
                 top: 5.0, bottom: 0.0, left: 0.0, right: 22.0),
-            child: Container(
-              height: 40.0,
-              width: 300.0,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6.0),
-                  border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 2.0),
-                child: TextField(
-                  obscureText: isPasswordVisible,
-                  onChanged: (value) {
-                    validationMethod();
-                  },
-                  enabled: editMode ? true : false,
-                  controller: textEditingController,
-                  decoration: InputDecoration(
-                      suffixIcon: Visibility(
-                        visible: editMode ? true : false,
-                        child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isPasswordVisible = !isPasswordVisible;
-                              });
-                            },
-                            child: isPasswordVisible
-                                ? const Icon(Icons.visibility_off)
-                                : const Icon(Icons.visibility)),
-                      ),
-                      filled: true,
-                      fillColor: textFiledColor
-                          ? AppColors.whiteColor
-                          : AppColors.denotiveColor5,
-                      hintText: txtHint,
-                      border: InputBorder.none,
-                      labelText: txtValue,
-                      hintStyle: StyleConstants.customTextStyle15MonsterRegular(
-                          color: getMaterialColor(AppColors.textColor1))),
-                ),
-              ),
-            ),
+            child: _buildContainer(validationMethod, textEditingController,
+                textFiledColor, txtHint, txtValue),
           ),
           Visibility(
-            visible: editMode ? true : false,
+            visible: _editMode ? true : false,
             child: Text(validationMessage,
                 style: StyleConstants.customTextStyle12MonsterRegular(
-                    color: getMaterialColor(AppColors.textColor5)),
+                    color: AppColors.textColor5),
                 textAlign: TextAlign.left),
           )
         ],
       );
 
-  Widget profileEmailTextFiledComponent(
+  Container _buildContainer(
+      Function validationMethod,
+      TextEditingController textEditingController,
+      bool textFiledColor,
+      String txtHint,
+      String txtValue) {
+    return Container(
+      height: 40.0,
+      width: 300.0,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+          border: Border.all(
+              color: AppColors.textColor1.withOpacity(0.2), width: 2)),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 2.0),
+        child: _buildTextField(validationMethod, textEditingController,
+            textFiledColor, txtHint, txtValue),
+      ),
+    );
+  }
+
+  TextField _buildTextField(
+      Function validationMethod,
+      TextEditingController textEditingController,
+      bool textFiledColor,
+      String txtHint,
+      String txtValue) {
+    return TextField(
+      obscureText: _isPasswordVisible,
+      onChanged: (value) {
+        validationMethod();
+      },
+      enabled: _editMode ? true : false,
+      controller: textEditingController,
+      decoration: InputDecoration(
+          suffixIcon: Visibility(
+            visible: _editMode ? true : false,
+            child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
+                child: _isPasswordVisible
+                    ? const Icon(Icons.visibility_off)
+                    : const Icon(Icons.visibility)),
+          ),
+          filled: true,
+          fillColor:
+              textFiledColor ? AppColors.whiteColor : AppColors.denotiveColor5,
+          hintText: txtHint,
+          border: InputBorder.none,
+          labelText: txtValue,
+          hintStyle: StyleConstants.customTextStyle15MonsterRegular(
+              color: AppColors.textColor1)),
+    );
+  }
+
+  Widget _profileEmailTextFiledComponent(
           String txtName,
           String txtValue,
           String txtHint,
@@ -515,7 +567,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
           CommonWidgets().textWidget(
               txtName,
               StyleConstants.customTextStyle14MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor1)),
+                  color: AppColors.textColor1),
               textAlign: TextAlign.left),
           Padding(
             padding: const EdgeInsets.only(
@@ -529,9 +581,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       : AppColors.denotiveColor5,
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: getMaterialColor(AppColors.textColor1)
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
                 padding: const EdgeInsets.only(left: 2.0),
                 child: SingleChildScrollView(
@@ -540,9 +590,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                     stepWidth: 0,
                     child: TextField(
                       onChanged: (value) {
-                        emailValidation();
+                        _emailValidation();
                       },
-                      enabled: editMode ? true : false,
+                      enabled: _editMode ? true : false,
                       controller: textEditingController,
                       decoration: InputDecoration(
                           filled: true,
@@ -554,116 +604,115 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                           labelText: txtValue,
                           hintStyle:
                               StyleConstants.customTextStyle15MonsterRegular(
-                                  color:
-                                      getMaterialColor(AppColors.textColor1))),
+                                  color: AppColors.textColor1)),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-          Text(emailValidationMessage,
+          Text(_emailValidationMessage,
               style: StyleConstants.customTextStyle12MonsterRegular(
-                  color: getMaterialColor(AppColors.textColor5)),
+                  color: AppColors.textColor5),
               textAlign: TextAlign.left)
         ],
       );
 
-  emailValidation() {
-    if (emailIdController.text.isEmpty) {
+  _emailValidation() {
+    if (_emailIdController.text.isEmpty) {
       setState(() {
-        emailValidationMessage = StringConstants.emptyValidEmail;
+        _emailValidationMessage = StringConstants.emptyValidEmail;
       });
       return false;
     }
-    if (!emailIdController.text.isValidEmail()) {
+    if (!_emailIdController.text.isValidEmail()) {
       setState(() {
-        emailValidationMessage = StringConstants.enterValidEmail;
+        _emailValidationMessage = StringConstants.enterValidEmail;
       });
       return false;
     }
-    if (emailIdController.text.isValidEmail()) {
+    if (_emailIdController.text.isValidEmail()) {
       setState(() {
-        emailValidationMessage = "";
+        _emailValidationMessage = "";
       });
       return true;
     }
   }
 
-  firstNameValidation() {
-    if (firstNameController.text.isEmpty) {
+  _firstNameValidation() {
+    if (_firstNameController.text.isEmpty) {
       setState(() {
-        firstNameValidationMessage = StringConstants.emptyFirstName;
+        _firstNameValidationMessage = StringConstants.emptyFirstName;
       });
       return false;
     } else {
       setState(() {
-        firstNameValidationMessage = "";
+        _firstNameValidationMessage = "";
       });
       return true;
     }
   }
 
-  lastNameValidation() {
-    if (lastNameController.text.isEmpty) {
+  _lastNameValidation() {
+    if (_lastNameController.text.isEmpty) {
       setState(() {
-        lastNameValidationMessage = StringConstants.emptyLastName;
+        _lastNameValidationMessage = StringConstants.emptyLastName;
       });
       return false;
     } else {
       setState(() {
-        lastNameValidationMessage = "";
+        _lastNameValidationMessage = "";
       });
 
       return true;
     }
   }
 
-  phoneNumberValidation() {
-    if (contactNumberController.text.isEmpty) {
+  _phoneNumberValidation() {
+    if (_contactNumberController.text.isEmpty) {
       setState(() {
-        contactNumberValidationMessage = StringConstants.emptyContactNumber;
+        _contactNumberValidationMessage = StringConstants.emptyContactNumber;
       });
       return false;
     } else {
       setState(() {
-        contactNumberValidationMessage = "";
+        _contactNumberValidationMessage = "";
       });
 
       return true;
     }
   }
 
-  bool validateStructure(String value) {
+  bool _validateStructure(String value) {
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~^%]).{7,}$';
     RegExp regExp = RegExp(pattern);
     return regExp.hasMatch(value);
   }
 
-  passwordValidation() {
-    if (newPasswordController.text.isEmpty) {
+  _passwordValidation() {
+    if (_newPasswordController.text.isEmpty) {
       setState(() {
-        passwordValidationMessage = "";
+        _passwordValidationMessage = "";
       });
       return false;
     }
-    if (newPasswordController.text.length < 7 ||
-        newPasswordController.text.length > 12) {
+    if (_newPasswordController.text.length < 7 ||
+        _newPasswordController.text.length > 12) {
       setState(() {
-        passwordValidationMessage = StringConstants.enterValidPasswordLength;
+        _passwordValidationMessage = StringConstants.enterValidPasswordLength;
       });
       return false;
     }
-    if (!validateStructure(newPasswordController.text.toString())) {
+    if (!_validateStructure(_newPasswordController.text.toString())) {
       setState(() {
-        passwordValidationMessage = StringConstants.enterSpecialChar;
+        _passwordValidationMessage = StringConstants.enterSpecialChar;
       });
       return false;
     }
-    if (newPasswordController.text.isValidPassword()) {
+    if (_newPasswordController.text.isValidPassword()) {
       setState(() {
-        passwordValidationMessage = "";
+        _passwordValidationMessage = "";
       });
       return true;
     }
@@ -672,7 +721,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -683,42 +732,42 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   void showSuccess(response) {
     if (response is MyProfileResponseModel) {
       setState(() {
-        getMyProfile.clear();
-        isApiProcess = false;
-        getMyProfile.add(response);
-        getUserDetails();
+        _getMyProfile.clear();
+        _isApiProcess = false;
+        _getMyProfile.add(response);
+        _getUserDetails();
       });
     } else {
       setState(() {
         CommonWidgets().showSuccessSnackBar(
             message: StringConstants.profileUpdateSuccessfully,
             context: context);
-        editMode = false;
-        isApiProcess = false;
-        if (isPasswordVisible == false) {
-          isPasswordVisible = !isPasswordVisible;
+        _editMode = false;
+        _isApiProcess = false;
+        if (_isPasswordVisible == false) {
+          _isPasswordVisible = !_isPasswordVisible;
         }
       });
-      getMyProfileDetails();
+      _getMyProfileDetails();
     }
   }
 
-  getUserDetails() {
-    userName = getMyProfile[0].firstName.toString() +
+  _getUserDetails() {
+    _userName = _getMyProfile[0].firstName.toString() +
         " " +
-        getMyProfile[0].lastName.toString();
-    firstNameController.text = getMyProfile[0].firstName.toString();
-    lastNameController.text = getMyProfile[0].lastName.toString();
-    contactNumberController.text = getMyProfile[0].phoneNum.toString();
-    emailIdController.text = getMyProfile[0].email.toString();
-    storeValuesInDB(
-        getMyProfile[0].firstName.toString(),
-        getMyProfile[0].lastName.toString(),
-        getMyProfile[0].phoneNum.toString(),
-        getMyProfile[0].email.toString());
+        _getMyProfile[0].lastName.toString();
+    _firstNameController.text = _getMyProfile[0].firstName.toString();
+    _lastNameController.text = _getMyProfile[0].lastName.toString();
+    _contactNumberController.text = _getMyProfile[0].phoneNum.toString();
+    _emailIdController.text = _getMyProfile[0].email.toString();
+    _storeValuesInDB(
+        _getMyProfile[0].firstName.toString(),
+        _getMyProfile[0].lastName.toString(),
+        _getMyProfile[0].phoneNum.toString(),
+        _getMyProfile[0].email.toString());
   }
 
-  storeValuesInDB(
+  _storeValuesInDB(
       String firstName, String lastName, String contactNumber, String email) {
     SessionDAO().insert(Session(key: DatabaseKeys.firstName, value: firstName));
     SessionDAO().insert(Session(key: DatabaseKeys.lastName, value: lastName));

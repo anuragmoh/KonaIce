@@ -6,7 +6,6 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class CustomMenuPopup extends StatefulWidget {
   const CustomMenuPopup({Key? key}) : super(key: key);
@@ -16,25 +15,31 @@ class CustomMenuPopup extends StatefulWidget {
 }
 
 class _CustomMenuPopupState extends State<CustomMenuPopup> {
-  String menuName = StringConstants.customMenuPackage;
-  bool isEditingMenuName = false;
-  var amountTextFieldController = TextEditingController();
-  var menuNameTextFieldController = TextEditingController();
+  String _menuName = StringConstants.customMenuPackage;
+  bool _isEditingMenuName = false;
+  var _amountTextFieldController = TextEditingController();
+  var _menuNameTextFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return showCustomMenuPopup();
+    return _showCustomMenuPopup();
   }
 
-  Widget showCustomMenuPopup() {
+  Widget _showCustomMenuPopup() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
-  Widget customMenuPopUpComponent() {
+  @override
+  void dispose() {
+    super.dispose();
+    _amountTextFieldController.dispose();
+    _menuNameTextFieldController.dispose();
+  }
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.43,
@@ -44,17 +49,17 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.customMenu,
-                onTapCloseButton: onTapCloseButton),
-            isEditingMenuName ? customMenuNameEditable() : customMenuName(),
-            amountTextFieldContainer(),
-            addMenuPopUpButton()
+                onTapCloseButton: _onTapCloseButton),
+            _isEditingMenuName ? _customMenuNameEditable() : _customMenuName(),
+            _amountTextFieldContainer(),
+            _addMenuPopUpButton()
           ],
         ),
       ),
     );
   }
 
-  Widget customMenuNameEditable() {
+  Widget _customMenuNameEditable() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15.0, 18.0, 14.0, 18.0),
       child: Row(
@@ -62,55 +67,55 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Expanded(child: customMenuNameTextFieldContainer()),
-          saveNameButton()
+          Expanded(child: _customMenuNameTextFieldContainer()),
+          _saveNameButton()
         ],
       ),
     );
   }
 
-  Widget customMenuName() {
+  Widget _customMenuName() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 24, 24, 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CommonWidgets().textWidget(
-              menuName,
+              _menuName,
               StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratSemiBold)),
-          editNameButton(),
+          _editNameButton(),
         ],
       ),
     );
   }
 
-  Widget customMenuNameTextFieldContainer() {
+  Widget _customMenuNameTextFieldContainer() {
     return TextField(
-      controller: menuNameTextFieldController,
+      controller: _menuNameTextFieldController,
       style: StyleConstants.customTextStyle(
           fontSize: 12.0,
-          color: getMaterialColor(AppColors.textColor1),
+          color: AppColors.textColor1,
           fontFamily: FontConstants.montserratSemiBold),
       decoration: InputDecoration(
           contentPadding: EdgeInsets.zero,
           hintText: StringConstants.enterMenuName,
           hintStyle: StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor2),
+              color: AppColors.textColor2,
               fontFamily: FontConstants.montserratRegular),
           enabledBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                  color: getMaterialColor(AppColors.denotiveColor4))),
+                  color: AppColors.denotiveColor4)),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(
-                  color: getMaterialColor(AppColors.denotiveColor4)))),
+                  color: AppColors.denotiveColor4))),
     );
   }
 
-  Widget amountTextFieldContainer() {
+  Widget _amountTextFieldContainer() {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: Column(
@@ -123,66 +128,78 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
                 StringConstants.amount,
                 StyleConstants.customTextStyle(
                     fontSize: 12,
-                    color: getMaterialColor(AppColors.textColor2),
+                    color: AppColors.textColor2,
                     fontFamily: FontConstants.montserratMedium)),
           ),
-          TextField(
-            controller: amountTextFieldController,
-            keyboardType: TextInputType.number,
-            style: StyleConstants.customTextStyle(
-                fontSize: 22.0,
-                color: getMaterialColor(AppColors.textColor6),
-                fontFamily: FontConstants.montserratMedium),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              hintText: StringConstants.enterAmount,
-              hintStyle: StyleConstants.customTextStyle(
-                  fontSize: 12,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratRegular),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: getMaterialColor(AppColors.skyBlueBorderColor)),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              prefixIcon: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: CommonWidgets().textWidget(
-                        StringConstants.symbolDollar,
-                        StyleConstants.customTextStyle(
-                            fontSize: 22,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 0.0, horizontal: 15.0),
-                    child: Container(
-                      color: getMaterialColor(AppColors.skyBlueBorderColor),
-                      width: 1.0,
-                      height: 30,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
+          _buildTextField(),
         ],
       ),
     );
   }
 
-  Widget editNameButton() {
+  TextField _buildTextField() {
+    return TextField(
+          controller: _amountTextFieldController,
+          keyboardType: TextInputType.number,
+          style: StyleConstants.customTextStyle(
+              fontSize: 22.0,
+              color: AppColors.textColor6,
+              fontFamily: FontConstants.montserratMedium),
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            hintText: StringConstants.enterAmount,
+            hintStyle: StyleConstants.customTextStyle(
+                fontSize: 12,
+                color: AppColors.textColor2,
+                fontFamily: FontConstants.montserratRegular),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AppColors.skyBlueBorderColor),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AppColors.skyBlueBorderColor),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            prefixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildPadding1(),
+                _buildPadding2(),
+              ],
+            ),
+          ),
+        );
+  }
+
+  Padding _buildPadding1() {
+    return Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: CommonWidgets().textWidget(
+                    StringConstants.symbolDollar,
+                    StyleConstants.customTextStyle(
+                        fontSize: 22,
+                        color: AppColors.textColor2,
+                        fontFamily: FontConstants.montserratMedium)),
+              );
+  }
+
+  Padding _buildPadding2() {
+    return Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 0.0, horizontal: 15.0),
+                child: Container(
+                  color: AppColors.skyBlueBorderColor,
+                  width: 1.0,
+                  height: 30,
+                ),
+              );
+  }
+
+  Widget _editNameButton() {
     return GestureDetector(
-      onTap: onTapEditNameButton,
+      onTap: _onTapEditNameButton,
       child: SizedBox(
         width: 40.0,
         height: 40.0,
@@ -194,7 +211,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     );
   }
 
-  Widget addMenuPopUpButton() {
+  Widget _addMenuPopUpButton() {
     return GestureDetector(
       onTap: onTapAddCustomMenu,
       child: Padding(
@@ -202,16 +219,16 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
         child: Container(
           height: 40.0,
           decoration: BoxDecoration(
-              color: getMaterialColor(isEditingMenuName
+              color: _isEditingMenuName
                   ? AppColors.denotiveColor5
-                  : AppColors.primaryColor2),
+                  : AppColors.primaryColor2,
               borderRadius: BorderRadius.circular(20.0)),
           child: Center(
             child: CommonWidgets().textWidget(
                 StringConstants.add,
                 StyleConstants.customTextStyle(
                     fontSize: 16.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratBold),
                 textAlign: TextAlign.center),
           ),
@@ -220,24 +237,24 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     );
   }
 
-  Widget saveNameButton() {
+  Widget _saveNameButton() {
     return GestureDetector(
-      onTap: onTapSaveButton,
+      onTap: _onTapSaveButton,
       child: Padding(
         padding: const EdgeInsets.only(left: 7.0),
         child: Container(
           height: 30.0,
           width: 45.0,
           decoration: BoxDecoration(
-              color: getMaterialColor(
-                  false ? AppColors.denotiveColor5 : AppColors.gradientColor1),
+              color:
+                  false ? AppColors.denotiveColor5 : AppColors.gradientColor1,
               borderRadius: BorderRadius.circular(5.0)),
           child: Center(
             child: CommonWidgets().textWidget(
                 StringConstants.save,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.whiteColor),
+                    color: AppColors.whiteColor,
                     fontFamily: FontConstants.montserratSemiBold),
                 textAlign: TextAlign.center),
           ),
@@ -247,22 +264,22 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
   }
 
   //Action
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop();
   }
 
-  onTapEditNameButton() {
+  _onTapEditNameButton() {
     setState(() {
-      isEditingMenuName = true;
+      _isEditingMenuName = true;
     });
   }
 
-  onTapSaveButton() {
+  _onTapSaveButton() {
     FunctionalUtils.hideKeyboard();
     setState(() {
-      if (menuNameTextFieldController.text.isNotEmpty) {
-        menuName = menuNameTextFieldController.text;
-        isEditingMenuName = false;
+      if (_menuNameTextFieldController.text.isNotEmpty) {
+        _menuName = _menuNameTextFieldController.text;
+        _isEditingMenuName = false;
       }
     });
   }

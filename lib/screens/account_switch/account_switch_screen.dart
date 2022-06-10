@@ -9,9 +9,8 @@ import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/available_device_list/available_device_list_screen.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 
 class AccountSwitchScreen extends StatefulWidget {
   const AccountSwitchScreen({Key? key}) : super(key: key);
@@ -21,7 +20,7 @@ class AccountSwitchScreen extends StatefulWidget {
 }
 
 class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
-  bool isStaffModeSelected = true;
+  bool _isStaffModeSelected = true;
 
   @override
   void initState() {
@@ -34,7 +33,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         child: bodyContainer(),
       ),
     );
@@ -42,81 +41,86 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
 
   Widget bodyContainer() {
     return Center(
-      child: Container(
-        width: 360,
-        decoration:
-            StyleConstants.customBoxShadowDecorationStyle(circularRadius: 4.0),
-        child: Padding(
-          padding: const EdgeInsets.all(17.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: CommonWidgets().textWidget(
-                      StringConstants.selectMode,
-                      StyleConstants.customTextStyle(
-                          fontSize: 22.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratSemiBold)),
-                ),
+      child: buildContainer(),
+    );
+  }
+
+  Container buildContainer() {
+    return Container(
+      width: 360,
+      decoration:
+          StyleConstants.customBoxShadowDecorationStyle(circularRadius: 4.0),
+      child: Padding(
+        padding: const EdgeInsets.all(17.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: CommonWidgets().textWidget(
+                    StringConstants.selectMode,
+                    StyleConstants.customTextStyle(
+                        fontSize: 22.0,
+                        color: AppColors.textColor1,
+                        fontFamily: FontConstants.montserratSemiBold)),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          onTapSelectionMode(staffSelected: true);
-                        },
-                        child: selectionModeContainer(AssetsConstants.staffMode,
-                            StringConstants.staffMode, isStaffModeSelected)),
-                    GestureDetector(
-                        onTap: () {
-                          onTapSelectionMode(staffSelected: false);
-                        },
-                        child: selectionModeContainer(
-                            AssetsConstants.customerMode,
-                            StringConstants.customerMode,
-                            !isStaffModeSelected)),
-                  ],
-                ),
+            ),
+            buildPadding(),
+            Align(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: _proceedButton(
+                    StringConstants.proceed,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: AppColors.textColor1,
+                        fontFamily: FontConstants.montserratBold)),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: proceedButton(
-                      StringConstants.proceed,
-                      StyleConstants.customTextStyle(
-                          fontSize: 12.0,
-                          color: getMaterialColor(AppColors.textColor1),
-                          fontFamily: FontConstants.montserratBold)),
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
 
-  Widget selectionModeContainer(
+  Padding buildPadding() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+              onTap: () {
+                _onTapSelectionMode(staffSelected: true);
+              },
+              child: _selectionModeContainer(AssetsConstants.staffMode,
+                  StringConstants.staffMode, _isStaffModeSelected)),
+          GestureDetector(
+              onTap: () {
+                _onTapSelectionMode(staffSelected: false);
+              },
+              child: _selectionModeContainer(AssetsConstants.customerMode,
+                  StringConstants.customerMode, !_isStaffModeSelected)),
+        ],
+      ),
+    );
+  }
+
+  Widget _selectionModeContainer(
       String imagePath, String modeText, bool modeSelected) {
     return Container(
       width: 152,
       height: 152,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.0),
-          color: getMaterialColor(AppColors.denotiveColor6),
+          color: AppColors.denotiveColor6,
           border: modeSelected
-              ? Border.all(
-                  color: getMaterialColor(AppColors.primaryColor2), width: 2.0)
+              ? Border.all(color: AppColors.primaryColor2, width: 2.0)
               : const Border.fromBorderSide(BorderSide.none)),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -144,7 +148,7 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
                     modeText,
                     StyleConstants.customTextStyle(
                         fontSize: 14.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1,
                         fontFamily: FontConstants.montserratSemiBold)))
           ],
         ),
@@ -152,15 +156,15 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
     );
   }
 
-  Widget proceedButton(String buttonText, TextStyle textStyle) {
+  Widget _proceedButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
       onTap: () {
-        onTapProceedButton();
+        _onTapProceedButton();
       },
       child: Container(
         width: 210,
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: AppColors.primaryColor2,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -174,28 +178,28 @@ class _AccountSwitchScreenState extends State<AccountSwitchScreen> {
   }
 
   //Action Event
-  onTapProceedButton() {
-    storeInformation();
+  _onTapProceedButton() {
+    _storeInformation();
   }
 
-  onTapSelectionMode({required bool staffSelected}) {
+  _onTapSelectionMode({required bool staffSelected}) {
     setState(() {
-      isStaffModeSelected = staffSelected;
+      _isStaffModeSelected = staffSelected;
     });
   }
 
   //Store Info
-  storeInformation() async {
+  _storeInformation() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.selectedMode,
-        value: isStaffModeSelected
+        value: _isStaffModeSelected
             ? StringConstants.staffMode
             : StringConstants.customerMode));
-    if (!isStaffModeSelected) {
+    if (!_isStaffModeSelected) {
       await P2PConnectionManager.shared.startService(isStaffView: false);
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(
-        builder: (context) => isStaffModeSelected
+        builder: (context) => _isStaffModeSelected
             ? const AvailableDeviceListScreen()
             : SplashScreen()));
   }

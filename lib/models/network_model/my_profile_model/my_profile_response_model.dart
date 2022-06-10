@@ -1,55 +1,44 @@
-// To parse this JSON data, do
-//
-//     final myProfileResponseModel = myProfileResponseModelFromJson(jsonString);
-
 import 'dart:convert';
 
 MyProfileResponseModel myProfileResponseModelFromJson(String str) =>
     MyProfileResponseModel.fromJson(json.decode(str));
 
-String myProfileResponseModelToJson(MyProfileResponseModel data) =>
-    json.encode(data.toJson());
-
 class MyProfileResponseModel {
   MyProfileResponseModel({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.createdBy,
-    this.updatedBy,
-    this.deleted,
-    this.firstName,
-    this.lastName,
-    this.email,
-    this.phoneNum,
-    this.numCountryCode,
-    this.profileImageFileId,
-    this.franchiseId,
-    this.activated,
-    this.emailVerified,
-    this.phoneNumberVerified,
-    // this.timezone,
-    this.roles,
-    // required this.files,
-    this.code,
-    this.franchisePhoneNumber,
-    this.connectAccountLink,
-    this.franchiseName,
-    this.franchisePhoneNumCountryCode,
-    this.franchiseEmail,
-    this.defaultTimezone,
-    this.billingName,
-    this.billingAddress,
-    // this.billingCountry,
-    this.billingState,
-    this.billingCity,
-    this.billingZipCode,
-    // this.addressLine2,
-    this.addressLine1,
-    this.country,
-    this.city,
-    this.state,
-    this.zipCode,
+     this.id,
+     this.createdAt,
+     this.updatedAt,
+     this.createdBy,
+     this.updatedBy,
+     this.deleted,
+     this.firstName,
+     this.lastName,
+     this.email,
+     this.phoneNum,
+     this.numCountryCode,
+     this.profileImageFileId,
+     this.franchiseId,
+     this.activated,
+     this.emailVerified,
+     this.phoneNumberVerified,
+     this.roles,
+     this.code,
+     this.franchisePhoneNumber,
+     this.connectAccountLink,
+     this.franchiseName,
+     this.franchisePhoneNumCountryCode,
+     this.franchiseEmail,
+     this.defaultTimezone,
+     this.billingName,
+     this.billingAddress,
+     this.billingState,
+     this.billingCity,
+     this.billingZipCode,
+     this.addressLine1,
+     this.country,
+     this.city,
+     this.state,
+     this.zipCode,
   });
 
   String? id;
@@ -68,9 +57,7 @@ class MyProfileResponseModel {
   bool? activated;
   bool? emailVerified;
   bool? phoneNumberVerified;
-  // dynamic timezone;
   List<Role>? roles;
-  // Files files;
   String? code;
   String? franchisePhoneNumber;
   String? connectAccountLink;
@@ -80,11 +67,10 @@ class MyProfileResponseModel {
   String? defaultTimezone;
   String? billingName;
   String? billingAddress;
-  dynamic billingCountry;
+  String? billingCountry;
   String? billingState;
   String? billingCity;
   String? billingZipCode;
-  // dynamic addressLine2;
   String? addressLine1;
   String? country;
   String? city;

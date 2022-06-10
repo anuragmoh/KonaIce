@@ -5,17 +5,14 @@ import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
-import 'package:kona_ice_pos/models/data_models/session.dart';
 import 'package:kona_ice_pos/screens/account_switch/account_switch_screen.dart';
 import 'package:kona_ice_pos/screens/customer_order_details/customer_order_details.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/login/login_screen.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/date_formats.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 enum NextScreen {
   login,
@@ -25,21 +22,21 @@ enum NextScreen {
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key}) : super(key: key);
-  bool isCustomerMode = false;
+  bool _isCustomerMode = false;
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
-  int numberOfTaps = 0;
-  int lastTap = DateTime.now().millisecondsSinceEpoch;
+  int _numberOfTaps = 0;
+  int _lastTap = DateTime.now().millisecondsSinceEpoch;
 
   _SplashScreenState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
 
-  openNextScreen({required NextScreen screenType}) {
+  _openNextScreen({required NextScreen screenType}) {
     Future.delayed(
       const Duration(seconds: 3),
       () {
@@ -63,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
     );
   }
 
-  selectNextScreen() async {
+  _selectNextScreen() async {
     var userLoggedIn =
         await SessionDAO().getValueForKey(DatabaseKeys.sessionKey);
     if (userLoggedIn != null) {
@@ -71,25 +68,25 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
           await SessionDAO().getValueForKey(DatabaseKeys.selectedMode);
       if (selectedMode != null) {
         if (selectedMode.value == StringConstants.staffMode) {
-          openNextScreen(screenType: NextScreen.dashboard);
+          _openNextScreen(screenType: NextScreen.dashboard);
         } else {
           if (!P2PConnectionManager.shared.isServiceStarted) {
             P2PConnectionManager.shared.startService(isStaffView: false);
           }
           setState(() {
-            widget.isCustomerMode = true;
+            widget._isCustomerMode = true;
           });
           // openCustomerView();
         }
       } else {
-        openNextScreen(screenType: NextScreen.modeSelection);
+        _openNextScreen(screenType: NextScreen.modeSelection);
       }
     } else {
-      openNextScreen(screenType: NextScreen.login);
+      _openNextScreen(screenType: NextScreen.login);
     }
   }
 
-  showCustomerView(P2POrderDetailsModel orderDetailsModel) {
+  _showCustomerView(P2POrderDetailsModel orderDetailsModel) {
     Navigator.of(context)
         .push(MaterialPageRoute(
             builder: (context) => CustomerOrderDetails(
@@ -101,48 +98,48 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
   @override
   void initState() {
     super.initState();
-    selectNextScreen();
+    _selectNextScreen();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTapScreenWithMultipleTimes();
+        _onTapScreenWithMultipleTimes();
       },
       child: Container(
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            splashIcon(),
+            _splashIcon(),
           ],
         ),
       ),
     );
   }
 
-  Widget splashIcon() {
+  Widget _splashIcon() {
     return CommonWidgets()
         .image(image: AssetsConstants.konaIcon, width: 161.0, height: 120.0);
   }
 
   //Action Event
-  onTapScreenWithMultipleTimes() {
-    if (widget.isCustomerMode) {
+  _onTapScreenWithMultipleTimes() {
+    if (widget._isCustomerMode) {
       int currentTap = DateTime.now().millisecondsSinceEpoch;
-      if (currentTap - lastTap < 1000) {
-        numberOfTaps++;
+      if (currentTap - _lastTap < 1000) {
+        _numberOfTaps++;
 
-        if (numberOfTaps >= 4) {
+        if (_numberOfTaps >= 4) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => const AccountSwitchScreen()));
         }
       } else {
-        numberOfTaps = 0;
+        _numberOfTaps = 0;
       }
-      lastTap = currentTap;
+      _lastTap = currentTap;
     }
   }
 
@@ -153,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen> implements P2PContractor {
       P2POrderDetailsModel modelObjc =
           p2POrderDetailsModelFromJson(response.data);
       if (modelObjc.orderRequestModel!.orderItemsList!.isNotEmpty) {
-        showCustomerView(modelObjc);
+        _showCustomerView(modelObjc);
       }
     }
   }
