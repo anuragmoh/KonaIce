@@ -554,7 +554,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                               : "NA",
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].refundAmount
-                              : "NA",
+                              : 0,
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].posPaymentMethod
                               : "NA"),
@@ -676,28 +676,38 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                           fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            CommonWidgets().textView(
-                '${StringConstants.paymentMode}: ',
-                StyleConstants.customTextStyle(
-                    fontSize: 9.0,
-                    color: getMaterialColor(AppColors.textColor1),
-                    fontFamily: FontConstants.montserratRegular)),
-            Expanded(
-                child: posPaymentMethod== "CASH"
-                    ? CommonWidgets().textView(
-                        StringConstants.paymentModeCash,
-                        StyleConstants.customTextStyle(
-                            fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium))
-                    : CommonWidgets().textView(
-                        StringConstants.paymentModeCard,
-                        StyleConstants.customTextStyle(
-                            fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
-                            fontFamily: FontConstants.montserratMedium))),
-          ]),
+          Padding(
+            padding: const EdgeInsets.only(top:8.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              CommonWidgets().textView(
+                  '${StringConstants.paymentMode}: ',
+                  StyleConstants.customTextStyle(
+                      fontSize: 9.0,
+                      color: getMaterialColor(AppColors.textColor1),
+                      fontFamily: FontConstants.montserratRegular)),
+              Expanded(
+                  child:posPaymentMethod== "null"
+                      ? CommonWidgets().textView(
+                      StringConstants.na,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: getMaterialColor(AppColors.textColor2),
+                          fontFamily: FontConstants.montserratMedium)):
+                  posPaymentMethod== "CASH"
+                      ? CommonWidgets().textView(
+                          StringConstants.paymentModeCash,
+                          StyleConstants.customTextStyle(
+                              fontSize: 9.0,
+                              color: getMaterialColor(AppColors.textColor2),
+                              fontFamily: FontConstants.montserratMedium))
+                      : CommonWidgets().textView(
+                          StringConstants.paymentModeCard,
+                          StyleConstants.customTextStyle(
+                              fontSize: 9.0,
+                              color: getMaterialColor(AppColors.textColor2),
+                              fontFamily: FontConstants.montserratMedium))),
+            ]),
+          ),
         ],
       );
 
@@ -1072,17 +1082,22 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   // Get data from local db function start from here
   getAllSavedOrders(String eventId) async {
-    setState(() {
-      savedOrdersList.clear();
-    });
-    var result = await SavedOrdersDAO().getOrdersList(eventId);
-    if (result != null) {
+    try{
       setState(() {
-        savedOrdersList.addAll(result);
+        savedOrdersList.clear();
       });
-    } else {
-      savedOrdersList.clear();
+      var result = await SavedOrdersDAO().getOrdersList(eventId);
+      if (result != null) {
+        setState(() {
+          savedOrdersList.addAll(result);
+        });
+      } else {
+        savedOrdersList.clear();
+      }
+    }catch(error){
+      debugPrint('adsasdasdasdas');
     }
+
   }
 
   Widget getOrderStatusView(String status, String paymentStatus) {
@@ -1235,7 +1250,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           orderStatus: event.orderStatus!,
           deleted: false,
           paymentTerm: event.paymentTerm.toString(),
-          refundAmount: event.refundAmount == "null" ? 0 : event.refundAmount,
+          refundAmount: event.refundAmount,
           posPaymentMethod: event.posPaymentMethod.toString()));
       for (var item in event.orderItemsList!) {
         await SavedOrdersItemsDAO().insert(SavedOrdersItem(

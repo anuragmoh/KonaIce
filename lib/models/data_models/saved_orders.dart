@@ -51,7 +51,8 @@ class SavedOrders {
       required this.orderStatus,
       required this.deleted,
       required this.paymentTerm,
-      required this.refundAmount, this.posPaymentMethod="NA"});
+      this.refundAmount = 0,
+      this.posPaymentMethod = "NA"});
 
   Map<String, dynamic> toMap() {
     return {
