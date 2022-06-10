@@ -198,7 +198,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     fontSize: 22.0,
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratBold)),
-            //SearchWidget(text: "text", onChanged: "", hintText: hintText)
+            _buildSearch("text"),
           ]),
           Visibility(
             visible: false,
@@ -227,6 +227,22 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
         ]),
       );
+  //String query = "SELECT * FROM sentences WHERE title LIKE '%${text}%' OR  body LIKE '%${text}%'";
+  SearchWidget _buildSearch(String text) {
+    return SearchWidget(
+        text: "", onChanged: _searchBy, hintText: "Search by Order Id or Customer Name");
+  }
+  _searchBy(text) async {
+    var result = await SavedOrdersDAO().getFilteredOrdersList(text);
+    if (result != null) {
+      setState(() {
+        _savedOrdersList.clear();
+        _savedOrdersList.addAll(result);
+      });
+    } else {
+      _savedOrdersList.clear();
+    }
+  }
 
   Widget _tableHeadRow() => Padding(
         padding: const EdgeInsets.only(left: 15.0),
