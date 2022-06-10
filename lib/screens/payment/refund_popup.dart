@@ -62,7 +62,7 @@ class _RefundPopup extends State<RefundPopup> {
                 onTapCloseButton: onTapCloseButton),
             Padding(
               padding:
-                  const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
+                  const EdgeInsets.only(top: 15.0, left: 23.0, bottom: 7.0),
               child: amountComponent(
                   StringConstants.totalAmountBlank,
                   totalAmoutController,

@@ -24,7 +24,7 @@ class SavedOrders {
   String orderStatus;
   bool deleted;
   String paymentTerm;
-  dynamic refundAmount;
+  String refundAmount;
   String posPaymentMethod;
 
   SavedOrders(
@@ -51,7 +51,7 @@ class SavedOrders {
       required this.orderStatus,
       required this.deleted,
       required this.paymentTerm,
-      this.refundAmount = 0,
+      required this.refundAmount,
       this.posPaymentMethod = "NA"});
 
   Map<String, dynamic> toMap() {

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -297,6 +299,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   DataRow _getDataRow(SavedOrders savedOrders, int index) {
     return DataRow(
         onSelectChanged: (value) {
+          debugPrint("Onslecetvalue$value");
           setState(() {
             selectedRow = index;
           });
@@ -365,7 +368,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratMedium)),
           ),
-          DataCell(
+          DataCell(/*pendingView()*/
               getOrderStatusView(savedOrders.orderStatus, savedOrders.payment))
         ]);
   }
@@ -554,7 +557,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                               : "NA",
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].refundAmount
-                              : 0,
+                              : "0.00",
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].posPaymentMethod
                               : "NA"),
@@ -677,7 +680,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             ]),
           ),
           Padding(
-            padding: const EdgeInsets.only(top:8.0),
+            padding: const EdgeInsets.only(top: 8.0),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               CommonWidgets().textView(
                   '${StringConstants.paymentMode}: ',
@@ -686,26 +689,26 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                       color: getMaterialColor(AppColors.textColor1),
                       fontFamily: FontConstants.montserratRegular)),
               Expanded(
-                  child:posPaymentMethod== "null"
+                  child: posPaymentMethod == "null"
                       ? CommonWidgets().textView(
-                      StringConstants.na,
-                      StyleConstants.customTextStyle(
-                          fontSize: 9.0,
-                          color: getMaterialColor(AppColors.textColor2),
-                          fontFamily: FontConstants.montserratMedium)):
-                  posPaymentMethod== "CASH"
-                      ? CommonWidgets().textView(
-                          StringConstants.paymentModeCash,
+                          StringConstants.na,
                           StyleConstants.customTextStyle(
                               fontSize: 9.0,
                               color: getMaterialColor(AppColors.textColor2),
                               fontFamily: FontConstants.montserratMedium))
-                      : CommonWidgets().textView(
-                          StringConstants.paymentModeCard,
-                          StyleConstants.customTextStyle(
-                              fontSize: 9.0,
-                              color: getMaterialColor(AppColors.textColor2),
-                              fontFamily: FontConstants.montserratMedium))),
+                      : posPaymentMethod == "CASH"
+                          ? CommonWidgets().textView(
+                              StringConstants.paymentModeCash,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 9.0,
+                                  color: getMaterialColor(AppColors.textColor2),
+                                  fontFamily: FontConstants.montserratMedium))
+                          : CommonWidgets().textView(
+                              StringConstants.paymentModeCard,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 9.0,
+                                  color: getMaterialColor(AppColors.textColor2),
+                                  fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
         ],
@@ -828,7 +831,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget completedAndRefundView(dynamic refundAmout) => Column(
+  Widget completedAndRefundView(double refundAmout) => Column(
         children: [
           completedView(),
           const SizedBox(
@@ -836,38 +839,39 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
           Visibility(
             visible: refundBool ? true : false,
-            child: GestureDetector(
-              onTap: onTapRefundButton,
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-                    color: refundBool
-                        ? getMaterialColor(AppColors.denotiveColor2)
-                            .withOpacity(0.2)
-                        : getMaterialColor(AppColors.denotiveColor4)
-                            .withOpacity(0.2)),
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      refundAmout == 0
-                          ? CommonWidgets().textView(
-                              StringConstants.refund,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 9.0,
-                                  color: getMaterialColor(
-                                      AppColors.denotiveColor2),
-                                  fontFamily: FontConstants.montserratMedium))
-                          : CommonWidgets().textView(
-                              StringConstants.refunded,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 9.0,
-                                  color: getMaterialColor(AppColors.textColor1),
-                                  fontFamily: FontConstants.montserratMedium)),
-                    ],
-                  ),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+                  color: refundBool
+                      ? getMaterialColor(AppColors.denotiveColor4)
+                          .withOpacity(0.2)
+                      : getMaterialColor(AppColors.denotiveColor2)
+                          .withOpacity(0.2)),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    refundAmout > 0.00
+                        ? CommonWidgets().textView(
+                            StringConstants.refunded,
+                            StyleConstants.customTextStyle(
+                                fontSize: 9.0,
+                                color: getMaterialColor(AppColors.textColor1),
+                                fontFamily: FontConstants.montserratMedium))
+                        : GestureDetector(
+                            onTap: onTapRefundButton,
+                            child: CommonWidgets().textView(
+                                StringConstants.refund,
+                                StyleConstants.customTextStyle(
+                                    fontSize: 9.0,
+                                    color: getMaterialColor(
+                                        AppColors.denotiveColor2),
+                                    fontFamily:
+                                        FontConstants.montserratMedium)),
+                          )
+                  ],
                 ),
               ),
             ),
@@ -1082,7 +1086,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   // Get data from local db function start from here
   getAllSavedOrders(String eventId) async {
-    try{
+    try {
       setState(() {
         savedOrdersList.clear();
       });
@@ -1094,10 +1098,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else {
         savedOrdersList.clear();
       }
-    }catch(error){
+    } catch (error) {
       debugPrint('adsasdasdasdas');
     }
-
   }
 
   Widget getOrderStatusView(String status, String paymentStatus) {
@@ -1110,8 +1113,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         return completedView();
       } else if (status == StringConstants.orderStatusCompleted) {
         return completedView();
+      } else if (status == StringConstants.orderStatusCancelled) {
+        return completedView();
       } else {
-        return inProgressView();
+        return pendingView();
       }
     } else {
       return savedView();
@@ -1119,12 +1124,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   }
 
   Widget getRightOrderStatusView(String status, String paymentStatus,
-      dynamic refundAmout, String posPaymentMethod) {
-    refundAmout ??= 0;
+      String refundAmout, String posPaymentMethod) {
+    double toRefund = double.parse(refundAmout);
     if (posPaymentMethod != "CASH") {
-      refundBool = true;
-    }else{
-      refundBool = false;
+      setState(() {
+        refundBool = true;
+      });
+    } else {
+      setState(() {
+        refundBool = false;
+      });
     }
     debugPrint('<><><><><><posRefund>${refundAmout}');
     debugPrint(status);
@@ -1136,7 +1145,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else if (status == StringConstants.orderStatusNew) {
         return rightCompletedView();
       } else if (status == StringConstants.orderStatusCompleted) {
-        return completedAndRefundView(refundAmout);
+        return completedAndRefundView(toRefund);
+      } else if (status == StringConstants.orderStatusCancelled) {
+        return completedAndRefundView(toRefund);
       } else {
         debugPrint('>>>>>>>>>>>>>');
         return rightPendingView();
@@ -1250,7 +1261,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           orderStatus: event.orderStatus!,
           deleted: false,
           paymentTerm: event.paymentTerm.toString(),
-          refundAmount: event.refundAmount,
+          refundAmount: getRefundAmount(event.refundAmount),
           posPaymentMethod: event.posPaymentMethod.toString()));
       for (var item in event.orderItemsList!) {
         await SavedOrdersItemsDAO().insert(SavedOrdersItem(
@@ -1286,5 +1297,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
     updateLastSync();
     getAllSavedOrders(widget.events.id);
+  }
+
+  getRefundAmount(dynamic refundAmout) {
+    if (refundAmout != null) {
+      return refundAmout.toString();
+    } else {
+      return "0.00";
+    }
   }
 }

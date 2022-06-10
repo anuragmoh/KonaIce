@@ -1467,7 +1467,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         orderStatus: "saved",
         deleted: false,
         paymentTerm: "NA",
-        refundAmount: 0.0,
+        refundAmount: "0.00",
         posPaymentMethod: "NA"));
 
     // Insert Items into DB
