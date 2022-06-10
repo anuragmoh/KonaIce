@@ -22,6 +22,7 @@ import 'package:kona_ice_pos/network/repository/all_orders/all_order_presenter.d
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart';
 import 'package:kona_ice_pos/screens/payment/refund_popup.dart';
+import 'package:kona_ice_pos/screens/search_widget.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
@@ -197,6 +198,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     fontSize: 22.0,
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratBold)),
+            //SearchWidget(text: "text", onChanged: "", hintText: hintText)
           ]),
           Visibility(
             visible: false,
