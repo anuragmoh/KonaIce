@@ -1152,7 +1152,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else if (status == StringConstants.orderStatusCompleted) {
         return completedView();
       } else {
-        return inProgressView();
+        return _pendingView();
       }
     } else {
       return _savedView();
