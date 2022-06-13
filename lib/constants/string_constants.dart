@@ -246,6 +246,7 @@ class StringConstants {
   static const orderStatusSaved = "saved";
   static const orderStatusCompleted = "COMPLETED";
   static const orderStatusPreparing = "preparing";
+  static const orderStatusCancelled="CANCELLED";
   static const orderStatusNew = "NEW";
 
   // all device screen

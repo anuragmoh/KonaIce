@@ -269,7 +269,7 @@ class DBScheme {
    order_status character varying(50),
    deleted boolean DEFAULT false,
    payment_term character varying(100),
-   refund_amount numeric(12,2),
+   refund_amount character varying(50),
    pos_payment_method character varying(50)
 )''';
   static const savedOrdersItem = '''CREATE TABLE saved_orders_item (

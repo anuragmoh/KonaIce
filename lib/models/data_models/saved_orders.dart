@@ -24,7 +24,7 @@ class SavedOrders {
   String orderStatus;
   bool deleted;
   String paymentTerm;
-  dynamic refundAmount;
+  String refundAmount;
   String posPaymentMethod;
 
   SavedOrders(
