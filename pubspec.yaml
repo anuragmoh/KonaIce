@@ -31,7 +31,7 @@ dependencies:
     sdk: flutter
   # used for database
   sqflite_sqlcipher: ^2.1.1
-  path_provider: ^2.0.10
+  path_provider: ^2.0.11
   # used for secure storage
   flutter_secure_storage: ^5.0.2
   # used for date_format
@@ -39,16 +39,16 @@ dependencies:
   # country_code_picker
   country_code_picker: ^2.0.2
   #Badge for notification
-  badges: ^2.0.2
+  badges: ^2.0.3
   # https
   http: ^0.13.4
   # check connectivity
-  connectivity_plus: ^2.0.2
+  connectivity_plus: ^2.3.4
   #Device info
   device_info: ^2.0.3
   #bonjour service
   flutter_nearby_connections: ^1.1.1
-  geolocator: ^8.2.0
+  geolocator: ^8.2.1
   geocoding: ^2.0.4
   #Google location
   flutter_google_places: ^0.3.0
@@ -58,7 +58,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.5
   mask_text_input_formatter: ^2.3.0
 
 #  blinkcard_flutter: ^2.4.2
