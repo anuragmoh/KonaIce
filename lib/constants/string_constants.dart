@@ -19,6 +19,7 @@ class StringConstants {
   static const bbpos = 'BBPOS';
   static const empty = 'empty';
   static const foodExtraPopupMsg="text to reach back";
+  static const reconnect = 'Reconnect';
 
   //DB Insertion default Value
   static const trueText = 'true';
@@ -113,8 +114,6 @@ class StringConstants {
   static const paymentMode="Payment Mode";
   static const paymentModeCard="Card";
   static const paymentModeCash="Cash";
-  static const paymentCashCheck="CASH";
-  static const paymentNull="null";
 
   static const totalAmount = 'Total Amount';
   static const amountReceived = 'Amount Received';
@@ -235,6 +234,7 @@ class StringConstants {
   static const confirmMessage = "Do you really want to clear the cart ?";
   static const yes = "Yes";
   static const no = "No";
+  static const done = "Done";
   static const confirmNewOrder =
       "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
@@ -252,6 +252,10 @@ class StringConstants {
   static const orderStatusPreparing = "preparing";
   static const orderStatusCancelled="CANCELLED";
   static const orderStatusNew = "NEW";
+
+  //booleans
+  static const updateTrue = "true";
+  static const updateFalse = "false";
 
   // all device screen
   static const allDeviceScreenHead =

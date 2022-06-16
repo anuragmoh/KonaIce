@@ -1,14 +1,4 @@
-// To parse this JSON data, do
-//
-//     final finixSendReceiptRequest = finixSendReceiptRequestFromJson(jsonString);
 
-import 'dart:convert';
-
-FinixSendReceiptRequest finixSendReceiptRequestFromJson(String str) =>
-    FinixSendReceiptRequest.fromJson(json.decode(str));
-
-String finixSendReceiptRequestToJson(FinixSendReceiptRequest data) =>
-    json.encode(data.toJson());
 
 class FinixSendReceiptRequest {
   FinixSendReceiptRequest({

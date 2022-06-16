@@ -1,11 +1,5 @@
 import 'dart:convert';
 
-ForgotPasswordRequestModel forgotPasswordRequestModelFromJson(String str) =>
-    ForgotPasswordRequestModel.fromJson(json.decode(str));
-
-String forgotPasswordRequestModelToJson(ForgotPasswordRequestModel data) =>
-    json.encode(data.toJson());
-
 class ForgotPasswordRequestModel {
   ForgotPasswordRequestModel({
     this.email,
@@ -25,9 +19,6 @@ class ForgotPasswordRequestModel {
 
 ForgotPasswordResponseModel forgotPasswordResponseModelFromJson(String str) =>
     ForgotPasswordResponseModel.fromJson(json.decode(str));
-
-String forgotPasswordResponseModelToJson(ForgotPasswordResponseModel data) =>
-    json.encode(data.toJson());
 
 class ForgotPasswordResponseModel {
   ForgotPasswordResponseModel({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kona_ice_pos/common/base_method.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
@@ -19,52 +20,37 @@ class ValidationPopup extends StatefulWidget {
 }
 
 class _ValidationPopup extends State<ValidationPopup> {
-  String menuName = StringConstants.customMenuPackage;
-  bool isEditingMenuName = false;
-  var amountTextFieldController = TextEditingController();
-  var menuNameTextFieldController = TextEditingController();
-  String cardNumberValidationMessage = "";
-  String cardDateValidationMessage = "";
-  String cardCvvValidationMessage = "";
-  String cardNumber = "4111111111111111",
-      cardCvc = "123",
-      cardExpiryYear = "22",
-      cardExpiryMonth = "12";
-  String stripeTokenId = "", stripePaymentMethodId = "";
-  String demoCardNumber = "";
-  bool isCardNumberValid = false;
-  bool isExpiryValid = false;
-  bool isCvcValid = false;
-  bool isApiProcess = false;
-  late PaymentPresenter paymentPresenter;
-  TextEditingController dateExpiryController = TextEditingController();
-  var maskFormatter = MaskTextInputFormatter(
-      mask: '##/##',
-      filter: {"#": RegExp(r'[0-9]')},
-      type: MaskAutoCompletionType.lazy);
-
-  TextEditingController cardNumberController = TextEditingController();
-  TextEditingController cvcController = TextEditingController();
-
+  BaseMethod _baseMethod = BaseMethod();
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: showCustomMenuPopup(),
+      child: _showCustomMenuPopup(),
     );
   }
 
-  Widget showCustomMenuPopup() {
+  @override
+  void dispose(){
+    super.dispose();
+    _baseMethod.amountTextFieldController.dispose();
+    _baseMethod.menuNameTextFieldController.dispose();
+    _baseMethod.dateExpiryController.dispose();
+    _baseMethod.cardNumberController.dispose();
+    _baseMethod.cvcController.dispose();
+  }
+
+
+  Widget _showCustomMenuPopup() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: customMenuPopUpComponent(),
+      child: _customMenuPopUpComponent(),
     );
   }
 
-  Widget customMenuPopUpComponent() {
+  Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.43,
@@ -74,7 +60,7 @@ class _ValidationPopup extends State<ValidationPopup> {
           children: [
             CommonWidgets().popUpTopView(
                 title: StringConstants.error,
-                onTapCloseButton: onTapCloseButton),
+                onTapCloseButton: _onTapCloseButton),
             Padding(
               padding:
                   const EdgeInsets.only(top: 25.0, left: 23.0, bottom: 10.0),
@@ -82,7 +68,7 @@ class _ValidationPopup extends State<ValidationPopup> {
                   widget.validationMessage,
                   StyleConstants.customTextStyle(
                       fontSize: 14.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1,
                       fontFamily: FontConstants.montserratRegular),
                   textAlign: TextAlign.left),
             ),
@@ -94,7 +80,7 @@ class _ValidationPopup extends State<ValidationPopup> {
               children: [
                 CommonWidgets().buttonWidget(
                   StringConstants.okay,
-                  onTapCloseButton,
+                  _onTapCloseButton,
                 ),
               ],
             ),
@@ -107,7 +93,7 @@ class _ValidationPopup extends State<ValidationPopup> {
     );
   }
 
-  onTapCloseButton() {
+  _onTapCloseButton() {
     Navigator.of(context).pop(false);
   }
 }

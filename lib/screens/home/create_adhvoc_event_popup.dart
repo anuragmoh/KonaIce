@@ -1,7 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:http/http.dart' as http;
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
@@ -10,22 +17,16 @@ import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/session.dart';
+import 'package:kona_ice_pos/models/network_model/home/assest_model.dart';
+import 'package:kona_ice_pos/models/network_model/home/create_event_model.dart';
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/create_adhoc_event/create_adhoc_event_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
-import 'package:kona_ice_pos/models/network_model/home/assest_model.dart';
-import 'package:kona_ice_pos/models/network_model/home/create_event_model.dart';
 import 'package:kona_ice_pos/screens/home/uuid.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/date_formats.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
-import 'package:google_maps_webservice/places.dart';
-import 'package:google_api_headers/google_api_headers.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:http/http.dart' as http;
 
 class CreateAdhocEvent extends StatefulWidget {
   const CreateAdhocEvent({Key? key}) : super(key: key);
@@ -36,49 +37,49 @@ class CreateAdhocEvent extends StatefulWidget {
 
 class _CreateAdhocEventState extends State<CreateAdhocEvent>
     implements AssetsResponseContractor {
-  TextEditingController eventNameController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
-  TextEditingController cityController = TextEditingController();
-  TextEditingController stateController = TextEditingController();
-  TextEditingController zipCodeController = TextEditingController();
+  TextEditingController _eventNameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  TextEditingController _cityController = TextEditingController();
+  TextEditingController _stateController = TextEditingController();
+  TextEditingController _zipCodeController = TextEditingController();
 
   late Position _currentPosition;
 
-  String selectedState = "",
-      selectedCity = "",
-      selectedZipcode = "",
-      selectedAddress = "";
+  String _selectedState = "",
+      _selectedCity = "",
+      _selectedZipcode = "",
+      _selectedAddress = "";
 
-  bool isValidEventName = true,
-      isValidAddress = true,
-      isValidCity = true,
-      isValidZipCode = true,
-      isValidState = true,
-      isAssetSelected = true;
+  bool _isValidEventName = true,
+      _isValidAddress = true,
+      _isValidCity = true,
+      _isValidZipCode = true,
+      _isValidState = true,
+      _isAssetSelected = true;
 
   List<Datum> assetList = [];
 
-  late CreateAdhocEventPresenter presenter;
-  bool isApiProcess = false;
-  bool isEventCreated = false;
+  late CreateAdhocEventPresenter _presenter;
+  bool _isApiProcess = false;
+  bool _isEventCreated = false;
 
   // ignore: prefer_typing_uninitialized_variables
   var _selectedAsset;
-  var lat;
-  var long;
+  var _lat;
+  var _long;
   late String _currentCountry;
 
   _CreateAdhocEventState() {
-    presenter = CreateAdhocEventPresenter(this);
+    _presenter = CreateAdhocEventPresenter(this);
   }
 
-  getAssets() {
+  _getAssets() {
     CheckConnection().connectionState().then((value) {
       if (value!) {
         setState(() {
-          isApiProcess = true;
+          _isApiProcess = true;
         });
-        presenter.getAssets();
+        _presenter.getAssets();
       } else {
         CommonWidgets().showErrorSnackBar(
             errorMessage: StringConstants.noInternetConnection,
@@ -91,25 +92,33 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   void initState() {
     super.initState();
     setState(() {
-      eventNameController.text = StringConstants().getDefaultEventName();
+      _eventNameController.text = StringConstants().getDefaultEventName();
     });
-    getAssets();
-    getLocation();
+    _getAssets();
+    _getLocation();
   }
-
+  @override
+  void dispose() {
+    super.dispose();
+    _eventNameController.dispose();
+    _addressController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    _zipCodeController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Loader(
-        isCallInProgress: isApiProcess,
+        isCallInProgress: _isApiProcess,
         child: Dialog(
           //backgroundColor: Colors.transparent,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-          child: mainUI(),
+          child: _mainUI(),
         ));
   }
 
-  Widget mainUI() {
+  Widget _mainUI() {
     return SizedBox(
       width: 500.0,
       height: MediaQuery.of(context).size.height * 0.75,
@@ -117,7 +126,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         children: [
           CommonWidgets().popUpTopView(
             title: StringConstants.popHeading,
-            onTapCloseButton: onTapCloseButton,
+            onTapCloseButton: _onTapCloseButton,
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -131,20 +140,20 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     children: [
                       // Name Field
                       const SizedBox(height: 24.0),
-                      eventName(),
+                      _eventName(),
                       // Address Field
-                      address(),
+                      _address(),
                       // City field
-                      city(),
+                      _city(),
                       // State field
-                      state(),
+                      _state(),
                       // ZipCode field
-                      zipCode(),
+                      _zipCode(),
                       // Select Equipments Field
-                      dropDown(),
+                      _dropDown(),
                       // Create Button
                       const SizedBox(height: 24.0),
-                      createButton(),
+                      _createButton(),
                       const SizedBox(height: 24.0),
                     ],
                   ),
@@ -157,7 +166,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     );
   }
 
-  Widget eventName() => Column(
+  Widget _eventName() => Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -169,12 +178,12 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                   fontFamily: FontConstants.montserratRegular)),
           const SizedBox(height: 5.0),
           TextField(
-            controller: eventNameController,
+            controller: _eventNameController,
             keyboardType: TextInputType.name,
             decoration: InputDecoration(
               hintText: StringConstants.enterName,
               errorText:
-                  isValidEventName ? null : StringConstants.emptyEventName,
+                  _isValidEventName ? null : StringConstants.emptyEventName,
               border: const OutlineInputBorder(
                 borderSide: BorderSide(color: AppColors.denotiveColor4),
               ),
@@ -189,7 +198,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ],
       );
 
-  Widget address() => Column(
+  Widget _address() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -203,18 +212,18 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             const SizedBox(height: 5.0),
             GestureDetector(
               onTap: () {
-                googlePlaces();
+                _googlePlaces();
               },
               child: TextField(
                 scrollPhysics: const ScrollPhysics(),
-                enabled: zipCodeController.text.isEmpty ? true : false,
-                controller: addressController,
+                enabled: _zipCodeController.text.isEmpty ? true : false,
+                controller: _addressController,
                 keyboardType: TextInputType.streetAddress,
                 decoration: InputDecoration(
                   hintText: StringConstants.enterAddress,
                   errorStyle: const TextStyle(color: Colors.red),
                   errorText:
-                      isValidAddress ? null : StringConstants.emptyAddress,
+                      _isValidAddress ? null : StringConstants.emptyAddress,
                   border: const OutlineInputBorder(
                     borderSide: BorderSide(color: AppColors.textColor2),
                   ),
@@ -229,7 +238,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             )
           ]);
 
-  Widget city() => Column(
+  Widget _city() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -243,13 +252,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             const SizedBox(height: 5.0),
             TextField(
               enabled: false,
-              controller: cityController,
+              controller: _cityController,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
-                enabled: cityController.text.isEmpty ? true : false,
+                enabled: _cityController.text.isEmpty ? true : false,
                 hintText: StringConstants.enterCity,
                 errorStyle: const TextStyle(color: Colors.red),
-                errorText: isValidCity ? null : StringConstants.emptyCity,
+                errorText: _isValidCity ? null : StringConstants.emptyCity,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.textColor2),
                 ),
@@ -263,7 +272,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             )
           ]);
 
-  Widget state() => Column(
+  Widget _state() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -276,13 +285,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     fontFamily: FontConstants.montserratRegular)),
             const SizedBox(height: 5.0),
             TextField(
-              controller: stateController,
+              controller: _stateController,
               keyboardType: TextInputType.streetAddress,
               decoration: InputDecoration(
-                enabled: stateController.text.isEmpty ? true : false,
+                enabled: _stateController.text.isEmpty ? true : false,
                 hintText: StringConstants.enterState,
                 errorStyle: const TextStyle(color: Colors.red),
-                errorText: isValidState ? null : StringConstants.emptyState,
+                errorText: _isValidState ? null : StringConstants.emptyState,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.textColor2),
                 ),
@@ -296,7 +305,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             )
           ]);
 
-  Widget zipCode() => Column(
+  Widget _zipCode() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -309,8 +318,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                     fontFamily: FontConstants.montserratRegular)),
             const SizedBox(height: 5.0),
             TextField(
-              controller: zipCodeController,
-              enabled: zipCodeController.text.isEmpty ? true : false,
+              controller: _zipCodeController,
+              enabled: _zipCodeController.text.isEmpty ? true : false,
               keyboardType: TextInputType.number,
               maxLength: 5,
               inputFormatters: <TextInputFormatter>[
@@ -320,7 +329,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 hintText: StringConstants.enterZipCode,
                 counterText: "",
                 errorStyle: const TextStyle(color: Colors.red),
-                errorText: isValidZipCode ? null : StringConstants.emptyZipCode,
+                errorText: _isValidZipCode ? null : StringConstants.emptyZipCode,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.denotiveColor4),
                 ),
@@ -334,7 +343,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             )
           ]);
 
-  Widget dropDown() => Column(
+  Widget _dropDown() => Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -351,7 +360,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 height: 60.0,
                 decoration: BoxDecoration(
                     border: Border.all(
-                        color: isAssetSelected
+                        color: _isAssetSelected
                             ? AppColors.denotiveColor4
                             : AppColors.textColor5,
                         width: 1.0),
@@ -361,7 +370,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      equipmentDropDown(),
+                      _equipmentDropDown(),
 /*                      const Padding(
                         padding: EdgeInsets.only(right: 16.0),
                         child: Icon(Icons.arrow_drop_down_sharp, size: 20.0),
@@ -372,7 +381,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
 
             // Error Message
             Visibility(
-              visible: !isAssetSelected,
+              visible: !_isAssetSelected,
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0, left: 12.0),
                 child: CommonWidgets().textView(
@@ -385,7 +394,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
             ),
           ]);
 
-  Widget equipmentDropDown() => DropdownButton(
+  Widget _equipmentDropDown() => DropdownButton(
         hint: const Text(StringConstants.selectEquipment),
         isDense: true,
         underline: Container(),
@@ -410,8 +419,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         value: _selectedAsset,
       );
 
-  Widget createButton() => GestureDetector(
-        onTap: onTapCreate,
+  Widget _createButton() => GestureDetector(
+        onTap: _onTapCreate,
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 40.0,
@@ -429,10 +438,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ),
       );
 
-  onTapCreate() {
+  _onTapCreate() {
     CheckConnection().connectionState().then((value) {
       if (value!) {
-        validateData();
+        _validateData();
       } else {
         CommonWidgets().showErrorSnackBar(
             errorMessage: StringConstants.noInternetConnection,
@@ -441,14 +450,14 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     });
   }
 
-  onTapCloseButton() {
-    Navigator.of(context).pop(isEventCreated);
+  _onTapCloseButton() {
+    Navigator.of(context).pop(_isEventCreated);
   }
 
   @override
   void showAssetsError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
     CommonWidgets().showErrorSnackBar(
         errorMessage: exception.message ?? StringConstants.somethingWentWrong,
@@ -458,7 +467,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   @override
   void showAssetsSuccess(response) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       AssetsResponseModel responseModel = response;
       assetList.addAll(responseModel.data!);
     });
@@ -467,7 +476,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
     //onTapCloseButton();
     CommonWidgets()
@@ -477,97 +486,97 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   @override
   void showSuccess(response) {
     CreateEventResponseModel responseModel = response;
-    updateDB();
+    _updateDB();
     setState(() {
-      isApiProcess = false;
-      isEventCreated = true;
+      _isApiProcess = false;
+      _isEventCreated = true;
     });
     CommonWidgets().showSuccessSnackBar(
         message: responseModel.general![0].message ??
             StringConstants.eventCreatedSuccessfully,
         context: context);
-    onTapCloseButton();
+    _onTapCloseButton();
   }
 
-  updateDB() async {
+  _updateDB() async {
     await SessionDAO().insert(Session(
         key: DatabaseKeys.adhocEvent, value: Date.getTimeStampFromDate()));
   }
 
-  validateData() {
+  _validateData() {
     setState(() {
-      isValidEventName = eventNameController.text.isNotEmpty ? true : false;
-      isValidAddress = addressController.text.isNotEmpty ? true : false;
-      isValidCity = cityController.text.isNotEmpty ? true : false;
-      isValidState = stateController.text.isNotEmpty ? true : false;
-      isValidZipCode = zipCodeController.text.isNotEmpty ? true : false;
-      isAssetSelected = _selectedAsset != null ? true : false;
+      _isValidEventName = _eventNameController.text.isNotEmpty ? true : false;
+      _isValidAddress = _addressController.text.isNotEmpty ? true : false;
+      _isValidCity = _cityController.text.isNotEmpty ? true : false;
+      _isValidState = _stateController.text.isNotEmpty ? true : false;
+      _isValidZipCode = _zipCodeController.text.isNotEmpty ? true : false;
+      _isAssetSelected = _selectedAsset != null ? true : false;
     });
-    if (eventNameController.text.isEmpty) {
+    if (_eventNameController.text.isEmpty) {
       setState(() {
-        isValidEventName = false;
+        _isValidEventName = false;
       });
       return false;
     }
-    if (addressController.text.isEmpty) {
+    if (_addressController.text.isEmpty) {
       setState(() {
-        isValidAddress = false;
+        _isValidAddress = false;
       });
       return false;
     }
-    if (cityController.text.isEmpty) {
+    if (_cityController.text.isEmpty) {
       setState(() {
-        isValidCity = false;
+        _isValidCity = false;
       });
       return false;
     }
-    if (stateController.text.isEmpty) {
+    if (_stateController.text.isEmpty) {
       setState(() {
-        isValidState = false;
+        _isValidState = false;
       });
       return false;
     }
-    if (zipCodeController.text.isEmpty) {
+    if (_zipCodeController.text.isEmpty) {
       setState(() {
-        isValidZipCode = false;
+        _isValidZipCode = false;
       });
       return false;
     }
     if (_selectedAsset == null) {
       setState(() {
-        isAssetSelected = false;
+        _isAssetSelected = false;
       });
       return false;
     }
-    createEvent();
+    _createEvent();
   }
 
-  createEvent() {
+  _createEvent() {
     CreateEventRequestModel createEventRequestModel = CreateEventRequestModel();
-    createEventRequestModel.name = eventNameController.text.toString();
-    createEventRequestModel.addressLine1 = addressController.text.toString();
+    createEventRequestModel.name = _eventNameController.text.toString();
+    createEventRequestModel.addressLine1 = _addressController.text.toString();
     createEventRequestModel.addressLine2 = "";
-    createEventRequestModel.city = cityController.text.toString();
-    createEventRequestModel.state = stateController.text.toString();
-    createEventRequestModel.zipCode = zipCodeController.text.toString();
+    createEventRequestModel.city = _cityController.text.toString();
+    createEventRequestModel.state = _stateController.text.toString();
+    createEventRequestModel.zipCode = _zipCodeController.text.toString();
     createEventRequestModel.startDateTime = int.parse(Date.getTimeStamp());
     //int.parse(Date.getStartOfDateTimeStamp(date: DateTime.now()));
     createEventRequestModel.endDateTime =
         int.parse(Date.getEndOfDateTimeStamp(date: DateTime.now()));
-    createEventRequestModel.addressLatitude = lat;
-    createEventRequestModel.addressLongitude = long;
+    createEventRequestModel.addressLatitude = _lat;
+    createEventRequestModel.addressLongitude = _long;
     createEventRequestModel.country = _currentCountry;
     EventAssetsList eventAssetsList = EventAssetsList();
     eventAssetsList.assetId = _selectedAsset;
     createEventRequestModel.eventAssetsList = [eventAssetsList];
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    presenter.createEvent(createEventRequestModel);
+    _presenter.createEvent(createEventRequestModel);
   }
 
   //get location using google places
-  Future<void> googlePlaces() async {
+  Future<void> _googlePlaces() async {
     Prediction? p = await PlacesAutocomplete.show(
       offset: 0,
       strictbounds: false,
@@ -596,9 +605,9 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       // types: ["(cities)"],
     );
     if (p != null) {
-      displayPrediction(p);
+      _displayPrediction(p);
       setState(() {
-        isApiProcess = true;
+        _isApiProcess = true;
       });
     }
   }
@@ -607,25 +616,29 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     debugPrint(response.toString());
   }
 
-  Future<void> displayPrediction(Prediction p) async {
+  Future<void> _displayPrediction(Prediction p) async {
     GoogleMapsPlaces _places = GoogleMapsPlaces(
       apiKey: GoogleMapKey.googleMapKey,
       apiHeaders: await const GoogleApiHeaders().getHeaders(),
     );
     PlacesDetailsResponse detail =
         await _places.getDetailsByPlaceId(p.placeId.toString());
-
     setState(() {
-      lat = detail.result.geometry!.location.lat;
-      long = detail.result.geometry!.location.lng;
+      _lat = detail.result.geometry!.location.lat;
+      _long = detail.result.geometry!.location.lng;
     });
-
     debugPrint("Result ${detail.result.addressComponents[0].longName}");
 
     debugPrint(
         "Picked lat and long : ${detail.result.geometry!.location.lat} & ${detail.result.geometry!.location.lng}");
     debugPrint("Picked location: ${detail.result.formattedAddress}");
+    _buildAddComponents(detail);
+    setState(() {
+      _isApiProcess = false;
+    });
+  }
 
+  void _buildAddComponents(PlacesDetailsResponse detail) {
     for (int i = 0; i < detail.result.addressComponents.length; i++) {
       try {
         for (int j = 0;
@@ -639,13 +652,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
           }
           if (detail.result.addressComponents[i].types[j] == "locality") {
             setState(() {
-              cityController.text = detail.result.addressComponents[i].longName;
+              _cityController.text = detail.result.addressComponents[i].longName;
             });
-            debugPrint("city: $selectedCity");
+            debugPrint("city: $_selectedCity");
 
             //Split the string to show in address
             const start = "";
-            final end = cityController.text;
+            final end = _cityController.text;
             debugPrint("trimmedEnd======>: $end");
             final startIndex = detail.result.formattedAddress!.indexOf(start);
             final endIndex = detail.result.formattedAddress!.indexOf(end);
@@ -654,22 +667,22 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 .trim();
             setState(() {
               String strFinal = result.substring(0, result.length - 1);
-              addressController.text = strFinal;
+              _addressController.text = strFinal;
               debugPrint("trimmed======>: $strFinal");
             });
           }
           if (detail.result.addressComponents[i].types[j] ==
               "administrative_area_level_1") {
             setState(() {
-              stateController.text =
+              _stateController.text =
                   detail.result.addressComponents[i].longName;
             });
 
-            debugPrint("state: $selectedState");
+            debugPrint("state: $_selectedState");
           }
           if (detail.result.addressComponents[i].types[j] == "postal_code") {
             setState(() {
-              zipCodeController.text =
+              _zipCodeController.text =
                   detail.result.addressComponents[i].longName;
             });
           }
@@ -683,15 +696,11 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
       } on RangeError catch (e) {
         debugPrint(e.toString());
       } catch (e) {
-        debugPrint(e.toString());
       }
     }
-    setState(() {
-      isApiProcess = false;
-    });
   }
 
-  getLocation() async {
+  _getLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -739,10 +748,10 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
           _currentPosition.latitude, _currentPosition.longitude);
       Placemark place = placeMarks[0];
       debugPrint("Place data $place");
-      cityController.text = place.locality!;
-      addressController.text = place.street! + place.subLocality!;
-      stateController.text = place.administrativeArea!;
-      zipCodeController.text = place.postalCode!;
+      _cityController.text = place.locality!;
+      _addressController.text = place.street! + place.subLocality!;
+      _stateController.text = place.administrativeArea!;
+      _zipCodeController.text = place.postalCode!;
       setState(() {
         _currentCountry = place.country!;
       });
@@ -768,7 +777,7 @@ getAddressFromLatLng(context, double lat, double lng) async {
     if (response.statusCode == 200) {
       Map data = jsonDecode(response.body);
       String _formattedAddress = data["results"][0]["formatted_address"];
-      debugPrint("response ==== $data");
+      print("response ==== $data");
       debugPrint('URL===>$url');
       debugPrint(data["results"][0]["address_components"][6]['long_name']);
       return _formattedAddress;

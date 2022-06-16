@@ -5,7 +5,6 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class CommonWidgets {
   image(
@@ -33,7 +32,7 @@ class CommonWidgets {
     return Container(
       height: 8.30 * SizeConfig.heightSizeMultiplier,
       decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
+          color: AppColors.primaryColor1,
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(8.0),
               bottomRight: Radius.circular(8.0))),
@@ -55,7 +54,7 @@ class CommonWidgets {
               userName,
               StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.whiteColor),
+                  color: AppColors.whiteColor,
                   fontFamily: FontConstants.montserratSemiBold)),
         ),
         Visibility(
@@ -130,7 +129,7 @@ class CommonWidgets {
                   '$quantity',
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor2),
+                      color: AppColors.textColor2,
                       fontFamily: FontConstants.montserratSemiBold)),
             ),
           ),
@@ -149,7 +148,7 @@ class CommonWidgets {
       width: 3.5 * SizeConfig.imageSizeMultiplier,
       height: 3.5 * SizeConfig.imageSizeMultiplier,
       decoration: BoxDecoration(
-        color: getMaterialColor(AppColors.primaryColor2),
+        color: AppColors.primaryColor2,
         borderRadius: BorderRadius.circular(15.0),
       ),
       child: Center(
@@ -157,7 +156,7 @@ class CommonWidgets {
             title,
             StyleConstants.customTextStyle(
                 fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor4),
+                color: AppColors.textColor4,
                 fontFamily: FontConstants.montserratSemiBold),
             textAlign: TextAlign.center),
       ),
@@ -168,7 +167,7 @@ class CommonWidgets {
       {required String title, required Function onTapCloseButton}) {
     return Container(
         decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
+            color: AppColors.primaryColor1,
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
         child: Padding(
@@ -180,7 +179,7 @@ class CommonWidgets {
                       title,
                       StyleConstants.customTextStyle(
                           fontSize: 16.0,
-                          color: getMaterialColor(AppColors.whiteColor),
+                          color: AppColors.whiteColor,
                           fontFamily: FontConstants.montserratSemiBold)),
                   GestureDetector(
                     onTap: () {
@@ -199,7 +198,7 @@ class CommonWidgets {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor2),
+            color: AppColors.primaryColor2,
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
@@ -209,7 +208,7 @@ class CommonWidgets {
               buttonTitle,
               style: StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratBold),
             ),
           ),
@@ -221,7 +220,7 @@ class CommonWidgets {
         onTap: onTap,
         child: Container(
           decoration: BoxDecoration(
-            // color: getMaterialColor(AppColors.primaryColor2),
+            // color: AppColors.primaryColor2,
             border: Border.all(color: AppColors.primaryColor2),
             borderRadius: BorderRadius.circular(30.0),
           ),
@@ -232,7 +231,7 @@ class CommonWidgets {
               buttonTitle,
               style: StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratBold),
             ),
           ),
@@ -246,9 +245,9 @@ class CommonWidgets {
           errorMessage,
           StyleConstants.customTextStyle(
               fontSize: 14.0,
-              color: getMaterialColor(AppColors.whiteColor),
+              color: AppColors.whiteColor,
               fontFamily: FontConstants.montserratMedium)),
-      backgroundColor: getMaterialColor(AppColors.denotiveColor1),
+      backgroundColor: AppColors.denotiveColor1,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -260,9 +259,9 @@ class CommonWidgets {
           message,
           StyleConstants.customTextStyle(
               fontSize: 14.0,
-              color: getMaterialColor(AppColors.whiteColor),
+              color: AppColors.whiteColor,
               fontFamily: FontConstants.montserratMedium)),
-      backgroundColor: getMaterialColor(AppColors.denotiveColor2),
+      backgroundColor: AppColors.denotiveColor2,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -271,7 +270,7 @@ class CommonWidgets {
     return Container(
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
+          color: AppColors.primaryColor1,
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(8.0),
               bottomRight: Radius.circular(8.0))),
@@ -287,7 +286,7 @@ class CommonWidgets {
       alignment: Alignment.bottomCenter,
       height: 4.19 * SizeConfig.heightSizeMultiplier,
       decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor1),
+          color: AppColors.primaryColor1,
           borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
     );

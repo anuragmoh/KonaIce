@@ -3,8 +3,6 @@ import 'dart:convert';
 SyncEventMenu syncEventMenuFromJson(String str) =>
     SyncEventMenu.fromJson(json.decode(str));
 
-String syncEventMenuToJson(SyncEventMenu data) => json.encode(data.toJson());
-
 class SyncEventMenu {
   SyncEventMenu({
     required this.pOsSyncEventDataDtoList,
@@ -358,12 +356,6 @@ class POsSyncItemCategoryDataDtoList {
         "deleted": deleted,
       };
 }
-
-SyncEventRequestModel syncEventRequestModelFromJson(String str) =>
-    SyncEventRequestModel.fromJson(json.decode(str));
-
-String syncEventRequestModelToJson(SyncEventRequestModel data) =>
-    json.encode(data.toJson());
 
 class SyncEventRequestModel {
   SyncEventRequestModel({
