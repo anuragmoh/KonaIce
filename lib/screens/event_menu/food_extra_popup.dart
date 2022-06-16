@@ -91,11 +91,11 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
       SizedBox(
         height: 40,
         child: Checkbox(
-            side: BorderSide(color: getMaterialColor(AppColors.textColor2)),
+            side: BorderSide(color: AppColors.textColor2),
             activeColor:AppColors.primaryColor1,
-            value: foodExtraItemList[index].isItemSelected,
+            value: _foodExtraItemList[index].isItemSelected,
             onChanged: (isSelected) {
-              onTapCheckBox((isSelected ?? false), index, foodExtraObject);
+              _onTapCheckBox((isSelected ?? false), index, foodExtraObject);
             }),
       ),
       CommonWidgets().textWidget(
