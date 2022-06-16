@@ -6,9 +6,6 @@ List<CustomerDetails> customerDetailsFromJson(String str) =>
     List<CustomerDetails>.from(
         json.decode(str).map((x) => CustomerDetails.fromJson(x)));
 
-String customerDetailsToJson(List<CustomerDetails> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class CustomerDetails {
   CustomerDetails({
     this.id,

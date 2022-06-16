@@ -5,10 +5,9 @@ import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
+import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
-import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import '../../utils/size_configuration.dart';
 
@@ -21,19 +20,19 @@ class AvailableDeviceListScreen extends StatefulWidget {
 }
 
 class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
-  List<Device> deviceList = [];
+  List<Device> _deviceList = [];
 
-  getAvailableDevice() {
+  _getAvailableDevice(){
     P2PConnectionManager.shared.startService(isStaffView: true);
     P2PConnectionManager.shared.getDeviceList(getBackValue);
   }
 
-  bool isConnectionProcess = false;
+  bool _isConnectionProcess = false;
 
-  getBackValue(dynamic value) {
+  getBackValue(dynamic value){
     setState(() {
-      deviceList.clear();
-      deviceList.addAll(value);
+      _deviceList.clear();
+      _deviceList.addAll(value);
     });
     // debugPrint("It's back with value${deviceList.length}");
   }
@@ -41,21 +40,19 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   @override
   void initState() {
     super.initState();
-    getAvailableDevice();
+    _getAvailableDevice();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Loader(
-        isCallInProgress: isConnectionProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isConnectionProcess, child: _mainUi(context));
   }
-
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        color: getMaterialColor(AppColors.primaryColor1),
+        color: AppColors.primaryColor1,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -63,129 +60,138 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
               padding: EdgeInsets.only(
                   top: 6.77 * SizeConfig.imageSizeMultiplier,
                   bottom: 5.07 * SizeConfig.imageSizeMultiplier),
-              child: icon(),
+              child: _icon(),
             ),
-            bodyContainer(),
+            _bodyContainer(),
             // loginContainer(),
           ],
         ),
       ),
     );
   }
-
-  Widget bodyContainer() => Container(
-        width: 360,
-        height: MediaQuery.of(context).size.height * 0.65,
-        color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
-              child: Text(
-                StringConstants.allDeviceScreenHead,
-                textAlign: TextAlign.center,
-                style: StyleConstants.customTextStyle22MontserratSemiBold(
-                    color: AppColors.textColor1),
-              ),
-            ),
-            Expanded(
-              child: deviceList.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: deviceList.length,
-                      itemBuilder: (context, index) {
-                        final device = deviceList[index];
-                        return listView(device);
-                      })
-                  : Align(
-                      alignment: Alignment.center,
-                      child: CommonWidgets().textWidget(
-                          StringConstants.noDeviceAvailableToConnect,
-                          StyleConstants.customTextStyle20MontserratSemiBold(
-                              color: AppColors.textColor1))),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: proceedButton(
-                  StringConstants.proceed,
-                  StyleConstants.customTextStyle12MontserratBold(
-                      color: getMaterialColor(AppColors.textColor1))),
-            )
-          ],
+  Widget _bodyContainer()=> Container(
+    width: 360,
+    height: MediaQuery.of(context).size.height * 0.65,
+    color: Colors.white,
+    child:  Column(
+      children: [
+         Padding(
+          padding:  const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
+          child: Text(StringConstants.allDeviceScreenHead,
+            textAlign: TextAlign.center,
+            style: StyleConstants.customTextStyle22MontserratSemiBold(
+              color: AppColors.textColor1),),
         ),
-      );
-  Widget icon() {
+        Expanded(
+          child: _deviceList.isNotEmpty ? ListView.builder(
+            itemCount: _deviceList.length,
+            itemBuilder: (context,index){
+              final device = _deviceList[index];
+            return _listView(device);
+            }) : Align(
+            alignment: Alignment.center,
+            child: CommonWidgets().textWidget(StringConstants.noDeviceAvailableToConnect, StyleConstants.customTextStyle20MontserratSemiBold(color: AppColors.textColor1))
+            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(40.0),
+          child: _proceedButton(StringConstants.proceed, StyleConstants.customTextStyle12MontserratBold(
+              color: AppColors.textColor1)),
+        )
+      ],
+    ) ,
+  );
+  Widget _icon() {
     return CommonWidgets().image(
         image: AssetsConstants.konaIcon,
         width: 20.96 * SizeConfig.imageSizeMultiplier,
         height: 15.62 * SizeConfig.imageSizeMultiplier);
   }
 
-  Widget listView(Device device) => Column(
+  Widget _listView(Device device)=> Column(
+    children: [
+      _buildPad(device),
+      const Padding(
+        padding: EdgeInsets.only(top: 15),
+        child: Divider(),
+      ),
+    ],
+  );
+
+  Padding _buildPad(Device device) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: _buildRow(device),
+    );
+  }
+
+  Row _buildRow(Device device) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: CommonWidgets().image(
-                    image: AssetsConstants.tabletIcon,
-                    width: 1.56 * SizeConfig.imageSizeMultiplier,
-                    height: 2.08 * SizeConfig.imageSizeMultiplier),
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      device.deviceName,
-                      textAlign: TextAlign.left,
-                      style: StyleConstants.customTextStyle15MonsterMedium(
-                          color: getMaterialColor(AppColors.textColor1)),
-                    ),
-                    Text('(${getStateName(device.state)})',
-                        textAlign: TextAlign.left,
-                        style: StyleConstants.customTextStyle15MonsterMedium(
-                            color: getStateColor(device.state))),
-                  ],
-                ),
-              ),
-              GestureDetector(
-                onTap: () => _onButtonClicked(device),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  height: 35,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: getButtonColor(device.state),
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      getButtonStateName(device.state),
-                      style: const TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            ]),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
+          child:  CommonWidgets().image(
+              image: AssetsConstants.tabletIcon,
+              width:  1.56 * SizeConfig.imageSizeMultiplier,
+              height: 2.08 * SizeConfig.imageSizeMultiplier) ,),
+      _buildExpanded(device),
+      _buildGestureDetector(device),
+    ]);
+  }
+
+  GestureDetector _buildGestureDetector(Device device) {
+    return GestureDetector(
+      onTap: () => _onButtonClicked(device),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.all(8.0),
+        height: 35,
+        width: 100,
+        decoration: BoxDecoration(
+          color: _getButtonColor(device.state),
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Center(
+          child: Text(
+            _getButtonStateName(device.state),
+            style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold),
           ),
-          const Padding(
-            padding: EdgeInsets.only(top: 15),
-            child: Divider(),
+        ),
+      ),
+    );
+  }
+
+  Expanded _buildExpanded(Device device) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            device.deviceName,
+            textAlign: TextAlign.left,
+            style: StyleConstants.customTextStyle15MonsterMedium(
+                color: AppColors.textColor1),
           ),
+          Text(
+            '(${_getStateName(device.state)})',
+            textAlign: TextAlign.left,
+            style: StyleConstants.customTextStyle15MonsterMedium(
+            color: _getStateColor(device.state))),
         ],
-      );
-  Widget proceedButton(String buttonText, TextStyle textStyle) {
+      ),
+    );
+  }
+  Widget _proceedButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
       onTap: () {
-        onTapProceedButton();
+        _onTapProceedButton();
       },
       child: Container(
         width: 210,
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: AppColors.primaryColor2,
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -199,34 +205,33 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   }
 
   //Action Event
-  onTapProceedButton() {
+  _onTapProceedButton() {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const Dashboard()));
   }
 
-  String getStateName(SessionState state) {
+  String _getStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
         debugPrint('not connected');
-        isConnectionProcess = false;
+        _isConnectionProcess = false;
         return "disconnected";
       case SessionState.connecting:
         return "waiting";
       default:
-        isConnectionProcess = false;
+        _isConnectionProcess = false;
         debugPrint('connected');
         return "connected";
     }
   }
-
-  Color getStateColor(SessionState state) {
+  Color _getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
-        return getMaterialColor(AppColors.textColor5);
+        return AppColors.textColor5;
       case SessionState.connecting:
-        return getMaterialColor(AppColors.textColor2);
+        return AppColors.textColor2;
       default:
-        return getMaterialColor(AppColors.textColor7);
+        return AppColors.textColor7;
     }
   }
 
@@ -236,7 +241,7 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
         P2PConnectionManager.shared.connectWithDevice(device);
         setState(() {
           debugPrint('state changed');
-          isConnectionProcess = true;
+          _isConnectionProcess = true;
         });
         break;
       case SessionState.connected:
@@ -247,17 +252,17 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
     }
   }
 
-  Color getButtonColor(SessionState state) {
+  Color _getButtonColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
       case SessionState.connecting:
-        return getMaterialColor(AppColors.denotiveColor2);
+        return AppColors.denotiveColor2;
       default:
-        return getMaterialColor(AppColors.denotiveColor1);
+        return AppColors.denotiveColor1;
     }
   }
 
-  String getButtonStateName(SessionState state) {
+  String _getButtonStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
       case SessionState.connecting:

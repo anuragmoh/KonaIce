@@ -17,6 +17,7 @@ class StringConstants {
   static const usCountryCode = '+1';
   static const test = 'TestCertification';
   static const bbpos = 'BBPOS';
+  static const reconnect = 'Reconnect';
 
   //DB Insertion default Value
   static const trueText = 'true';
@@ -231,6 +232,7 @@ class StringConstants {
   static const confirmMessage = "Do you really want to clear the cart ?";
   static const yes = "Yes";
   static const no = "No";
+  static const done = "Done";
   static const confirmNewOrder =
       "Do you want to save or cancel currently selected order ?";
   static const btnCancel = "Cancel";
@@ -248,6 +250,10 @@ class StringConstants {
   static const orderStatusPreparing = "preparing";
   static const orderStatusCancelled="CANCELLED";
   static const orderStatusNew = "NEW";
+
+  //booleans
+  static const updateTrue = "true";
+  static const updateFalse = "false";
 
   // all device screen
   static const allDeviceScreenHead =

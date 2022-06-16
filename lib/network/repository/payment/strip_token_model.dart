@@ -1,14 +1,7 @@
-// To parse this JSON data, do
-//
-//     final stripTokenRequestModel = stripTokenRequestModelFromJson(jsonString);
-
 import 'dart:convert';
 
 StripTokenResponseModel stripTokenResponseModelFromJson(String str) =>
     StripTokenResponseModel.fromJson(json.decode(str));
-
-String stripTokenResponseModelToJson(StripTokenResponseModel data) =>
-    json.encode(data.toJson());
 
 class StripTokenResponseModel {
   StripTokenResponseModel({

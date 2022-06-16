@@ -3,6 +3,7 @@ class CustomerActionConst {
   static const paymentModeSelected = "paymentModeSelected";
   static const editOrderDetails = "editOrderDetails";
   static const tip = "tip";
+  static const paymentStatus = "paymentStatus";
 }
 
 class StaffActionConst {
@@ -17,4 +18,7 @@ class StaffActionConst {
       "showSplashAtCustomerForHomeAndSettings";
   static const customerCardScan = "customerCardScan";
   static const tip = "tip";
+  static const paymentStatus = "paymentStatus";
 }
+
+

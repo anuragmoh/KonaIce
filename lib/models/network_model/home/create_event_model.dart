@@ -1,11 +1,5 @@
 import 'dart:convert';
 
-CreateEventRequestModel createEventRequestModelFromJson(String str) =>
-    CreateEventRequestModel.fromJson(json.decode(str));
-
-String createEventRequestModelToJson(CreateEventRequestModel data) =>
-    json.encode(data.toJson());
-
 class CreateEventRequestModel {
   CreateEventRequestModel({
     this.name,
@@ -88,9 +82,6 @@ class EventAssetsList {
 
 CreateEventResponseModel createEventResponseModelFromJson(String str) =>
     CreateEventResponseModel.fromJson(json.decode(str));
-
-String createEventResponseModelToJson(CreateEventResponseModel data) =>
-    json.encode(data.toJson());
 
 class CreateEventResponseModel {
   CreateEventResponseModel({

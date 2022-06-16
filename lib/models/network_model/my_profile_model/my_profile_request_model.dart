@@ -1,14 +1,4 @@
-// To parse this JSON data, do
-//
-//     final myProfileUpdateRequestModel = myProfileUpdateRequestModelFromJson(jsonString);
 
-import 'dart:convert';
-
-MyProfileUpdateRequestModel myProfileUpdateRequestModelFromJson(String str) =>
-    MyProfileUpdateRequestModel.fromJson(json.decode(str));
-
-String myProfileUpdateRequestModelToJson(MyProfileUpdateRequestModel data) =>
-    json.encode(data.toJson());
 
 class MyProfileUpdateRequestModel {
   MyProfileUpdateRequestModel({

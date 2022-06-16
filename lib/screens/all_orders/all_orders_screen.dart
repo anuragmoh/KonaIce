@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -24,11 +22,14 @@ import 'package:kona_ice_pos/network/repository/all_orders/all_order_presenter.d
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart';
 import 'package:kona_ice_pos/screens/payment/refund_popup.dart';
+import 'package:kona_ice_pos/screens/search_widget.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+
+import '../../models/network_model/order_model/order_response_model.dart';
 
 class AllOrdersScreen extends StatefulWidget {
   final Function(
@@ -49,21 +50,21 @@ class AllOrdersScreen extends StatefulWidget {
 
 class _AllOrdersScreenState extends State<AllOrdersScreen>
     implements ResponseContractor {
-  bool isItemClick = true;
-  List<SavedOrders> savedOrdersList = [];
-  List<SavedOrdersItem> savedOrderItemList = [];
-  List<SavedOrdersExtraItems> savedOrderExtraItemList = [];
-  late AllOrderPresenter allOrderPresenter;
-  List<AllOrderResponse> allOrdersList = [];
-  int selectedRow = -1;
-  bool isApiProcess = false;
-  int countOffSet = 0;
-  bool refundBool = false;
-  bool paymentModeCardBool = false;
-  String paymentModeCard = "";
+  bool _isItemClick = true;
+  List<SavedOrders> _savedOrdersList = [];
+  List<SavedOrdersItem> _savedOrderItemList = [];
+  List<SavedOrdersExtraItems> _savedOrderExtraItemList = [];
+  late AllOrderPresenter _allOrderPresenter;
+  List<AllOrderResponse> _allOrdersList = [];
+  int _selectedRow = -1;
+  bool _isApiProcess = false;
+  int _countOffSet = 0;
+  bool _refundBool = false;
+  bool _paymentModeCardBool = false;
+  String _paymentModeCard = "";
 
   _AllOrdersScreenState() {
-    allOrderPresenter = AllOrderPresenter(this);
+    _allOrderPresenter = AllOrderPresenter(this);
   }
 
   getSyncOrders(
@@ -72,9 +73,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       required String eventId,
       required int offset}) {
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    allOrderPresenter.getSyncOrder(
+    _allOrderPresenter.getSyncOrder(
         orderStatus: orderStatus,
         eventId: eventId,
         offset: offset,
@@ -90,7 +91,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  getData() {
+  _getData() {
     CheckConnection().connectionState().then((value) {
       if (value!) {
         getLastSync().then((value) {
@@ -98,13 +99,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               lastSync: value,
               orderStatus: "",
               eventId: widget.events.id,
-              offset: countOffSet);
+              offset: _countOffSet);
         });
       } else {
         CommonWidgets().showErrorSnackBar(
             errorMessage: StringConstants.noInternetConnection,
             context: context);
-        getAllSavedOrders(widget.events.id);
+        _getAllSavedOrders(widget.events.id);
       }
     });
   }
@@ -112,19 +113,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   @override
   void initState() {
     super.initState();
-    getData();
+    _getData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Loader(isCallInProgress: isApiProcess, child: mainUi(context));
+    return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
 
-  Widget mainUi(BuildContext context) {
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
-        child: savedOrdersList.isNotEmpty
+        child: _savedOrdersList.isNotEmpty
             ? Column(
                 children: [
                   // topWidget(),
@@ -144,7 +145,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  Widget topWidget() => Container(
+  Widget _topWidget() => Container(
         height: 100.0,
         decoration: BoxDecoration(
             color: getMaterialColor(AppColors.primaryColor1),
@@ -155,38 +156,38 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   Widget bodyWidget() => Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
-        child: bodyWidgetComponent(),
+        child: _bodyWidgetComponent(),
       );
 
-  Widget bodyWidgetComponent() => Row(children: [
-        leftSideWidget(),
-        Visibility(visible: selectedRow != -1, child: rightSideWidget()),
+  Widget _bodyWidgetComponent() => Row(children: [
+        _leftSideWidget(),
+        Visibility(visible: _selectedRow != -1, child: _rightSideWidget()),
       ]);
 
-  Widget bottomWidget() => Container(
+  Widget _bottomWidget() => Container(
         height: 43.0,
         decoration: BoxDecoration(
             color: getMaterialColor(AppColors.primaryColor1),
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
         child: Align(
-            alignment: Alignment.topRight, child: componentBottomWidget()),
+            alignment: Alignment.topRight, child: _componentBottomWidget()),
       );
 
-  Widget componentBottomWidget() => Padding(
+  Widget _componentBottomWidget() => Padding(
         padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 35.0),
         child: Image.asset(AssetsConstants.switchAccount,
             width: 30.0, height: 30.0),
       );
 
-  Widget leftSideWidget() => Expanded(
+  Widget _leftSideWidget() => Expanded(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        topComponent(),
-        Expanded(child: tableHeadRow()),
+        _topComponent(),
+        Expanded(child: _tableHeadRow()),
       ]));
 
-  Widget topComponent() => Padding(
+  Widget _topComponent() => Padding(
         padding: const EdgeInsets.only(
             left: 18.8, top: 20.9, right: 17.0, bottom: 21.1),
         child:
@@ -199,6 +200,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     fontSize: 22.0,
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratBold)),
+            _buildSearch("text"),
           ]),
           Visibility(
             visible: false,
@@ -227,8 +229,24 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
         ]),
       );
+  //String query = "SELECT * FROM sentences WHERE title LIKE '%${text}%' OR  body LIKE '%${text}%'";
+  SearchWidget _buildSearch(String text) {
+    return SearchWidget(
+        text: "", onChanged: _searchBy, hintText: "Search by Order Id or Customer Name");
+  }
+  _searchBy(text) async {
+    var result = await SavedOrdersDAO().getFilteredOrdersList(text);
+    if (result != null) {
+      setState(() {
+        _savedOrdersList.clear();
+        _savedOrdersList.addAll(result);
+      });
+    } else {
+      _savedOrdersList.clear();
+    }
+  }
 
-  Widget tableHeadRow() => Padding(
+  Widget _tableHeadRow() => Padding(
         padding: const EdgeInsets.only(left: 15.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -245,49 +263,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     columnSpacing: 35,
                     dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
                     columns: [
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.customerName,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.date,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.payment,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.price,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
-                      DataColumn(
-                        label: CommonWidgets().textView(
-                            StringConstants.status,
-                            StyleConstants.customTextStyle(
-                                fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold)),
-                      ),
+                      _buildNameColumn(),
+                      _buildDateColumn(),
+                      _buildPaymentColumn(),
+                      _buildPriceColumn(),
+                      _buildStatusColumn(),
                     ],
-                    rows: List.generate(savedOrdersList.length,
-                        (index) => _getDataRow(savedOrdersList[index], index)),
+                    rows: List.generate(_savedOrdersList.length,
+                        (index) => _getDataRow(_savedOrdersList[index], index)),
                   ),
                 ),
               ],
@@ -296,16 +279,70 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
+  DataColumn _buildStatusColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.status,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
+  DataColumn _buildPriceColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.price,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
+  DataColumn _buildPaymentColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.payment,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
+  DataColumn _buildDateColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.date,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
+  DataColumn _buildNameColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.customerName,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
   DataRow _getDataRow(SavedOrders savedOrders, int index) {
     return DataRow(
         onSelectChanged: (value) {
-          debugPrint("Onslecetvalue$value");
           setState(() {
-            selectedRow = index;
+            _selectedRow = index;
           });
           getItemByOrderId(savedOrders.orderId);
         },
-        color: selectedRow == index
+        color: _selectedRow == index
             ? MaterialStateProperty.all(Colors.white)
             : null,
         cells: <DataCell>[
@@ -313,7 +350,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                circularImage(AssetsConstants.defaultProfileImage),
+                _circularImage(AssetsConstants.defaultProfileImage),
                 const SizedBox(width: 8.0),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -334,24 +371,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   ],
                 ),
               ])),
-          DataCell(Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CommonWidgets().textView(
-                  savedOrders.getOrderDate(),
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratMedium)),
-              CommonWidgets().textView(
-                  savedOrders.getOrderDateTime(),
-                  StyleConstants.customTextStyle(
-                      fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratMedium))
-            ],
-          )),
+          _buildOrderDateDataCell(savedOrders),
           DataCell(
             CommonWidgets().textView(
                 savedOrders.payment,
@@ -368,12 +388,33 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     color: getMaterialColor(AppColors.textColor1),
                     fontFamily: FontConstants.montserratMedium)),
           ),
-          DataCell(/*pendingView()*/
-              getOrderStatusView(savedOrders.orderStatus, savedOrders.payment))
+          DataCell(
+              _getOrderStatusView(savedOrders.orderStatus, savedOrders.payment))
         ]);
   }
 
-  Widget circularImage(String imageUrl) => Container(
+  DataCell _buildOrderDateDataCell(SavedOrders savedOrders) {
+    return DataCell(Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CommonWidgets().textView(
+            savedOrders.getOrderDate(),
+            StyleConstants.customTextStyle(
+                fontSize: 12.0,
+                color: getMaterialColor(AppColors.textColor1),
+                fontFamily: FontConstants.montserratMedium)),
+        CommonWidgets().textView(
+            savedOrders.getOrderDateTime(),
+            StyleConstants.customTextStyle(
+                fontSize: 12.0,
+                color: getMaterialColor(AppColors.textColor1),
+                fontFamily: FontConstants.montserratMedium))
+      ],
+    ));
+  }
+
+  Widget _circularImage(String imageUrl) => Container(
         width: 4.55 * SizeConfig.imageSizeMultiplier,
         height: 4.55 * SizeConfig.imageSizeMultiplier,
         decoration: BoxDecoration(
@@ -382,7 +423,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 fit: BoxFit.cover, image: AssetImage(imageUrl))),
       );
 
-  Widget rightSideWidget() => Padding(
+  Widget _rightSideWidget() => Padding(
         padding: const EdgeInsets.only(top: 21.0, right: 18.0, bottom: 18.0),
         child: Container(
           width: MediaQuery.of(context).size.width * 0.307,
@@ -395,171 +436,55 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  _orderDetailsVisi(),
                   Visibility(
-                    visible: selectedRow != -1 ? true : false,
-                    child: Padding(
-                        padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
-                        child: CommonWidgets().textView(
-                            StringConstants.orderDetails,
-                            StyleConstants.customTextStyle(
-                                fontSize: 22.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratBold))),
-                  ),
-                  Visibility(
-                      visible: selectedRow != -1 ? true : false,
-                      child: customerNameWidget(
-                          customerName: selectedRow != -1
-                              ? savedOrdersList[selectedRow].customerName
+                      visible: _selectedRow != -1 ? true : false,
+                      child: _customerNameWidget(
+                          customerName: _selectedRow != -1
+                              ? _savedOrdersList[_selectedRow].customerName
                               : 'NA')),
                   const SizedBox(height: 7.0),
                   Visibility(
-                    visible: selectedRow != -1 ? true : false,
-                    child: orderDetailsWidget(
-                        orderId: selectedRow != -1
-                            ? savedOrdersList[selectedRow].orderId
+                    visible: _selectedRow != -1 ? true : false,
+                    child: _orderDetailsWidget(
+                        orderId: _selectedRow != -1
+                            ? _savedOrdersList[_selectedRow].orderId
                             : 'NA',
-                        orderDate: selectedRow != -1
-                            ? savedOrdersList[selectedRow].getOrderDateTime()
+                        orderDate: _selectedRow != -1
+                            ? _savedOrdersList[_selectedRow].getOrderDateTime()
                             : "NA"),
                   ),
                   const SizedBox(height: 8.0),
-                  Visibility(
-                    visible: selectedRow != -1,
-                    child: customerDetailsComponent(
-                        eventName: widget.events.getEventName(),
-                        email: selectedRow != -1
-                            ? savedOrdersList[selectedRow].email
-                            : StringExtension.empty(),
-                        storeAddress: widget.events.getEventAddress(),
-                        phone: selectedRow != -1
-                            ? savedOrdersList[selectedRow].phoneCountryCode +
-                                savedOrdersList[selectedRow].phoneNumber
-                            : StringExtension.empty(),
-                        posPaymentMethod: selectedRow != -1
-                            ? savedOrdersList[selectedRow].posPaymentMethod
-                            : StringExtension.empty()),
-                  ),
+                  _selectedRowVisi(),
                   const SizedBox(height: 35.0),
-                  Visibility(
-                    visible: selectedRow != -1,
-                    child: Stack(
-                      children: [
-                        Row(
-                          children: [
-                            Column(
-                              children: [
-                                InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        isItemClick = true;
-                                      });
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 5.0, right: 5.0),
-                                      child: CommonWidgets().textView(
-                                          StringConstants.items,
-                                          StyleConstants.customTextStyle(
-                                              fontSize: 12.0,
-                                              color: getMaterialColor(
-                                                  AppColors.textColor1),
-                                              fontFamily: FontConstants
-                                                  .montserratBold)),
-                                    )),
-                                const SizedBox(
-                                  height: 11.0,
-                                ),
-                                Container(
-                                  color: getMaterialColor(isItemClick
-                                      ? AppColors.primaryColor2
-                                      : AppColors.whiteColor),
-                                  width: 45.0,
-                                  height: 3.0,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 53.0,
-                            ),
-                            Visibility(
-                              visible: false,
-                              child: Column(
-                                children: [
-                                  InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          isItemClick = false;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 5.0, right: 5.0),
-                                        child: CommonWidgets().textView(
-                                            StringConstants.inProcess,
-                                            StyleConstants.customTextStyle(
-                                                fontSize: 12.0,
-                                                color: getMaterialColor(
-                                                    AppColors.textColor1),
-                                                fontFamily: FontConstants
-                                                    .montserratBold)),
-                                      )),
-                                  const SizedBox(
-                                    height: 11.0,
-                                  ),
-                                  Container(
-                                    color: getMaterialColor(isItemClick
-                                        ? AppColors.whiteColor
-                                        : AppColors.primaryColor2),
-                                    width: 90.0,
-                                    height: 3.0,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 35.5,
-                        ),
-                        const Positioned.fill(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Divider(
-                              thickness: 1.0,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildVisi(),
                   const SizedBox(height: 10.0),
                   Visibility(
-                    visible: selectedRow != -1,
+                    visible: _selectedRow != -1,
                     child: Expanded(
                         child: SingleChildScrollView(
                       child: Container(
                         color: getMaterialColor(AppColors.whiteColor),
-                        child: isItemClick ? itemView() : inProgressView(),
+                        child: _isItemClick ? itemView() : inProgressView(),
                       ),
                     )),
                   ),
                   Visibility(
-                    visible: selectedRow != -1,
+                    visible: _selectedRow != -1,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 29.0, top: 10.0),
-                      child: getRightOrderStatusView(
-                          selectedRow != -1
-                              ? savedOrdersList[selectedRow].orderStatus
+                      child: _getRightOrderStatusView(
+                          _selectedRow != -1
+                              ? _savedOrdersList[_selectedRow].orderStatus
                               : "NA",
-                          selectedRow != -1
-                              ? savedOrdersList[selectedRow].payment
+                          _selectedRow != -1
+                              ? _savedOrdersList[_selectedRow].payment
                               : "NA",
-                          selectedRow != -1
-                              ? savedOrdersList[selectedRow].refundAmount
+                          _selectedRow != -1
+                              ? _savedOrdersList[_selectedRow].refundAmount
                               : "0.00",
-                          selectedRow != -1
-                              ? savedOrdersList[selectedRow].posPaymentMethod
+                          _selectedRow != -1
+                              ? _savedOrdersList[_selectedRow].posPaymentMethod
                               : "NA"),
                     ),
                   ),
@@ -568,8 +493,133 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
+  Visibility _buildVisi() {
+    return Visibility(
+      visible: _selectedRow != -1,
+      child: Stack(
+        children: [
+          Row(
+            children: [
+              Column(
+                children: [
+                  InkWell(
+                      onTap: () {
+                        setState(() {
+                          _isItemClick = true;
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                        child: CommonWidgets().textView(
+                            StringConstants.items,
+                            StyleConstants.customTextStyle(
+                                fontSize: 12.0,
+                                color: getMaterialColor(AppColors.textColor1),
+                                fontFamily: FontConstants.montserratBold)),
+                      )),
+                  const SizedBox(
+                    height: 11.0,
+                  ),
+                  Container(
+                    color: getMaterialColor(_isItemClick
+                        ? AppColors.primaryColor2
+                        : AppColors.whiteColor),
+                    width: 45.0,
+                    height: 3.0,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 53.0,
+              ),
+              _buildProcessVisi(),
+            ],
+          ),
+          const SizedBox(
+            height: 35.5,
+          ),
+          const Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Divider(
+                thickness: 1.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Visibility _buildProcessVisi() {
+    return Visibility(
+      visible: false,
+      child: Column(
+        children: [
+          InkWell(
+              onTap: () {
+                setState(() {
+                  _isItemClick = false;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                child: CommonWidgets().textView(
+                    StringConstants.inProcess,
+                    StyleConstants.customTextStyle(
+                        fontSize: 12.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratBold)),
+              )),
+          const SizedBox(
+            height: 11.0,
+          ),
+          Container(
+            color: getMaterialColor(
+                _isItemClick ? AppColors.whiteColor : AppColors.primaryColor2),
+            width: 90.0,
+            height: 3.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Visibility _selectedRowVisi() {
+    return Visibility(
+      visible: _selectedRow != -1,
+      child: _customerDetailsComponent(
+          eventName: widget.events.getEventName(),
+          email: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].email
+              : StringExtension.empty(),
+          storeAddress: widget.events.getEventAddress(),
+          phone: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].phoneCountryCode +
+                  _savedOrdersList[_selectedRow].phoneNumber
+              : StringExtension.empty(),
+          posPaymentMethod: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].posPaymentMethod
+              : StringExtension.empty()),
+    );
+  }
+
+  Visibility _orderDetailsVisi() {
+    return Visibility(
+      visible: _selectedRow != -1 ? true : false,
+      child: Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 11.0),
+          child: CommonWidgets().textView(
+              StringConstants.orderDetails,
+              StyleConstants.customTextStyle(
+                  fontSize: 22.0,
+                  color: getMaterialColor(AppColors.textColor1),
+                  fontFamily: FontConstants.montserratBold))),
+    );
+  }
+
   // customer Name
-  Widget customerNameWidget({required String customerName}) =>
+  Widget _customerNameWidget({required String customerName}) =>
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         CommonWidgets().textView(
             '${StringConstants.customerName} - ',
@@ -587,7 +637,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       ]);
 
   // customer Details
-  Widget customerDetailsComponent(
+  Widget _customerDetailsComponent(
           {required String eventName,
           required String email,
           required String storeAddress,
@@ -679,43 +729,44 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                           fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              CommonWidgets().textView(
-                  '${StringConstants.paymentMode}: ',
-                  StyleConstants.customTextStyle(
-                      fontSize: 9.0,
-                      color: getMaterialColor(AppColors.textColor1),
-                      fontFamily: FontConstants.montserratRegular)),
-              Expanded(
-                  child: posPaymentMethod == "null"
-                      ? CommonWidgets().textView(
-                          StringConstants.na,
-                          StyleConstants.customTextStyle(
-                              fontSize: 9.0,
-                              color: getMaterialColor(AppColors.textColor2),
-                              fontFamily: FontConstants.montserratMedium))
-                      : posPaymentMethod == "CASH"
-                          ? CommonWidgets().textView(
-                              StringConstants.paymentModeCash,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 9.0,
-                                  color: getMaterialColor(AppColors.textColor2),
-                                  fontFamily: FontConstants.montserratMedium))
-                          : CommonWidgets().textView(
-                              StringConstants.paymentModeCard,
-                              StyleConstants.customTextStyle(
-                                  fontSize: 9.0,
-                                  color: getMaterialColor(AppColors.textColor2),
-                                  fontFamily: FontConstants.montserratMedium))),
-            ]),
-          ),
+          _buildPaymentRow(posPaymentMethod),
         ],
       );
 
+  Row _buildPaymentRow(String posPaymentMethod) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      CommonWidgets().textView(
+          '${StringConstants.paymentMode}: ',
+          StyleConstants.customTextStyle(
+              fontSize: 9.0,
+              color: getMaterialColor(AppColors.textColor1),
+              fontFamily: FontConstants.montserratRegular)),
+      Expanded(
+          child: posPaymentMethod == "null"
+              ? CommonWidgets().textView(
+              StringConstants.na,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratMedium))
+              : posPaymentMethod == "CASH"
+              ? CommonWidgets().textView(
+              StringConstants.paymentModeCash,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratMedium))
+              : CommonWidgets().textView(
+              StringConstants.paymentModeCard,
+              StyleConstants.customTextStyle(
+                  fontSize: 9.0,
+                  color: getMaterialColor(AppColors.textColor2),
+                  fontFamily: FontConstants.montserratMedium))),
+    ]);
+  }
+
   // Widget orderDetails
-  Widget orderDetailsWidget(
+  Widget _orderDetailsWidget(
           {required String orderId, required String orderDate}) =>
       Column(children: [
         Row(children: [
@@ -752,17 +803,17 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget itemView() => Column(children: [
         ListView.builder(
             shrinkWrap: true,
-            itemCount: savedOrderItemList.length,
+            itemCount: _savedOrderItemList.length,
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              return itemViewListItem(
-                  savedOrderItemList[index].itemName,
-                  savedOrderItemList[index].quantity,
-                  savedOrderItemList[index].totalPrice.toDouble());
+              return _itemViewListItem(
+                  _savedOrderItemList[index].itemName,
+                  _savedOrderItemList[index].quantity,
+                  _savedOrderItemList[index].totalPrice.toDouble());
             }),
       ]);
 
-  Widget itemViewListItem(String itemName, int quantity, double price) =>
+  Widget _itemViewListItem(String itemName, int quantity, double price) =>
       Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -805,7 +856,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               itemCount: 10,
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
-                return itemViewListItem('Kiddie', 7, 20);
+                return _itemViewListItem('Kiddie', 7, 20);
               }),
         ],
       );
@@ -832,54 +883,66 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   Widget completedAndRefundView(double refundAmout) => Column(
-        children: [
-          completedView(),
-          const SizedBox(
-            height: 10.0,
-          ),
-          Visibility(
-            visible: refundBool ? true : false,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-                  color: refundBool
-                      ? getMaterialColor(AppColors.denotiveColor4)
-                          .withOpacity(0.2)
-                      : getMaterialColor(AppColors.denotiveColor2)
-                          .withOpacity(0.2)),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    refundAmout > 0.00
-                        ? CommonWidgets().textView(
-                            StringConstants.refunded,
-                            StyleConstants.customTextStyle(
-                                fontSize: 9.0,
-                                color: getMaterialColor(AppColors.textColor1),
-                                fontFamily: FontConstants.montserratMedium))
-                        : GestureDetector(
-                            onTap: onTapRefundButton,
-                            child: CommonWidgets().textView(
-                                StringConstants.refund,
-                                StyleConstants.customTextStyle(
-                                    fontSize: 9.0,
-                                    color: getMaterialColor(
-                                        AppColors.denotiveColor2),
-                                    fontFamily:
-                                        FontConstants.montserratMedium)),
-                          )
-                  ],
-                ),
-              ),
+    children: [
+      completedView(),
+      const SizedBox(
+        height: 10.0,
+      ),
+      Visibility(
+        visible: _refundBool ? true : false,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+              color: _refundBool
+                  ? getMaterialColor(AppColors.denotiveColor4)
+                  .withOpacity(0.2)
+                  : getMaterialColor(AppColors.denotiveColor2)
+                  .withOpacity(0.2)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                refundAmout > 0.00
+                    ? CommonWidgets().textView(
+                    StringConstants.refunded,
+                    StyleConstants.customTextStyle(
+                        fontSize: 9.0,
+                        color: getMaterialColor(AppColors.textColor1),
+                        fontFamily: FontConstants.montserratMedium))
+                    : GestureDetector(
+                  onTap: onTapRefundButton,
+                  child: CommonWidgets().textView(
+                      StringConstants.refund,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: getMaterialColor(
+                              AppColors.denotiveColor2),
+                          fontFamily:
+                          FontConstants.montserratMedium)),
+                )
+              ],
             ),
           ),
-        ],
-      );
+        ),
+      ),
+    ],
+  );
+  onTapRefundButton() {
+    showDialog(
+        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return RefundPopup(amount: _savedOrdersList[_selectedRow].totalAmount);
+        }).then((value) {
+      String amount = value['totalAmount'];
+      double totalAmount = double.parse(amount);
+      _refundPaymentApiCall(totalAmount);
+    });
+  }
 
-  Widget pendingView() => Container(
+  Widget _pendingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: getMaterialColor(AppColors.denotiveColor1).withOpacity(0.1)),
@@ -904,7 +967,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget preparingView() => Container(
+  Widget _preparingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: getMaterialColor(AppColors.denotiveColor3).withOpacity(0.1)),
@@ -931,7 +994,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget savedView() => Container(
+  Widget _savedView() => Container(
         height: 25.0,
         width: 80.0,
         decoration: BoxDecoration(
@@ -1002,7 +1065,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget rightPreparingView() => Container(
+  Widget _rightPreparingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
             color: getMaterialColor(AppColors.denotiveColor3).withOpacity(0.1)),
@@ -1029,8 +1092,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         ),
       );
 
-  Widget rightSavedView() => GestureDetector(
-        onTap: onTapResumeButton,
+  Widget _rightSavedView() => GestureDetector(
+        onTap: _onTapResumeButton,
         child: Container(
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(12.5)),
@@ -1055,21 +1118,22 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   //Action Events
-  onTapResumeButton() {
-    widget.onBackTap(savedOrdersList[selectedRow], savedOrderItemList,
-        savedOrderExtraItemList);
+  _onTapResumeButton() {
+    widget.onBackTap(_savedOrdersList[_selectedRow], _savedOrderItemList,
+        _savedOrderExtraItemList);
   }
 
-  onTapRefundButton() {
+  _onTapRefundButton() {
     showDialog(
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
         context: context,
         builder: (context) {
-          return RefundPopup(amount: savedOrdersList[selectedRow].totalAmount);
+          return RefundPopup(
+              amount: _savedOrdersList[_selectedRow].totalAmount);
         }).then((value) {
       String amount = value['totalAmount'];
       double totalAmount = double.parse(amount);
-      refundPaymentApiCall(totalAmount);
+      _refundPaymentApiCall(totalAmount);
     });
   }
 
@@ -1078,25 +1142,25 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     RefundPaymentModel refundPaymentModel = RefundPaymentModel();
     refundPaymentModel.refundAmount = totalAmount;
     setState(() {
-      isApiProcess = true;
+      _isApiProcess = true;
     });
-    allOrderPresenter.refundPayment(
-        savedOrdersList[selectedRow].orderId, refundPaymentModel);
+    _allOrderPresenter.refundPayment(
+        _savedOrdersList[_selectedRow].orderId, refundPaymentModel);
   }
 
   // Get data from local db function start from here
-  getAllSavedOrders(String eventId) async {
+  _getAllSavedOrders(String eventId) async {
     try {
       setState(() {
-        savedOrdersList.clear();
+        _savedOrdersList.clear();
       });
       var result = await SavedOrdersDAO().getOrdersList(eventId);
       if (result != null) {
         setState(() {
-          savedOrdersList.addAll(result);
+          _savedOrdersList.addAll(result);
         });
       } else {
-        savedOrdersList.clear();
+        _savedOrdersList.clear();
       }
     } catch (error) {
       debugPrint('adsasdasdasdas');
@@ -1116,32 +1180,32 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else if (status == StringConstants.orderStatusCancelled) {
         return completedView();
       } else {
-        return pendingView();
+        return _pendingView();
       }
     } else {
       return savedView();
     }
   }
 
-  Widget getRightOrderStatusView(String status, String paymentStatus,
-      String refundAmout, String posPaymentMethod) {
+  Widget _getRightOrderStatusView(String status, String paymentStatus,
+      dynamic refundAmout, String posPaymentMethod) {
     double toRefund = double.parse(refundAmout);
     if (posPaymentMethod != "CASH") {
       setState(() {
-        refundBool = true;
+        _refundBool = true;
       });
     } else {
       setState(() {
-        refundBool = false;
+        _refundBool = false;
       });
     }
     debugPrint('<><><><><><posRefund>${refundAmout}');
     debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
-        return rightSavedView();
+        return _rightSavedView();
       } else if (status == StringConstants.orderStatusPreparing) {
-        return rightPreparingView();
+        return _rightPreparingView();
       } else if (status == StringConstants.orderStatusNew) {
         return rightCompletedView();
       } else if (status == StringConstants.orderStatusCompleted) {
@@ -1153,31 +1217,31 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         return rightPendingView();
       }
     } else {
-      return rightSavedView();
+      return _rightSavedView();
     }
   }
 
   getItemByOrderId(String orderId) async {
     setState(() {
-      savedOrderItemList.clear();
+      _savedOrderItemList.clear();
     });
     var result = await SavedOrdersItemsDAO().getItemList(orderId: orderId);
     if (result != null) {
       setState(() {
-        savedOrderItemList.addAll(result);
+        _savedOrderItemList.addAll(result);
       });
       getAllFoodExtras();
     } else {
       setState(() {
-        savedOrderItemList.clear();
+        _savedOrderItemList.clear();
       });
     }
   }
 
   getAllFoodExtras() async {
-    if (savedOrderItemList.isNotEmpty) {
-      savedOrderExtraItemList.clear();
-      for (var item in savedOrderItemList) {
+    if (_savedOrderItemList.isNotEmpty) {
+      _savedOrderExtraItemList.clear();
+      for (var item in _savedOrderItemList) {
         await getExtraFoodItems(item.itemId, item.orderId);
       }
     }
@@ -1188,7 +1252,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         .getExtraItemList(itemId: itemId, orderId: orderId);
     if (result != null) {
       setState(() {
-        savedOrderExtraItemList.addAll(result);
+        _savedOrderExtraItemList.addAll(result);
       });
     }
   }
@@ -1196,7 +1260,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   @override
   void showError(GeneralErrorResponse exception) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
           errorMessage: exception.message ?? StringConstants.somethingWentWrong,
           context: context);
@@ -1206,7 +1270,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   @override
   void showSuccess(response) {
     setState(() {
-      isApiProcess = false;
+      _isApiProcess = false;
     });
 
     if (response is GeneralSuccessModel) {
@@ -1216,7 +1280,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               StringConstants.eventCreatedSuccessfully,
           context: context);
     } else {
-      ordersInsertIntoDb(response);
+      _ordersInsertIntoDb(response);
     }
   }
 
@@ -1226,12 +1290,18 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         value: DateTime.now().millisecondsSinceEpoch.toString()));
   }
 
-  ordersInsertIntoDb(AllOrderResponse response) async {
+  _ordersInsertIntoDb(AllOrderResponse response) async {
     List<AllOrderResponse> allOrdersList = [];
     setState(() {
       allOrdersList.add(response);
     });
 
+    await _buildOrderListLoop(allOrdersList);
+    updateLastSync();
+    _getAllSavedOrders(widget.events.id);
+  }
+
+  Future<void> _buildOrderListLoop(List<AllOrderResponse> allOrdersList) async {
     for (var event in allOrdersList[0].data!) {
       String customerName = event.firstName != null
           ? "${event.firstName} " + event.lastName!
@@ -1263,40 +1333,49 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           paymentTerm: event.paymentTerm.toString(),
           refundAmount: getRefundAmount(event.refundAmount),
           posPaymentMethod: event.posPaymentMethod.toString()));
-      for (var item in event.orderItemsList!) {
-        await SavedOrdersItemsDAO().insert(SavedOrdersItem(
-            orderId: event.id!,
-            itemId: item.itemId.toString(),
-            itemName: item.name.toString(),
-            quantity: item.quantity!,
-            unitPrice: item.unitPrice!,
-            totalPrice: item.totalAmount!,
-            itemCategoryId: item.itemCategoryId.toString(),
-            deleted: false));
-        if (item.foodExtraItemMappingList != null) {
-          for (var extraItemMappingList in item.foodExtraItemMappingList!) {
-            if (extraItemMappingList.orderFoodExtraItemDetailDto != null) {
-              for (var extraItem
-                  in extraItemMappingList.orderFoodExtraItemDetailDto!) {
-                await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(
-                    orderId: event.id!,
-                    itemId: item.itemId.toString(),
-                    extraFoodItemId: extraItem.id!,
-                    extraFoodItemName: extraItem.foodExtraItemName!,
-                    extraFoodItemCategoryId:
-                        extraItemMappingList.foodExtraCategoryId!,
-                    quantity: extraItem.quantity!,
-                    unitPrice: extraItem.unitPrice!,
-                    totalPrice: extraItem.totalAmount!,
-                    deleted: false));
-              }
+      await _buildOrderItemListLoop(event);
+    }
+  }
+
+  Future<void> _buildOrderItemListLoop(PlaceOrderResponseModel event) async {
+    for (var item in event.orderItemsList!) {
+      await SavedOrdersItemsDAO().insert(SavedOrdersItem(
+          orderId: event.id!,
+          itemId: item.itemId.toString(),
+          itemName: item.name.toString(),
+          quantity: item.quantity!,
+          unitPrice: item.unitPrice!,
+          totalPrice: item.totalAmount!,
+          itemCategoryId: item.itemCategoryId.toString(),
+          deleted: false));
+      if (item.foodExtraItemMappingList != null) {
+        for (var extraItemMappingList in item.foodExtraItemMappingList!) {
+          if (extraItemMappingList.orderFoodExtraItemDetailDto != null) {
+            for (var extraItem
+                in extraItemMappingList.orderFoodExtraItemDetailDto!) {
+              await SavedOrdersExtraItemsDAO().insert(SavedOrdersExtraItems(
+                  orderId: event.id!,
+                  itemId: item.itemId.toString(),
+                  extraFoodItemId: extraItem.id!,
+                  extraFoodItemName: extraItem.foodExtraItemName!,
+                  extraFoodItemCategoryId:
+                      extraItemMappingList.foodExtraCategoryId!,
+                  quantity: extraItem.quantity!,
+                  unitPrice: extraItem.unitPrice!,
+                  totalPrice: extraItem.totalAmount!,
+                  deleted: false));
             }
           }
         }
       }
     }
-    updateLastSync();
-    getAllSavedOrders(widget.events.id);
+  }
+  getRefundAmount(dynamic refundAmout) {
+    if (refundAmout != null) {
+      return refundAmout.toString();
+    } else {
+      return "0.00";
+    }
   }
 
   getRefundAmount(dynamic refundAmout) {
