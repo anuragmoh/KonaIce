@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -299,7 +297,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   DataRow _getDataRow(SavedOrders savedOrders, int index) {
     return DataRow(
         onSelectChanged: (value) {
-          debugPrint("Onslecetvalue$value");
           setState(() {
             selectedRow = index;
           });
@@ -411,17 +408,17 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                       child: customerNameWidget(
                           customerName: selectedRow != -1
                               ? savedOrdersList[selectedRow].customerName
-                              : 'NA')),
+                              : StringConstants.na)),
                   const SizedBox(height: 7.0),
                   Visibility(
                     visible: selectedRow != -1 ? true : false,
                     child: orderDetailsWidget(
                         orderId: selectedRow != -1
                             ? savedOrdersList[selectedRow].orderId
-                            : 'NA',
+                            : StringConstants.na,
                         orderDate: selectedRow != -1
                             ? savedOrdersList[selectedRow].getOrderDateTime()
-                            : "NA"),
+                            : StringConstants.na),
                   ),
                   const SizedBox(height: 8.0),
                   Visibility(
@@ -551,16 +548,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                       child: getRightOrderStatusView(
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].orderStatus
-                              : "NA",
+                              : StringConstants.na,
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].payment
-                              : "NA",
+                              : StringConstants.na,
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].refundAmount
                               : "0.00",
                           selectedRow != -1
                               ? savedOrdersList[selectedRow].posPaymentMethod
-                              : "NA"),
+                              : StringConstants.na),
                     ),
                   ),
                 ]),
@@ -689,14 +686,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                       color: getMaterialColor(AppColors.textColor1),
                       fontFamily: FontConstants.montserratRegular)),
               Expanded(
-                  child: posPaymentMethod == "null"
+                  child: posPaymentMethod == StringConstants.paymentNull
                       ? CommonWidgets().textView(
                           StringConstants.na,
                           StyleConstants.customTextStyle(
                               fontSize: 9.0,
                               color: getMaterialColor(AppColors.textColor2),
                               fontFamily: FontConstants.montserratMedium))
-                      : posPaymentMethod == "CASH"
+                      : posPaymentMethod == StringConstants.paymentCashCheck
                           ? CommonWidgets().textView(
                               StringConstants.paymentModeCash,
                               StyleConstants.customTextStyle(
@@ -1099,7 +1096,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         savedOrdersList.clear();
       }
     } catch (error) {
-      debugPrint('adsasdasdasdas');
+      debugPrint(error.toString());
     }
   }
 
@@ -1135,8 +1132,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         refundBool = false;
       });
     }
-    debugPrint('<><><><><><posRefund>${refundAmout}');
-    debugPrint(status);
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
         return rightSavedView();
@@ -1149,7 +1144,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else if (status == StringConstants.orderStatusCancelled) {
         return completedAndRefundView(toRefund);
       } else {
-        debugPrint('>>>>>>>>>>>>>');
         return rightPendingView();
       }
     } else {

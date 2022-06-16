@@ -161,7 +161,6 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
   }
 
   onTapAddButton() {
-    //debugPrint("Tip from dialog ${tipController.text.toString()}");
     setState(() {
       isValidTip = tipController.text.isEmpty ? false : true;
     });

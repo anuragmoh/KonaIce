@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-
-// import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';

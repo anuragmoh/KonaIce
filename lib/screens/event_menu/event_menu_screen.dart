@@ -1414,7 +1414,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   @override
   void showSuccessForPlaceOrder(response) {
-    // TODO: implement showSuccessForPay
     placeOrderResponseModel = response;
     if (placeOrderResponseModel.id != null) {
       setState(() {

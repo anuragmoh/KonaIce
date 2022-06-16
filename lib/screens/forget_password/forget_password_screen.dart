@@ -56,7 +56,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
       decoration:
           StyleConstants.customBoxShadowDecorationStyle(circularRadius: 3.6),
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
             padding: EdgeInsets.only(
@@ -97,7 +96,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
                     borderSide:
                         BorderSide(color: AppColors.textColor2, width: 1.0),
                   ),
-                  hintText: 'abc@gmail.com',
+                  hintText: StringConstants.hintEmail,
                   errorText: emailValidationMessage,
                   hintStyle: StyleConstants.customTextStyle15MonsterRegular(
                       color: getMaterialColor(AppColors.textColor1)),

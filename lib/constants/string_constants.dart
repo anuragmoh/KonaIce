@@ -17,6 +17,8 @@ class StringConstants {
   static const usCountryCode = '+1';
   static const test = 'TestCertification';
   static const bbpos = 'BBPOS';
+  static const empty = 'empty';
+  static const foodExtraPopupMsg="text to reach back";
 
   //DB Insertion default Value
   static const trueText = 'true';
@@ -111,6 +113,8 @@ class StringConstants {
   static const paymentMode="Payment Mode";
   static const paymentModeCard="Card";
   static const paymentModeCash="Cash";
+  static const paymentCashCheck="CASH";
+  static const paymentNull="null";
 
   static const totalAmount = 'Total Amount';
   static const amountReceived = 'Amount Received';

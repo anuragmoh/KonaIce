@@ -38,7 +38,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   TextEditingController cardNumberController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
   TextEditingController zipCodeController = TextEditingController();
-  // {cardNumber: 4111111111111111, expirationYear: 2023, expirationMonth: 12, cvv: 123, zipcode: 90404}
   var maskFormatter = MaskTextInputFormatter(
       mask: '##/##',
       filter: {"#": RegExp(r'[0-9]')},
@@ -329,7 +328,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       isExpiryValid = false;
     }
     if (dateExpiryController.text.length < 5) {
-      debugPrint('>>>>>>>>${dateExpiryController.text.length}');
       setState(() {
         cardDateValidationMessage = StringConstants.cardExpiryEnterMsg;
       });

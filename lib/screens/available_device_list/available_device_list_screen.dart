@@ -35,7 +35,6 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       deviceList.clear();
       deviceList.addAll(value);
     });
-    // debugPrint("It's back with value${deviceList.length}");
   }
 
   @override
@@ -66,7 +65,6 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
               child: icon(),
             ),
             bodyContainer(),
-            // loginContainer(),
           ],
         ),
       ),
@@ -207,14 +205,12 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
   String getStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
-        debugPrint('not connected');
         isConnectionProcess = false;
         return "disconnected";
       case SessionState.connecting:
         return "waiting";
       default:
         isConnectionProcess = false;
-        debugPrint('connected');
         return "connected";
     }
   }
@@ -235,7 +231,6 @@ class _AvailableDeviceListScreenState extends State<AvailableDeviceListScreen> {
       case SessionState.notConnected:
         P2PConnectionManager.shared.connectWithDevice(device);
         setState(() {
-          debugPrint('state changed');
           isConnectionProcess = true;
         });
         break;

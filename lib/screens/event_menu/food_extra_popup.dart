@@ -95,7 +95,6 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
         child: Checkbox(
             side: BorderSide(color: getMaterialColor(AppColors.textColor2)),
             activeColor: getMaterialColor(AppColors.primaryColor1),
-            // value: widget.item.selectedExtras.contains(foodExtraObject),
             value: foodExtraItemList[index].isItemSelected,
             onChanged: (isSelected) {
               onTapCheckBox((isSelected ?? false), index, foodExtraObject);
@@ -207,7 +206,7 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
   }
 
   onTapCloseButton() {
-    Navigator.of(context).pop('text to reach back');
+    Navigator.of(context).pop(StringConstants.foodExtraPopupMsg);
   }
 
   onTapAddExtrasButton(Item item) {

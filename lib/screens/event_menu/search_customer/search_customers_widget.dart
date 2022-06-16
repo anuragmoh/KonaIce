@@ -191,11 +191,6 @@ class _SearchCustomersState extends State<SearchCustomers>
         (inputText ?? '').isNotEmpty) {
       customerListAPI(searchText: inputText!);
     }
-    // } else if ((inputText ?? '').length < 3 ) {
-    //   setState(() {
-    //     customerList.clear();
-    //   });
-    // }
   }
 
   onTapCancelButton() {
@@ -210,7 +205,6 @@ class _SearchCustomersState extends State<SearchCustomers>
   }
 
   //API Call
-
   customerListAPI({required String searchText}) {
     setState(() {
       isApiProcess = true;
@@ -221,7 +215,6 @@ class _SearchCustomersState extends State<SearchCustomers>
 
   @override
   void showError(GeneralErrorResponse exception) {
-    // TODO: implement showError
     setState(() {
       isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
@@ -232,7 +225,6 @@ class _SearchCustomersState extends State<SearchCustomers>
 
   @override
   void showSuccess(response) {
-    // TODO: implement showSuccess
     List<CustomerDetails> list = response;
     setState(() {
       isApiProcess = false;

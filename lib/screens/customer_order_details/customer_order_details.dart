@@ -177,9 +177,6 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                       orderItem: orderDetailsModel!
                           .orderRequestModel!.orderItemsList![index]);
                 }),
-            // DottedLine(
-            //     height: 2.0, color: getMaterialColor(AppColors.textColor1)),
-            // componentBill(),
           ],
         ),
       );
@@ -316,7 +313,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             ),
           ),
           Visibility(
-            visible: email.isNotEmpty && email != "null",
+            visible: email.isNotEmpty && email != StringConstants.paymentNull,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -351,7 +348,6 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
             billTextView(
                 StringConstants.salesTax, orderDetailsModel!.salesTax ?? 0.0),
             billTextView(StringConstants.subTotal, getSubTotal()),
-            //  billTextView(StringConstants.discount, orderDetailsModel!.discount ?? 0.0),
             billTextView(StringConstants.tip, tipAmount),
             Divider(
               thickness: 1,

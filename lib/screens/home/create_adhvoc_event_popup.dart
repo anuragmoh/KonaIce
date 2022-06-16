@@ -772,8 +772,10 @@ getAddressFromLatLng(context, double lat, double lng) async {
       debugPrint('URL===>$url');
       debugPrint(data["results"][0]["address_components"][6]['long_name']);
       return _formattedAddress;
-    } else
+    } else {
       return null;
-  } else
+    }
+  } else {
     return null;
+  }
 }

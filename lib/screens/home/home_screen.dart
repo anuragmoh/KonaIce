@@ -420,7 +420,6 @@ class _HomeScreenState extends State<HomeScreen>
             MaterialLocalizations.of(context).modalBarrierDismissLabel,
         barrierColor: null,
         useRootNavigator: false,
-        //barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
         builder: (context) {
           return const CreateAdhocEvent();
