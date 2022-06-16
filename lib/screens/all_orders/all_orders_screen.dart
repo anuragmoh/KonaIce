@@ -1138,7 +1138,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   }
 
   //Refund Payment Api call
-  refundPaymentApiCall(double totalAmount) {
+  _refundPaymentApiCall(double totalAmount) {
     RefundPaymentModel refundPaymentModel = RefundPaymentModel();
     refundPaymentModel.refundAmount = totalAmount;
     setState(() {
@@ -1167,12 +1167,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  Widget getOrderStatusView(String status, String paymentStatus) {
+  Widget _getOrderStatusView(String status, String paymentStatus) {
     if (paymentStatus == StringConstants.paymentStatusSuccess) {
       if (status == StringConstants.orderStatusSaved) {
-        return savedView();
+        return _savedView();
       } else if (status == StringConstants.orderStatusPreparing) {
-        return preparingView();
+        return _preparingView();
       } else if (status == StringConstants.orderStatusNew) {
         return completedView();
       } else if (status == StringConstants.orderStatusCompleted) {
@@ -1183,7 +1183,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         return _pendingView();
       }
     } else {
-      return savedView();
+      return _savedView();
     }
   }
 
@@ -1331,7 +1331,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           orderStatus: event.orderStatus!,
           deleted: false,
           paymentTerm: event.paymentTerm.toString(),
-          refundAmount: getRefundAmount(event.refundAmount),
+          refundAmount: _getRefundAmount(event.refundAmount),
           posPaymentMethod: event.posPaymentMethod.toString()));
       await _buildOrderItemListLoop(event);
     }
@@ -1370,15 +1370,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       }
     }
   }
-  getRefundAmount(dynamic refundAmout) {
-    if (refundAmout != null) {
-      return refundAmout.toString();
-    } else {
-      return "0.00";
-    }
-  }
-
-  getRefundAmount(dynamic refundAmout) {
+  _getRefundAmount(dynamic refundAmout) {
     if (refundAmout != null) {
       return refundAmout.toString();
     } else {
