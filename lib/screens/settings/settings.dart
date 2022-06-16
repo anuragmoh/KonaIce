@@ -13,6 +13,8 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 
+import '../reconnect_screen.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
 
@@ -29,10 +31,12 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   bool _isApiProcess = false;
+  bool _isShowReconnectButton = true;
 
   @override
   void initState() {
     super.initState();
+    showReconnectButton();
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.showSplashAtCustomerForHomeAndSettings);
   }
@@ -52,11 +56,50 @@ class _SettingScreenState extends State<SettingScreen>
   }
 
   Widget _body() {
-    return CommonWidgets().buttonWidget(StringConstants.signOut, () {
-      _onTapSignOutButton();
-    });
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CommonWidgets().buttonWidget(
+          StringConstants.signOut,
+          () {
+            _onTapSignOutButton();
+          },
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        Visibility(
+          visible: _isShowReconnectButton,
+          child: CommonWidgets().buttonWidget(
+            StringConstants.reconnect,
+            () {
+              _onTapReconnectButton();
+            },
+          ),
+        ),
+      ],
+    );
   }
-
+  _onTapReconnectButton() {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: AppColors.textColor1.withOpacity(0.7),
+        context: context,
+        builder: (context) {
+          return ReconnectScreenDialog(callBack: _showButton);
+        });
+  }
+  _showButton(bool isConnected){
+    if (isConnected) {
+      setState(() {
+        _isShowReconnectButton = false;
+      });
+    } else {
+      setState(() {
+        _isShowReconnectButton = true;
+      });
+    }
+  }
   //Action Event
   _onTapSignOutButton() {
     _callLogoutApi();
@@ -97,5 +140,25 @@ class _SettingScreenState extends State<SettingScreen>
     await SessionDAO().delete(DatabaseKeys.sessionKey);
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));
+  }
+  showReconnectButton() async{
+    var result = await SessionDAO().getValueForKey(DatabaseKeys.reConnect);
+    if (result != null) {
+      String lastValue = result.value;
+      debugPrint("lastValue----->"+lastValue);
+      if (lastValue == "true") {
+        setState(() {
+          _isShowReconnectButton = false;
+        });
+      } else {
+        setState(() {
+          _isShowReconnectButton = true;
+        });
+      }
+    } else {
+      setState(() {
+        _isShowReconnectButton = true;
+      });
+    }
   }
 }

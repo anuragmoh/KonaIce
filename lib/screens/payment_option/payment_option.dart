@@ -27,7 +27,7 @@ class _PaymentOptionState extends State<PaymentOption>
     implements P2PContractor {
   int _paymentModeType = -1;
   String _paymentStatus = "";
-  bool _isAnimation=false;
+  bool _isAnimation = false;
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
@@ -56,8 +56,7 @@ class _PaymentOptionState extends State<PaymentOption>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Divider(
-                          color: AppColors.gradientColor1
-                              .withOpacity(0.2),
+                          color: AppColors.gradientColor1.withOpacity(0.2),
                           thickness: 1,
                         ),
                       ),
@@ -65,19 +64,18 @@ class _PaymentOptionState extends State<PaymentOption>
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Divider(
-                          color: AppColors.gradientColor1
-                              .withOpacity(0.2),
+                          color: AppColors.gradientColor1.withOpacity(0.2),
                           thickness: 1,
                         ),
                       ),
                     ],
                   ),
-                  Center(
-                    child: Visibility(
-                        visible: (_paymentModeType == PaymentModeConstants.creditCard && _isAnimation)||(_paymentModeType == PaymentModeConstants.creditCardManual && _isAnimation),
-                        child: Lottie.asset(_paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:_paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
-                            height: 150, width: 150)),
-                  ),
+                  // Center(
+                  //   child: Visibility(
+                  //       visible: (_paymentModeType == PaymentModeConstants.creditCard && _isAnimation)||(_paymentModeType == PaymentModeConstants.creditCardManual && _isAnimation),
+                  //       child: Lottie.asset(_paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:_paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
+                  //           height: 150, width: 150)),
+                  // ),
                 ],
               ),
             ),
@@ -152,8 +150,7 @@ class _PaymentOptionState extends State<PaymentOption>
                   color: _paymentModeType == index
                       ? AppColors.primaryColor2
                       : null,
-                  border: Border.all(
-                      color: AppColors.primaryColor2),
+                  border: Border.all(color: AppColors.primaryColor2),
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding:
@@ -192,13 +189,16 @@ class _PaymentOptionState extends State<PaymentOption>
       _updateSelectedPaymentMode();
     });
     if (_paymentModeType == PaymentModeConstants.creditCard) {
+      _paymentStatus = 'progress';
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.paymentStatus,
+          data: _paymentStatus.toString());
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {
           _paymentModeType = -1;
         });
       });
-    }
-    else if (_paymentModeType == PaymentModeConstants.creditCardManual) {
+    } else if (_paymentModeType == PaymentModeConstants.creditCardManual) {
       _paymentStatus = 'progress';
       P2PConnectionManager.shared.updateData(
           action: StaffActionConst.paymentStatus,
@@ -250,25 +250,23 @@ class _PaymentOptionState extends State<PaymentOption>
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
-    }else if (response.action ==
-        StaffActionConst.paymentStatus) {
+    } else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
-        _isAnimation=true;
+        _isAnimation = true;
       });
       setState(() {
-        _paymentStatus=response.data.toString();
+        _paymentStatus = response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
-    }else if (response.action ==
+    } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
-    }else if (response.action ==
-        StaffActionConst.paymentStatus) {
+    } else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
-        _isAnimation=true;
+        _isAnimation = true;
       });
       setState(() {
-        _paymentStatus=response.data.toString();
+        _paymentStatus = response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
     }

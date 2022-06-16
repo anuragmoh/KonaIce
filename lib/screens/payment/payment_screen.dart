@@ -37,6 +37,7 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
@@ -85,6 +86,8 @@ class _PaymentScreenState extends State<PaymentScreen>
   String _stripeTokenId = "", _stripePaymentMethodId = "";
   String _emailValidationMessage = "";
   String _smsValidationMessage = "";
+  String _paymentStatusValue = "";
+  bool _isAnimation = false;
   String _countryCode = StringConstants.usCountryCode;
   FinixResponseModel _finixResponse = FinixResponseModel();
 
@@ -226,24 +229,40 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget _leftSideWidget() => Expanded(
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        const SizedBox(
-          height: 14.0,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
-          child: _leftSideTopComponent(totalAmount),
-        ),
-        // leftSideTopComponent(totalAmount),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Divider(
-            color: AppColors.gradientColor1.withOpacity(0.2),
-            thickness: 1,
-          ),
-        ),
-        Expanded(child: _leftBodyComponent()),
-      ]));
+              Stack(
+                children: [
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    const SizedBox(
+                      height: 14.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
+                      child: _leftSideTopComponent(totalAmount),
+                    ),
+                    // leftSideTopComponent(totalAmount),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Divider(
+                        color: AppColors.gradientColor1.withOpacity(0.2),
+                        thickness: 1,
+                      ),
+                    ),
+                    Expanded(child: _leftBodyComponent()),
+                  ]),
+                  // Center(
+                  //   child: Visibility(
+                  //       visible: (_paymentModeType ==
+                  //           PaymentModeConstants.creditCard) || (_paymentModeType ==
+                  //           PaymentModeConstants.creditCardManual),
+                  //       child: Lottie.asset(
+                  //           _paymentStatusValue == 'insert' ? AssetsConstants
+                  //               .insertCardAnimationPath : _paymentStatusValue == 'progress'
+                  //               ? AssetsConstants.progressAnimationPath
+                  //               : AssetsConstants.removeCardAnimationPath,
+                  //           height: 150, width: 150)),
+                  // ),
+                ],
+              ));
 
   Widget _leftSideTopComponent(double totalAmount) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -1092,6 +1111,11 @@ class _PaymentScreenState extends State<PaymentScreen>
       });
     }
     if (_paymentModeType == PaymentModeConstants.creditCard) {
+      _paymentStatusValue = 'progress';
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.paymentStatus,
+          data: _paymentStatusValue.toString());
+
       _performCardPayment();
     }
     _getEmailIdPhoneNumber();
@@ -1306,7 +1330,16 @@ class _PaymentScreenState extends State<PaymentScreen>
       }
     } else if (response.action == CustomerActionConst.editOrderDetails) {
       _showEventMenuScreen();
+    }else if (response.action == StaffActionConst.paymentStatus) {
+      setState(() {
+        _isAnimation = true;
+      });
+      setState(() {
+        _paymentStatusValue = response.data.toString();
+      });
+      debugPrint('response--->' + response.data.toString());
     }
+
   }
 
   //FinixMannual CardDetails

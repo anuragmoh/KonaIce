@@ -97,6 +97,7 @@ class PlaceOrderResponseModel {
     this.recipientNameLabel,
     this.smsNotification,
     this.emailNotification,
+    this.posPaymentMethod,
   });
 
   String? id;
@@ -128,7 +129,7 @@ class PlaceOrderResponseModel {
   String? paymentStatus;
   String? countryName;
   String? stateName;
-  String? refundAmount;
+  double? refundAmount;
   String? recipientName;
   bool? campaignShareRefund;
   bool? orderAmountRefund;
@@ -191,6 +192,7 @@ class PlaceOrderResponseModel {
   String? recipientNameLabel;
   bool? smsNotification;
   bool? emailNotification;
+  String? posPaymentMethod;
 
   factory PlaceOrderResponseModel.fromJson(Map<String?, dynamic> json) =>
       PlaceOrderResponseModel(
@@ -287,6 +289,7 @@ class PlaceOrderResponseModel {
         recipientNameLabel: json["recipientNameLabel"],
         smsNotification: json["smsNotification"],
         emailNotification: json["emailNotification"],
+        posPaymentMethod: json["posPaymentMethod"]
       );
 
   Map<String?, dynamic> toJson() => {
@@ -383,6 +386,7 @@ class PlaceOrderResponseModel {
         "recipientNameLabel": recipientNameLabel,
         "smsNotification": smsNotification,
         "emailNotification": emailNotification,
+        "posPaymentMethod": posPaymentMethod,
       };
 }
 
