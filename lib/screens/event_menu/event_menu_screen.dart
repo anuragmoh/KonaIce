@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
@@ -60,6 +61,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   late OrderPresenter _orderPresenter;
   late EventPresenter _eventPresenter;
   PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
+  P2POrderDetailsModel dataModel = P2POrderDetailsModel();
 
   _EventMenuScreenState() {
     _orderPresenter = OrderPresenter(this);
@@ -791,6 +793,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   controller: controller,
                   maxLength: TextFieldLengthConstant.addTip,
                   keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
                   style: StyleConstants.customTextStyle12MonsterMedium(
                       color: AppColors.textColor1),
                   decoration: InputDecoration(
@@ -1260,7 +1265,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   _updateOrderDataToCustomer() {
-    P2POrderDetailsModel dataModel = P2POrderDetailsModel();
+    //dataModel = P2POrderDetailsModel();
     dataModel.orderRequestModel = _getOrderRequestModel();
     dataModel.orderRequestModel!.addressLongitude = 0.0;
     dataModel.orderRequestModel!.addressLatitude = 0.0;
@@ -1385,10 +1390,15 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               P2PConnectionManager.shared.getP2PContractor(this),
               if (value != null)
                 {
+                  setState(() {
+                    _isPaymentScreen = false;
+                  }),
                   if (value["isOrderComplete"] == "True")
                     {_clearCart()}
                   else if (value["orderID"] != "NA")
-                    {_orderID = value["orderID"]}
+                    {
+                      _orderID = value["orderID"],
+                    }
                 }
             });
   }
