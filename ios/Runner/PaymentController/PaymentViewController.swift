@@ -13,6 +13,9 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     @IBOutlet weak var containerView: UIView!
     
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var cancelButton: UIButton!
+    
     var payment: PaymentModel!
     
     var transactionAnimationView: AnimationView!
@@ -31,6 +34,10 @@ class PaymentViewController: UIViewController, ShowAlert {
         addVisualEffectBlurrView()
         
         showTransactionAnimationView(with: .progress)
+        
+        self.statusLabel.textColor = .white
+        
+        self.cancelButton.addTarget(self, action: #selector(cancelTransactionButtonTapped), for: .touchUpInside)
     }
     
     func performPayment() {
@@ -45,8 +52,59 @@ class PaymentViewController: UIViewController, ShowAlert {
         }
     }
     
-    func initializeSDK() {
+    func checkIfCreditCardCanScan() -> Bool {
+        
+        if FINIXHELPER.isSDKInitialized() {
+            
+            if FINIXHELPER.isReaderConnected() {
                 
+                print("==========SDK initialzed & reader connected, show scan option==========")
+                
+                return true
+                
+            } else {
+                
+                print("==========SDK initialzed but reader not connected, disable scan option==========")
+                
+                return false
+            }
+            
+        } else {
+            
+            print("==========SDK not initialzed, show scan option==========")
+
+            return true
+        }
+    }
+    
+    @objc func cancelTransactionButtonTapped() {
+        
+        if FINIXHELPER.cancelSale() {
+            
+            print("==========Sale Cancelled==========")
+            
+            DispatchQueue.main.async {
+                
+                self.statusLabel.text = "==========Sale Cancelled=========="
+            }
+            
+            AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentFailed", arguments: [""])
+            
+            self.dismissView()
+            
+        } else {
+            
+            print("==========Sale Cancellation Failed==========")
+            
+            DispatchQueue.main.async {
+                
+                self.statusLabel.text = "==========Sale Cancellation Failed=========="
+            }
+        }
+    }
+    
+    func initializeSDK() {
+        
         print("==========Payment Model: \(payment.debugDescription)==========")
         
         var deviceSerialNumber: String? = nil
@@ -124,7 +182,7 @@ class PaymentViewController: UIViewController, ShowAlert {
         DispatchQueue.main.async {
             
             AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentStatus", arguments: [animationName.rawValue])
-
+            
             self.stopAnimationView()
             
             self.transactionAnimationView = AnimationView(name: animationName.rawValue)
@@ -178,6 +236,11 @@ extension PaymentViewController: FinixHelperDelegate {
         }
         
         print("==========SDK Initialized: \(error.debugDescription)==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = error.debugDescription
+        }
     }
     
     func sdkDeinitialzed(error: Error?) {
@@ -188,11 +251,21 @@ extension PaymentViewController: FinixHelperDelegate {
         }
         
         print("==========SDK Deinitialized: \(error.debugDescription)==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = error.debugDescription
+        }
     }
     
     func deviceDidConnect(_ description: String, model: String, serialNumber: String) {
         
         print("==========Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = "Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)"
+        }
         
         self.performSale()
     }
@@ -200,11 +273,21 @@ extension PaymentViewController: FinixHelperDelegate {
     func deviceDidDisconnect() {
         
         print("==========Device Did Disconnect==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = "Device Did Disconnect"
+        }
     }
     
     func deviceInitialization(inProgress currentProgress: Double, description: String, model: String, serialNumber: String) {
         
         print("==========Device Initialization:\nProgress:\(currentProgress)\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = "==========Device Initialization:\nProgress:\(currentProgress)\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)=========="
+        }
     }
     
     func deviceDidError(_ error: Error) {
@@ -212,26 +295,47 @@ extension PaymentViewController: FinixHelperDelegate {
         showAlert(title: "Error", message: error.localizedDescription)
         
         print("==========Device Did Error: \(error.localizedDescription)==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = "==========Device Did Error: \(error.localizedDescription)=========="
+        }
     }
     
     func statusDidChange(_ status: FinixPOS.DeviceStatus, description: String) {
         
         print("==========Device Status change:\(status), description:\(description)==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Device Status change:\(status), description:\(description)=========="
+        }
     }
     
     func onBatteryLow() {
         
         print("==========Device Battery Low==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Device Battery Low=========="
+        }
     }
     
     func prereadTimedOut() {
         
         print("==========Device Preread Time Out==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Device Preread Time Out=========="
+        }
     }
     
     func onDisplayText(_ text: String) {
         
         print("==========On display text: \(text)==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========On display text: \(text)=========="
+        }
         
         switch FinixDisplayText(rawValue: text) {
             
@@ -250,12 +354,20 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Card removed==========")
         
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Card removed=========="
+        }
+        
         showTransactionAnimationView(with: .removeCard)
     }
     
     func saleResponseFailed(error: Error) {
         
         print("==========Sale Response Failed with error : \(error)==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Sale Response Failed with error : \(error)=========="
+        }
         
         showAlert(title: "Error", message: "\(error)")
     }
@@ -264,6 +376,10 @@ extension PaymentViewController: FinixHelperDelegate {
         
         print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
         
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))=========="
+        }
+        
         let jsonEncoder = JSONEncoder()
         
         if let jsonData = try? jsonEncoder.encode(saleResponseReceipt) {
@@ -271,6 +387,10 @@ extension PaymentViewController: FinixHelperDelegate {
             if let content = String(data: jsonData, encoding: String.Encoding.utf8) {
                 
                 print("==========Sale Response Json String: \(content)")
+                
+                DispatchQueue.main.async {
+                    self.statusLabel.text = "==========Sale Response Json String: \(content)"
+                }
                 
                 showAlert(title: "Payment Success", message: content, transactionModelString: content)
             }
