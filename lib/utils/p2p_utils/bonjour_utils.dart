@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
@@ -9,9 +10,10 @@ import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/screens/payment_option/P2PCardDetailsModel.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
+import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 
+import '../../models/data_models/session.dart';
 import 'p2p_models/p2p_order_details_model.dart';
 
 abstract class P2PContractor {
@@ -88,13 +90,18 @@ class P2PConnectionManager {
           .where((device) => device.state == SessionState.connected)
           .toList();
       if (connectedDevices.isNotEmpty) {
+        _updateDB(StringConstants.updateTrue);
         setConnectedDevice(connectedDevices[0]);
+      }else{
+        _updateDB(StringConstants.updateFalse);
       }
       sentBackValue(devices);
     });
     return devices;
   }
-
+  _updateDB(String value) async {
+    await SessionDAO().insert(Session(key: DatabaseKeys.reConnect, value: value));
+  }
   getDeviceListAtCustomer() {
     getDeviceList((deviceList) => {});
   }

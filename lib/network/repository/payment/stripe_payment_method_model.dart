@@ -1,16 +1,8 @@
-// To parse this JSON data, do
-//
-//     final stripePaymentMethodRequestModel = stripePaymentMethodRequestModelFromJson(jsonString);
-
 import 'dart:convert';
 
 StripePaymentMethodRequestModel stripePaymentMethodRequestModelFromJson(
         String str) =>
     StripePaymentMethodRequestModel.fromJson(json.decode(str));
-
-String stripePaymentMethodRequestModelToJson(
-        StripePaymentMethodRequestModel data) =>
-    json.encode(data.toJson());
 
 class StripePaymentMethodRequestModel {
   StripePaymentMethodRequestModel({

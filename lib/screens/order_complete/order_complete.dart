@@ -7,7 +7,6 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class OrderComplete extends StatefulWidget {
   const OrderComplete({Key? key}) : super(key: key);
@@ -17,14 +16,14 @@ class OrderComplete extends StatefulWidget {
 }
 
 class _OrderCompleteState extends State<OrderComplete> {
-  bool isMovedToNextScreen = false;
+  bool _isMovedToNextScreen = false;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 5), () {
-      if (!isMovedToNextScreen) {
-        showSplashScreen();
+      if (!_isMovedToNextScreen) {
+        _showSplashScreen();
       }
     });
   }
@@ -33,11 +32,11 @@ class _OrderCompleteState extends State<OrderComplete> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.withOpacity(0.2),
         child: Column(
           children: [
             CommonWidgets().topEmptyBar(),
-            Expanded(child: paymentSuccess()),
+            Expanded(child: _paymentSuccess()),
             CommonWidgets().bottomEmptyBar(),
           ],
         ),
@@ -45,7 +44,7 @@ class _OrderCompleteState extends State<OrderComplete> {
     );
   }
 
-  Widget paymentSuccess() => Column(
+  Widget _paymentSuccess() => Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -59,7 +58,7 @@ class _OrderCompleteState extends State<OrderComplete> {
               StringConstants.orderCompleted,
               StyleConstants.customTextStyle(
                   fontSize: 22.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1,
                   fontFamily: FontConstants.montserratBold)),
           const SizedBox(height: 8.0),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -67,13 +66,13 @@ class _OrderCompleteState extends State<OrderComplete> {
                 '${StringConstants.transactionId}:',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratSemiBold)),
             CommonWidgets().textWidget(
-                StringConstants.dummyOrder,
+                "35891456",
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1,
                     fontFamily: FontConstants.montserratSemiBold)),
           ]),
           const SizedBox(height: 34.0),
@@ -85,19 +84,19 @@ class _OrderCompleteState extends State<OrderComplete> {
                   vertical: 3.90 * SizeConfig.heightSizeMultiplier),
               child: CommonWidgets().buttonWidget(
                 StringConstants.okay,
-                onTapOkay,
+                _onTapOkay,
               ),
             ),
           )
         ],
       );
 
-  onTapOkay() {
-    showSplashScreen();
+  _onTapOkay() {
+    _showSplashScreen();
   }
 
   //Navigation
-  showSplashScreen() {
+  _showSplashScreen() {
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => SplashScreen()));
   }

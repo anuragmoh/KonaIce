@@ -5,6 +5,8 @@ import 'package:kona_ice_pos/database/database_helper.dart';
 import 'package:kona_ice_pos/models/data_models/saved_orders.dart';
 import 'package:sqflite_sqlcipher/sqflite.dart';
 
+import '../../models/data_models/session.dart';
+
 class SavedOrdersDAO {
   static const String tableName = "saved_orders";
 
@@ -65,7 +67,22 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
-
+  Future<List<SavedOrders>?> getFilteredOrdersList(String text) async {
+    try {
+      final db = await _db;
+      var result =
+      await db.rawQuery("SELECT * FROM $tableName WHERE customer_name LIKE '%${text}%' OR order_id LIKE '%${text}%' order by order_date DESC");
+      if (result.isNotEmpty) {
+        debugPrint('saveOrderDao${result}');
+        return List.generate(
+            result.length, (index) => SavedOrders.fromMap(result[index]));
+      } else {
+        return null;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
+    }
+  }
   Future<List<SavedOrders>?> getOrder(String orderId) async {
     try {
       final db = await _db;

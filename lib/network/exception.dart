@@ -1,5 +1,6 @@
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/network/app_exception.dart';
+
 import 'general_error_model.dart';
 
 class FetchException implements Exception {
