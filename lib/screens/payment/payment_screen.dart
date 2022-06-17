@@ -341,10 +341,12 @@ class _PaymentScreenState extends State<PaymentScreen>
                 '\$',
                 StyleConstants.customTextStyle22MonsterMedium(
                     color: AppColors.textColor1)),
-            CommonWidgets().textWidget(
-                _returnAmount.toStringAsFixed(2),
-                StyleConstants.customTextStyle22MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1)))
+            Expanded(
+              child: CommonWidgets().textWidget(
+                  _returnAmount.toStringAsFixed(2),
+                  StyleConstants.customTextStyle22MonsterMedium(
+                      color: getMaterialColor(AppColors.textColor1))),
+            )
           ],
         )
       ],
@@ -373,8 +375,8 @@ class _PaymentScreenState extends State<PaymentScreen>
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             color: AppColors.whiteColor,
             border: Border.all(color: AppColors.primaryColor2)),
-        width: 70.0,
-        height: 42.0,
+        width: 72.0,
+        height: 49.0,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
@@ -383,10 +385,12 @@ class _PaymentScreenState extends State<PaymentScreen>
               style: StyleConstants.customTextStyle22MonsterMedium(
                   color: AppColors.textColor1),
               keyboardType: TextInputType.number,
+              maxLength: 5,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
               decoration: const InputDecoration(
+                counterText: "",
                 border: InputBorder.none,
               ),
               onChanged: (value) {
