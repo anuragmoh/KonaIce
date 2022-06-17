@@ -36,8 +36,14 @@ class PaymentViewController: UIViewController, ShowAlert {
         showTransactionAnimationView(with: .progress)
         
         self.statusLabel.textColor = .white
+        self.enableLogging(true)
         
         self.cancelButton.addTarget(self, action: #selector(cancelTransactionButtonTapped), for: .touchUpInside)
+    }
+    
+    func enableLogging(_ enable: Bool) {
+        
+        self.statusLabel.isHidden = !enable
     }
     
     func performPayment() {
@@ -272,12 +278,16 @@ extension PaymentViewController: FinixHelperDelegate {
     
     func deviceDidDisconnect() {
         
+        showAlert(title: "Error", message: "Device Disconnected")
+        
         print("==========Device Did Disconnect==========")
         
         DispatchQueue.main.async {
             
             self.statusLabel.text = "Device Did Disconnect"
         }
+        
+        FINIXHELPER.deinitializeFinixSDK()
     }
     
     func deviceInitialization(inProgress currentProgress: Double, description: String, model: String, serialNumber: String) {
@@ -300,6 +310,8 @@ extension PaymentViewController: FinixHelperDelegate {
             
             self.statusLabel.text = "==========Device Did Error: \(error.localizedDescription)=========="
         }
+        
+        FINIXHELPER.deinitializeFinixSDK()
     }
     
     func statusDidChange(_ status: FinixPOS.DeviceStatus, description: String) {
