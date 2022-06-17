@@ -5,9 +5,9 @@ class StringConstants {
   static const loginText = "Log In";
   static const emailId = 'Email ID';
   static const password = 'Password';
-  static const forgotPassword = 'Forgot Password ?';
+  static const forgotPassword = 'Forgot Password?';
   static const signIn = 'Sign In';
-  static const rememberPassword = 'Remember Password ?';
+  static const rememberPassword = 'Remember Password?';
   static const submit = 'Submit';
   static const pay = 'Pay';
   static const okay = 'Okay';

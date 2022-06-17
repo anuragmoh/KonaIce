@@ -328,8 +328,8 @@ class _PaymentScreenState extends State<PaymentScreen>
                                   border: Border.all(
                                       color: getMaterialColor(
                                           AppColors.primaryColor2))),
-                              width: 70.0,
-                              height: 42.0,
+                              width: 72.0,
+                              height: 49.0,
                               child: Center(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -341,10 +341,12 @@ class _PaymentScreenState extends State<PaymentScreen>
                                             color: getMaterialColor(
                                                 AppColors.textColor1)),
                                     keyboardType: TextInputType.number,
+                                    maxLength: 5,
                                     inputFormatters: <TextInputFormatter>[
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
                                     decoration: const InputDecoration(
+                                      counterText: "",
                                       border: InputBorder.none,
                                     ),
                                     onChanged: (value) {
@@ -384,11 +386,13 @@ class _PaymentScreenState extends State<PaymentScreen>
                                 StyleConstants.customTextStyle22MonsterMedium(
                                     color: getMaterialColor(
                                         AppColors.textColor1))),
-                            CommonWidgets().textWidget(
-                                returnAmount.toStringAsFixed(2),
-                                StyleConstants.customTextStyle22MonsterMedium(
-                                    color:
-                                        getMaterialColor(AppColors.textColor1)))
+                            Expanded(
+                              child: CommonWidgets().textWidget(
+                                  returnAmount.toStringAsFixed(2),
+                                  StyleConstants.customTextStyle22MonsterMedium(
+                                      color:
+                                          getMaterialColor(AppColors.textColor1))),
+                            )
                           ])
                     ]),
               ),
