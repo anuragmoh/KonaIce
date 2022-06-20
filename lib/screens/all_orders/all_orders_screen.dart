@@ -121,6 +121,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   Widget _mainUi(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
         child: _savedOrdersList.isNotEmpty
@@ -240,7 +241,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         _savedOrdersList.addAll(result);
       });
     } else {
-      _savedOrdersList.clear();
+      var result = await SavedOrdersDAO().getOrdersList(widget.events.id);
+      if (result != null) {
+        setState(() {
+          _savedOrdersList.clear();
+          _savedOrdersList.addAll(result);
+        });
+      }
     }
   }
 
