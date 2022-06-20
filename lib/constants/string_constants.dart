@@ -246,6 +246,9 @@ class StringConstants {
 
   //all Order status
   static const paymentStatusSuccess = "SUCCESS";
+  static const paymentStatusFailed = "paymentFailed";
+  static const paymentStatusSucc = "paymentSuccess";
+  static const paymentStatus = "paymentStatus";
   static const paymentStatusPending = "PENDING";
   static const orderStatusSaved = "saved";
   static const orderStatusCompleted = "COMPLETED";

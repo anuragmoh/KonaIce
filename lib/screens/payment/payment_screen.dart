@@ -143,6 +143,10 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isPaymentDone = true;
     });
     _finixResponse = finixResponseFromJson(msg);
+    _paymentStatusValue = 'paymentSuccess';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: _paymentStatusValue.toString());
     //Finix recipt Api Call
     PayReceipt payReceipt = _getPayReceiptModel(false);
   }
@@ -159,6 +163,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentStatus(status) async {
     debugPrint("Payment Status: $status");
+    _paymentStatusValue = 'paymentStatus';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: _paymentStatusValue.toString());
   }
 
   _getPaymentToken(token) async {
@@ -1118,7 +1126,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       P2PConnectionManager.shared.updateData(
           action: StaffActionConst.paymentStatus,
           data: _paymentStatusValue.toString());
-
       _performCardPayment();
     }
     _getEmailIdPhoneNumber();
