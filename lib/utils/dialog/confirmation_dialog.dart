@@ -67,7 +67,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   Padding buildConfirmmsgPadding() {
     return Padding(
       padding: const EdgeInsets.only(
-          left: 65.0, right: 65, top: 47.0, bottom: 49.0),
+          left: 65.0, right: 65, top: 35.0, bottom: 35.0),
       child: Text(widget.confirmMessage,
           style: StyleConstants.customTextStyle(
               fontSize: 14.0,

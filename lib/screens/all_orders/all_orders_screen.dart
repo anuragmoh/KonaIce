@@ -227,11 +227,15 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
         ]),
       );
+
   //String query = "SELECT * FROM sentences WHERE title LIKE '%${text}%' OR  body LIKE '%${text}%'";
   SearchWidget _buildSearch(String text) {
     return SearchWidget(
-        text: "", onChanged: _searchBy, hintText: "Search by Order Id or Customer Name");
+        text: "",
+        onChanged: _searchBy,
+        hintText: "Search by Order Id or Customer Name");
   }
+
   _searchBy(text) async {
     var result = await SavedOrdersDAO().getFilteredOrdersList(text);
     if (result != null) {
@@ -742,24 +746,24 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       Expanded(
           child: posPaymentMethod == "null"
               ? CommonWidgets().textView(
-              StringConstants.na,
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium))
+                  StringConstants.na,
+                  StyleConstants.customTextStyle(
+                      fontSize: 9.0,
+                      color: getMaterialColor(AppColors.textColor2),
+                      fontFamily: FontConstants.montserratMedium))
               : posPaymentMethod == "CASH"
-              ? CommonWidgets().textView(
-              StringConstants.paymentModeCash,
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium))
-              : CommonWidgets().textView(
-              StringConstants.paymentModeCard,
-              StyleConstants.customTextStyle(
-                  fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
-                  fontFamily: FontConstants.montserratMedium))),
+                  ? CommonWidgets().textView(
+                      StringConstants.paymentModeCash,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: getMaterialColor(AppColors.textColor2),
+                          fontFamily: FontConstants.montserratMedium))
+                  : CommonWidgets().textView(
+                      StringConstants.paymentModeCard,
+                      StyleConstants.customTextStyle(
+                          fontSize: 9.0,
+                          color: getMaterialColor(AppColors.textColor2),
+                          fontFamily: FontConstants.montserratMedium))),
     ]);
   }
 
@@ -881,58 +885,62 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   Widget completedAndRefundView(double refundAmout) => Column(
-    children: [
-      completedView(),
-      const SizedBox(
-        height: 10.0,
-      ),
-      Visibility(
-        visible: _refundBool ? true : false,
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-              color: _refundBool
-                  ? getMaterialColor(AppColors.denotiveColor4)
-                  .withOpacity(0.2)
-                  : getMaterialColor(AppColors.denotiveColor2)
-                  .withOpacity(0.2)),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                refundAmout > 0.00
-                    ? CommonWidgets().textView(
-                    StringConstants.refunded,
-                    StyleConstants.customTextStyle(
-                        fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
-                        fontFamily: FontConstants.montserratMedium))
-                    : GestureDetector(
-                  onTap: onTapRefundButton,
-                  child: CommonWidgets().textView(
-                      StringConstants.refund,
-                      StyleConstants.customTextStyle(
-                          fontSize: 9.0,
-                          color: getMaterialColor(
-                              AppColors.denotiveColor2),
-                          fontFamily:
-                          FontConstants.montserratMedium)),
-                )
-              ],
+        children: [
+          completedView(),
+          const SizedBox(
+            height: 10.0,
+          ),
+          Visibility(
+            visible: _refundBool ? true : false,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(12.5)),
+                  color: _refundBool
+                      ? getMaterialColor(AppColors.denotiveColor4)
+                          .withOpacity(0.2)
+                      : getMaterialColor(AppColors.denotiveColor2)
+                          .withOpacity(0.2)),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
+                child: InkWell(
+                  onTap:refundAmout > 0.00? onTapRefundedButton:onTapRefundButton,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      refundAmout > 0.00
+                          ? CommonWidgets().textView(
+                              StringConstants.refunded,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 9.0,
+                                  color: getMaterialColor(AppColors.textColor1),
+                                  fontFamily: FontConstants.montserratMedium))
+                          : CommonWidgets().textView(
+                              StringConstants.refund,
+                              StyleConstants.customTextStyle(
+                                  fontSize: 9.0,
+                                  color: getMaterialColor(
+                                      AppColors.denotiveColor2),
+                                  fontFamily:
+                                      FontConstants.montserratMedium))
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-    ],
-  );
+        ],
+      );
+  onTapRefundedButton(){
+
+  }
   onTapRefundButton() {
     showDialog(
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
         context: context,
         builder: (context) {
-          return RefundPopup(amount: _savedOrdersList[_selectedRow].totalAmount);
+          return RefundPopup(
+              amount: _savedOrdersList[_selectedRow].totalAmount);
         }).then((value) {
       String amount = value['totalAmount'];
       double totalAmount = double.parse(amount);
@@ -1368,6 +1376,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       }
     }
   }
+
   _getRefundAmount(dynamic refundAmout) {
     if (refundAmout != null) {
       return refundAmout.toString();
