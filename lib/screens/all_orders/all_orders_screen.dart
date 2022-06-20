@@ -29,8 +29,6 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
-import '../../models/network_model/order_model/order_response_model.dart';
-
 class AllOrdersScreen extends StatefulWidget {
   final Function(
           SavedOrders, List<SavedOrdersItem>, List<SavedOrdersExtraItems>)
@@ -1337,7 +1335,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  Future<void> _buildOrderItemListLoop(PlaceOrderResponseModel event) async {
+  Future<void> _buildOrderItemListLoop(Datum event) async {
     for (var item in event.orderItemsList!) {
       await SavedOrdersItemsDAO().insert(SavedOrdersItem(
           orderId: event.id!,
