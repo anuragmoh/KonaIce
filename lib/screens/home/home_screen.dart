@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen>
   Timer? _clockInTimer;
   bool _isClockIn = false;
   bool _isApiProcess = false;
-  bool _isCreateAdhocEventButtonEnable = false;
+  bool _isCreateAdhocEventButtonEnable = true;
   List<Events> _eventList = [];
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
   List<POsSyncEventDataDtoList> _pOsSyncEventDataDtoList = [];
@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen>
       String lastValue = result.value;
       if (lastValue == Date.getTimeStampFromDate()) {
         setState(() {
-          _isCreateAdhocEventButtonEnable = false;
+          _isCreateAdhocEventButtonEnable = true;
         });
       } else {
         setState(() {

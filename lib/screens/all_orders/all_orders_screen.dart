@@ -1181,6 +1181,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       } else {
         _savedOrdersList.clear();
         _isNoRecord = true;
+        setState(() {
+          _isApiProcess = false;
+        });
       }
     } catch (error) {
       debugPrint('adsasdasdasdas');
