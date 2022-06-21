@@ -56,6 +56,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   List<AllOrderResponse> _allOrdersList = [];
   int _selectedRow = -1;
   bool _isApiProcess = false;
+  bool _isNoRecord=false;
   int _countOffSet = 0;
   bool _refundBool = false;
   bool _paymentModeCardBool = false;
@@ -132,14 +133,17 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   // bottomWidget(),
                 ],
               )
-            : Align(
-                alignment: Alignment.center,
-                child: CommonWidgets().textWidget(
-                    StringConstants.noOrdersToDisplay,
-                    StyleConstants.customTextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.textColor1,
-                        fontFamily: FontConstants.montserratSemiBold))),
+            : Visibility(
+          visible: _isNoRecord,
+              child: Align(
+                  alignment: Alignment.center,
+                  child: CommonWidgets().textWidget(
+                      StringConstants.noOrdersToDisplay,
+                      StyleConstants.customTextStyle(
+                          fontSize: 20.0,
+                          color: AppColors.textColor1,
+                          fontFamily: FontConstants.montserratSemiBold))),
+            ),
       ),
     );
   }
@@ -1167,7 +1171,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         _savedOrdersList.clear();
       });
       var result = await SavedOrdersDAO().getOrdersList(eventId);
-
       if (result != null) {
         setState(() {
           _savedOrdersList.addAll(result);
@@ -1177,6 +1180,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         });
       } else {
         _savedOrdersList.clear();
+        _isNoRecord = true;
       }
     } catch (error) {
       debugPrint('adsasdasdasdas');

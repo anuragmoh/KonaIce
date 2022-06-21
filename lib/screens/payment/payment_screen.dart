@@ -1105,6 +1105,11 @@ class _PaymentScreenState extends State<PaymentScreen>
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
         debugPrint('>>>>>>>$value');
+        if(value.toString()=='false'){
+          setState(() {
+            _paymentModeType=-1;
+          });
+        }
         bool valueForApi = value[ConstantKeys.cardValue];
         debugPrint('>>>>>>>$valueForApi');
         if (valueForApi == true) {
