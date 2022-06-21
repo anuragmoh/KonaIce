@@ -1167,9 +1167,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         _savedOrdersList.clear();
       });
       var result = await SavedOrdersDAO().getOrdersList(eventId);
+
       if (result != null) {
         setState(() {
           _savedOrdersList.addAll(result);
+        });
+        setState(() {
+          _isApiProcess = false;
         });
       } else {
         _savedOrdersList.clear();
@@ -1281,9 +1285,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   @override
   void showSuccess(response) {
-    setState(() {
-      _isApiProcess = false;
-    });
+    // setState(() {
+    //   _isApiProcess = false;
+    // });
 
     if (response is GeneralSuccessModel) {
       GeneralSuccessModel responseModel = response;
