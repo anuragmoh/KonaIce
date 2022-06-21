@@ -71,7 +71,7 @@ class SavedOrdersDAO {
     try {
       final db = await _db;
       var result =
-      await db.rawQuery("SELECT * FROM $tableName WHERE customer_name LIKE '%${text}%' OR order_id LIKE '%${text}%' order by order_date DESC");
+      await db.rawQuery("SELECT * FROM $tableName WHERE customer_name LIKE '%${text}%' OR order_id LIKE '%${text}%' OR order_code LIKE '%${text}%' order by order_date DESC");
       if (result.isNotEmpty) {
         debugPrint('saveOrderDao${result}');
         return List.generate(

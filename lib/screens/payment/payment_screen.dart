@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math' as math;
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/app_constant.dart';
@@ -395,7 +396,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               keyboardType: TextInputType.number,
               maxLength: 5,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+                NumberRemoveExtraDotFormatter(),
               ],
               decoration: const InputDecoration(
                 counterText: "",
@@ -1533,5 +1534,45 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isApiProcess = true;
     });
     _orderPresenter.finixSendReceipt(_orderID, finixSendReceiptRequest);
+  }
+}
+class NumberRemoveExtraDotFormatter extends TextInputFormatter {
+  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    if (nValue.startsWith('.')) {
+      nValue = '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldValue.text;
+      } else {
+        if (nValue.split('.').length > 2) {
+          List<String> split = nValue.split('.');
+          nValue = split[0] + '.' + split[1];
+        }
+      }
+    }
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: math.min(nValue.length, nValue.length + 1),
+      extentOffset: math.min(nValue.length, nValue.length + 1),
+    );
+
+    return TextEditingValue(
+        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }

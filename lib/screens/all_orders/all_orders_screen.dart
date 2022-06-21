@@ -234,7 +234,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     return SearchWidget(
         text: "",
         onChanged: _searchBy,
-        hintText: "Search by Order Id or Customer Name");
+        hintText: "Search by Order Id, Order Code or Customer Name");
   }
 
   _searchBy(text) async {
