@@ -70,12 +70,12 @@ class _PaymentOptionState extends State<PaymentOption>
                       ),
                     ],
                   ),
-                  // Center(
-                  //   child: Visibility(
-                  //       visible: (_paymentModeType == PaymentModeConstants.creditCard && _isAnimation)||(_paymentModeType == PaymentModeConstants.creditCardManual && _isAnimation),
-                  //       child: Lottie.asset(_paymentStatus == 'insert'?AssetsConstants.insertCardAnimationPath:_paymentStatus == 'progress'?AssetsConstants.progressAnimationPath:AssetsConstants.removeCardAnimationPath,
-                  //           height: 150, width: 150)),
-                  // ),
+                  Center(
+                    child: Visibility(
+                        visible: _isAnimation,
+                        child: Lottie.asset(AssetsConstants.progressAnimationPath,
+                            height: 350, width: 350,animate: true)),
+                  ),
                 ],
               ),
             ),
@@ -250,20 +250,16 @@ class _PaymentOptionState extends State<PaymentOption>
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
-    } else if (response.action == StaffActionConst.paymentStatus) {
-      setState(() {
-        _isAnimation = true;
-      });
-      setState(() {
-        _paymentStatus = response.data.toString();
-      });
-      debugPrint('response--->' + response.data.toString());
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
     } else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
-        _isAnimation = true;
+        if(response.data.toString()==StringConstants.paymentStatusSucc||response.data.toString()==StringConstants.paymentStatusFailed) {
+          _isAnimation = false;
+        }else{
+          _isAnimation = true;
+        }
       });
       setState(() {
         _paymentStatus = response.data.toString();

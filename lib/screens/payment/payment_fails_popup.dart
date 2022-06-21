@@ -11,6 +11,9 @@ import '../../common/base_method.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import '../../constants/p2p_constants.dart';
+import '../../utils/p2p_utils/bonjour_utils.dart';
+
 class PaymentFailPopup extends StatefulWidget {
   String paymentFailMessage;
 
@@ -95,6 +98,9 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
   }
 
   _onTapCloseButton() {
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: 'paymentFailed');
     Navigator.of(context).pop(false);
   }
 }

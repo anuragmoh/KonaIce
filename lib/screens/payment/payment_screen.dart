@@ -1,6 +1,7 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math' as math;
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/app_constant.dart';
@@ -143,6 +144,10 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isPaymentDone = true;
     });
     _finixResponse = finixResponseFromJson(msg);
+    _paymentStatusValue = 'paymentSuccess';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: _paymentStatusValue.toString());
     //Finix recipt Api Call
     PayReceipt payReceipt = _getPayReceiptModel(false);
   }
@@ -159,6 +164,10 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentStatus(status) async {
     debugPrint("Payment Status: $status");
+    _paymentStatusValue = 'paymentStatus';
+    P2PConnectionManager.shared.updateData(
+        action: StaffActionConst.paymentStatus,
+        data: _paymentStatusValue.toString());
   }
 
   _getPaymentToken(token) async {
@@ -341,10 +350,12 @@ class _PaymentScreenState extends State<PaymentScreen>
                 '\$',
                 StyleConstants.customTextStyle22MonsterMedium(
                     color: AppColors.textColor1)),
-            CommonWidgets().textWidget(
-                _returnAmount.toStringAsFixed(2),
-                StyleConstants.customTextStyle22MonsterMedium(
-                    color: getMaterialColor(AppColors.textColor1)))
+            Expanded(
+              child: CommonWidgets().textWidget(
+                  _returnAmount.toStringAsFixed(2),
+                  StyleConstants.customTextStyle22MonsterMedium(
+                      color: getMaterialColor(AppColors.textColor1))),
+            )
           ],
         )
       ],
@@ -373,8 +384,8 @@ class _PaymentScreenState extends State<PaymentScreen>
             borderRadius: const BorderRadius.all(Radius.circular(8.0)),
             color: AppColors.whiteColor,
             border: Border.all(color: AppColors.primaryColor2)),
-        width: 70.0,
-        height: 42.0,
+        width: 72.0,
+        height: 49.0,
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
@@ -383,10 +394,12 @@ class _PaymentScreenState extends State<PaymentScreen>
               style: StyleConstants.customTextStyle22MonsterMedium(
                   color: AppColors.textColor1),
               keyboardType: TextInputType.number,
+              maxLength: 5,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+                NumberRemoveExtraDotFormatter(),
               ],
               decoration: const InputDecoration(
+                counterText: "",
                 border: InputBorder.none,
               ),
               onChanged: (value) {
@@ -1114,7 +1127,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       P2PConnectionManager.shared.updateData(
           action: StaffActionConst.paymentStatus,
           data: _paymentStatusValue.toString());
-
       _performCardPayment();
     }
     _getEmailIdPhoneNumber();
@@ -1522,5 +1534,45 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isApiProcess = true;
     });
     _orderPresenter.finixSendReceipt(_orderID, finixSendReceiptRequest);
+  }
+}
+class NumberRemoveExtraDotFormatter extends TextInputFormatter {
+  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    if (nValue.startsWith('.')) {
+      nValue = '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldValue.text;
+      } else {
+        if (nValue.split('.').length > 2) {
+          List<String> split = nValue.split('.');
+          nValue = split[0] + '.' + split[1];
+        }
+      }
+    }
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: math.min(nValue.length, nValue.length + 1),
+      extentOffset: math.min(nValue.length, nValue.length + 1),
+    );
+
+    return TextEditingValue(
+        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }
