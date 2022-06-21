@@ -43,7 +43,7 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-
+import 'dart:math' as math;
 import '../../models/network_model/order_model/order_request_model.dart';
 import '../../models/network_model/order_model/order_response_model.dart';
 
@@ -794,7 +794,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   maxLength: TextFieldLengthConstant.addTip,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
+                    NumberRemoveExtraDotFormatter(),
                   ],
                   style: StyleConstants.customTextStyle12MonsterMedium(
                       color: AppColors.textColor1),
@@ -1565,5 +1565,45 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     await SavedOrdersDAO().clearEventDataByOrderID(_orderID).then((value) {
       _eventPresenter.deleteOrder(orderId: _orderID);
     });
+  }
+}
+class NumberRemoveExtraDotFormatter extends TextInputFormatter {
+  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    if (nValue.startsWith('.')) {
+      nValue = '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldValue.text;
+      } else {
+        if (nValue.split('.').length > 2) {
+          List<String> split = nValue.split('.');
+          nValue = split[0] + '.' + split[1];
+        }
+      }
+    }
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: math.min(nValue.length, nValue.length + 1),
+      extentOffset: math.min(nValue.length, nValue.length + 1),
+    );
+
+    return TextEditingValue(
+        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }

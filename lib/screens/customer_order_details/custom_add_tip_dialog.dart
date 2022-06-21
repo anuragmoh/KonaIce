@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'dart:math' as math;
 import '../../constants/app_colors.dart';
 import '../../constants/font_constants.dart';
 import '../../constants/other_constants.dart';
@@ -54,11 +55,13 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
       ),
     );
   }
+
   @override
   void dispose() {
     super.dispose();
     _tipController.dispose();
   }
+
   //Action
   _onTapCloseButton() {
     Navigator.of(context).pop();
@@ -86,55 +89,56 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
 
   TextField _buildTextField() {
     return TextField(
-          controller: _tipController,
-          keyboardType: TextInputType.number,
-          maxLength: TextFieldLengthConstant.addTip,
-          style: StyleConstants.customTextStyle22MonsterMedium(
-              color: AppColors.textColor6),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            hintText: StringConstants.enterAmount,
-            errorText: _isValidTip ? "" : StringConstants.enterTip,
-            hintStyle: StyleConstants.customTextStyle12MonsterRegular(
-                color: AppColors.textColor2),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.skyBlueBorderColor),
-              borderRadius: BorderRadius.circular(8.0),
+      controller: _tipController,
+      keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        NumberRemoveExtraDotFormatter(),
+      ],
+      maxLength: TextFieldLengthConstant.addTip,
+
+      style: StyleConstants.customTextStyle22MonsterMedium(
+          color: AppColors.textColor6),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        hintText: StringConstants.enterAmount,
+        errorText: _isValidTip ? "" : StringConstants.enterTip,
+        hintStyle: StyleConstants.customTextStyle12MonsterRegular(
+            color: AppColors.textColor2),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.skyBlueBorderColor),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.textColor5),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.skyBlueBorderColor),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        prefixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: CommonWidgets().textWidget(
+                  StringConstants.symbolDollar,
+                  StyleConstants.customTextStyle22MonsterMedium(
+                      color: AppColors.textColor2)),
             ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.textColor5),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.skyBlueBorderColor),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            prefixIcon: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: CommonWidgets().textWidget(
-                      StringConstants.symbolDollar,
-                      StyleConstants.customTextStyle22MonsterMedium(
-                          color: AppColors.textColor2)),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0.0, horizontal: 15.0),
-                  child: Container(
-                    color: AppColors.skyBlueBorderColor,
-                    width: 1.0,
-                    height: 30,
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0),
+              child: Container(
+                color: AppColors.skyBlueBorderColor,
+                width: 1.0,
+                height: 30,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _addTipButton() {
@@ -173,13 +177,54 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
       _isValidTip = _tipController.text.isEmpty ? false : true;
     });
     if (_tipController.text.isNotEmpty) {
-      widget.callBack(double.parse(
-          _tipController.text.isEmpty ? '0.0' : _tipController.text.toString()));
+      widget.callBack(double.parse(_tipController.text.isEmpty
+          ? '0.0'
+          : _tipController.text.toString()));
       Navigator.of(context).pop();
     } else {
       setState(() {
         _isValidTip = false;
       });
     }
+  }
+}
+class NumberRemoveExtraDotFormatter extends TextInputFormatter {
+  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
+      : assert(decimalRange == null || decimalRange > 0);
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    if (nValue.startsWith('.')) {
+      nValue = '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldValue.text;
+      } else {
+        if (nValue.split('.').length > 2) {
+          List<String> split = nValue.split('.');
+          nValue = split[0] + '.' + split[1];
+        }
+      }
+    }
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: math.min(nValue.length, nValue.length + 1),
+      extentOffset: math.min(nValue.length, nValue.length + 1),
+    );
+
+    return TextEditingValue(
+        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }
