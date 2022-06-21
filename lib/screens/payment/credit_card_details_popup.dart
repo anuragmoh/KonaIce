@@ -183,7 +183,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 2.0,top: 10.0),
+                padding: const EdgeInsets.only(left: 2.0,top: 0.0),
                 child: TextField(
                   inputFormatters: [_maskFormatter],
                   keyboardType: TextInputType.number,
@@ -245,7 +245,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
                           .withOpacity(0.2),
                       width: 2)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 2.0,top: 10.0),
+                padding: const EdgeInsets.only(left: 2.0,top: 0.0),
                 child: TextField(
                   keyboardType: TextInputType.number,
                   maxLength: maxLength,

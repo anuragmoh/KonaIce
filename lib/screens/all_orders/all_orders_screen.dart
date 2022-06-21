@@ -871,9 +871,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   Widget completedView() => Container(
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
+
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
@@ -900,6 +898,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           Visibility(
             visible: _refundBool ? true : false,
             child: Container(
+              height: 35.0,
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(12.5)),
                   color: _refundBool
@@ -1292,6 +1291,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           message: responseModel.general![0].message ??
               StringConstants.eventCreatedSuccessfully,
           context: context);
+      //Refresh the list after refund success
+      _getData();
     } else {
       _ordersInsertIntoDb(response);
     }
