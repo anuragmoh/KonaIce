@@ -36,7 +36,7 @@ class PaymentViewController: UIViewController, ShowAlert {
         showTransactionAnimationView(with: .progress)
         
         self.statusLabel.textColor = .white
-        self.enableLogging(true)
+        self.enableLogging(false)
         
         self.cancelButton.addTarget(self, action: #selector(cancelTransactionButtonTapped), for: .touchUpInside)
     }
@@ -404,7 +404,11 @@ extension PaymentViewController: FinixHelperDelegate {
                     self.statusLabel.text = "==========Sale Response Json String: \(content)"
                 }
                 
-                showAlert(title: "Payment Success", message: content, transactionModelString: content)
+                // showAlert(title: "Payment Success", message: content, transactionModelString: content)
+                
+                AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentSuccess", arguments: content)
+                
+                self.dismissView()
             }
         }
     }
