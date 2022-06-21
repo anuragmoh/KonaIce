@@ -56,6 +56,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   List<AllOrderResponse> _allOrdersList = [];
   int _selectedRow = -1;
   bool _isApiProcess = false;
+  bool _isNoRecord=false;
   int _countOffSet = 0;
   bool _refundBool = false;
   bool _paymentModeCardBool = false;
@@ -132,14 +133,17 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   // bottomWidget(),
                 ],
               )
-            : Align(
-                alignment: Alignment.center,
-                child: CommonWidgets().textWidget(
-                    StringConstants.noOrdersToDisplay,
-                    StyleConstants.customTextStyle(
-                        fontSize: 20.0,
-                        color: AppColors.textColor1,
-                        fontFamily: FontConstants.montserratSemiBold))),
+            : Visibility(
+          visible: _isNoRecord,
+              child: Align(
+                  alignment: Alignment.center,
+                  child: CommonWidgets().textWidget(
+                      StringConstants.noOrdersToDisplay,
+                      StyleConstants.customTextStyle(
+                          fontSize: 20.0,
+                          color: AppColors.textColor1,
+                          fontFamily: FontConstants.montserratSemiBold))),
+            ),
       ),
     );
   }
@@ -1171,8 +1175,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         setState(() {
           _savedOrdersList.addAll(result);
         });
+        setState(() {
+          _isApiProcess = false;
+        });
       } else {
         _savedOrdersList.clear();
+        _isNoRecord = true;
       }
     } catch (error) {
       debugPrint('adsasdasdasdas');
@@ -1281,9 +1289,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   @override
   void showSuccess(response) {
-    setState(() {
-      _isApiProcess = false;
-    });
+    // setState(() {
+    //   _isApiProcess = false;
+    // });
 
     if (response is GeneralSuccessModel) {
       GeneralSuccessModel responseModel = response;
