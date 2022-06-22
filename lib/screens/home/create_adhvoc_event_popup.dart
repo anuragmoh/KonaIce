@@ -45,8 +45,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
 
   late Position _currentPosition;
 
-  String _selectedState = "",
-      _selectedCity = "";
+  String _selectedState = "", _selectedCity = "";
 
   bool _isValidEventName = true,
       _isValidAddress = true,
@@ -71,19 +70,16 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     _presenter = CreateAdhocEventPresenter(this);
   }
 
-  _getAssets() {
-    CheckConnection().connectionState().then((value) {
-      if (value!) {
-        setState(() {
-          _isApiProcess = true;
-        });
-        _presenter.getAssets();
-      } else {
-        CommonWidgets().showErrorSnackBar(
-            errorMessage: StringConstants.noInternetConnection,
-            context: context);
-      }
-    });
+  _getAssets() async {
+    if (await CheckConnection.connectionState() == true) {
+      setState(() {
+        _isApiProcess = true;
+      });
+      _presenter.getAssets();
+    } else {
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.noInternetConnection, context: context);
+    }
   }
 
   @override
@@ -95,6 +91,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     _getAssets();
     _getLocation();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -104,6 +101,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     _stateController.dispose();
     _zipCodeController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Loader(
@@ -327,7 +325,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
                 hintText: StringConstants.enterZipCode,
                 counterText: "",
                 errorStyle: const TextStyle(color: Colors.red),
-                errorText: _isValidZipCode ? null : StringConstants.emptyZipCode,
+                errorText:
+                    _isValidZipCode ? null : StringConstants.emptyZipCode,
                 border: const OutlineInputBorder(
                   borderSide: BorderSide(color: AppColors.denotiveColor4),
                 ),
@@ -436,16 +435,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ),
       );
 
-  _onTapCreate() {
-    CheckConnection().connectionState().then((value) {
-      if (value!) {
-        _validateData();
-      } else {
-        CommonWidgets().showErrorSnackBar(
-            errorMessage: StringConstants.noInternetConnection,
-            context: context);
-      }
-    });
+  _onTapCreate() async {
+    if (await CheckConnection.connectionState() == true) {
+      _validateData();
+    } else {
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.noInternetConnection, context: context);
+    }
   }
 
   _onTapCloseButton() {
@@ -650,7 +646,8 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
           }
           if (detail.result.addressComponents[i].types[j] == "locality") {
             setState(() {
-              _cityController.text = detail.result.addressComponents[i].longName;
+              _cityController.text =
+                  detail.result.addressComponents[i].longName;
             });
             debugPrint("city: $_selectedCity");
 
@@ -693,8 +690,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         }
       } on RangeError catch (e) {
         debugPrint(e.toString());
-      } catch (e) {
-      }
+      } catch (e) {}
     }
   }
 

@@ -55,7 +55,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   late AllOrderPresenter _allOrderPresenter;
   int _selectedRow = -1;
   bool _isApiProcess = false;
-  bool _isNoRecord=false;
+  bool _isNoRecord = false;
   int _countOffSet = 0;
   bool _refundBool = false;
 
@@ -87,23 +87,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  _getData() {
-    CheckConnection().connectionState().then((value) {
-      if (value!) {
-        getLastSync().then((value) {
-          getSyncOrders(
-              lastSync: value,
-              orderStatus: "",
-              eventId: widget.events.id,
-              offset: _countOffSet);
-        });
-      } else {
-        CommonWidgets().showErrorSnackBar(
-            errorMessage: StringConstants.noInternetConnection,
-            context: context);
-        _getAllSavedOrders(widget.events.id);
-      }
-    });
+  _getData() async {
+    if (await CheckConnection.connectionState() == true) {
+      getLastSync().then((value) {
+        getSyncOrders(
+            lastSync: value,
+            orderStatus: "",
+            eventId: widget.events.id,
+            offset: _countOffSet);
+      });
+    } else {
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.noInternetConnection, context: context);
+      _getAllSavedOrders(widget.events.id);
+    }
   }
 
   @override
@@ -131,20 +128,19 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 ],
               )
             : Visibility(
-          visible: _isNoRecord,
-              child: Align(
-                  alignment: Alignment.center,
-                  child: CommonWidgets().textWidget(
-                      StringConstants.noOrdersToDisplay,
-                      StyleConstants.customTextStyle(
-                          fontSize: 20.0,
-                          color: AppColors.textColor1,
-                          fontFamily: FontConstants.montserratSemiBold))),
-            ),
+                visible: _isNoRecord,
+                child: Align(
+                    alignment: Alignment.center,
+                    child: CommonWidgets().textWidget(
+                        StringConstants.noOrdersToDisplay,
+                        StyleConstants.customTextStyle(
+                            fontSize: 20.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratSemiBold))),
+              ),
       ),
     );
   }
-
 
   Widget bodyWidget() => Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
@@ -155,8 +151,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         _leftSideWidget(),
         Visibility(visible: _selectedRow != -1, child: _rightSideWidget()),
       ]);
-
-
 
   Widget _leftSideWidget() => Expanded(
           child:
@@ -850,7 +844,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   Widget completedView() => Container(
-
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
@@ -889,7 +882,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 padding: const EdgeInsets.only(
                     top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
                 child: InkWell(
-                  onTap:refundAmout > 0.00? onTapRefundedButton:onTapRefundButton,
+                  onTap: refundAmout > 0.00
+                      ? onTapRefundedButton
+                      : onTapRefundButton,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -906,8 +901,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                                   fontSize: 9.0,
                                   color: getMaterialColor(
                                       AppColors.denotiveColor2),
-                                  fontFamily:
-                                      FontConstants.montserratMedium))
+                                  fontFamily: FontConstants.montserratMedium))
                     ],
                   ),
                 ),
@@ -916,9 +910,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
         ],
       );
-  onTapRefundedButton(){
 
-  }
+  onTapRefundedButton() {}
+
   onTapRefundButton() {
     showDialog(
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
