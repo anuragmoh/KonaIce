@@ -28,6 +28,7 @@ import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
 import 'package:kona_ice_pos/screens/payment/validation_popup.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
+import 'package:kona_ice_pos/utils/color_extension.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
@@ -36,7 +37,6 @@ import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
@@ -354,7 +354,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               child: CommonWidgets().textWidget(
                   _returnAmount.toStringAsFixed(2),
                   StyleConstants.customTextStyle22MonsterMedium(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1.toMaterialColor())),
             )
           ],
         )

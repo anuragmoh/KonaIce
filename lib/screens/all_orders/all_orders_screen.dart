@@ -24,10 +24,10 @@ import 'package:kona_ice_pos/models/network_model/all_order/all_order_model.dart
 import 'package:kona_ice_pos/screens/payment/refund_popup.dart';
 import 'package:kona_ice_pos/screens/search_widget.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
+import 'package:kona_ice_pos/utils/color_extension.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 class AllOrdersScreen extends StatefulWidget {
   final Function(
@@ -118,7 +118,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.2),
+        color: AppColors.textColor3.toMaterialColor().withOpacity(0.2),
         child: _savedOrdersList.isNotEmpty
             ? Column(
                 children: [
@@ -143,7 +143,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   }
 
   Widget bodyWidget() => Container(
-        color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
+        color: AppColors.textColor3.toMaterialColor().withOpacity(0.1),
         child: _bodyWidgetComponent(),
       );
 
@@ -170,7 +170,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 StringConstants.foodOrders,
                 StyleConstants.customTextStyle(
                     fontSize: 22.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1.toMaterialColor(),
                     fontFamily: FontConstants.montserratBold)),
             _buildSearch("text"),
           ]),
@@ -178,7 +178,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             visible: false,
             child: Container(
                 decoration: BoxDecoration(
-                  color: getMaterialColor(AppColors.whiteColor),
+                  color: AppColors.whiteColor.toMaterialColor(),
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 ),
                 child: Padding(
@@ -194,7 +194,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         StringConstants.filterOrders,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.primaryColor1),
+                            color: AppColors.primaryColor1.toMaterialColor(),
                             fontFamily: FontConstants.montserratMedium)),
                   ]),
                 )),
@@ -267,7 +267,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           StringConstants.status,
           StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1.toMaterialColor(),
               fontFamily: FontConstants.montserratBold)),
     );
   }
@@ -278,7 +278,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           StringConstants.price,
           StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1.toMaterialColor(),
               fontFamily: FontConstants.montserratBold)),
     );
   }
@@ -289,7 +289,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           StringConstants.payment,
           StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1.toMaterialColor(),
               fontFamily: FontConstants.montserratBold)),
     );
   }
@@ -300,7 +300,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           StringConstants.date,
           StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1.toMaterialColor(),
               fontFamily: FontConstants.montserratBold)),
     );
   }
@@ -311,7 +311,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           StringConstants.customerName,
           StyleConstants.customTextStyle(
               fontSize: 12.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1.toMaterialColor(),
               fontFamily: FontConstants.montserratBold)),
     );
   }
@@ -342,13 +342,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         savedOrders.customerName,
                         StyleConstants.customTextStyle(
                             fontSize: 12.0,
-                            color: getMaterialColor(AppColors.textColor4),
+                            color:AppColors.textColor4.toMaterialColor(),
                             fontFamily: FontConstants.montserratBold)),
                     CommonWidgets().textView(
                         savedOrders.orderCode,
                         StyleConstants.customTextStyle(
                             fontSize: 10.0,
-                            color: getMaterialColor(AppColors.textColor1),
+                            color: AppColors.textColor1.toMaterialColor(),
                             fontFamily: FontConstants.montserratMedium))
                   ],
                 ),
@@ -359,7 +359,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 savedOrders.payment,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1.toMaterialColor(),
                     fontFamily: FontConstants.montserratMedium)),
           ),
           DataCell(
@@ -367,7 +367,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 '\$ ${savedOrders.totalAmount}',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1.toMaterialColor(),
                     fontFamily: FontConstants.montserratMedium)),
           ),
           DataCell(
@@ -384,13 +384,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             savedOrders.getOrderDate(),
             StyleConstants.customTextStyle(
                 fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor1),
+                color: AppColors.textColor1.toMaterialColor(),
                 fontFamily: FontConstants.montserratMedium)),
         CommonWidgets().textView(
             savedOrders.getOrderDateTime(),
             StyleConstants.customTextStyle(
                 fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor1),
+                color: AppColors.textColor1.toMaterialColor(),
                 fontFamily: FontConstants.montserratMedium))
       ],
     ));
@@ -410,7 +410,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         child: Container(
           width: MediaQuery.of(context).size.width * 0.307,
           decoration: BoxDecoration(
-              color: getMaterialColor(AppColors.whiteColor),
+              color: AppColors.whiteColor.toMaterialColor(),
               borderRadius: const BorderRadius.all(Radius.circular(8.0))),
           child: Padding(
             padding: const EdgeInsets.only(left: 22.0, right: 19.0),
@@ -446,7 +446,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     child: Expanded(
                         child: SingleChildScrollView(
                       child: Container(
-                        color: getMaterialColor(AppColors.whiteColor),
+                        color: AppColors.whiteColor.toMaterialColor(),
                         child: _isItemClick ? itemView() : inProgressView(),
                       ),
                     )),
@@ -496,16 +496,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                             StringConstants.items,
                             StyleConstants.customTextStyle(
                                 fontSize: 12.0,
-                                color: getMaterialColor(AppColors.textColor1),
+                                color: AppColors.textColor1.toMaterialColor(),
                                 fontFamily: FontConstants.montserratBold)),
                       )),
                   const SizedBox(
                     height: 11.0,
                   ),
                   Container(
-                    color: getMaterialColor(_isItemClick
-                        ? AppColors.primaryColor2
-                        : AppColors.whiteColor),
+                    color: _isItemClick
+                        ? AppColors.primaryColor2.toMaterialColor()
+                        : AppColors.whiteColor.toMaterialColor(),
                     width: 45.0,
                     height: 3.0,
                   ),
@@ -550,15 +550,15 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     StringConstants.inProcess,
                     StyleConstants.customTextStyle(
                         fontSize: 12.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1.toMaterialColor(),
                         fontFamily: FontConstants.montserratBold)),
               )),
           const SizedBox(
             height: 11.0,
           ),
           Container(
-            color: getMaterialColor(
-                _isItemClick ? AppColors.whiteColor : AppColors.primaryColor2),
+            color:
+                _isItemClick ? AppColors.whiteColor.toMaterialColor() : AppColors.primaryColor2.toMaterialColor(),
             width: 90.0,
             height: 3.0,
           ),
@@ -595,7 +595,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               StringConstants.orderDetails,
               StyleConstants.customTextStyle(
                   fontSize: 22.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1.toMaterialColor(),
                   fontFamily: FontConstants.montserratBold))),
     );
   }
@@ -607,14 +607,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             '${StringConstants.customerName} - ',
             StyleConstants.customTextStyle(
                 fontSize: 12.0,
-                color: getMaterialColor(AppColors.textColor1),
+                color: AppColors.textColor1.toMaterialColor(),
                 fontFamily: FontConstants.montserratRegular)),
         Expanded(
             child: CommonWidgets().textView(
                 customerName,
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
-                    color: getMaterialColor(AppColors.textColor1),
+                    color: AppColors.textColor1.toMaterialColor(),
                     fontFamily: FontConstants.montserratBold))),
       ]);
 
@@ -637,14 +637,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     '${StringConstants.email}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1.toMaterialColor(),
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
                         email,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2.toMaterialColor(),
                             fontFamily: FontConstants.montserratMedium))),
               ]),
             ),
@@ -659,14 +659,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     '${StringConstants.phone}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1.toMaterialColor(),
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
                         phone,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2.toMaterialColor(),
                             fontFamily: FontConstants.montserratMedium))),
               ]),
             ),
@@ -681,14 +681,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     '${StringConstants.eventName}: ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
-                        color: getMaterialColor(AppColors.textColor1),
+                        color: AppColors.textColor1.toMaterialColor(),
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
                         eventName,
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
-                            color: getMaterialColor(AppColors.textColor2),
+                            color: AppColors.textColor2.toMaterialColor(),
                             fontFamily: FontConstants.montserratMedium))),
               ]),
             ),
@@ -700,14 +700,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   '${StringConstants.eventAddress}: ',
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratRegular)),
               Expanded(
                   child: CommonWidgets().textView(
                       storeAddress,
                       StyleConstants.customTextStyle(
                           fontSize: 9.0,
-                          color: getMaterialColor(AppColors.textColor2),
+                          color: AppColors.textColor2.toMaterialColor(),
                           fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
@@ -721,7 +721,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           '${StringConstants.paymentMode}: ',
           StyleConstants.customTextStyle(
               fontSize: 9.0,
-              color: getMaterialColor(AppColors.textColor1),
+              color: AppColors.textColor1.toMaterialColor(),
               fontFamily: FontConstants.montserratRegular)),
       Expanded(
           child: posPaymentMethod == "null"
@@ -729,20 +729,20 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.na,
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.textColor2),
+                      color: AppColors.textColor2.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium))
               : posPaymentMethod == "CASH"
                   ? CommonWidgets().textView(
                       StringConstants.paymentModeCash,
                       StyleConstants.customTextStyle(
                           fontSize: 9.0,
-                          color: getMaterialColor(AppColors.textColor2),
+                          color: AppColors.textColor2.toMaterialColor(),
                           fontFamily: FontConstants.montserratMedium))
                   : CommonWidgets().textView(
                       StringConstants.paymentModeCard,
                       StyleConstants.customTextStyle(
                           fontSize: 9.0,
-                          color: getMaterialColor(AppColors.textColor2),
+                          color: AppColors.textColor2.toMaterialColor(),
                           fontFamily: FontConstants.montserratMedium))),
     ]);
   }
@@ -756,13 +756,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               StringConstants.orderId,
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1.toMaterialColor(),
                   fontFamily: FontConstants.montserratRegular)),
           CommonWidgets().textView(
               ' #$orderId',
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
+                  color: AppColors.textColor2.toMaterialColor(),
                   fontFamily: FontConstants.montserratMedium)),
         ]),
         const SizedBox(height: 8.0),
@@ -771,13 +771,13 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               StringConstants.orderDate,
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor1),
+                  color: AppColors.textColor1.toMaterialColor(),
                   fontFamily: FontConstants.montserratRegular)),
           CommonWidgets().textView(
               ' $orderDate',
               StyleConstants.customTextStyle(
                   fontSize: 9.0,
-                  color: getMaterialColor(AppColors.textColor2),
+                  color: AppColors.textColor2.toMaterialColor(),
                   fontFamily: FontConstants.montserratMedium)),
         ]),
       ]);
@@ -805,7 +805,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   itemName,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratRegular)),
             ),
             Expanded(
@@ -814,7 +814,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   "${StringConstants.qty} - $quantity",
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratRegular)),
             ),
             Expanded(
@@ -823,7 +823,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   "\$${price.toStringAsFixed(2)}",
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratRegular)),
             )
           ]),
@@ -854,7 +854,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.completed,
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor2),
+                      color: AppColors.denotiveColor2.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium)),
             ],
           ),
@@ -874,9 +874,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(12.5)),
                   color: _refundBool
-                      ? getMaterialColor(AppColors.denotiveColor4)
+                      ? AppColors.denotiveColor4.toMaterialColor()
                           .withOpacity(0.2)
-                      : getMaterialColor(AppColors.denotiveColor2)
+                      : AppColors.denotiveColor2.toMaterialColor()
                           .withOpacity(0.2)),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -893,14 +893,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                               StringConstants.refunded,
                               StyleConstants.customTextStyle(
                                   fontSize: 9.0,
-                                  color: getMaterialColor(AppColors.textColor1),
+                                  color: AppColors.textColor1.toMaterialColor(),
                                   fontFamily: FontConstants.montserratMedium))
                           : CommonWidgets().textView(
                               StringConstants.refund,
                               StyleConstants.customTextStyle(
                                   fontSize: 9.0,
-                                  color: getMaterialColor(
-                                      AppColors.denotiveColor2),
+                                  color:
+                                      AppColors.denotiveColor2.toMaterialColor(),
                                   fontFamily: FontConstants.montserratMedium))
                     ],
                   ),
@@ -915,7 +915,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
 
   onTapRefundButton() {
     showDialog(
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
+        barrierColor: AppColors.textColor1.toMaterialColor().withOpacity(0.7),
         context: context,
         builder: (context) {
           return RefundPopup(
@@ -930,7 +930,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget _pendingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor1).withOpacity(0.1)),
+            color: AppColors.denotiveColor1.toMaterialColor().withOpacity(0.1)),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
@@ -940,7 +940,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.pending,
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor1),
+                      color: AppColors.denotiveColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium)),
               const SizedBox(
                 width: 10.0,
@@ -955,7 +955,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget _preparingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor3).withOpacity(0.1)),
+            color: AppColors.denotiveColor3.toMaterialColor().withOpacity(0.1)),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
@@ -965,7 +965,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.preparing,
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor3),
+                      color: AppColors.denotiveColor3.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium)),
               const SizedBox(
                 width: 10.0,
@@ -984,7 +984,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         width: 80.0,
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
+            color: AppColors.primaryColor1.toMaterialColor().withOpacity(0.1)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -995,7 +995,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 StringConstants.saved,
                 StyleConstants.customTextStyle(
                     fontSize: 9.0,
-                    color: getMaterialColor(AppColors.primaryColor1),
+                    color: AppColors.primaryColor1.toMaterialColor(),
                     fontFamily: FontConstants.montserratMedium)),
             const SizedBox(
               width: 15.0,
@@ -1007,7 +1007,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget rightCompletedView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor2).withOpacity(0.2)),
+            color: AppColors.denotiveColor2.toMaterialColor().withOpacity(0.2)),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
@@ -1018,7 +1018,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.completed,
                   StyleConstants.customTextStyle(
                       fontSize: 16.0,
-                      color: getMaterialColor(AppColors.denotiveColor2),
+                      color: AppColors.denotiveColor2.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium)),
             ],
           ),
@@ -1028,7 +1028,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget rightPendingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor1).withOpacity(0.1)),
+            color: AppColors.denotiveColor1.toMaterialColor().withOpacity(0.1)),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 12.0, left: 20.0),
@@ -1038,7 +1038,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.pending,
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor1),
+                      color: AppColors.denotiveColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium)),
               const SizedBox(
                 width: 10.0,
@@ -1053,7 +1053,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   Widget _rightPreparingView() => Container(
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12.5)),
-            color: getMaterialColor(AppColors.denotiveColor3).withOpacity(0.1)),
+            color: AppColors.denotiveColor3.toMaterialColor().withOpacity(0.1)),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 12.0, left: 16.0),
@@ -1063,7 +1063,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   StringConstants.preparing,
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
-                      color: getMaterialColor(AppColors.denotiveColor3),
+                      color: AppColors.denotiveColor3.toMaterialColor(),
                       fontFamily: FontConstants.montserratMedium)),
               const SizedBox(
                 width: 10.0,
@@ -1083,7 +1083,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(12.5)),
               color:
-                  getMaterialColor(AppColors.primaryColor1).withOpacity(0.1)),
+                  AppColors.primaryColor1.toMaterialColor().withOpacity(0.1)),
           child: Padding(
             padding: const EdgeInsets.only(
                 top: 11.0, bottom: 11.0, right: 20.0, left: 20.0),
@@ -1094,7 +1094,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     StringConstants.resume,
                     StyleConstants.customTextStyle(
                         fontSize: 16.0,
-                        color: getMaterialColor(AppColors.primaryColor1),
+                        color: AppColors.primaryColor1.toMaterialColor(),
                         fontFamily: FontConstants.montserratBold)),
               ],
             ),

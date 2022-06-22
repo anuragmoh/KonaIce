@@ -348,8 +348,10 @@ class _LoginScreenState extends State<LoginScreen>
             errorMessage: StringConstants.noInternetConnection,
             context: context);
       }
+      debugPrint(">>>>>${await CheckConnection.connectionState()}");
     }
   }
+
   _onTapForgotPassword() {
     setState(() {
       _isLoginView = false;

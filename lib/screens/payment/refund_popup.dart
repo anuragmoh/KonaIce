@@ -3,9 +3,9 @@ import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/utils/color_extension.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dialog/dialog_helper.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 //ignore: must_be_immutable
 class RefundPopup extends StatefulWidget {
   num amount;
@@ -179,7 +179,7 @@ class _RefundPopup extends State<RefundPopup> {
           Text(validationMessage,
               style: StyleConstants.customTextStyle(
                   fontSize: 12.0,
-                  color: getMaterialColor(AppColors.textColor5),
+                  color: AppColors.textColor5.toMaterialColor(),
                   fontFamily: FontConstants.montserratRegular),
               textAlign: TextAlign.left)
         ],
