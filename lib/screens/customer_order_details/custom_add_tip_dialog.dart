@@ -190,7 +190,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
 }
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange == null || decimalRange > 0);
+      : assert(decimalRange > 0);
 
   final int decimalRange;
 

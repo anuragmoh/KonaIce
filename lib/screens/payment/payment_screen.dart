@@ -37,7 +37,6 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../utils/function_utils.dart';
 import 'credit_card_details_popup.dart';
@@ -114,6 +113,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     super.initState();
     totalAmount = widget.billDetails['totalAmount'];
     _tip = widget.billDetails['tip'];
+    debugPrint('>>>>>>>>>>>>$_tip');
     _discount = widget.billDetails['discount'];
     _foodCost = widget.billDetails['foodCost'];
     _salesTax = widget.billDetails['salesTax'];
@@ -1183,9 +1183,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     await _cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }
 
-  _onTapCloseButton() {
-    Navigator.of(context).pop();
-  }
 
   _onTapNewOrder() {
     if (_isPaymentDone) {
@@ -1253,20 +1250,12 @@ class _PaymentScreenState extends State<PaymentScreen>
     return payOrderRequestModel;
   }
 
-  PayOrderCardRequestModel _getPayOrderCardMethodRequestModel() {
-    PayOrderCardRequestModel payOrderCardRequestModel =
-        PayOrderCardRequestModel();
-    payOrderCardRequestModel.orderId = _orderID;
-    payOrderCardRequestModel.paymentMethod = PaymentMethods.card;
-    payOrderCardRequestModel.stripeCardId = _stripeTokenId;
-    payOrderCardRequestModel.stripePaymentMethodId = _stripePaymentMethodId;
-
-    return payOrderCardRequestModel;
-  }
-
   //API call
-  _callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+  _callPlaceOrderAPI() async {
+
     _orderPresenter.placeOrder(widget.placeOrderRequestModel);
+
+    debugPrint('>>>>>>>>>>>>${widget.placeOrderRequestModel}');
   }
 
   //API call for card payment method
@@ -1543,7 +1532,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 }
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange == null || decimalRange > 0);
+      : assert(decimalRange > 0);
 
   final int decimalRange;
 

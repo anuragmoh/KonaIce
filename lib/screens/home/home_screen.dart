@@ -36,7 +36,7 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 
 import '../../common/base_method.dart';
 import '../../common/extensions/string_extension.dart';
-
+//ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   var onCallback;
   HomeScreen({Key? key, this.onCallback}) : super(key: key);

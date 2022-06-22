@@ -8,7 +8,6 @@ import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
@@ -72,7 +71,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   bool _isApiProcess = false;
 
   List<ItemCategories> _itemCategoriesList = [];
-  List<FoodExtraItems> _foodExtraItemList = [];
 
   bool _isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -161,34 +159,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     } else {
       setState(() {
         _itemList.clear();
-      });
-    }
-  }
-
-  _getItemsByCategory(String categoryId) async {
-    // Category Id need to pass
-    var result = await ItemDAO().getAllItemsByCategories(categoryId);
-    if (result != null) {
-      setState(() {
-        _itemList.addAll(result);
-      });
-    } else {
-      setState(() {
-        _itemList.clear();
-      });
-    }
-  }
-
-  _getExtraFoodItem() async {
-    var result =
-        await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
-    if (result != null) {
-      setState(() {
-        _foodExtraItemList.addAll(result);
-      });
-    } else {
-      setState(() {
-        _foodExtraItemList.clear();
       });
     }
   }
@@ -501,35 +471,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       ),
     );
   }
-
-  Widget _addNewMenuItem() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 3.0),
-            child: _plusSymbolText(),
-          ),
-          SizedBox(
-            width: 70.0,
-            child: CommonWidgets().textWidget(
-                StringConstants.addNewMenuItem,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: AppColors.textColor2,
-                    fontFamily: FontConstants.montserratMedium),
-                textAlign: TextAlign.center),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget _plusSymbolText() {
     return CommonWidgets().textWidget(
         StringConstants.plusSymbol,
@@ -1193,11 +1134,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     });
     FocusScope.of(context).unfocus();
   }
-
-  _onDrawerTap() {
-    _scaffoldKey.currentState!.openEndDrawer();
-  }
-
   _onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
@@ -1257,13 +1193,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       });
     });
   }
-
-  //data for p2pConnection
-  _showOrderScreenToCustomer() {
-    P2PConnectionManager.shared
-        .updateData(action: StaffActionConst.eventSelected);
-  }
-
   _updateOrderDataToCustomer() {
     //dataModel = P2POrderDetailsModel();
     dataModel.orderRequestModel = _getOrderRequestModel();
@@ -1309,12 +1238,12 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       orderRequestModel.zipCode = "";
       orderRequestModel.anonymous = false;
       orderRequestModel.donation = 0;
-      orderRequestModel.gratuity = 0;
       orderRequestModel.addressLatitude = 0.0;
       orderRequestModel.addressLongitude = 0.0;
     } else {
       orderRequestModel.anonymous = true;
     }
+    orderRequestModel.gratuity = _tip;
     orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
     orderRequestModel.allowPromoNotifications = false;
     orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
@@ -1404,7 +1333,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   //API Call
-  _callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+  _callPlaceOrderAPI() async {
     PlaceOrderRequestModel requestModel = _getOrderRequestModel();
     _orderPresenter.placeOrder(requestModel);
     setState(() {
@@ -1569,7 +1498,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 }
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange == null || decimalRange > 0);
+      : assert(decimalRange > 0);
 
   final int decimalRange;
 

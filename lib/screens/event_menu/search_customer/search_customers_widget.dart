@@ -10,10 +10,10 @@ import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import '../../../models/network_model/search_customer/customer_model.dart';
 
+//ignore: must_be_immutable
 class SearchCustomers extends StatefulWidget {
   Function onTapCustomer;
   SearchCustomers({required this.onTapCustomer, Key? key}) : super(key: key);
@@ -29,9 +29,7 @@ class _SearchCustomersState extends State<SearchCustomers>
   _SearchCustomersState() {
     _customerPresenter = CustomerPresenter(this);
   }
-
   bool _isApiProcess = false;
-
   List<CustomerDetails> _customerList = [];
   TextEditingController _searchFieldController = TextEditingController();
 
@@ -40,7 +38,6 @@ class _SearchCustomersState extends State<SearchCustomers>
     return Loader(
         isCallInProgress: _isApiProcess,
         child: _searchCustomerContainer(context));
-    //return searchCustomerContainer(context);
   }
 
   @override
@@ -195,11 +192,6 @@ class _SearchCustomersState extends State<SearchCustomers>
         (inputText ?? '').isNotEmpty) {
       _customerListAPI(searchText: inputText!);
     }
-    // } else if ((inputText ?? '').length < 3 ) {
-    //   setState(() {
-    //     customerList.clear();
-    //   });
-    // }
   }
 
   _onTapCancelButton() {
@@ -214,18 +206,15 @@ class _SearchCustomersState extends State<SearchCustomers>
   }
 
   //API Call
-
   _customerListAPI({required String searchText}) {
     setState(() {
       _isApiProcess = true;
     });
-
     _customerPresenter.customerList(searchText);
   }
 
   @override
   void showError(GeneralErrorResponse exception) {
-    // TODO: implement showError
     setState(() {
       _isApiProcess = false;
       CommonWidgets().showErrorSnackBar(
@@ -236,7 +225,6 @@ class _SearchCustomersState extends State<SearchCustomers>
 
   @override
   void showSuccess(response) {
-    // TODO: implement showSuccess
     List<CustomerDetails> list = response;
     setState(() {
       _isApiProcess = false;

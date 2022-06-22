@@ -3,11 +3,10 @@ import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-
+//ignore: must_be_immutable
 class CreditCardDetailsPopup extends StatefulWidget {
   String totalAmount;
 
@@ -31,7 +30,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   int _yearOfExpiryInt = 0;
   var _month, _year;
   String _spliitYear = "";
-  late PaymentPresenter _paymentPresenter;
   TextEditingController _dateExpiryController = TextEditingController();
   TextEditingController _cardNumberController = TextEditingController();
   TextEditingController _cvvController = TextEditingController();

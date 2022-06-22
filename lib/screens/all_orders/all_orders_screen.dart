@@ -53,14 +53,11 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   List<SavedOrdersItem> _savedOrderItemList = [];
   List<SavedOrdersExtraItems> _savedOrderExtraItemList = [];
   late AllOrderPresenter _allOrderPresenter;
-  List<AllOrderResponse> _allOrdersList = [];
   int _selectedRow = -1;
   bool _isApiProcess = false;
   bool _isNoRecord=false;
   int _countOffSet = 0;
   bool _refundBool = false;
-  bool _paymentModeCardBool = false;
-  String _paymentModeCard = "";
 
   _AllOrdersScreenState() {
     _allOrderPresenter = AllOrderPresenter(this);
@@ -148,14 +145,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     );
   }
 
-  Widget _topWidget() => Container(
-        height: 100.0,
-        decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(8.0),
-                bottomRight: Radius.circular(8.0))),
-      );
 
   Widget bodyWidget() => Container(
         color: getMaterialColor(AppColors.textColor3).withOpacity(0.1),
@@ -167,21 +156,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         Visibility(visible: _selectedRow != -1, child: _rightSideWidget()),
       ]);
 
-  Widget _bottomWidget() => Container(
-        height: 43.0,
-        decoration: BoxDecoration(
-            color: getMaterialColor(AppColors.primaryColor1),
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8.0), topRight: Radius.circular(8.0))),
-        child: Align(
-            alignment: Alignment.topRight, child: _componentBottomWidget()),
-      );
 
-  Widget _componentBottomWidget() => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 7.0, horizontal: 35.0),
-        child: Image.asset(AssetsConstants.switchAccount,
-            width: 30.0, height: 30.0),
-      );
 
   Widget _leftSideWidget() => Expanded(
           child:
@@ -1137,20 +1112,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   _onTapResumeButton() {
     widget.onBackTap(_savedOrdersList[_selectedRow], _savedOrderItemList,
         _savedOrderExtraItemList);
-  }
-
-  _onTapRefundButton() {
-    showDialog(
-        barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),
-        context: context,
-        builder: (context) {
-          return RefundPopup(
-              amount: _savedOrdersList[_selectedRow].totalAmount);
-        }).then((value) {
-      String amount = value['totalAmount'];
-      double totalAmount = double.parse(amount);
-      _refundPaymentApiCall(totalAmount);
-    });
   }
 
   //Refund Payment Api call

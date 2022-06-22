@@ -46,9 +46,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
   late Position _currentPosition;
 
   String _selectedState = "",
-      _selectedCity = "",
-      _selectedZipcode = "",
-      _selectedAddress = "";
+      _selectedCity = "";
 
   bool _isValidEventName = true,
       _isValidAddress = true,

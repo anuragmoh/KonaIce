@@ -25,7 +25,6 @@ class ForgetPasswordScreen extends StatefulWidget {
 }
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> implements ResponseContractor{
-  bool _isApiProcess = false;
   bool _isEmailValid = true;
   String _emailValidationMessage = "";
   TextEditingController _emailController = TextEditingController();

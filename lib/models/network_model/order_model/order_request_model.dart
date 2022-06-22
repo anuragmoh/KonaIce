@@ -52,7 +52,7 @@ class PlaceOrderRequestModel {
   String? zipCode;
   bool? anonymous;
   int? donation;
-  int? gratuity;
+  double? gratuity;
   int? ccChargesIncluded;
   int? corporateDonation;
   num? corporateDonationBeforeCcCharges;

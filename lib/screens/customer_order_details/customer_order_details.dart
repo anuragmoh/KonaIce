@@ -475,11 +475,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
           return CustomerAddTipDialog(callBack: _getTip);
         });
   }
-
-  Widget _textWidget(String textTitle, TextStyle textStyle) {
-    return Text(textTitle, style: textStyle);
-  }
-
+  
   _getTip(double tip) {
     _orderDetailsModel?.setTip(tip);
     double? receivedTip = _orderDetailsModel?.getTip();
