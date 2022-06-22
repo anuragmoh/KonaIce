@@ -56,7 +56,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
   List<AllOrderResponse> _allOrdersList = [];
   int _selectedRow = -1;
   bool _isApiProcess = false;
-  bool _isNoRecord=false;
+  bool _isNoRecord = false;
+  bool _isNoRecordFound = false;
   int _countOffSet = 0;
   bool _refundBool = false;
   bool _paymentModeCardBool = false;
@@ -134,16 +135,16 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 ],
               )
             : Visibility(
-          visible: _isNoRecord,
-              child: Align(
-                  alignment: Alignment.center,
-                  child: CommonWidgets().textWidget(
-                      StringConstants.noOrdersToDisplay,
-                      StyleConstants.customTextStyle(
-                          fontSize: 20.0,
-                          color: AppColors.textColor1,
-                          fontFamily: FontConstants.montserratSemiBold))),
-            ),
+                visible: _isNoRecord,
+                child: Align(
+                    alignment: Alignment.center,
+                    child: CommonWidgets().textWidget(
+                        StringConstants.noOrdersToDisplay,
+                        StyleConstants.customTextStyle(
+                            fontSize: 20.0,
+                            color: AppColors.textColor1,
+                            fontFamily: FontConstants.montserratSemiBold))),
+              ),
       ),
     );
   }
@@ -245,6 +246,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     var result = await SavedOrdersDAO().getFilteredOrdersList(text);
     if (result != null) {
       setState(() {
+        if(text.toString().isEmpty){
+        _isNoRecordFound=false;
+        }
         _savedOrdersList.clear();
         _savedOrdersList.addAll(result);
       });
@@ -253,44 +257,58 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       if (result != null) {
         setState(() {
           _savedOrdersList.clear();
+          if(text.toString().isNotEmpty) {
+            _isNoRecordFound = true;
+          }
           _savedOrdersList.addAll(result);
         });
       }
     }
   }
 
-  Widget _tableHeadRow() => Padding(
-        padding: const EdgeInsets.only(left: 15.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          // controller: _scrollController,
+  Widget _tableHeadRow() => _isNoRecordFound
+      ? Align(
+          alignment: Alignment.center,
+          child: CommonWidgets().textWidget(
+              StringConstants.noRecordsFound,
+              StyleConstants.customTextStyle(
+                  fontSize: 20.0,
+                  color: AppColors.textColor1,
+                  fontFamily: FontConstants.montserratSemiBold)))
+      : Padding(
+          padding: const EdgeInsets.only(left: 15.0),
           child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
-                  child: DataTable(
-                    sortAscending: false,
-                    showCheckboxColumn: false,
-                    columnSpacing: 35,
-                    dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
-                    columns: [
-                      _buildNameColumn(),
-                      _buildDateColumn(),
-                      _buildPaymentColumn(),
-                      _buildPriceColumn(),
-                      _buildStatusColumn(),
-                    ],
-                    rows: List.generate(_savedOrdersList.length,
-                        (index) => _getDataRow(_savedOrdersList[index], index)),
+            scrollDirection: Axis.vertical,
+            // controller: _scrollController,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: DataTable(
+                      sortAscending: false,
+                      showCheckboxColumn: false,
+                      columnSpacing: 35,
+                      dataRowHeight: 5.51 * SizeConfig.heightSizeMultiplier,
+                      columns: [
+                        _buildNameColumn(),
+                        _buildDateColumn(),
+                        _buildPaymentColumn(),
+                        _buildPriceColumn(),
+                        _buildStatusColumn(),
+                      ],
+                      rows: List.generate(
+                          _savedOrdersList.length,
+                          (index) =>
+                              _getDataRow(_savedOrdersList[index], index)),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
 
   DataColumn _buildStatusColumn() {
     return DataColumn(
@@ -875,7 +893,6 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       );
 
   Widget completedView() => Container(
-
         child: Padding(
           padding: const EdgeInsets.only(
               top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
@@ -914,7 +931,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                 padding: const EdgeInsets.only(
                     top: 7.0, bottom: 7.0, right: 16.0, left: 16.0),
                 child: InkWell(
-                  onTap:refundAmout > 0.00? onTapRefundedButton:onTapRefundButton,
+                  onTap: refundAmout > 0.00
+                      ? onTapRefundedButton
+                      : onTapRefundButton,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -931,8 +950,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                                   fontSize: 9.0,
                                   color: getMaterialColor(
                                       AppColors.denotiveColor2),
-                                  fontFamily:
-                                      FontConstants.montserratMedium))
+                                  fontFamily: FontConstants.montserratMedium))
                     ],
                   ),
                 ),
@@ -941,9 +959,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
         ],
       );
-  onTapRefundedButton(){
-
-  }
+  onTapRefundedButton() {}
   onTapRefundButton() {
     showDialog(
         barrierColor: getMaterialColor(AppColors.textColor1).withOpacity(0.7),

@@ -228,6 +228,7 @@ class StringConstants {
   static const noMenuItemsAvailable =
       'No menu items available for the selected event';
   static const noOrdersToDisplay = "No records found in the order history";
+  static const noRecordsFound = "No such records found";
 
   // Dialog String
 
