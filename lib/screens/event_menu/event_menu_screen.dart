@@ -8,6 +8,7 @@ import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
+import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
@@ -45,6 +46,7 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'dart:math' as math;
 import '../../models/network_model/order_model/order_request_model.dart';
 import '../../models/network_model/order_model/order_response_model.dart';
+import '../../utils/number_formatter.dart';
 
 class EventMenuScreen extends StatefulWidget {
   final Events events;
@@ -71,6 +73,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   bool _isApiProcess = false;
 
   List<ItemCategories> _itemCategoriesList = [];
+  List<FoodExtraItems> _foodExtraItemList = [];
 
   bool _isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -1497,46 +1500,5 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     await SavedOrdersDAO().clearEventDataByOrderID(_orderID).then((value) {
       _eventPresenter.deleteOrder(orderId: _orderID);
     });
-  }
-}
-
-class NumberRemoveExtraDotFormatter extends TextInputFormatter {
-  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange > 0);
-
-  final int decimalRange;
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String nValue = newValue.text;
-    TextSelection nSelection = newValue.selection;
-
-    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
-    nValue = p
-        .allMatches(nValue)
-        .map<String>((Match match) => match.group(0)!)
-        .join();
-
-    if (nValue.startsWith('.')) {
-      nValue = '0.';
-    } else if (nValue.contains('.')) {
-      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
-        nValue = oldValue.text;
-      } else {
-        if (nValue.split('.').length > 2) {
-          List<String> split = nValue.split('.');
-          nValue = split[0] + '.' + split[1];
-        }
-      }
-    }
-
-    nSelection = newValue.selection.copyWith(
-      baseOffset: math.min(nValue.length, nValue.length + 1),
-      extentOffset: math.min(nValue.length, nValue.length + 1),
-    );
-
-    return TextEditingValue(
-        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }
