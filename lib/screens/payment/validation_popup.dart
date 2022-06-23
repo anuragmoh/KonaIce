@@ -32,7 +32,7 @@ class _ValidationPopup extends State<ValidationPopup> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _baseMethod.amountTextFieldController.dispose();
     _baseMethod.menuNameTextFieldController.dispose();
@@ -40,7 +40,6 @@ class _ValidationPopup extends State<ValidationPopup> {
     _baseMethod.cardNumberController.dispose();
     _baseMethod.cvcController.dispose();
   }
-
 
   Widget _showCustomMenuPopup() {
     return Dialog(

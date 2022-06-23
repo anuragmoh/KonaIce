@@ -40,6 +40,7 @@ import 'package:kona_ice_pos/utils/utils.dart';
 import 'package:lottie/lottie.dart';
 
 import '../../utils/function_utils.dart';
+import '../../utils/number_formatter.dart';
 import 'credit_card_details_popup.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -236,41 +237,41 @@ class _PaymentScreenState extends State<PaymentScreen>
       ]);
 
   Widget _leftSideWidget() => Expanded(
-          child:
-              Stack(
-                children: [
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const SizedBox(
-                      height: 14.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
-                      child: _leftSideTopComponent(totalAmount),
-                    ),
-                    // leftSideTopComponent(totalAmount),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Divider(
-                        color: AppColors.gradientColor1.withOpacity(0.2),
-                        thickness: 1,
-                      ),
-                    ),
-                    Expanded(child: _leftBodyComponent()),
-                  ]),
-                  // Center(
-                  //   child: Visibility(
-                  //       visible: (_paymentModeType ==
-                  //           PaymentModeConstants.creditCard) || (_paymentModeType ==
-                  //           PaymentModeConstants.creditCardManual),
-                  //       child: Lottie.asset(
-                  //           _paymentStatusValue == 'insert' ? AssetsConstants
-                  //               .insertCardAnimationPath : _paymentStatusValue == 'progress'
-                  //               ? AssetsConstants.progressAnimationPath
-                  //               : AssetsConstants.removeCardAnimationPath,
-                  //           height: 150, width: 150)),
-                  // ),
-                ],
-              ));
+          child: Stack(
+        children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const SizedBox(
+              height: 14.0,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
+              child: _leftSideTopComponent(totalAmount),
+            ),
+            // leftSideTopComponent(totalAmount),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Divider(
+                color: AppColors.gradientColor1.withOpacity(0.2),
+                thickness: 1,
+              ),
+            ),
+            Expanded(child: _leftBodyComponent()),
+          ]),
+          // Center(
+          //   child: Visibility(
+          //       visible: (_paymentModeType ==
+          //           PaymentModeConstants.creditCard) || (_paymentModeType ==
+          //           PaymentModeConstants.creditCardManual),
+          //       child: Lottie.asset(
+          //           _paymentStatusValue == 'insert' ? AssetsConstants
+          //               .insertCardAnimationPath : _paymentStatusValue == 'progress'
+          //               ? AssetsConstants.progressAnimationPath
+          //               : AssetsConstants.removeCardAnimationPath,
+          //           height: 150, width: 150)),
+          // ),
+        ],
+      ));
 
   Widget _leftSideTopComponent(double totalAmount) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -1105,9 +1106,9 @@ class _PaymentScreenState extends State<PaymentScreen>
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
         debugPrint('>>>>>>>$value');
-        if(value.toString()=='false'){
+        if (value.toString() == 'false') {
           setState(() {
-            _paymentModeType=-1;
+            _paymentModeType = -1;
           });
         }
         bool valueForApi = value[ConstantKeys.cardValue];
@@ -1346,7 +1347,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       }
     } else if (response.action == CustomerActionConst.editOrderDetails) {
       _showEventMenuScreen();
-    }else if (response.action == StaffActionConst.paymentStatus) {
+    } else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
         _isAnimation = true;
       });
@@ -1355,7 +1356,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       });
       debugPrint('response--->' + response.data.toString());
     }
-
   }
 
   //FinixMannual CardDetails
@@ -1539,45 +1539,5 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isApiProcess = true;
     });
     _orderPresenter.finixSendReceipt(_orderID, finixSendReceiptRequest);
-  }
-}
-class NumberRemoveExtraDotFormatter extends TextInputFormatter {
-  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange == null || decimalRange > 0);
-
-  final int decimalRange;
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String nValue = newValue.text;
-    TextSelection nSelection = newValue.selection;
-
-    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
-    nValue = p
-        .allMatches(nValue)
-        .map<String>((Match match) => match.group(0)!)
-        .join();
-
-    if (nValue.startsWith('.')) {
-      nValue = '0.';
-    } else if (nValue.contains('.')) {
-      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
-        nValue = oldValue.text;
-      } else {
-        if (nValue.split('.').length > 2) {
-          List<String> split = nValue.split('.');
-          nValue = split[0] + '.' + split[1];
-        }
-      }
-    }
-
-    nSelection = newValue.selection.copyWith(
-      baseOffset: math.min(nValue.length, nValue.length + 1),
-      extentOffset: math.min(nValue.length, nValue.length + 1),
-    );
-
-    return TextEditingValue(
-        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }

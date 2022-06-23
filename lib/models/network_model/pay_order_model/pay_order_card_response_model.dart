@@ -41,8 +41,7 @@ class OrderItemsInvoiceDto {
         transactionId: json["transactionId"],
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "transactionId": transactionId,
       };
 }

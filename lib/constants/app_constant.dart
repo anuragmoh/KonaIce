@@ -1,4 +1,3 @@
-
 enum FinixTagsKey {
   customerEmail,
   customerName,

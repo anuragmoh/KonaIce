@@ -185,6 +185,7 @@ class FunctionalUtils {
 
     return userName.toTitleCase();
   }
+
   static Future<String> getFinixMerchantIdNCP() async {
     String merchantId = StringExtension.empty();
     var idObj = await SessionDAO().getValueForKey(DatabaseKeys.merchantIdNCP);

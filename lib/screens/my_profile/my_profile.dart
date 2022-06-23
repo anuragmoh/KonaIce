@@ -165,7 +165,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   void _setBoolVars() {
-    _emailIdController.text.isEmpty ? _isEmailValid = false : _isEmailValid = true;
+    _emailIdController.text.isEmpty
+        ? _isEmailValid = false
+        : _isEmailValid = true;
     _newPasswordController.text.isEmpty
         ? _isPasswordValid = false
         : _isPasswordValid = true;
@@ -181,7 +183,8 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   void _getMyProfileDetailsToUpdate() {
-    _myProfileUpdateRequestModel.firstName = _firstNameController.text.toString();
+    _myProfileUpdateRequestModel.firstName =
+        _firstNameController.text.toString();
     _myProfileUpdateRequestModel.lastName = _lastNameController.text.toString();
     _myProfileUpdateRequestModel.email = _emailIdController.text.toString();
     _myProfileUpdateRequestModel.phoneNum =
@@ -204,7 +207,10 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   }
 
   void _callUpdateProfile(String userID) {
-    if (_isEmailValid && _isFirstNameValid && _isLastNameValid && _isContactValid) {
+    if (_isEmailValid &&
+        _isFirstNameValid &&
+        _isLastNameValid &&
+        _isContactValid) {
       CheckConnection().connectionState().then((value) {
         if (value == true) {
           _isApiProcess = true;

@@ -67,11 +67,12 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
+
   Future<List<SavedOrders>?> getFilteredOrdersList(String text) async {
     try {
       final db = await _db;
-      var result =
-      await db.rawQuery("SELECT * FROM $tableName WHERE customer_name LIKE '%${text}%' OR order_id LIKE '%${text}%' OR order_code LIKE '%${text}%' order by order_date DESC");
+      var result = await db.rawQuery(
+          "SELECT * FROM $tableName WHERE customer_name LIKE '%${text}%' OR order_id LIKE '%${text}%' OR order_code LIKE '%${text}%' order by order_date DESC");
       if (result.isNotEmpty) {
         debugPrint('saveOrderDao${result}');
         return List.generate(
@@ -83,6 +84,7 @@ class SavedOrdersDAO {
       debugPrint(error.toString());
     }
   }
+
   Future<List<SavedOrders>?> getOrder(String orderId) async {
     try {
       final db = await _db;

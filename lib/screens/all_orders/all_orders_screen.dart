@@ -29,6 +29,8 @@ import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/utils.dart';
 
+import '../../models/network_model/order_model/order_response_model.dart';
+
 class AllOrdersScreen extends StatefulWidget {
   final Function(
           SavedOrders, List<SavedOrdersItem>, List<SavedOrdersExtraItems>)
@@ -246,8 +248,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     var result = await SavedOrdersDAO().getFilteredOrdersList(text);
     if (result != null) {
       setState(() {
-        if(text.toString().isEmpty){
-        _isNoRecordFound=false;
+        if (text.toString().isEmpty) {
+          _isNoRecordFound = false;
         }
         _savedOrdersList.clear();
         _savedOrdersList.addAll(result);
@@ -257,7 +259,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       if (result != null) {
         setState(() {
           _savedOrdersList.clear();
-          if(text.toString().isNotEmpty) {
+          if (text.toString().isNotEmpty) {
             _isNoRecordFound = true;
           }
           _savedOrdersList.addAll(result);
@@ -1378,7 +1380,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  Future<void> _buildOrderItemListLoop(Datum event) async {
+  Future<void> _buildOrderItemListLoop(PlaceOrderResponseModel event) async {
     for (var item in event.orderItemsList!) {
       await SavedOrdersItemsDAO().insert(SavedOrdersItem(
           orderId: event.id!,
@@ -1398,7 +1400,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                   orderId: event.id!,
                   itemId: item.itemId.toString(),
                   extraFoodItemId: extraItem.id!,
-                  extraFoodItemName: extraItem.foodExtraItemName!,
+                  extraFoodItemName: extraItem.name!,
                   extraFoodItemCategoryId:
                       extraItemMappingList.foodExtraCategoryId!,
                   quantity: extraItem.quantity!,
@@ -1412,9 +1414,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     }
   }
 
-  _getRefundAmount(dynamic refundAmout) {
-    if (refundAmout != null) {
-      return refundAmout.toString();
+  _getRefundAmount(dynamic refundAmount) {
+    if (refundAmount != null) {
+      return refundAmount.toString();
     } else {
       return "0.00";
     }
