@@ -475,7 +475,7 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
           return CustomerAddTipDialog(callBack: _getTip);
         });
   }
-  
+
   _getTip(double tip) {
     _orderDetailsModel?.setTip(tip);
     double? receivedTip = _orderDetailsModel?.getTip();

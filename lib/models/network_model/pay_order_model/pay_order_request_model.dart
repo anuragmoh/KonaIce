@@ -1,5 +1,3 @@
-
-
 class PayOrderRequestModel {
   PayOrderRequestModel({
     this.paymentMethod,

@@ -236,41 +236,41 @@ class _PaymentScreenState extends State<PaymentScreen>
       ]);
 
   Widget _leftSideWidget() => Expanded(
-          child:
-              Stack(
-                children: [
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    const SizedBox(
-                      height: 14.0,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
-                      child: _leftSideTopComponent(totalAmount),
-                    ),
-                    // leftSideTopComponent(totalAmount),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Divider(
-                        color: AppColors.gradientColor1.withOpacity(0.2),
-                        thickness: 1,
-                      ),
-                    ),
-                    Expanded(child: _leftBodyComponent()),
-                  ]),
-                  // Center(
-                  //   child: Visibility(
-                  //       visible: (_paymentModeType ==
-                  //           PaymentModeConstants.creditCard) || (_paymentModeType ==
-                  //           PaymentModeConstants.creditCardManual),
-                  //       child: Lottie.asset(
-                  //           _paymentStatusValue == 'insert' ? AssetsConstants
-                  //               .insertCardAnimationPath : _paymentStatusValue == 'progress'
-                  //               ? AssetsConstants.progressAnimationPath
-                  //               : AssetsConstants.removeCardAnimationPath,
-                  //           height: 150, width: 150)),
-                  // ),
-                ],
-              ));
+          child: Stack(
+        children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const SizedBox(
+              height: 14.0,
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5.0),
+              child: _leftSideTopComponent(totalAmount),
+            ),
+            // leftSideTopComponent(totalAmount),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Divider(
+                color: AppColors.gradientColor1.withOpacity(0.2),
+                thickness: 1,
+              ),
+            ),
+            Expanded(child: _leftBodyComponent()),
+          ]),
+          // Center(
+          //   child: Visibility(
+          //       visible: (_paymentModeType ==
+          //           PaymentModeConstants.creditCard) || (_paymentModeType ==
+          //           PaymentModeConstants.creditCardManual),
+          //       child: Lottie.asset(
+          //           _paymentStatusValue == 'insert' ? AssetsConstants
+          //               .insertCardAnimationPath : _paymentStatusValue == 'progress'
+          //               ? AssetsConstants.progressAnimationPath
+          //               : AssetsConstants.removeCardAnimationPath,
+          //           height: 150, width: 150)),
+          // ),
+        ],
+      ));
 
   Widget _leftSideTopComponent(double totalAmount) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
@@ -1105,9 +1105,9 @@ class _PaymentScreenState extends State<PaymentScreen>
             return CreditCardDetailsPopup(totalAmount: totalAmount.toString());
           }).then((value) {
         debugPrint('>>>>>>>$value');
-        if(value.toString()=='false'){
+        if (value.toString() == 'false') {
           setState(() {
-            _paymentModeType=-1;
+            _paymentModeType = -1;
           });
         }
         bool valueForApi = value[ConstantKeys.cardValue];
@@ -1183,7 +1183,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     await _cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }
 
-
   _onTapNewOrder() {
     if (_isPaymentDone) {
       Navigator.of(context).pop(_getOrderInfoToSendBack(true));
@@ -1252,7 +1251,6 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   //API call
   _callPlaceOrderAPI() async {
-
     _orderPresenter.placeOrder(widget.placeOrderRequestModel);
 
     debugPrint('>>>>>>>>>>>>${widget.placeOrderRequestModel}');
@@ -1335,7 +1333,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       }
     } else if (response.action == CustomerActionConst.editOrderDetails) {
       _showEventMenuScreen();
-    }else if (response.action == StaffActionConst.paymentStatus) {
+    } else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
         _isAnimation = true;
       });
@@ -1344,7 +1342,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       });
       debugPrint('response--->' + response.data.toString());
     }
-
   }
 
   //FinixMannual CardDetails
@@ -1530,6 +1527,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     _orderPresenter.finixSendReceipt(_orderID, finixSendReceiptRequest);
   }
 }
+
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
       : assert(decimalRange > 0);

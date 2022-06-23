@@ -331,6 +331,7 @@ class _DashboardState extends State<Dashboard>
           franchiseId: "empty"));
     }
   }
+
   BaseMethod _baseMethod = BaseMethod();
   Future<void> _posSyncEventDtoList() async {
     await _baseMethod.insertData(_pOsSyncEventDataDtoList);

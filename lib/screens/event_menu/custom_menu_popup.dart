@@ -39,6 +39,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     _amountTextFieldController.dispose();
     _menuNameTextFieldController.dispose();
   }
+
   Widget _customMenuPopUpComponent() {
     return SingleChildScrollView(
       child: SizedBox(
@@ -107,11 +108,9 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
               color: AppColors.textColor2,
               fontFamily: FontConstants.montserratRegular),
           enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.denotiveColor4)),
+              borderSide: BorderSide(color: AppColors.denotiveColor4)),
           focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.denotiveColor4))),
+              borderSide: BorderSide(color: AppColors.denotiveColor4))),
     );
   }
 
@@ -139,62 +138,59 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
 
   TextField _buildTextField() {
     return TextField(
-          controller: _amountTextFieldController,
-          keyboardType: TextInputType.number,
-          style: StyleConstants.customTextStyle(
-              fontSize: 22.0,
-              color: AppColors.textColor6,
-              fontFamily: FontConstants.montserratMedium),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            hintText: StringConstants.enterAmount,
-            hintStyle: StyleConstants.customTextStyle(
-                fontSize: 12,
-                color: AppColors.textColor2,
-                fontFamily: FontConstants.montserratRegular),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.skyBlueBorderColor),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                  color: AppColors.skyBlueBorderColor),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            prefixIcon: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildPadding1(),
-                _buildPadding2(),
-              ],
-            ),
-          ),
-        );
+      controller: _amountTextFieldController,
+      keyboardType: TextInputType.number,
+      style: StyleConstants.customTextStyle(
+          fontSize: 22.0,
+          color: AppColors.textColor6,
+          fontFamily: FontConstants.montserratMedium),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        hintText: StringConstants.enterAmount,
+        hintStyle: StyleConstants.customTextStyle(
+            fontSize: 12,
+            color: AppColors.textColor2,
+            fontFamily: FontConstants.montserratRegular),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.skyBlueBorderColor),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.skyBlueBorderColor),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        prefixIcon: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildPadding1(),
+            _buildPadding2(),
+          ],
+        ),
+      ),
+    );
   }
 
   Padding _buildPadding1() {
     return Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: CommonWidgets().textWidget(
-                    StringConstants.symbolDollar,
-                    StyleConstants.customTextStyle(
-                        fontSize: 22,
-                        color: AppColors.textColor2,
-                        fontFamily: FontConstants.montserratMedium)),
-              );
+      padding: const EdgeInsets.only(left: 15),
+      child: CommonWidgets().textWidget(
+          StringConstants.symbolDollar,
+          StyleConstants.customTextStyle(
+              fontSize: 22,
+              color: AppColors.textColor2,
+              fontFamily: FontConstants.montserratMedium)),
+    );
   }
 
   Padding _buildPadding2() {
     return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 0.0, horizontal: 15.0),
-                child: Container(
-                  color: AppColors.skyBlueBorderColor,
-                  width: 1.0,
-                  height: 30,
-                ),
-              );
+      padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0),
+      child: Container(
+        color: AppColors.skyBlueBorderColor,
+        width: 1.0,
+        height: 30,
+      ),
+    );
   }
 
   Widget _editNameButton() {

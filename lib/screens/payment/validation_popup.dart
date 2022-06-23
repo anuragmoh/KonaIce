@@ -5,6 +5,7 @@ import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+
 //ignore: must_be_immutable
 class ValidationPopup extends StatefulWidget {
   String validationMessage;
@@ -29,7 +30,7 @@ class _ValidationPopup extends State<ValidationPopup> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
     _baseMethod.amountTextFieldController.dispose();
     _baseMethod.menuNameTextFieldController.dispose();
@@ -37,7 +38,6 @@ class _ValidationPopup extends State<ValidationPopup> {
     _baseMethod.cardNumberController.dispose();
     _baseMethod.cvcController.dispose();
   }
-
 
   Widget _showCustomMenuPopup() {
     return Dialog(

@@ -11,9 +11,9 @@ class ConfirmationDialog extends StatefulWidget {
 
   const ConfirmationDialog(
       {Key? key,
-        required this.onTapYes,
-        required this.onTapNo,
-        required this.confirmMessage})
+      required this.onTapYes,
+      required this.onTapNo,
+      required this.confirmMessage})
       : super(key: key);
 
   @override
@@ -32,10 +32,10 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
   }
 
   Widget dialogUi() => SizedBox(
-    height: 208,
-    width: 391,
-    child: buildColumn(),
-  );
+        height: 208,
+        width: 391,
+        child: buildColumn(),
+      );
 
   Column buildColumn() {
     return Column(
@@ -57,8 +57,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
           button(StringConstants.no, widget.onTapNo,
               AppColors.textColor2.withOpacity(0.3)),
           const SizedBox(width: 12.0),
-          button(StringConstants.yes, widget.onTapYes,
-              AppColors.primaryColor2),
+          button(StringConstants.yes, widget.onTapYes, AppColors.primaryColor2),
         ],
       ),
     );
@@ -66,8 +65,8 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
 
   Padding buildConfirmmsgPadding() {
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 65.0, right: 65, top: 35.0, bottom: 35.0),
+      padding:
+          const EdgeInsets.only(left: 65.0, right: 65, top: 35.0, bottom: 35.0),
       child: Text(widget.confirmMessage,
           style: StyleConstants.customTextStyle(
               fontSize: 14.0,
@@ -80,8 +79,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
     return Container(
       color: AppColors.primaryColor1,
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: 20.0, vertical: 10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -112,7 +110,7 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
           child: Center(
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 31.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 31.0, vertical: 8.0),
               child: Text(
                 title,
                 style: StyleConstants.customTextStyle(

@@ -12,12 +12,12 @@ String payReceiptToJson(PayReceipt data) => json.encode(data.toJson());
 class PayReceipt {
   PayReceipt(
       {this.paymentMethod,
-        this.orderId,
-        this.stripePaymentMethodId,
-        this.stripeCardId,
-        this.finixResponseDto,
-        this.finixNCPaymentToken,
-        this.finixNCPMerchantId});
+      this.orderId,
+      this.stripePaymentMethodId,
+      this.stripeCardId,
+      this.finixResponseDto,
+      this.finixNCPaymentToken,
+      this.finixNCPMerchantId});
 
   String? paymentMethod;
   String? orderId;
@@ -37,14 +37,14 @@ class PayReceipt {
       finixNCPMerchantId: json["finixNCPMerchantId"]);
 
   Map<String, dynamic> toJson() => {
-    "paymentMethod": paymentMethod,
-    "orderId": orderId,
-    "stripePaymentMethodId": stripePaymentMethodId,
-    "stripeCardId": stripeCardId,
-    "finixResponseDto": finixResponseDto!.toJson(),
-    "finixNCPaymentToken": finixNCPaymentToken,
-    "finixNCPMerchantId": finixNCPMerchantId
-  };
+        "paymentMethod": paymentMethod,
+        "orderId": orderId,
+        "stripePaymentMethodId": stripePaymentMethodId,
+        "stripeCardId": stripeCardId,
+        "finixResponseDto": finixResponseDto!.toJson(),
+        "finixNCPaymentToken": finixNCPaymentToken,
+        "finixNCPMerchantId": finixNCPMerchantId
+      };
 }
 
 class FinixResponseDto {
@@ -59,15 +59,15 @@ class FinixResponseDto {
   factory FinixResponseDto.fromJson(Map<String, dynamic> json) =>
       FinixResponseDto(
         finixSaleResponse:
-        FinixSaleReciptResponseRequest.fromJson(json["finixSaleResponse"]),
+            FinixSaleReciptResponseRequest.fromJson(json["finixSaleResponse"]),
         finixSaleReceipt:
-        FinixSaleReceiptRequest.fromJson(json["finixSaleReceipt"]),
+            FinixSaleReceiptRequest.fromJson(json["finixSaleReceipt"]),
       );
 
   Map<String, dynamic> toJson() => {
-    "finixSaleResponse": finixSaleResponse!.toJson(),
-    "finixSaleReceipt": finixSaleReceipt!.toJson(),
-  };
+        "finixSaleResponse": finixSaleResponse!.toJson(),
+        "finixSaleReceipt": finixSaleReceipt!.toJson(),
+      };
 }
 
 class FinixSaleReceiptRequest {
@@ -128,23 +128,23 @@ class FinixSaleReceiptRequest {
       );
 
   Map<String, dynamic> toJson() => {
-    "cryptogram": cryptogram,
-    "merchantId": merchantId,
-    "accountNumber": accountNumber,
-    "referenceNumber": referenceNumber,
-    "applicationLabel": applicationLabel,
-    "entryMode": entryMode,
-    "approvalCode": approvalCode,
-    "transactionId": transactionId,
-    "cardBrand": cardBrand,
-    "merchantName": merchantName,
-    "merchantAddress": merchantAddress,
-    "responseCode": responseCode,
-    "transactionType": transactionType,
-    "responseMessage": responseMessage,
-    "applicationIdentifier": applicationIdentifier,
-    "date": date,
-  };
+        "cryptogram": cryptogram,
+        "merchantId": merchantId,
+        "accountNumber": accountNumber,
+        "referenceNumber": referenceNumber,
+        "applicationLabel": applicationLabel,
+        "entryMode": entryMode,
+        "approvalCode": approvalCode,
+        "transactionId": transactionId,
+        "cardBrand": cardBrand,
+        "merchantName": merchantName,
+        "merchantAddress": merchantAddress,
+        "responseCode": responseCode,
+        "transactionType": transactionType,
+        "responseMessage": responseMessage,
+        "applicationIdentifier": applicationIdentifier,
+        "date": date,
+      };
 }
 
 class FinixSaleReciptResponseRequest {
@@ -196,20 +196,20 @@ class FinixSaleReciptResponseRequest {
       );
 
   Map<String, dynamic> toJson() => {
-    "transferId": transferId,
-    "updated": updated,
-    "amount": amount,
-    "cardLogo": cardLogo,
-    "cardHolderName": cardHolderName,
-    "expirationMonth": expirationMonth,
-    "resourceTags": resourceTags!.toJson(),
-    "entryMode": entryMode,
-    "maskedAccountNumber": maskedAccountNumber,
-    "created": created,
-    "traceId": traceId,
-    "transferState": transferState,
-    "expirationYear": expirationYear,
-  };
+        "transferId": transferId,
+        "updated": updated,
+        "amount": amount,
+        "cardLogo": cardLogo,
+        "cardHolderName": cardHolderName,
+        "expirationMonth": expirationMonth,
+        "resourceTags": resourceTags!.toJson(),
+        "entryMode": entryMode,
+        "maskedAccountNumber": maskedAccountNumber,
+        "created": created,
+        "traceId": traceId,
+        "transferState": transferState,
+        "expirationYear": expirationYear,
+      };
 }
 
 class ResourceTagsRequest {
@@ -240,11 +240,11 @@ class ResourceTagsRequest {
       );
 
   Map<String, dynamic> toJson() => {
-    "customerEmail": customerEmail,
-    "customerName": customerName,
-    "eventName": eventName,
-    "eventCode": eventCode,
-    "environment": environment,
-    "paymentMethod": paymentMethod,
-  };
+        "customerEmail": customerEmail,
+        "customerName": customerName,
+        "eventName": eventName,
+        "eventCode": eventCode,
+        "environment": environment,
+        "paymentMethod": paymentMethod,
+      };
 }

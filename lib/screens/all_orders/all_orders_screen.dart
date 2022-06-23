@@ -342,7 +342,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         savedOrders.customerName,
                         StyleConstants.customTextStyle(
                             fontSize: 12.0,
-                            color:AppColors.textColor4.toMaterialColor(),
+                            color: AppColors.textColor4.toMaterialColor(),
                             fontFamily: FontConstants.montserratBold)),
                     CommonWidgets().textView(
                         savedOrders.orderCode,
@@ -557,8 +557,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             height: 11.0,
           ),
           Container(
-            color:
-                _isItemClick ? AppColors.whiteColor.toMaterialColor() : AppColors.primaryColor2.toMaterialColor(),
+            color: _isItemClick
+                ? AppColors.whiteColor.toMaterialColor()
+                : AppColors.primaryColor2.toMaterialColor(),
             width: 90.0,
             height: 3.0,
           ),
@@ -874,9 +875,11 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(12.5)),
                   color: _refundBool
-                      ? AppColors.denotiveColor4.toMaterialColor()
+                      ? AppColors.denotiveColor4
+                          .toMaterialColor()
                           .withOpacity(0.2)
-                      : AppColors.denotiveColor2.toMaterialColor()
+                      : AppColors.denotiveColor2
+                          .toMaterialColor()
                           .withOpacity(0.2)),
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -899,8 +902,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                               StringConstants.refund,
                               StyleConstants.customTextStyle(
                                   fontSize: 9.0,
-                                  color:
-                                      AppColors.denotiveColor2.toMaterialColor(),
+                                  color: AppColors.denotiveColor2
+                                      .toMaterialColor(),
                                   fontFamily: FontConstants.montserratMedium))
                     ],
                   ),

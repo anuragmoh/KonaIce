@@ -6,6 +6,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
+
 //ignore: must_be_immutable
 class FoodExtraPopup extends StatefulWidget {
   Item item;
@@ -92,7 +93,7 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
         height: 40,
         child: Checkbox(
             side: BorderSide(color: AppColors.textColor2),
-            activeColor:AppColors.primaryColor1,
+            activeColor: AppColors.primaryColor1,
             value: _foodExtraItemList[index].isItemSelected,
             onChanged: (isSelected) {
               _onTapCheckBox((isSelected ?? false), index, foodExtraObject);
@@ -141,10 +142,9 @@ class _FoodExtraPopupState extends State<FoodExtraPopup> {
             height: 30.0,
             width: 90.0,
             decoration: BoxDecoration(
-                color:
-                    (item.selectedExtras.isEmpty && _selectedExtras.isEmpty)
-                        ? AppColors.denotiveColor5
-                        : AppColors.primaryColor2,
+                color: (item.selectedExtras.isEmpty && _selectedExtras.isEmpty)
+                    ? AppColors.denotiveColor5
+                    : AppColors.primaryColor2,
                 borderRadius: BorderRadius.circular(15.0)),
             child: Center(
               child: CommonWidgets().textWidget(

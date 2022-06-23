@@ -7,6 +7,7 @@ import 'package:kona_ice_pos/utils/common_widgets.dart';
 import '../../common/base_method.dart';
 import '../../constants/p2p_constants.dart';
 import '../../utils/p2p_utils/bonjour_utils.dart';
+
 //ignore: must_be_immutable
 class PaymentFailPopup extends StatefulWidget {
   String paymentFailMessage;
@@ -20,8 +21,7 @@ class PaymentFailPopup extends StatefulWidget {
 
 class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
   BaseMethod _baseMethod = BaseMethod();
-  _PaymentFailPopupPopupState() {
-  }
+  _PaymentFailPopupPopupState() {}
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
       child: _showCustomMenuPopup(),
     );
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -40,6 +41,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
     _baseMethod.cardNumberController.dispose();
     _baseMethod.cvcController.dispose();
   }
+
   Widget _showCustomMenuPopup() {
     return Dialog(
       backgroundColor: AppColors.whiteColor,
@@ -93,8 +95,7 @@ class _PaymentFailPopupPopupState extends State<PaymentFailPopup> {
 
   _onTapCloseButton() {
     P2PConnectionManager.shared.updateData(
-        action: StaffActionConst.paymentStatus,
-        data: 'paymentFailed');
+        action: StaffActionConst.paymentStatus, data: 'paymentFailed');
     Navigator.of(context).pop(false);
   }
 }

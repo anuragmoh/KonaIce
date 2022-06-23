@@ -1,5 +1,3 @@
-
-
 class FinixSendReceiptRequest {
   FinixSendReceiptRequest({
     this.email,

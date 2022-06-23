@@ -6,6 +6,7 @@ import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/utils/color_extension.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dialog/dialog_helper.dart';
+
 //ignore: must_be_immutable
 class RefundPopup extends StatefulWidget {
   num amount;
@@ -93,8 +94,8 @@ class _RefundPopup extends State<RefundPopup> {
   _onTapConfirmButton() {
     debugPrint('.............$_isTotalAmoutValid');
     if (_isTotalAmoutValid == true) {
-      DialogHelper.confirmationDialog(context, _onConfirmTapYes, _onConfirmTapNo,
-          StringConstants.confirmAmountMessage);
+      DialogHelper.confirmationDialog(context, _onConfirmTapYes,
+          _onConfirmTapNo, StringConstants.confirmAmountMessage);
     }
   }
 
@@ -149,11 +150,10 @@ class _RefundPopup extends State<RefundPopup> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(6.0),
                         border: Border.all(
-                            color: AppColors.textColor1
-                                .withOpacity(0.2),
+                            color: AppColors.textColor1.withOpacity(0.2),
                             width: 2)),
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 2.0,bottom: 3.0),
+                      padding: const EdgeInsets.only(left: 2.0, bottom: 3.0),
                       child: TextField(
                         keyboardType: TextInputType.number,
                         maxLength: maxLength,

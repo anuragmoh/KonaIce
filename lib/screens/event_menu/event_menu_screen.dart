@@ -471,6 +471,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       ),
     );
   }
+
   Widget _plusSymbolText() {
     return CommonWidgets().textWidget(
         StringConstants.plusSymbol,
@@ -1134,6 +1135,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     });
     FocusScope.of(context).unfocus();
   }
+
   _onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
@@ -1193,6 +1195,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       });
     });
   }
+
   _updateOrderDataToCustomer() {
     //dataModel = P2POrderDetailsModel();
     dataModel.orderRequestModel = _getOrderRequestModel();
@@ -1496,6 +1499,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     });
   }
 }
+
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
       : assert(decimalRange > 0);

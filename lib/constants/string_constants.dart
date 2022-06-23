@@ -18,7 +18,7 @@ class StringConstants {
   static const test = 'TestCertification';
   static const bbpos = 'BBPOS';
   static const empty = 'empty';
-  static const foodExtraPopupMsg="text to reach back";
+  static const foodExtraPopupMsg = "text to reach back";
   static const reconnect = 'Reconnect';
 
   //DB Insertion default Value
@@ -111,9 +111,9 @@ class StringConstants {
   static const qty = 'Qty';
   static const refund = 'Refund';
   static const refunded = 'Refunded';
-  static const paymentMode="Payment Mode";
-  static const paymentModeCard="Card";
-  static const paymentModeCash="Cash";
+  static const paymentMode = "Payment Mode";
+  static const paymentModeCard = "Card";
+  static const paymentModeCash = "Cash";
 
   static const totalAmount = 'Total Amount';
   static const amountReceived = 'Amount Received';
@@ -253,7 +253,7 @@ class StringConstants {
   static const orderStatusSaved = "saved";
   static const orderStatusCompleted = "COMPLETED";
   static const orderStatusPreparing = "preparing";
-  static const orderStatusCancelled="CANCELLED";
+  static const orderStatusCancelled = "CANCELLED";
   static const orderStatusNew = "NEW";
 
   //booleans

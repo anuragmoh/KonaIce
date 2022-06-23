@@ -15,31 +15,34 @@ import '../utils/size_configuration.dart';
 // ignore: must_be_immutable
 class ReconnectScreenDialog extends StatefulWidget {
   Function callBack;
-  ReconnectScreenDialog({Key? key,required this.callBack}) : super(key: key);
+  ReconnectScreenDialog({Key? key, required this.callBack}) : super(key: key);
   @override
   State<ReconnectScreenDialog> createState() => _ReconnectScreenDialogState();
 }
 
 class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
   List<Device> deviceList = [];
-  getAvailableDevice(){
+  getAvailableDevice() {
     P2PConnectionManager.shared.startService(isStaffView: true);
     P2PConnectionManager.shared.getDeviceList(getBackValue);
   }
+
   bool isConnectionProcess = false;
   bool isConnected = false;
-  getBackValue(dynamic value){
+  getBackValue(dynamic value) {
     setState(() {
       deviceList.clear();
       deviceList.addAll(value);
     });
     // debugPrint("It's back with value${deviceList.length}");
   }
+
   @override
   void initState() {
     super.initState();
     getAvailableDevice();
   }
+
   @override
   Widget build(BuildContext context) {
     return showReconnectDialog();
@@ -49,46 +52,57 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
     return Dialog(
       backgroundColor: AppColors.whiteColor.toMaterialColor(),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
-      child: Loader(isCallInProgress: isConnectionProcess, child: bodyContainer()),
+      child:
+          Loader(isCallInProgress: isConnectionProcess, child: bodyContainer()),
     );
   }
 
-  Widget bodyContainer()=> Container(
-    width: MediaQuery.of(context).size.width,
-    height: MediaQuery.of(context).size.height * 0.75,
-    color: Colors.white,
-    child:  Column(
-      children: [
-        Padding(
-          padding:  const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
-          child: Text(StringConstants.allDeviceScreenHead,
-            textAlign: TextAlign.center,
-            style: StyleConstants.customTextStyle(
-                fontSize: 22.0,
-                color: AppColors.textColor1,
-                fontFamily: FontConstants.montserratSemiBold),),
+  Widget bodyContainer() => Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height * 0.75,
+        color: Colors.white,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 41, vertical: 25),
+              child: Text(
+                StringConstants.allDeviceScreenHead,
+                textAlign: TextAlign.center,
+                style: StyleConstants.customTextStyle(
+                    fontSize: 22.0,
+                    color: AppColors.textColor1,
+                    fontFamily: FontConstants.montserratSemiBold),
+              ),
+            ),
+            Expanded(
+              child: deviceList.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: deviceList.length,
+                      itemBuilder: (context, index) {
+                        final device = deviceList[index];
+                        return listView(device);
+                      })
+                  : Align(
+                      alignment: Alignment.center,
+                      child: CommonWidgets().textWidget(
+                          StringConstants.noDeviceAvailableToConnect,
+                          StyleConstants.customTextStyle(
+                              fontSize: 20.0,
+                              color: AppColors.textColor1,
+                              fontFamily: FontConstants.montserratSemiBold))),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: doneButton(
+                  StringConstants.done,
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: AppColors.textColor1.toMaterialColor(),
+                      fontFamily: FontConstants.montserratBold)),
+            )
+          ],
         ),
-        Expanded(
-          child: deviceList.isNotEmpty ? ListView.builder(
-              itemCount: deviceList.length,
-              itemBuilder: (context,index){
-                final device = deviceList[index];
-                return listView(device);
-              }) : Align(
-              alignment: Alignment.center,
-              child: CommonWidgets().textWidget(StringConstants.noDeviceAvailableToConnect, StyleConstants.customTextStyle(fontSize: 20.0, color: AppColors.textColor1, fontFamily: FontConstants.montserratSemiBold))
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: doneButton(StringConstants.done, StyleConstants.customTextStyle(
-              fontSize: 12.0,
-              color: AppColors.textColor1.toMaterialColor(),
-              fontFamily: FontConstants.montserratBold)),
-        )
-      ],
-    ) ,
-  );
+      );
   Widget icon() {
     return CommonWidgets().image(
         image: AssetsConstants.konaIcon,
@@ -96,18 +110,18 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
         height: 15.62 * SizeConfig.imageSizeMultiplier);
   }
 
-  Widget listView(Device device)=> Column(
-    children: [
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(padding: const EdgeInsets.symmetric(horizontal: 12),
-                child:  CommonWidgets().image(
+  Widget listView(Device device) => Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: CommonWidgets().image(
                     image: AssetsConstants.tabletIcon,
-                    width:  1.56 * SizeConfig.imageSizeMultiplier,
-                    height: 2.08 * SizeConfig.imageSizeMultiplier) ,),
+                    width: 1.56 * SizeConfig.imageSizeMultiplier,
+                    height: 2.08 * SizeConfig.imageSizeMultiplier),
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,14 +129,15 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
                     Text(
                       device.deviceName,
                       textAlign: TextAlign.left,
-                      style: StyleConstants.customTextStyle(fontSize: 15,
+                      style: StyleConstants.customTextStyle(
+                          fontSize: 15,
                           color: AppColors.textColor1.toMaterialColor(),
                           fontFamily: FontConstants.montserratMedium),
                     ),
-                    Text(
-                        '(${getStateName(device.state)})',
+                    Text('(${getStateName(device.state)})',
                         textAlign: TextAlign.left,
-                        style: StyleConstants.customTextStyle(fontSize: 13,
+                        style: StyleConstants.customTextStyle(
+                            fontSize: 13,
                             color: getStateColor(device.state),
                             fontFamily: FontConstants.montserratMedium)),
                   ],
@@ -143,20 +158,19 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
                     child: Text(
                       getButtonStateName(device.state),
                       style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
               ),
             ]),
-      ),
-      const Padding(
-        padding: EdgeInsets.only(top: 15),
-        child: Divider(),
-      ),
-    ],
-  );
+          ),
+          const Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Divider(),
+          ),
+        ],
+      );
   Widget doneButton(String buttonText, TextStyle textStyle) {
     return GestureDetector(
       onTap: () {
@@ -169,13 +183,10 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 70.0),
-          child: Align (
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 70.0),
+          child: Align(
               alignment: Alignment.center,
-              child: CommonWidgets().textWidget(buttonText, textStyle)
-          ),
+              child: CommonWidgets().textWidget(buttonText, textStyle)),
         ),
       ),
     );
@@ -202,6 +213,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
         return "connected";
     }
   }
+
   Color getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -212,6 +224,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
         return AppColors.textColor7.toMaterialColor();
     }
   }
+
   _onButtonClicked(Device device) {
     switch (device.state) {
       case SessionState.notConnected:
@@ -219,7 +232,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
         setState(() {
           debugPrint('state changed');
           isConnectionProcess = true;
-          isConnected=true;
+          isConnected = true;
         });
         break;
       case SessionState.connected:
@@ -232,6 +245,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
         break;
     }
   }
+
   Color getButtonColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -241,6 +255,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
         return AppColors.denotiveColor1.toMaterialColor();
     }
   }
+
   String getButtonStateName(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
@@ -251,4 +266,3 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
     }
   }
 }
-
