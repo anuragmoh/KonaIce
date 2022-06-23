@@ -20,5 +20,3 @@ class StaffActionConst {
   static const tip = "tip";
   static const paymentStatus = "paymentStatus";
 }
-
-

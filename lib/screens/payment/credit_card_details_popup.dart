@@ -154,13 +154,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
   }
 
   Widget _cardExpiryComponent(
-      String txtName,
-      String txtValue,
-      String txtHint,
-      TextEditingController textEditingController,
-      String validationMessage,
-      Function validationMethod,
-      int maxLength) =>
+          String txtName,
+          String txtValue,
+          String txtHint,
+          TextEditingController textEditingController,
+          String validationMessage,
+          Function validationMethod,
+          int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -179,11 +179,9 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: AppColors.textColor1
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 2.0,top: 0.0),
+                padding: const EdgeInsets.only(left: 2.0, top: 0.0),
                 child: TextField(
                   inputFormatters: [_maskFormatter],
                   keyboardType: TextInputType.number,
@@ -216,13 +214,13 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       );
 
   Widget _profileDetailsComponent(
-      String txtName,
-      String txtValue,
-      String txtHint,
-      TextEditingController textEditingController,
-      String validationMessage,
-      Function validationMethod,
-      int maxLength) =>
+          String txtName,
+          String txtValue,
+          String txtHint,
+          TextEditingController textEditingController,
+          String validationMessage,
+          Function validationMethod,
+          int maxLength) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -241,11 +239,9 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                      color: AppColors.textColor1
-                          .withOpacity(0.2),
-                      width: 2)),
+                      color: AppColors.textColor1.withOpacity(0.2), width: 2)),
               child: Padding(
-                padding: const EdgeInsets.only(left: 2.0,top: 0.0),
+                padding: const EdgeInsets.only(left: 2.0, top: 0.0),
                 child: TextField(
                   keyboardType: TextInputType.number,
                   maxLength: maxLength,
@@ -331,7 +327,7 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       });
       _isExpiryValid = false;
     }
-    if (_month!=null) {
+    if (_month != null) {
       if (_month > 12) {
         setState(() {
           _cardDateValidationMessage = StringConstants.cardExpiryCheckkMsg;
@@ -344,7 +340,6 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
         _isExpiryValid = true;
       }
     }
-
   }
 
   _cvvValidation() {
@@ -381,7 +376,10 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       });
       _isCardNumberValid = false;
     }
-    if (_isCardNumberValid && _isExpiryValid && _isCvvValid && _isZipCodeValid) {
+    if (_isCardNumberValid &&
+        _isExpiryValid &&
+        _isCvvValid &&
+        _isZipCodeValid) {
       Map<String, dynamic> myData = {};
       myData[ConstantKeys.cardValue] = true;
       myData[ConstantKeys.cardNumber] = _cardNumberController.text;

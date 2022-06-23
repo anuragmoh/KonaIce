@@ -82,6 +82,135 @@
             </objects>
             <point key="canvasLocation" x="847.65625" y="-7.0312499999999991"/>
         </scene>
+        <!--Tip View Controller-->
+        <scene sceneID="pPX-3P-2Cv">
+            <objects>
+                <viewController id="eqF-s7-J5d" customClass="TipViewController" customModule="Runner" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="w3s-Yu-Jy2"/>
+                        <viewControllerLayoutGuide type="bottom" id="ETf-m9-czV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4cP-OC-Wx3">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="I6l-cg-WXb">
+                                <rect key="frame" x="128" y="134.5" width="768" height="499"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="HKM-hr-hcM">
+                                        <rect key="frame" x="30" y="30" width="708" height="76.5"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$30" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FD6-yJ-eah">
+                                                <rect key="frame" x="326.5" y="0.0" width="55.5" height="36"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add a tip?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qRc-J8-dyH">
+                                                <rect key="frame" x="316" y="56" width="76" height="20.5"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="PCB-VK-59z">
+                                        <rect key="frame" x="30" y="136.5" width="708" height="50"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="N0K-KL-bnq">
+                                                <rect key="frame" x="0.0" y="0.0" width="236" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="AEO-eZ-Vi8"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="$1"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YY3-aK-39N">
+                                                <rect key="frame" x="236" y="0.0" width="236" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="Gav-sA-Sqc"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="$2"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="esk-S6-QbT">
+                                                <rect key="frame" x="472" y="0.0" width="236" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="CIQ-YU-Q7W"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="$3"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="26" translatesAutoresizingMaskIntoConstraints="NO" id="XGH-lu-h31">
+                                        <rect key="frame" x="171.5" y="216.5" width="425" height="50"/>
+                                        <subviews>
+                                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="TH2-RY-LFW">
+                                                <rect key="frame" x="0.0" y="0.0" width="323" height="50"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                <textInputTraits key="textInputTraits"/>
+                                            </textField>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eVW-Jj-Ukq">
+                                                <rect key="frame" x="349" y="0.0" width="76" height="50"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="50" id="jGl-zm-PmX"/>
+                                                </constraints>
+                                                <state key="normal" title="Button"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Confirm"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NYI-mC-qAg">
+                                        <rect key="frame" x="171.5" y="296.5" width="425" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="8Fa-Lc-riO"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="No tip"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HKM-hr-hcM" secondAttribute="trailing" constant="30" id="0d2-fS-mFQ"/>
+                                    <constraint firstItem="HKM-hr-hcM" firstAttribute="leading" secondItem="I6l-cg-WXb" secondAttribute="leading" constant="30" id="4TO-LH-wI8"/>
+                                    <constraint firstItem="PCB-VK-59z" firstAttribute="leading" secondItem="I6l-cg-WXb" secondAttribute="leading" constant="30" id="56R-uB-MMj"/>
+                                    <constraint firstItem="XGH-lu-h31" firstAttribute="width" secondItem="PCB-VK-59z" secondAttribute="width" multiplier="0.6" id="75I-ck-1sk"/>
+                                    <constraint firstItem="PCB-VK-59z" firstAttribute="top" secondItem="HKM-hr-hcM" secondAttribute="bottom" constant="30" id="7KK-Ro-jep"/>
+                                    <constraint firstItem="XGH-lu-h31" firstAttribute="centerX" secondItem="I6l-cg-WXb" secondAttribute="centerX" id="HYV-nw-1O3"/>
+                                    <constraint firstAttribute="trailing" secondItem="PCB-VK-59z" secondAttribute="trailing" constant="30" id="JDz-01-vsp"/>
+                                    <constraint firstItem="NYI-mC-qAg" firstAttribute="width" secondItem="XGH-lu-h31" secondAttribute="width" id="YFZ-0q-jZD"/>
+                                    <constraint firstItem="NYI-mC-qAg" firstAttribute="centerX" secondItem="I6l-cg-WXb" secondAttribute="centerX" id="dvs-Tw-Scv"/>
+                                    <constraint firstItem="HKM-hr-hcM" firstAttribute="top" secondItem="I6l-cg-WXb" secondAttribute="top" constant="30" id="n2E-51-9Rw"/>
+                                    <constraint firstItem="NYI-mC-qAg" firstAttribute="top" secondItem="XGH-lu-h31" secondAttribute="bottom" constant="30" id="n5I-An-hDm"/>
+                                    <constraint firstItem="XGH-lu-h31" firstAttribute="top" secondItem="PCB-VK-59z" secondAttribute="bottom" constant="30" id="zyD-N8-APa"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="I6l-cg-WXb" firstAttribute="height" secondItem="4cP-OC-Wx3" secondAttribute="height" multiplier="0.65" id="T1W-0G-XdN"/>
+                            <constraint firstItem="I6l-cg-WXb" firstAttribute="width" secondItem="4cP-OC-Wx3" secondAttribute="width" multiplier="0.75" id="eo6-5o-Ua7"/>
+                            <constraint firstItem="I6l-cg-WXb" firstAttribute="centerY" secondItem="4cP-OC-Wx3" secondAttribute="centerY" id="mDr-DY-7y5"/>
+                            <constraint firstItem="I6l-cg-WXb" firstAttribute="centerX" secondItem="4cP-OC-Wx3" secondAttribute="centerX" id="p36-sM-h5Y"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="addTipLabel" destination="qRc-J8-dyH" id="wLW-2c-0en"/>
+                        <outlet property="amountLabel" destination="FD6-yJ-eah" id="10s-GQ-6oo"/>
+                        <outlet property="confirmButton" destination="eVW-Jj-Ukq" id="ZOk-Q4-6fI"/>
+                        <outlet property="containerView" destination="I6l-cg-WXb" id="qRc-I5-gMz"/>
+                        <outlet property="customAmountTextField" destination="TH2-RY-LFW" id="gzd-CE-p0K"/>
+                        <outlet property="noTipButton" destination="NYI-mC-qAg" id="dT5-3B-0US"/>
+                        <outlet property="tipAmountOneButton" destination="N0K-KL-bnq" id="rvf-Fn-VUZ"/>
+                        <outlet property="tipAmountThreeButton" destination="esk-S6-QbT" id="N0L-dN-SbL"/>
+                        <outlet property="tipAmountTwoButton" destination="YY3-aK-39N" id="a0J-8J-euT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="DEN-tK-RJd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1589.6484375" y="-6.25"/>
+        </scene>
     </scenes>
     <resources>
         <image name="close" width="78" height="78"/>

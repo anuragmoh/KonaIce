@@ -20,5 +20,4 @@ extension StringExtension on String {
     return isNotEmpty &&
         RegExp(r"^(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,12}$").hasMatch(this);
   }
-
 }
