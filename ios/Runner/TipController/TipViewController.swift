@@ -33,6 +33,8 @@ class TipViewController: UIViewController {
         case noTip = 5
     }
     
+    var selectedTipAmount: ((Double) -> Void)?
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
@@ -190,6 +192,7 @@ class TipViewController: UIViewController {
     }
     
     @objc func confirmButtonTapped() {
+        selectedTipAmount?(Double(customAmountTextField.text ?? "0") ?? 0)
         dismissView()
     }
     

@@ -78,6 +78,9 @@ import PaymentsSDK
         tipViewController.billAmount = amount
         tipViewController.view.backgroundColor = UIColor.clear
         tipViewController.modalPresentationStyle = .overCurrentContext
+        tipViewController.selectedTipAmount = { (tipAmount) in
+            print(tipAmount)
+        }
         window.rootViewController?.present(tipViewController, animated: true)
     }
     
@@ -121,6 +124,5 @@ extension AppDelegate {
             }
             onCompletion(token.id)
         }
-        
     }
 }
