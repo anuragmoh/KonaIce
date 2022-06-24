@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/finix_sendreceipt_model.dart';
 import 'package:kona_ice_pos/models/network_model/pay_order_model/pay_order_request_model.dart';
-import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
+import 'package:kona_ice_pos/network/repository/payment/payrecipt_finix_model.dart';
 
 import '../../exception.dart';
 import '../../response_contractor.dart';
