@@ -14,7 +14,7 @@
 		530E18DE2824014F00D7D134 /* insertCard.json in Resources */ = {isa = PBXBuildFile; fileRef = 530E18DB2824014F00D7D134 /* insertCard.json */; };
 		534E22A52821025E00AD293F /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E22A42821025E00AD293F /* Enums.swift */; };
 		534E22A72821531200AD293F /* PrintHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534E22A62821531200AD293F /* PrintHelper.swift */; };
-		53DFB629282000B100714719 /* TransactionResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB628282000B100714719 /* TransactionResponseModel.swift */; };
+		53DFB629282000B100714719 /* AuthorizationResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DFB628282000B100714719 /* AuthorizationResponseModel.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
@@ -58,7 +58,7 @@
 		530E18DB2824014F00D7D134 /* insertCard.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = insertCard.json; sourceTree = "<group>"; };
 		534E22A42821025E00AD293F /* Enums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		534E22A62821531200AD293F /* PrintHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHelper.swift; sourceTree = "<group>"; };
-		53DFB628282000B100714719 /* TransactionResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionResponseModel.swift; sourceTree = "<group>"; };
+		53DFB628282000B100714719 /* AuthorizationResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationResponseModel.swift; sourceTree = "<group>"; };
 		59EEAA296A6C90566AEA8D21 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 		53DFB627282000A000714719 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				53DFB628282000B100714719 /* TransactionResponseModel.swift */,
+				53DFB628282000B100714719 /* AuthorizationResponseModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -381,7 +381,7 @@
 				EEF2C40D281806BA00CB0893 /* ShowAlert.swift in Sources */,
 				EEF2C40B2818050000CB0893 /* PaymentModel.swift in Sources */,
 				534E22A72821531200AD293F /* PrintHelper.swift in Sources */,
-				53DFB629282000B100714719 /* TransactionResponseModel.swift in Sources */,
+				53DFB629282000B100714719 /* AuthorizationResponseModel.swift in Sources */,
 				EEF2C3FF2817FDD300CB0893 /* FinixHelper.swift in Sources */,
 				534E22A52821025E00AD293F /* Enums.swift in Sources */,
 				EED58D9A281956DF00D9E91A /* FinixConstants.swift in Sources */,

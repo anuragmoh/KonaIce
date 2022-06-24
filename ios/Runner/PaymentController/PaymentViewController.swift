@@ -20,6 +20,8 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     var transactionAnimationView: AnimationView!
     
+    var authorizationResponseString: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -132,8 +134,10 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     func performSale() {
         
-        FINIXHELPER.performSale(billAmount: Decimal(payment.amount),
-                                testTags: payment.tags)
+        FINIXHELPER.performaAuthorization(billAmount: Decimal(payment.amount),
+                                          testTags: payment.tags)
+        
+        //performSale(billAmount: Decimal(payment.amount), testTags: payment.tags)
     }
     
     func showAlert(title: String, message: String, transactionModelString: String? = nil) {
@@ -373,35 +377,77 @@ extension PaymentViewController: FinixHelperDelegate {
         showTransactionAnimationView(with: .removeCard)
     }
     
-    func saleResponseFailed(error: Error) {
+    func authorizationResponseFailed(error: Error) {
         
-        print("==========Sale Response Failed with error : \(error)==========")
+        print("==========Authorization Response Failed with error : \(error)==========")
         
         DispatchQueue.main.async {
-            self.statusLabel.text = "==========Sale Response Failed with error : \(error)=========="
+            self.statusLabel.text = "==========Authorization Response Failed with error : \(error)=========="
         }
         
         showAlert(title: "Error", message: "\(error)")
     }
     
-    func saleResponseSuccess(saleResponseReceipt: TransactionResponseModel?) {
+    func authorizationResponseSuccess(authorizationResponseModel: AuthorizationResponseModel?) {
         
-        print("==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))==========")
+        print("==========Authorization Response Success With Receipt: \(String(describing: authorizationResponseModel))==========")
         
         DispatchQueue.main.async {
-            self.statusLabel.text = "==========Sale Response Success With Receipt: \(String(describing: saleResponseReceipt))=========="
+            self.statusLabel.text = "==========Authorization Response Success With Receipt: \(String(describing: authorizationResponseModel))=========="
         }
         
         let jsonEncoder = JSONEncoder()
         
-        if let jsonData = try? jsonEncoder.encode(saleResponseReceipt) {
+        if let jsonData = try? jsonEncoder.encode(authorizationResponseModel) {
             
             if let content = String(data: jsonData, encoding: String.Encoding.utf8) {
                 
-                print("==========Sale Response Json String: \(content)")
+                print("==========Authorization Response Json String: \(content)")
                 
                 DispatchQueue.main.async {
-                    self.statusLabel.text = "==========Sale Response Json String: \(content)"
+                    
+                    self.statusLabel.text = "==========Authorization Response Json String: \(content)"
+                }
+                
+                self.authorizationResponseString = content
+                
+                FINIXHELPER.performCapture(authorizationId: authorizationResponseModel?.finixAuthorizationResponse.transferId ?? "",
+                                           billAmount: Decimal(payment.amount))
+            }
+        }
+    }
+    
+    func captureResponseFailed(error: Error?) {
+        
+        print("==========Capture Response Failed with error : \(String(describing: error))==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = "==========Capture Response Failed with error : \(String(describing: error))=========="
+        }
+        
+        showAlert(title: "Error", message: "\(String(describing: error))")
+    }
+    
+    func captureResponseSuccess(transactionResponseModel: TransactionResponseModel?) {
+        
+        print("==========Capture Response Success: \(String(describing: transactionResponseModel))==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Capture Response Success: \(String(describing: transactionResponseModel))=========="
+        }
+        
+        let jsonEncoder = JSONEncoder()
+        
+        if let jsonData = try? jsonEncoder.encode(transactionResponseModel) {
+            
+            if let content = String(data: jsonData, encoding: String.Encoding.utf8) {
+                
+                print("==========Capture Response Json String: \(content)")
+                
+                DispatchQueue.main.async {
+                    
+                    self.statusLabel.text = "==========Capture Response Json String: \(content)"
                 }
                 
                 // showAlert(title: "Payment Success", message: content, transactionModelString: content)
