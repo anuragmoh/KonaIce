@@ -111,6 +111,9 @@ class TipViewController: UIViewController {
     }
     
     func setupView() {
+        
+        self.navigationItem.hidesBackButton = true
+        
         setupTextField()
         
         addTipLabel.textColor = UIColor.textColor
@@ -207,7 +210,9 @@ class TipViewController: UIViewController {
     }
     
     func dismissView() {
-        dismiss(animated: true)
+        
+        // dismiss(animated: true)
+        self.navigationController?.popViewController(animated: false)
     }
     
     /*

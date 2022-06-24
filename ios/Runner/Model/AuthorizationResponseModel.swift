@@ -12,26 +12,13 @@ public struct TransactionResponseModel: Codable {
         
     let authorizationResponseModel: AuthorizationResponseModel?
     let finixCaptureResponse: FinixCaptureResponse
-    
-    init(authorizationResponseModel: AuthorizationResponseModel?,
-         finixCaptureResponse: FinixCaptureResponse) {
-        
-        self.authorizationResponseModel = authorizationResponseModel
-        self.finixCaptureResponse = finixCaptureResponse
-    }
+    let tipAmount: Double?
 }
 
 public struct AuthorizationResponseModel: Codable {
         
     let finixAuthorizationReceipt: FinixAuthorizationReceipt?
     let finixAuthorizationResponse: FinixAuthorizationResponse
-    
-    init(finixAuthorizationReceipt: FinixAuthorizationReceipt?,
-         finixAuthorizationResponse: FinixAuthorizationResponse) {
-        
-        self.finixAuthorizationReceipt = finixAuthorizationReceipt
-        self.finixAuthorizationResponse = finixAuthorizationResponse
-    }
 }
 
 struct FinixAuthorizationReceipt: Codable {

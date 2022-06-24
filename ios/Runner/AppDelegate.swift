@@ -68,19 +68,26 @@ import PaymentsSDK
         guard let paymentViewController = storyBoard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController else { return }
         paymentViewController.payment = payment
         paymentViewController.view.backgroundColor = UIColor.clear
-        paymentViewController.modalPresentationStyle = .overCurrentContext
-        window.rootViewController?.present(paymentViewController, animated: true)
+        
+        let navigationController = UINavigationController(rootViewController: paymentViewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        
+        window.rootViewController?.present(navigationController, animated: true)
     }
     
     func loadTipView(_ amount: Double) {
+        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         guard let tipViewController = storyBoard.instantiateViewController(withIdentifier: "TipViewController") as? TipViewController else { return }
+        
         tipViewController.billAmount = amount
         tipViewController.view.backgroundColor = UIColor.clear
-        tipViewController.modalPresentationStyle = .overCurrentContext
+        tipViewController.modalPresentationStyle = .overFullScreen
+        
         tipViewController.selectedTipAmount = { (tipAmount) in
             print(tipAmount)
         }
+        
         window.rootViewController?.present(tipViewController, animated: true)
     }
     

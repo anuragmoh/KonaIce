@@ -63,7 +63,7 @@ public protocol FinixHelperDelegate : AnyObject {
     /// Capture Performed with Error
     func captureResponseFailed(error: Error?)
     
-    /// Authorization Performed with Success, but check for any error
+    /// Capture Performed with Success, but check for any error
     func captureResponseSuccess(transactionResponseModel: TransactionResponseModel?)
 }
 
@@ -117,7 +117,7 @@ class FinixHelper {
             }
             
             guard success == true else {
-                                
+                
                 print(items:"==========FinixSDK: failed to initalize with error \(error!)==========")
                 
                 return
@@ -149,12 +149,12 @@ class FinixHelper {
     
     func getAuthorizationResponseModel(receipt: SaleReceipt?, response: AuthorizationResponse) -> AuthorizationResponseModel {
         
-        let finixAuthorizationReceipt = FinixAuthorizationReceipt.init(receipt: receipt)
+        let finixAuthorizationReceipt = FinixAuthorizationReceipt(receipt: receipt)
         
-        let finixAuthorizationResponse = FinixAuthorizationResponse.init(response: response)
+        let finixAuthorizationResponse = FinixAuthorizationResponse(response: response)
         
-        let authorizationResponseModel = AuthorizationResponseModel.init(finixAuthorizationReceipt: finixAuthorizationReceipt,
-                                                                         finixAuthorizationResponse: finixAuthorizationResponse)
+        let authorizationResponseModel = AuthorizationResponseModel(finixAuthorizationReceipt: finixAuthorizationReceipt,
+                                                                    finixAuthorizationResponse: finixAuthorizationResponse)
         
         return authorizationResponseModel
     }
@@ -215,16 +215,16 @@ class FinixHelper {
         }
     }
     
-    func getTransactionResponseModel(captureResponse: CaptureResponse) -> TransactionResponseModel {
+    func getTransactionResponseModel(captureResponse: CaptureResponse, tipAmount: Double) -> TransactionResponseModel {
         
-        let finixCaptureResponse = FinixCaptureResponse.init(response: captureResponse)
+        let finixCaptureResponse = FinixCaptureResponse(response: captureResponse)
         
-        let transactionResponseModel = TransactionResponseModel.init(authorizationResponseModel: self.authorizationResponseModel, finixCaptureResponse: finixCaptureResponse)
+        let transactionResponseModel = TransactionResponseModel(authorizationResponseModel: self.authorizationResponseModel, finixCaptureResponse: finixCaptureResponse, tipAmount: tipAmount)
         
         return transactionResponseModel
     }
     
-    func performCapture(authorizationId: String, billAmount: Decimal) {
+    func performCapture(authorizationId: String, billAmount: Decimal, tipAmount: Double) {
         
         let saleAmount = Currency(decimal: billAmount, code: .USD)
         
@@ -246,7 +246,7 @@ class FinixHelper {
             
             if response.success {
                 
-                let transactionResponseModel = self.getTransactionResponseModel(captureResponse: response)
+                let transactionResponseModel = self.getTransactionResponseModel(captureResponse: response, tipAmount: tipAmount)
                 
                 print(items:"==========Success capture response: \(responseText), Transfer Id: \(response.id)==========")
                 
@@ -258,7 +258,7 @@ class FinixHelper {
             } else {
                 
                 print(items:"==========Not Successful response: \(responseText)==========")
-                                
+                
                 if let delegate = self.finixHelperDelegate {
                     
                     delegate.captureResponseFailed(error: nil)
@@ -268,60 +268,60 @@ class FinixHelper {
     }
     
     /*func performSale(billAmount: Decimal, testTags: ResourceTags) {
-        
-        // before performing sale, present the user an ActionSheet to adjust the amount.
-        // upon submission, show the device's input status.
-        let saleAmount = Currency(decimal: billAmount, code: .USD)
-        
-        let transfer = TransferRequest(deviceId: self.deviceId, amount: saleAmount, tags: testTags)
-        
-        print(items:"==========Transfer Request: \(transfer)==========")
-        
-        FinixClient.shared.cardSale(transfer) { response, error in
-            
-            guard let response = response else {
-                
-                print(items:"==========Failed with error : \(error!)==========")
-                
-                if let delegate = self.finixHelperDelegate {
-                    
-                    delegate.saleResponseFailed(error: error!)
-                }
-                
-                return
-            }
-            
-            let responseText = String(describing: response)
-            
-            if response.success {
-                
-                let receipt = FinixClient.shared.receipt(for: response)
-                
-                let receiptText = String(describing: receipt)
-                
-                let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: receipt, response: response)
-                
-                print(items:"==========Success response: \(responseText), Transfer Id: \(response.id)==========")
-                print(items:"==========Sale Receipt: \(receiptText)==========")
-                
-                if let delegate = self.finixHelperDelegate {
-                    
-                    delegate.saleResponseSuccess(saleResponseReceipt: saleResponseReceipt)
-                }
-                
-            } else {
-                
-                print(items:"==========Not Successful response: \(responseText)==========")
-                
-                let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: nil, response: response)
-                
-                if let delegate = self.finixHelperDelegate {
-                    
-                    delegate.saleResponseSuccess(saleResponseReceipt: saleResponseReceipt)
-                }
-            }
-        }
-    }*/
+     
+     // before performing sale, present the user an ActionSheet to adjust the amount.
+     // upon submission, show the device's input status.
+     let saleAmount = Currency(decimal: billAmount, code: .USD)
+     
+     let transfer = TransferRequest(deviceId: self.deviceId, amount: saleAmount, tags: testTags)
+     
+     print(items:"==========Transfer Request: \(transfer)==========")
+     
+     FinixClient.shared.cardSale(transfer) { response, error in
+     
+     guard let response = response else {
+     
+     print(items:"==========Failed with error : \(error!)==========")
+     
+     if let delegate = self.finixHelperDelegate {
+     
+     delegate.saleResponseFailed(error: error!)
+     }
+     
+     return
+     }
+     
+     let responseText = String(describing: response)
+     
+     if response.success {
+     
+     let receipt = FinixClient.shared.receipt(for: response)
+     
+     let receiptText = String(describing: receipt)
+     
+     let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: receipt, response: response)
+     
+     print(items:"==========Success response: \(responseText), Transfer Id: \(response.id)==========")
+     print(items:"==========Sale Receipt: \(receiptText)==========")
+     
+     if let delegate = self.finixHelperDelegate {
+     
+     delegate.saleResponseSuccess(saleResponseReceipt: saleResponseReceipt)
+     }
+     
+     } else {
+     
+     print(items:"==========Not Successful response: \(responseText)==========")
+     
+     let saleResponseReceipt = self.convertSaleReceiptToSaleResponseReceipt(receipt: nil, response: response)
+     
+     if let delegate = self.finixHelperDelegate {
+     
+     delegate.saleResponseSuccess(saleResponseReceipt: saleResponseReceipt)
+     }
+     }
+     }
+     }*/
     
     func cancelSale() -> Bool {
         

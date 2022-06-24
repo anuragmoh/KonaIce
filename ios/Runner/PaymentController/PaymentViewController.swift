@@ -20,7 +20,7 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     var transactionAnimationView: AnimationView!
     
-    var authorizationResponseString: String?
+    var authorizationResponseModel: AuthorizationResponseModel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,7 +80,7 @@ class PaymentViewController: UIViewController, ShowAlert {
         } else {
             
             print("==========SDK not initialzed, show scan option==========")
-
+            
             return true
         }
     }
@@ -161,6 +161,36 @@ class PaymentViewController: UIViewController, ShowAlert {
             }
             
             self.displayAlert(with: title, message: message, type: .alert, actions: [okAction])
+        }
+    }
+    
+    func loadTipView(_ amount: Double) {
+        
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        
+        guard let tipViewController = storyBoard.instantiateViewController(withIdentifier: "TipViewController") as? TipViewController else { return }
+        
+        tipViewController.billAmount = amount
+        tipViewController.view.backgroundColor = UIColor.clear
+        
+        tipViewController.selectedTipAmount = { (tipAmount) in
+            
+            print(tipAmount)
+            
+            self.showTransactionAnimationView(with: .progress)
+            
+            let billAmount = tipAmount + self.payment.amount
+            
+            FINIXHELPER.performCapture(authorizationId: self.authorizationResponseModel?.finixAuthorizationResponse.transferId ?? "",
+                                       billAmount: Decimal(billAmount),
+                                       tipAmount: tipAmount)
+        }
+        
+        DispatchQueue.main.async {
+            
+            self.stopAnimationView()
+            
+            self.navigationController?.pushViewController(tipViewController, animated: false)
         }
     }
     
@@ -409,10 +439,9 @@ extension PaymentViewController: FinixHelperDelegate {
                     self.statusLabel.text = "==========Authorization Response Json String: \(content)"
                 }
                 
-                self.authorizationResponseString = content
+                self.authorizationResponseModel = authorizationResponseModel
                 
-                FINIXHELPER.performCapture(authorizationId: authorizationResponseModel?.finixAuthorizationResponse.transferId ?? "",
-                                           billAmount: Decimal(payment.amount))
+                self.loadTipView(payment.amount)
             }
         }
     }
