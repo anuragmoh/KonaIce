@@ -73,8 +73,11 @@ class _PaymentOptionState extends State<PaymentOption>
                   Center(
                     child: Visibility(
                         visible: _isAnimation,
-                        child: Lottie.asset(AssetsConstants.progressAnimationPath,
-                            height: 350, width: 350,animate: true)),
+                        child: Lottie.asset(
+                            AssetsConstants.progressAnimationPath,
+                            height: 350,
+                            width: 350,
+                            animate: true)),
                   ),
                 ],
               ),
@@ -255,9 +258,10 @@ class _PaymentOptionState extends State<PaymentOption>
       FunctionalUtils.showCustomerSplashScreen();
     } else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
-        if(response.data.toString()==StringConstants.paymentStatusSucc||response.data.toString()==StringConstants.paymentStatusFailed) {
+        if (response.data.toString() == StringConstants.paymentStatusSucc ||
+            response.data.toString() == StringConstants.paymentStatusFailed) {
           _isAnimation = false;
-        }else{
+        } else {
           _isAnimation = true;
         }
       });

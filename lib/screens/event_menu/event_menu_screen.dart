@@ -1567,6 +1567,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     });
   }
 }
+
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
       : assert(decimalRange == null || decimalRange > 0);

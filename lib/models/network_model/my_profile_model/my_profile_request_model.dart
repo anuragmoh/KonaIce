@@ -1,5 +1,3 @@
-
-
 class MyProfileUpdateRequestModel {
   MyProfileUpdateRequestModel({
     this.firstName,

@@ -20,6 +20,9 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		C88906B4DF30390D8956815E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43E3AFACCDE9FE87F6A1273A /* Pods_Runner.framework */; };
+		EEB10CD12864464B00879247 /* TipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB10CD02864464B00879247 /* TipViewController.swift */; };
+		EEB10CD328649FF400879247 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EEB10CD228649FF300879247 /* Colors.xcassets */; };
+		EEB10CD52864A13500879247 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEB10CD42864A13500879247 /* ColorExtension.swift */; };
 		EED58D9A281956DF00D9E91A /* FinixConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = EED58D99281956DF00D9E91A /* FinixConstants.swift */; };
 		EEF2C3F92817FD3400CB0893 /* FinixPOS.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEF2C3F62817FD2000CB0893 /* FinixPOS.xcframework */; };
 		EEF2C3FA2817FD3400CB0893 /* FinixPOS.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = EEF2C3F62817FD2000CB0893 /* FinixPOS.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -70,6 +73,9 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EEB10CD02864464B00879247 /* TipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipViewController.swift; sourceTree = "<group>"; };
+		EEB10CD228649FF300879247 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		EEB10CD42864A13500879247 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		EED58D99281956DF00D9E91A /* FinixConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinixConstants.swift; sourceTree = "<group>"; };
 		EEF2C3F52817FD2000CB0893 /* triPOSMobileSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = triPOSMobileSDK.xcframework; path = frameworks/triPOSMobileSDK.xcframework; sourceTree = "<group>"; };
 		EEF2C3F62817FD2000CB0893 /* FinixPOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = FinixPOS.xcframework; path = frameworks/FinixPOS.xcframework; sourceTree = "<group>"; };
@@ -184,6 +190,7 @@
 				530E18BE28239CF800D7D134 /* Assets */,
 				534E22A32821025300AD293F /* Helper */,
 				53DFB627282000A000714719 /* Model */,
+				EEB10CCF2864462E00879247 /* TipController */,
 				EEF2C4092818012100CB0893 /* PaymentController */,
 				EEF2C4042817FFCB00CB0893 /* Extensions */,
 				EEF2C3FD2817FDB300CB0893 /* Finix */,
@@ -195,8 +202,17 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				EEB10CD228649FF300879247 /* Colors.xcassets */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		EEB10CCF2864462E00879247 /* TipController */ = {
+			isa = PBXGroup;
+			children = (
+				EEB10CD02864464B00879247 /* TipViewController.swift */,
+			);
+			path = TipController;
 			sourceTree = "<group>";
 		};
 		EEF2C3FD2817FDB300CB0893 /* Finix */ = {
@@ -211,6 +227,7 @@
 		EEF2C4042817FFCB00CB0893 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				EEB10CD42864A13500879247 /* ColorExtension.swift */,
 				EEF2C40C281806BA00CB0893 /* ShowAlert.swift */,
 			);
 			path = Extensions;
@@ -293,6 +310,7 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				530E18DE2824014F00D7D134 /* insertCard.json in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
+				EEB10CD328649FF400879247 /* Colors.xcassets in Resources */,
 				530E18DD2824014F00D7D134 /* progress.json in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 			);
@@ -377,6 +395,8 @@
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				EEF2C4082818011A00CB0893 /* PaymentViewController.swift in Sources */,
+				EEB10CD12864464B00879247 /* TipViewController.swift in Sources */,
+				EEB10CD52864A13500879247 /* ColorExtension.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 				EEF2C40D281806BA00CB0893 /* ShowAlert.swift in Sources */,
 				EEF2C40B2818050000CB0893 /* PaymentModel.swift in Sources */,

@@ -24,7 +24,7 @@ class SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     const styleActive = TextStyle(color: AppColors.textColor1);
-    const styleHint = TextStyle(color: AppColors.textColor2,fontSize: 12);
+    const styleHint = TextStyle(color: AppColors.textColor2, fontSize: 12);
     final style = widget.text.isEmpty ? styleHint : styleActive;
 
     return Container(

@@ -246,8 +246,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     var result = await SavedOrdersDAO().getFilteredOrdersList(text);
     if (result != null) {
       setState(() {
-        if(text.toString().isEmpty){
-        _isNoRecordFound=false;
+        if (text.toString().isEmpty) {
+          _isNoRecordFound = false;
         }
         _savedOrdersList.clear();
         _savedOrdersList.addAll(result);
@@ -257,7 +257,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
       if (result != null) {
         setState(() {
           _savedOrdersList.clear();
-          if(text.toString().isNotEmpty) {
+          if (text.toString().isNotEmpty) {
             _isNoRecordFound = true;
           }
           _savedOrdersList.addAll(result);

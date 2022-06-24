@@ -80,6 +80,7 @@ class _SettingScreenState extends State<SettingScreen>
       ],
     );
   }
+
   _onTapReconnectButton() {
     showDialog(
         barrierDismissible: false,
@@ -89,7 +90,8 @@ class _SettingScreenState extends State<SettingScreen>
           return ReconnectScreenDialog(callBack: _showButton);
         });
   }
-  _showButton(bool isConnected){
+
+  _showButton(bool isConnected) {
     if (isConnected) {
       setState(() {
         _isShowReconnectButton = false;
@@ -100,6 +102,7 @@ class _SettingScreenState extends State<SettingScreen>
       });
     }
   }
+
   //Action Event
   _onTapSignOutButton() {
     _callLogoutApi();
@@ -141,11 +144,12 @@ class _SettingScreenState extends State<SettingScreen>
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
-  showReconnectButton() async{
+
+  showReconnectButton() async {
     var result = await SessionDAO().getValueForKey(DatabaseKeys.reConnect);
     if (result != null) {
       String lastValue = result.value;
-      debugPrint("lastValue----->"+lastValue);
+      debugPrint("lastValue----->" + lastValue);
       if (lastValue == "true") {
         setState(() {
           _isShowReconnectButton = false;

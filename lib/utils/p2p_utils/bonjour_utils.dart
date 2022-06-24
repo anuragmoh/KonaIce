@@ -92,16 +92,19 @@ class P2PConnectionManager {
       if (connectedDevices.isNotEmpty) {
         _updateDB(StringConstants.updateTrue);
         setConnectedDevice(connectedDevices[0]);
-      }else{
+      } else {
         _updateDB(StringConstants.updateFalse);
       }
       sentBackValue(devices);
     });
     return devices;
   }
+
   _updateDB(String value) async {
-    await SessionDAO().insert(Session(key: DatabaseKeys.reConnect, value: value));
+    await SessionDAO()
+        .insert(Session(key: DatabaseKeys.reConnect, value: value));
   }
+
   getDeviceListAtCustomer() {
     getDeviceList((deviceList) => {});
   }

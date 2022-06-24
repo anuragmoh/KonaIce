@@ -95,7 +95,6 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
         NumberRemoveExtraDotFormatter(),
       ],
       maxLength: TextFieldLengthConstant.addTip,
-
       style: StyleConstants.customTextStyle22MonsterMedium(
           color: AppColors.textColor6),
       decoration: InputDecoration(
@@ -188,6 +187,7 @@ class _CustomerAddTipDialogState extends State<CustomerAddTipDialog> {
     }
   }
 }
+
 class NumberRemoveExtraDotFormatter extends TextInputFormatter {
   NumberRemoveExtraDotFormatter({this.decimalRange = 3})
       : assert(decimalRange == null || decimalRange > 0);
