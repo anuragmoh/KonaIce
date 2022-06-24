@@ -41,15 +41,6 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
     );
   }
 
-  Widget _topWidget() => Container(
-        height: 100.0,
-        decoration: BoxDecoration(
-            color: AppColors.primaryColor1,
-            borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(8.0),
-                bottomRight: Radius.circular(8.0))),
-      );
-
   Widget _bodyWidget() => Container(
         color: AppColors.textColor3.withOpacity(0.1),
         child: _bodyWidgetComponent(),
@@ -91,10 +82,6 @@ class _CustomerViewScreenState extends State<CustomerViewScreen> {
           ),
         ),
       );
-
-  _onDrawerTap() {
-    Scaffold.of(context).openDrawer();
-  }
 
   _onProfileChange() {
     Navigator.of(context)

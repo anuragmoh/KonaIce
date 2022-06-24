@@ -4,11 +4,9 @@ import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+//ignore: must_be_immutable
 class ValidationPopup extends StatefulWidget {
   String validationMessage;
 

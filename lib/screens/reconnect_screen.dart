@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
+import 'package:kona_ice_pos/utils/color_extension.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/font_constants.dart';
 import '../../constants/string_constants.dart';
 import '../../constants/style_constants.dart';
 import '../../utils/common_widgets.dart';
-import '../../utils/utils.dart';
 import '../constants/asset_constants.dart';
 import '../utils/loader.dart';
 import '../utils/p2p_utils/bonjour_utils.dart';
@@ -50,7 +50,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
 
   Widget showReconnectDialog() {
     return Dialog(
-      backgroundColor: getMaterialColor(AppColors.whiteColor),
+      backgroundColor: AppColors.whiteColor.toMaterialColor(),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
       child:
           Loader(isCallInProgress: isConnectionProcess, child: bodyContainer()),
@@ -97,7 +97,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
                   StringConstants.done,
                   StyleConstants.customTextStyle(
                       fontSize: 12.0,
-                      color: getMaterialColor(AppColors.textColor1),
+                      color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratBold)),
             )
           ],
@@ -131,7 +131,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
                       textAlign: TextAlign.left,
                       style: StyleConstants.customTextStyle(
                           fontSize: 15,
-                          color: getMaterialColor(AppColors.textColor1),
+                          color: AppColors.textColor1.toMaterialColor(),
                           fontFamily: FontConstants.montserratMedium),
                     ),
                     Text('(${getStateName(device.state)})',
@@ -179,7 +179,7 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
       child: Container(
         width: 210,
         decoration: BoxDecoration(
-          color: getMaterialColor(AppColors.primaryColor2),
+          color: AppColors.primaryColor2.toMaterialColor(),
           borderRadius: BorderRadius.circular(20.0),
         ),
         child: Padding(
@@ -217,11 +217,11 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
   Color getStateColor(SessionState state) {
     switch (state) {
       case SessionState.notConnected:
-        return getMaterialColor(AppColors.textColor5);
+        return AppColors.textColor5.toMaterialColor();
       case SessionState.connecting:
-        return getMaterialColor(AppColors.textColor2);
+        return AppColors.textColor2.toMaterialColor();
       default:
-        return getMaterialColor(AppColors.textColor7);
+        return AppColors.textColor7.toMaterialColor();
     }
   }
 
@@ -250,9 +250,9 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
     switch (state) {
       case SessionState.notConnected:
       case SessionState.connecting:
-        return getMaterialColor(AppColors.denotiveColor2);
+        return AppColors.denotiveColor2.toMaterialColor();
       default:
-        return getMaterialColor(AppColors.denotiveColor1);
+        return AppColors.denotiveColor1.toMaterialColor();
     }
   }
 
@@ -266,3 +266,4 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
     }
   }
 }
+

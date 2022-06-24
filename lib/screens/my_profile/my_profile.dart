@@ -79,18 +79,15 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   _getMyProfileDetails() async {
     String userID = await FunctionalUtils.getUserID();
 
-    CheckConnection().connectionState().then((value) {
-      if (value == true) {
-        setState(() {
-          _isApiProcess = true;
-        });
-        _userPresenter.getMyProfile(userID);
-      } else {
-        CommonWidgets().showErrorSnackBar(
-            errorMessage: StringConstants.noInternetConnection,
-            context: context);
-      }
-    });
+    if (await CheckConnection.connectionState() == true) {
+      setState(() {
+        _isApiProcess = true;
+      });
+      _userPresenter.getMyProfile(userID);
+    } else {
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.noInternetConnection, context: context);
+    }
   }
 
   @override
@@ -206,22 +203,20 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         _getMyProfile[0].defaultTimezone.toString();
   }
 
-  void _callUpdateProfile(String userID) {
+  Future<void> _callUpdateProfile(String userID) async {
     if (_isEmailValid &&
         _isFirstNameValid &&
         _isLastNameValid &&
         _isContactValid) {
-      CheckConnection().connectionState().then((value) {
-        if (value == true) {
-          _isApiProcess = true;
-          _editMode = false;
-          _userPresenter.updateProfile(userID, _myProfileUpdateRequestModel);
-        } else {
-          CommonWidgets().showErrorSnackBar(
-              errorMessage: StringConstants.noInternetConnection,
-              context: context);
-        }
-      });
+      if (await CheckConnection.connectionState() == true) {
+        _isApiProcess = true;
+        _editMode = false;
+        _userPresenter.updateProfile(userID, _myProfileUpdateRequestModel);
+      } else {
+        CommonWidgets().showErrorSnackBar(
+            errorMessage: StringConstants.noInternetConnection,
+            context: context);
+      }
     }
   }
 

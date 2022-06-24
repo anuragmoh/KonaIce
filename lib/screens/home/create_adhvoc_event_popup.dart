@@ -45,10 +45,7 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
 
   late Position _currentPosition;
 
-  String _selectedState = "",
-      _selectedCity = "",
-      _selectedZipcode = "",
-      _selectedAddress = "";
+  String _selectedState = "", _selectedCity = "";
 
   bool _isValidEventName = true,
       _isValidAddress = true,
@@ -73,19 +70,16 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
     _presenter = CreateAdhocEventPresenter(this);
   }
 
-  _getAssets() {
-    CheckConnection().connectionState().then((value) {
-      if (value!) {
-        setState(() {
-          _isApiProcess = true;
-        });
-        _presenter.getAssets();
-      } else {
-        CommonWidgets().showErrorSnackBar(
-            errorMessage: StringConstants.noInternetConnection,
-            context: context);
-      }
-    });
+  _getAssets() async {
+    if (await CheckConnection.connectionState() == true) {
+      setState(() {
+        _isApiProcess = true;
+      });
+      _presenter.getAssets();
+    } else {
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.noInternetConnection, context: context);
+    }
   }
 
   @override
@@ -441,16 +435,13 @@ class _CreateAdhocEventState extends State<CreateAdhocEvent>
         ),
       );
 
-  _onTapCreate() {
-    CheckConnection().connectionState().then((value) {
-      if (value!) {
-        _validateData();
-      } else {
-        CommonWidgets().showErrorSnackBar(
-            errorMessage: StringConstants.noInternetConnection,
-            context: context);
-      }
-    });
+  _onTapCreate() async {
+    if (await CheckConnection.connectionState() == true) {
+      _validateData();
+    } else {
+      CommonWidgets().showErrorSnackBar(
+          errorMessage: StringConstants.noInternetConnection, context: context);
+    }
   }
 
   _onTapCloseButton() {

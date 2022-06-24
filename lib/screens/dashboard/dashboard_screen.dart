@@ -42,7 +42,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard>
     implements ResponseContractor, BottomBarMenu {
   List<Events> _eventList = [];
-  final _service = ServiceNotifier();
   final List<SyncEventMenu> _syncEventMenuResponseModel = [];
   List<POsSyncEventDataDtoList> _pOsSyncEventDataDtoList = [];
   List<POsSyncItemCategoryDataDtoList> _pOsSyncItemCategoryDataDtoList = [];

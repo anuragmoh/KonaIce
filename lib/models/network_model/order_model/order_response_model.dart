@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
+
 PlaceOrderResponseModel placeOrderResponseModelFromJson(String str) =>
     PlaceOrderResponseModel.fromJson(json.decode(str));
 
@@ -151,7 +153,7 @@ class PlaceOrderResponseModel {
   String? createdByRoleCode;
   String? subAccountId;
   String? userAddressId;
-  List<OrderItemsDetailList>? orderItemsList;
+  List<OrderItemsList>? orderItemsList;
   String? franchisePhoneNumber;
   OrderInvoice? orderInvoice;
   String? franchiseAddressLine2;
@@ -247,8 +249,8 @@ class PlaceOrderResponseModel {
           createdByRoleCode: json["createdByRoleCode"],
           subAccountId: json["subAccountId"],
           userAddressId: json["userAddressId"],
-          orderItemsList: List<OrderItemsDetailList>.from(json["orderItemsList"]
-              .map((x) => OrderItemsDetailList.fromJson(x))),
+          orderItemsList: List<OrderItemsList>.from(
+              json["orderItemsList"].map((x) => OrderItemsList.fromJson(x))),
           franchisePhoneNumber: json["franchisePhoneNumber"],
           orderInvoice: OrderInvoice.fromJson(json["orderInvoice"]),
           franchiseAddressLine2: json["franchiseAddressLine2"],
@@ -576,88 +578,5 @@ class OrderInvoice {
         "donationFranchiseSharePercent": donationFranchiseSharePercent,
         "creditCardFees": creditCardFees,
         "creditCardFeesPercent": creditCardFeesPercent,
-      };
-}
-
-class OrderItemsDetailList {
-  OrderItemsDetailList({
-    this.id,
-    this.createdAt,
-    this.updatedAt,
-    this.createdBy,
-    this.updatedBy,
-    this.deleted,
-    this.orderId,
-    this.quantity,
-    this.itemId,
-    this.itemCategoryId,
-    this.name,
-    this.totalAmount,
-    this.foodExtraItemMappingList,
-    this.unitPrice,
-    this.key,
-    this.values,
-    this.recipientName,
-  });
-
-  String? id;
-  int? createdAt;
-  int? updatedAt;
-  String? createdBy;
-  String? updatedBy;
-  bool? deleted;
-  String? orderId;
-  int? quantity;
-  String? itemId;
-  String? itemCategoryId;
-  String? name;
-  double? totalAmount;
-  List<dynamic>? foodExtraItemMappingList;
-  double? unitPrice;
-  String? key;
-  String? values;
-  String? recipientName;
-
-  factory OrderItemsDetailList.fromJson(Map<String?, dynamic> json) =>
-      OrderItemsDetailList(
-        id: json["id"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-        createdBy: json["createdBy"],
-        updatedBy: json["updatedBy"],
-        deleted: json["deleted"],
-        orderId: json["orderId"],
-        quantity: json["quantity"],
-        itemId: json["itemId"],
-        itemCategoryId: json["itemCategoryId"],
-        name: json["name"],
-        totalAmount: json["totalAmount"],
-        foodExtraItemMappingList:
-            List<dynamic>.from(json["foodExtraItemMappingList"].map((x) => x)),
-        unitPrice: json["unitPrice"],
-        key: json["key"],
-        values: json["values"],
-        recipientName: json["recipientName"],
-      );
-
-  Map<String?, dynamic> toJson() => {
-        "id": id,
-        "createdAt": createdAt,
-        "updatedAt": updatedAt,
-        "createdBy": createdBy,
-        "updatedBy": updatedBy,
-        "deleted": deleted,
-        "orderId": orderId,
-        "quantity": quantity,
-        "itemId": itemId,
-        "itemCategoryId": itemCategoryId,
-        "name": name,
-        "totalAmount": totalAmount,
-        "foodExtraItemMappingList":
-            List<dynamic>.from((foodExtraItemMappingList ?? []).map((x) => x)),
-        "unitPrice": unitPrice,
-        "key": key,
-        "values": values,
-        "recipientName": recipientName,
       };
 }

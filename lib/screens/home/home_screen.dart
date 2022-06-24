@@ -37,8 +37,10 @@ import 'package:kona_ice_pos/utils/size_configuration.dart';
 import '../../common/base_method.dart';
 import '../../common/extensions/string_extension.dart';
 
+//ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   var onCallback;
+
   HomeScreen({Key? key, this.onCallback}) : super(key: key);
 
   @override
@@ -85,37 +87,34 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
-  void _refreshDB(Session? value) {
+  Future<void> _refreshDB(Session? value) async {
     if (value != null) {
       int lastSyncTime = int.parse(value.value);
-      CheckConnection().connectionState().then((value) {
-        if (value == true) {
-          //eventList.clear();
-          setState(() {
-            _isApiProcess = true;
-          });
-          _syncPresenter.syncData(lastSyncTime);
-        } else {
-          _loadDataFromDb();
-          CommonWidgets().showErrorSnackBar(
-              errorMessage: StringConstants.noInternetConnection,
-              context: context);
-        }
-      });
+
+      if (await CheckConnection.connectionState() == true) {
+        //eventList.clear();
+        setState(() {
+          _isApiProcess = true;
+        });
+        _syncPresenter.syncData(lastSyncTime);
+      } else {
+        _loadDataFromDb();
+        CommonWidgets().showErrorSnackBar(
+            errorMessage: StringConstants.noInternetConnection,
+            context: context);
+      }
     } else {
-      CheckConnection().connectionState().then((value) {
-        if (value == true) {
-          setState(() {
-            _isApiProcess = true;
-          });
-          _syncPresenter.syncData(0);
-        } else {
-          _loadDataFromDb();
-          CommonWidgets().showErrorSnackBar(
-              errorMessage: StringConstants.noInternetConnection,
-              context: context);
-        }
-      });
+      if (await CheckConnection.connectionState() == true) {
+        setState(() {
+          _isApiProcess = true;
+        });
+        _syncPresenter.syncData(0);
+      } else {
+        _loadDataFromDb();
+        CommonWidgets().showErrorSnackBar(
+            errorMessage: StringConstants.noInternetConnection,
+            context: context);
+      }
     }
   }
 
@@ -656,6 +655,7 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   BaseMethod _baseMethod = BaseMethod();
+
   Future<void> _insertEventSync() async {
     if (_pOsSyncEventDataDtoList.isNotEmpty) {
       await _baseMethod.insertData(_pOsSyncEventDataDtoList);

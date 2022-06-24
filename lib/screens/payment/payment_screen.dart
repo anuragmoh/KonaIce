@@ -28,6 +28,7 @@ import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
 import 'package:kona_ice_pos/screens/payment/validation_popup.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
+import 'package:kona_ice_pos/utils/color_extension.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/dotted_line.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
@@ -36,10 +37,9 @@ import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../utils/function_utils.dart';
+import '../../utils/number_formatter.dart';
 import 'credit_card_details_popup.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -114,6 +114,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     super.initState();
     totalAmount = widget.billDetails['totalAmount'];
     _tip = widget.billDetails['tip'];
+    debugPrint('>>>>>>>>>>>>$_tip');
     _discount = widget.billDetails['discount'];
     _foodCost = widget.billDetails['foodCost'];
     _salesTax = widget.billDetails['salesTax'];
@@ -354,7 +355,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               child: CommonWidgets().textWidget(
                   _returnAmount.toStringAsFixed(2),
                   StyleConstants.customTextStyle22MonsterMedium(
-                      color: getMaterialColor(AppColors.textColor1))),
+                      color: AppColors.textColor1.toMaterialColor())),
             )
           ],
         )
@@ -1183,10 +1184,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     await _cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }
 
-  _onTapCloseButton() {
-    Navigator.of(context).pop();
-  }
-
   _onTapNewOrder() {
     if (_isPaymentDone) {
       Navigator.of(context).pop(_getOrderInfoToSendBack(true));
@@ -1253,20 +1250,11 @@ class _PaymentScreenState extends State<PaymentScreen>
     return payOrderRequestModel;
   }
 
-  PayOrderCardRequestModel _getPayOrderCardMethodRequestModel() {
-    PayOrderCardRequestModel payOrderCardRequestModel =
-        PayOrderCardRequestModel();
-    payOrderCardRequestModel.orderId = _orderID;
-    payOrderCardRequestModel.paymentMethod = PaymentMethods.card;
-    payOrderCardRequestModel.stripeCardId = _stripeTokenId;
-    payOrderCardRequestModel.stripePaymentMethodId = _stripePaymentMethodId;
-
-    return payOrderCardRequestModel;
-  }
-
   //API call
-  _callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+  _callPlaceOrderAPI() async {
     _orderPresenter.placeOrder(widget.placeOrderRequestModel);
+
+    debugPrint('>>>>>>>>>>>>${widget.placeOrderRequestModel}');
   }
 
   //API call for card payment method
@@ -1538,46 +1526,5 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isApiProcess = true;
     });
     _orderPresenter.finixSendReceipt(_orderID, finixSendReceiptRequest);
-  }
-}
-
-class NumberRemoveExtraDotFormatter extends TextInputFormatter {
-  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange == null || decimalRange > 0);
-
-  final int decimalRange;
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String nValue = newValue.text;
-    TextSelection nSelection = newValue.selection;
-
-    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
-    nValue = p
-        .allMatches(nValue)
-        .map<String>((Match match) => match.group(0)!)
-        .join();
-
-    if (nValue.startsWith('.')) {
-      nValue = '0.';
-    } else if (nValue.contains('.')) {
-      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
-        nValue = oldValue.text;
-      } else {
-        if (nValue.split('.').length > 2) {
-          List<String> split = nValue.split('.');
-          nValue = split[0] + '.' + split[1];
-        }
-      }
-    }
-
-    nSelection = newValue.selection.copyWith(
-      baseOffset: math.min(nValue.length, nValue.length + 1),
-      extentOffset: math.min(nValue.length, nValue.length + 1),
-    );
-
-    return TextEditingValue(
-        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }

@@ -46,6 +46,7 @@ import 'package:kona_ice_pos/utils/top_bar.dart';
 import 'dart:math' as math;
 import '../../models/network_model/order_model/order_request_model.dart';
 import '../../models/network_model/order_model/order_response_model.dart';
+import '../../utils/number_formatter.dart';
 
 class EventMenuScreen extends StatefulWidget {
   final Events events;
@@ -161,34 +162,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     } else {
       setState(() {
         _itemList.clear();
-      });
-    }
-  }
-
-  _getItemsByCategory(String categoryId) async {
-    // Category Id need to pass
-    var result = await ItemDAO().getAllItemsByCategories(categoryId);
-    if (result != null) {
-      setState(() {
-        _itemList.addAll(result);
-      });
-    } else {
-      setState(() {
-        _itemList.clear();
-      });
-    }
-  }
-
-  _getExtraFoodItem() async {
-    var result =
-        await FoodExtraItemsDAO().getFoodExtraByEventIdAndItemId("", "");
-    if (result != null) {
-      setState(() {
-        _foodExtraItemList.addAll(result);
-      });
-    } else {
-      setState(() {
-        _foodExtraItemList.clear();
       });
     }
   }
@@ -498,34 +471,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               StyleConstants.customTextStyle12MonsterMedium(
                   color: AppColors.textColor3)),
         ),
-      ),
-    );
-  }
-
-  Widget _addNewMenuItem() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 3.0),
-            child: _plusSymbolText(),
-          ),
-          SizedBox(
-            width: 70.0,
-            child: CommonWidgets().textWidget(
-                StringConstants.addNewMenuItem,
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: AppColors.textColor2,
-                    fontFamily: FontConstants.montserratMedium),
-                textAlign: TextAlign.center),
-          )
-        ],
       ),
     );
   }
@@ -1194,10 +1139,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     FocusScope.of(context).unfocus();
   }
 
-  _onDrawerTap() {
-    _scaffoldKey.currentState!.openEndDrawer();
-  }
-
   _onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
@@ -1258,12 +1199,6 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     });
   }
 
-  //data for p2pConnection
-  _showOrderScreenToCustomer() {
-    P2PConnectionManager.shared
-        .updateData(action: StaffActionConst.eventSelected);
-  }
-
   _updateOrderDataToCustomer() {
     //dataModel = P2POrderDetailsModel();
     dataModel.orderRequestModel = _getOrderRequestModel();
@@ -1309,12 +1244,12 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       orderRequestModel.zipCode = "";
       orderRequestModel.anonymous = false;
       orderRequestModel.donation = 0;
-      orderRequestModel.gratuity = 0;
       orderRequestModel.addressLatitude = 0.0;
       orderRequestModel.addressLongitude = 0.0;
     } else {
       orderRequestModel.anonymous = true;
     }
+    orderRequestModel.gratuity = _tip;
     orderRequestModel.corporateDonationBeforeCcCharges = 0.0;
     orderRequestModel.allowPromoNotifications = false;
     orderRequestModel.orderDate = DateTime.now().millisecondsSinceEpoch;
@@ -1404,7 +1339,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   }
 
   //API Call
-  _callPlaceOrderAPI({bool isPreviousRequestFail = false}) async {
+  _callPlaceOrderAPI() async {
     PlaceOrderRequestModel requestModel = _getOrderRequestModel();
     _orderPresenter.placeOrder(requestModel);
     setState(() {
@@ -1565,46 +1500,5 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     await SavedOrdersDAO().clearEventDataByOrderID(_orderID).then((value) {
       _eventPresenter.deleteOrder(orderId: _orderID);
     });
-  }
-}
-
-class NumberRemoveExtraDotFormatter extends TextInputFormatter {
-  NumberRemoveExtraDotFormatter({this.decimalRange = 3})
-      : assert(decimalRange == null || decimalRange > 0);
-
-  final int decimalRange;
-
-  @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    String nValue = newValue.text;
-    TextSelection nSelection = newValue.selection;
-
-    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
-    nValue = p
-        .allMatches(nValue)
-        .map<String>((Match match) => match.group(0)!)
-        .join();
-
-    if (nValue.startsWith('.')) {
-      nValue = '0.';
-    } else if (nValue.contains('.')) {
-      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
-        nValue = oldValue.text;
-      } else {
-        if (nValue.split('.').length > 2) {
-          List<String> split = nValue.split('.');
-          nValue = split[0] + '.' + split[1];
-        }
-      }
-    }
-
-    nSelection = newValue.selection.copyWith(
-      baseOffset: math.min(nValue.length, nValue.length + 1),
-      extentOffset: math.min(nValue.length, nValue.length + 1),
-    );
-
-    return TextEditingValue(
-        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }

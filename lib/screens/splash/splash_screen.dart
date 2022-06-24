@@ -12,7 +12,6 @@ import 'package:kona_ice_pos/screens/dashboard/dashboard_screen.dart';
 import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/utils/common_widgets.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
-import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 
 enum NextScreen {
@@ -21,6 +20,7 @@ enum NextScreen {
   modeSelection,
 }
 
+//ignore: must_be_immutable
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key}) : super(key: key);
   bool _isCustomerMode = false;

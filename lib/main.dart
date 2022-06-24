@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/screens/splash/splash_screen.dart';
+import 'package:kona_ice_pos/utils/color_extension.dart';
 import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
-import 'package:kona_ice_pos/utils/utils.dart';
 
 import 'constants/app_colors.dart';
 
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
           navigatorKey: FunctionalUtils.navigatorKey,
           title: StringConstants.title,
           theme: ThemeData(
-            primarySwatch: getMaterialColor(AppColors.primaryColor2),
+            primarySwatch: AppColors.primaryColor2.toMaterialColor(),
           ),
           debugShowCheckedModeBanner: false,
           home: SplashScreen(),

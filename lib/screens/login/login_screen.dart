@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen>
   _LoginScreenState() {
     _userPresenter = UserPresenter(this);
   }
+
   bool _isEmailValid = true;
   bool _isPasswordValid = true;
   bool _isPasswordVisible = true;
@@ -326,7 +327,7 @@ class _LoginScreenState extends State<LoginScreen>
     }
   }
 
-  _onTapSingIn() {
+  _onTapSingIn() async {
     FocusScope.of(context).unfocus();
     setState(() {
       _emailController.text.isEmpty || !_emailController.text.isValidEmail()
@@ -340,15 +341,14 @@ class _LoginScreenState extends State<LoginScreen>
     _passwordValidation();
 
     if (_isEmailValid && _isPasswordValid) {
-      CheckConnection().connectionState().then((value) {
-        if (value == true) {
-          _callLoginApi();
-        } else {
-          CommonWidgets().showErrorSnackBar(
-              errorMessage: StringConstants.noInternetConnection,
-              context: context);
-        }
-      });
+      if (await CheckConnection.connectionState() == true) {
+        _callLoginApi();
+      } else {
+        CommonWidgets().showErrorSnackBar(
+            errorMessage: StringConstants.noInternetConnection,
+            context: context);
+      }
+      debugPrint(">>>>>${await CheckConnection.connectionState()}");
     }
   }
 

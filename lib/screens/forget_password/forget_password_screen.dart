@@ -30,7 +30,6 @@ class ForgetPasswordScreen extends StatefulWidget {
 
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     implements ResponseContractor {
-  bool _isApiProcess = false;
   bool _isEmailValid = true;
   String _emailValidationMessage = "";
   TextEditingController _emailController = TextEditingController();
@@ -42,6 +41,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
   _ForgetPasswordScreenState() {
     _userPresenter = UserPresenter(this);
   }
+
   forgotPasswordApiCall() {
     widget.forgotPasswordLoader(true);
     _forgotPasswordRequestModel.email = _emailController.text.toString();
@@ -192,7 +192,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
   }
 
   //Actions
-  _onTapSubmit() {
+  _onTapSubmit() async {
     FunctionalUtils.hideKeyboard();
     setState(() {
       _emailController.text.isEmpty
@@ -202,15 +202,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
 
     _emailValidation();
     if (_isEmailValid) {
-      CheckConnection().connectionState().then((value) {
-        if (value == true) {
-          forgotPasswordApiCall();
-        } else {
-          CommonWidgets().showErrorSnackBar(
-              errorMessage: StringConstants.noInternetConnection,
-              context: context);
-        }
-      });
+      if (await CheckConnection.connectionState() == true) {
+        forgotPasswordApiCall();
+      } else {
+        CommonWidgets().showErrorSnackBar(
+            errorMessage: StringConstants.noInternetConnection,
+            context: context);
+      }
     }
   }
 
