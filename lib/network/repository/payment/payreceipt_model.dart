@@ -1,16 +1,17 @@
+/*
 // To parse this JSON data, do
 //
 //     final payReceipt = payReceiptFromJson(jsonString);
 
 import 'dart:convert';
 
-PayReceipt payReceiptFromJson(String str) =>
-    PayReceipt.fromJson(json.decode(str));
+PayReceiptOld payReceiptFromJson(String str) =>
+    PayReceiptOld.fromJson(json.decode(str));
 
-String payReceiptToJson(PayReceipt data) => json.encode(data.toJson());
+String payReceiptToJson(PayReceiptOld data) => json.encode(data.toJson());
 
-class PayReceipt {
-  PayReceipt(
+class PayReceiptOld {
+  PayReceiptOld(
       {this.paymentMethod,
       this.orderId,
       this.stripePaymentMethodId,
@@ -27,7 +28,7 @@ class PayReceipt {
   String? finixNCPaymentToken;
   String? finixNCPMerchantId;
 
-  factory PayReceipt.fromJson(Map<String, dynamic> json) => PayReceipt(
+  factory PayReceiptOld.fromJson(Map<String, dynamic> json) => PayReceiptOld(
       paymentMethod: json["paymentMethod"],
       orderId: json["orderId"],
       stripePaymentMethodId: json["stripePaymentMethodId"],
@@ -248,3 +249,4 @@ class ResourceTagsRequest {
         "paymentMethod": paymentMethod,
       };
 }
+*/
