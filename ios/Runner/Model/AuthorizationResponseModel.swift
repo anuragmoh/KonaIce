@@ -10,19 +10,31 @@ import FinixPOS
 
 public struct TransactionResponseModel: Codable {
         
-    let finixSaleReceipt: FinixSaleReceipt?
+    let authorizationResponseModel: AuthorizationResponseModel?
+    let finixCaptureResponse: FinixCaptureResponse
     
-    let finixSaleResponse: FinixSaleResponse
-    
-    init(finixSaleReceipt: FinixSaleReceipt?,
-         finixSaleResponse: FinixSaleResponse) {
+    init(authorizationResponseModel: AuthorizationResponseModel?,
+         finixCaptureResponse: FinixCaptureResponse) {
         
-        self.finixSaleReceipt = finixSaleReceipt
-        self.finixSaleResponse = finixSaleResponse
+        self.authorizationResponseModel = authorizationResponseModel
+        self.finixCaptureResponse = finixCaptureResponse
     }
 }
 
-struct FinixSaleReceipt: Codable {
+public struct AuthorizationResponseModel: Codable {
+        
+    let finixAuthorizationReceipt: FinixAuthorizationReceipt?
+    let finixAuthorizationResponse: FinixAuthorizationResponse
+    
+    init(finixAuthorizationReceipt: FinixAuthorizationReceipt?,
+         finixAuthorizationResponse: FinixAuthorizationResponse) {
+        
+        self.finixAuthorizationReceipt = finixAuthorizationReceipt
+        self.finixAuthorizationResponse = finixAuthorizationResponse
+    }
+}
+
+struct FinixAuthorizationReceipt: Codable {
     
     let merchantName, merchantAddress, applicationLabel, applicationIdentifier, merchantId, referenceNumber, accountNumber, cardBrand, entryMode, transactionId, approvalCode, responseCode, responseMessage, cryptogram, transactionType: String?
     
@@ -49,8 +61,8 @@ struct FinixSaleReceipt: Codable {
     }
 }
 
-struct FinixSaleResponse: Codable {
-    
+struct FinixAuthorizationResponse: Codable {
+
     var transferId, traceId: String?
     var transferState: String?
     var amount: Double?
@@ -78,7 +90,16 @@ struct FinixSaleResponse: Codable {
     /// AID from a Magstripe-Mode contactless transaction
     var applicationIdentifier: String?
     
-    init(response: SaleResponse) {
+    /// Card verification information
+    var verification: String?
+
+    /// EMV
+    var emv: String?
+
+    /// host response data
+    var hostResponse: String?
+    
+    init(response: AuthorizationResponse) {
         
         transferId = response.id
         traceId = response.traceId
@@ -94,6 +115,9 @@ struct FinixSaleResponse: Codable {
         expirationMonth = response.card.expirationMonth
         expirationYear = response.card.expirationYear
         applicationIdentifier = response.card.applicationIdentifier
+        verification = response.verification?.description
+        emv = response.emv.description
+        hostResponse = response.hostResponse?.description
     }
     
     func getFinixTransferState(state: Transfer.State) -> String? {
@@ -187,5 +211,54 @@ struct FinixSaleResponse: Codable {
         }
         
         return cardLogo
+    }
+}
+
+struct FinixCaptureResponse: Codable {
+
+    var transferId, traceId: String?
+    var transferState, deviceId: String?
+    var amount: Double?
+    var created, updated: Double?
+    var resourceTags: [String: String]?
+    
+    init(response: CaptureResponse) {
+        
+        transferId = response.id
+        traceId = response.traceId
+        transferState = self.getFinixTransferState(state: response.state)
+        deviceId = response.deviceId
+        amount = Double(truncating: response.amount.decimal as NSNumber)
+        created = response.created.timeIntervalSince1970
+        updated = response.updated.timeIntervalSince1970
+        resourceTags = response.tags
+    }
+    
+    func getFinixTransferState(state: Transfer.State) -> String? {
+        
+        var finixTransferState: String = ""
+        
+        switch state {
+            
+        case .pending:
+            finixTransferState = FinixTransferState.pending.rawValue
+            
+        case .canceled:
+            finixTransferState = FinixTransferState.canceled.rawValue
+            
+        case .failed:
+            finixTransferState = FinixTransferState.failed.rawValue
+            
+        case .succeeded:
+            finixTransferState = FinixTransferState.succeeded.rawValue
+            
+        case .unknown:
+            finixTransferState = FinixTransferState.unknown.rawValue
+            
+        @unknown default:
+            finixTransferState = FinixTransferState.unknown.rawValue
+        }
+        
+        return finixTransferState
     }
 }
