@@ -13,6 +13,8 @@ import PaymentsSDK
     ) -> Bool {
         let controller: FlutterViewController = window?.rootViewController as! FlutterViewController
         
+        getFont(controller)
+        
         let methodChannelName = "com.mobisoft.konaicepos/cardPayment"
         
         cardPaymentChannel = FlutterMethodChannel(name: methodChannelName, binaryMessenger: controller.binaryMessenger)
@@ -68,6 +70,26 @@ import PaymentsSDK
         paymentViewController.view.backgroundColor = UIColor.clear
         paymentViewController.modalPresentationStyle = .overCurrentContext
         window.rootViewController?.present(paymentViewController, animated: true)
+    }
+    
+    func loadTipView(_ amount: Double) {
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        guard let tipViewController = storyBoard.instantiateViewController(withIdentifier: "TipViewController") as? TipViewController else { return }
+        tipViewController.billAmount = amount
+        tipViewController.view.backgroundColor = UIColor.clear
+        tipViewController.modalPresentationStyle = .overCurrentContext
+        window.rootViewController?.present(tipViewController, animated: true)
+    }
+    
+    fileprivate func getFont(_ controller: FlutterViewController) {
+        let bundle = Bundle.main
+        let fontKey = controller.lookupKey(forAsset: "assets/fonts/Montserrat-Bold.ttf")
+        let path = bundle.path(forResource: fontKey, ofType: nil)
+        guard let fontData = NSData(contentsOfFile: path ?? "") else { return }
+        guard let dataProvider = CGDataProvider(data: fontData) else { return }
+        guard let fontRef = CGFont(dataProvider) else { return }
+        var errorRef: Unmanaged<CFError>? = nil
+        CTFontManagerRegisterGraphicsFont(fontRef, &errorRef)
     }
 }
 
