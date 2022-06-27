@@ -1498,7 +1498,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
     setState(() {
       double? newAmount = _finixResponse
-          .authorizationResponseModel?.finixAuthorizationResponse?.amount;
+          .finixCaptureResponse?.amount;
       _isApiProcess = true;
       _tip = _finixResponse.tipAmount;
       totalAmount = newAmount!;
