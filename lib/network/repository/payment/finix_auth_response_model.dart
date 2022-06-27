@@ -16,13 +16,13 @@ class FinixAuthResponseModel {
   });
 
   AuthorizationResponseModel? authorizationResponseModel;
-  int? tipAmount;
-  FinixCaptureResponse? finixCaptureResponse;
+  dynamic tipAmount;
+  AuthFinixCaptureResponse? finixCaptureResponse;
 
   factory FinixAuthResponseModel.fromJson(Map<String, dynamic> json) => FinixAuthResponseModel(
     authorizationResponseModel: AuthorizationResponseModel.fromJson(json["authorizationResponseModel"]),
     tipAmount: json["tipAmount"],
-    finixCaptureResponse: FinixCaptureResponse.fromJson(json["finixCaptureResponse"]),
+    finixCaptureResponse: AuthFinixCaptureResponse.fromJson(json["finixCaptureResponse"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -236,8 +236,8 @@ class FinixAuthorizationResponseResourceTags {
   };
 }
 
-class FinixCaptureResponse {
-  FinixCaptureResponse({
+class AuthFinixCaptureResponse {
+  AuthFinixCaptureResponse({
     this.amount,
     this.deviceId,
     this.updated,
@@ -257,7 +257,7 @@ class FinixCaptureResponse {
   FinixCaptureResponseResourceTags? resourceTags;
   String? transferState;
 
-  factory FinixCaptureResponse.fromJson(Map<String, dynamic> json) => FinixCaptureResponse(
+  factory AuthFinixCaptureResponse.fromJson(Map<String, dynamic> json) => AuthFinixCaptureResponse(
     amount: json["amount"].toDouble(),
     deviceId: json["deviceId"],
     updated: json["updated"].toDouble(),

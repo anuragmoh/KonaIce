@@ -1102,6 +1102,9 @@ class _PaymentScreenState extends State<PaymentScreen>
       _updateSelectedPaymentMode();
     });
     if (_paymentModeType == PaymentModeConstants.creditCardManual) {
+/*      String msg="{\"authorizationResponseModel\":{\"finixAuthorizationResponse\":{\"transferId\":\"AUke6WrvA5BCsyTf7dG9MKN6\",\"updated\":1656068927.09,\"amount\":4.4,\"cardLogo\":\"Visa\",\"cardHolderName\":\"TESTCARD07\",\"expirationMonth\":\"12\",\"resourceTags\":{\"environment\":\"TestCertification\",\"eventCode\":\"F00181787\",\"paymentMethod\":\"BBPOS\",\"customerEmail\":\"\",\"eventName\":\"RAZZLEDAZZLE\",\"customerName\":\"GuestCustomer\"},\"emv\":\"applicationidentifier:A000000003101001\\napplicationLabel:VISACREDIT\\napplicationPreferredName:Notpresent\\ncryptogram:ARQCDB7FBB82548E0E6F\\napplicationTransactionCounter:0128\\ntags:Notpresent\\nissuerCodeTableIndex:Notpresent\",\"hostResponse\":\"expressResponseCode:0\\nexpressResponseMessage:Approved\\nexpressTransactionDate:20220624\\nexpressTransactionTime:060843\\nexpressTransactionTimezone:UTC-05:00:00\\nhostResponseCode:00\\nhostResponseMessage:\\nprocessorName:VANTIV_TEST\\ntransactionID:157507468\\napprovalNumber:28345A\\nnetworkLabel:\\nexpressResponseXml:\\n<CreditCardAuthorizationResponsexmlns='https://transaction.elementexpress.com'><Response><ExpressResponseCode>0</ExpressResponseCode><ExpressResponseMessage>Approved</ExpressResponseMessage><HostResponseCode>00</HostResponseCode><ExpressTransactionDate>20220624</ExpressTransactionDate><ExpressTransactionTime>060843</ExpressTransactionTime><ExpressTransactionTimezone>UTC-05:00:00</ExpressTransactionTimezone><Batch><HostBatchID>1</HostBatchID></Batch><Card><ExpirationMonth>12</ExpirationMonth><ExpirationYear>22</ExpirationYear><CardLogo>Visa</CardLogo><EMVData>kQqKf02i0lZpyjAwigIwMA==</EMVData><CardNumberMasked>xxxx-xxxx-xxxx-0076</CardNumberMasked><BIN>476173</BIN><CardLevelResults>A</CardLevelResults></Card><Transaction><TransactionID>157507468</TransactionID><ApprovalNumber>28345A</ApprovalNumber><ReferenceNumber>FNXv1ZEjjm1JUJVbMtpQyDMcD</ReferenceNumber><AcquirerData>507468|217506507468|0624110843|1042000314|N|5|002175401248760|0000||||||||A|||||||00|0520|060843|||||||M18203|0624||||||||</AcquirerData><ProcessorName>VANTIV_TEST</ProcessorName><TransactionStatus>Authorized</TransactionStatus><TransactionStatusCode>5</TransactionStatusCode><HostTransactionID>010000</HostTransactionID><ApprovedAmount>4.40</ApprovedAmount><NetworkTransactionID>002175401248760</NetworkTransactionID><PAR>V0010013820179861073690933044</PAR><RetrievalReferenceNumber>217506507468</RetrievalReferenceNumber><SystemTraceAuditNumber>507468</SystemTraceAuditNumber></Transaction><Terminal><MotoECICode>1</MotoECICode></Terminal></Response></CreditCardAuthorizationResponse>\",\"entryMode\":\"Icc\",\"maskedAccountNumber\":\"476173******0076\",\"created\":1656068917.26,\"traceId\":\"FNXv1ZEjjm1JUJVbMtpQyDMcD\",\"transferState\":\"succeeded\",\"expirationYear\":\"22\"},\"finixAuthorizationReceipt\":{\"cryptogram\":\"ARQCDB7FBB82548E0E6F\",\"merchantId\":\"ID3s4MqoJDJ43pinKMsFHs7q\",\"accountNumber\":\"476173******0076\",\"referenceNumber\":\"AUke6WrvA5BCsyTf7dG9MKN6\",\"applicationLabel\":\"VISACREDIT\",\"entryMode\":\"Icc\",\"approvalCode\":\"28345A\",\"transactionId\":\"AUke6WrvA5BCsyTf7dG9MKN6\",\"cardBrand\":\"Visa\",\"merchantName\":\"KonaSchoolSide\",\"merchantAddress\":\"741DouglassStApartment8SanMateoCA94114\",\"responseCode\":\"00\",\"transactionType\":\"Sale\",\"responseMessage\":\"\",\"applicationIdentifier\":\"A000000003101001\",\"date\":1656068923}},\"tipAmount\":3,\"finixCaptureResponse\":{\"amount\":7.4,\"deviceId\":\"DVqrsA5EWLDfJUDs3JSpvqrq\",\"updated\":1656068931.76,\"traceId\":\"FNXv1ZEjjm1JUJVbMtpQyDMcD\",\"created\":1656068930.69,\"transferId\":\"TRnjb2bDDT3gh9JnRD8rjxi6\",\"resourceTags\":{},\"transferState\":\"succeeded\"}}";
+
+      _paymentSuccess(msg);*/
       showDialog(
           barrierColor: AppColors.textColor1.withOpacity(0.7),
           context: context,
@@ -1446,11 +1449,22 @@ class _PaymentScreenState extends State<PaymentScreen>
         _finixResponse.authorizationResponseModel?.finixAuthorizationReceipt?.applicationIdentifier;
     finixSaleReceiptRequest.date = _finixResponse.authorizationResponseModel?.finixAuthorizationReceipt?.date;
 
+
     FinixResponseDto finixResponseDto=FinixResponseDto();
+    FinixCaptureResponse finixCaptureResponse=FinixCaptureResponse();
+
+    finixCaptureResponse.amount=_finixResponse.finixCaptureResponse?.amount;
+    finixCaptureResponse.deviceId=_finixResponse.finixCaptureResponse?.deviceId;
+    finixCaptureResponse.updated=_finixResponse.finixCaptureResponse?.updated;
+    finixCaptureResponse.traceId=_finixResponse.finixCaptureResponse?.traceId;
+    finixCaptureResponse.transferId=_finixResponse.finixCaptureResponse?.traceId;
+    finixCaptureResponse.transferState=_finixResponse.finixCaptureResponse?.transferState;
 
     finixResponseDto.finixSaleResponse = finixSaleResponse;
     finixResponseDto.finixSaleResponse?.resourceTags = resourceTagsRequest;
     finixResponseDto.finixSaleReceipt = finixSaleReceiptRequest;
+    finixResponseDto.tipAmount=_finixResponse.tipAmount;
+    finixResponseDto.finixCaptureResponse=finixCaptureResponse;
     payReceiptModel.finixResponseDto = finixResponseDto;
 
     debugPrint('>>>>>>>>>>>${payReceiptModel.toString()}');

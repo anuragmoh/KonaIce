@@ -50,21 +50,21 @@ class FinixResponseDto {
 
   FinixSaleResponse? finixSaleResponse;
   FinixSaleReceipt? finixSaleReceipt;
-  double? tipAmount;
+  dynamic tipAmount;
   FinixCaptureResponse? finixCaptureResponse;
 
   factory FinixResponseDto.fromJson(Map<String, dynamic> json) => FinixResponseDto(
     finixSaleResponse: FinixSaleResponse.fromJson(json["finixSaleResponse"]),
     finixSaleReceipt: FinixSaleReceipt.fromJson(json["finixSaleReceipt"]),
     tipAmount: json["tipAmount"],
-    finixCaptureResponse: FinixCaptureResponse.fromJson(json["finixCaptureResponse"]),
+    finixCaptureResponse: FinixCaptureResponse.fromJson(json["finixCaptureResponseDto"]),
   );
 
   Map<String, dynamic> toJson() => {
     "finixSaleResponse": finixSaleResponse!.toJson(),
     "finixSaleReceipt": finixSaleReceipt!.toJson(),
     "tipAmount": tipAmount,
-    "finixCaptureResponse": finixCaptureResponse!.toJson(),
+    "finixCaptureResponseDto": finixCaptureResponse!.toJson(),
   };
 }
 
