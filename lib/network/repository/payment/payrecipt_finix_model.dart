@@ -195,6 +195,7 @@ class FinixSaleResponse {
     this.resourceTags,
     this.emv,
     this.hostResponse,
+    this.verification,
     this.entryMode,
     this.maskedAccountNumber,
     this.created,
@@ -212,6 +213,7 @@ class FinixSaleResponse {
   ResourceTags? resourceTags;
   String? emv;
   String? hostResponse;
+  String? verification;
   String? entryMode;
   String? maskedAccountNumber;
   double? created;
@@ -229,6 +231,7 @@ class FinixSaleResponse {
     resourceTags: ResourceTags.fromJson(json["resourceTags"]),
     emv: json["emv"],
     hostResponse: json["hostResponse"],
+    verification:json["verification"],
     entryMode: json["entryMode"],
     maskedAccountNumber: json["maskedAccountNumber"],
     created: json["created"].toDouble(),
@@ -247,6 +250,7 @@ class FinixSaleResponse {
     "resourceTags": resourceTags!.toJson(),
     "emv": emv,
     "hostResponse": hostResponse,
+    "verification":verification,
     "entryMode": entryMode,
     "maskedAccountNumber": maskedAccountNumber,
     "created": created,
