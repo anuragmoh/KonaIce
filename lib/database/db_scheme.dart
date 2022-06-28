@@ -265,6 +265,7 @@ class DBScheme {
    discount numeric(12,2),
    food_cost numeric(12,2),
    total_amount numeric(12,2),
+   grand_total numeric(12,2),
    payment character varying(50),
    order_status character varying(50),
    deleted boolean DEFAULT false,

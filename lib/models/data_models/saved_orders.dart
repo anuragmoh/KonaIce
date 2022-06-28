@@ -20,6 +20,7 @@ class SavedOrders {
   num discount;
   num foodCost;
   num totalAmount;
+  num grandTotalAmount;
   String payment;
   String orderStatus;
   bool deleted;
@@ -47,6 +48,7 @@ class SavedOrders {
       required this.discount,
       required this.foodCost,
       required this.totalAmount,
+      required this.grandTotalAmount,
       this.payment = 'NA',
       required this.orderStatus,
       required this.deleted,
@@ -75,6 +77,7 @@ class SavedOrders {
       "discount": discount,
       "foodCost": foodCost,
       "totalAmount": totalAmount,
+      "grandTotal": grandTotalAmount,
       "payment": payment,
       "orderStatus": orderStatus,
       "deleted": deleted,
@@ -105,6 +108,7 @@ class SavedOrders {
         discount: map["discount"],
         foodCost: map["food_cost"],
         totalAmount: map["total_amount"],
+        grandTotalAmount: map["grand_total"],
         payment: map["payment"],
         orderStatus: map["order_status"],
         deleted: map["deleted"] == 1,
