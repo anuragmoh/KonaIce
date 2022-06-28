@@ -1297,6 +1297,9 @@ class _PaymentScreenState extends State<PaymentScreen>
           context: context);
       _phoneNumberController.clear();
       _emailController.clear();
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.receiptEmailProgress,
+          data: "Sucess" );
     } else {
       setState(() {
         _updatePaymentSuccess();
@@ -1331,6 +1334,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   //P2P Implemented Method
   @override
   void receivedDataFromP2P(P2PDataModel response) {
+    debugPrint('>>>>>>>>>>');
     if (response.action == CustomerActionConst.paymentModeSelected) {
       String modeType = response.data;
       setState(() {
@@ -1349,6 +1353,11 @@ class _PaymentScreenState extends State<PaymentScreen>
         _paymentStatusValue = response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
+    }
+    else if (response.action == StaffActionConst.receiptEmail) {
+      String emailFromCustomer=response.data;
+      _sendReciptMailOrSmsApiCall("", "", emailFromCustomer);
+      debugPrint('>>>>>>>>>>$emailFromCustomer');
     }
   }
 

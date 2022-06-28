@@ -221,6 +221,7 @@ class StringConstants {
   static const savedOrderSuccess = 'Order saved successfully!';
   static const profileUpdateSuccessfully = 'Profile saved successfully!';
   static const eventCreatedSuccessfully = "Adhoc event created successfully";
+  static const emailSendSuccessfully="Email sent successfully.";
 
   //Data not available messages
   static const eventNotAvailable =
