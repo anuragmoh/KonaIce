@@ -237,6 +237,8 @@ class _OrderCompleteState extends State<OrderComplete>
           });
         });
       }
+    }else if (response.action == StaffActionConst.goToSplash) {
+      _showSplashScreen();
     }
   }
 }

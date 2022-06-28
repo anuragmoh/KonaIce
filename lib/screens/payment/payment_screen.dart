@@ -1194,6 +1194,9 @@ class _PaymentScreenState extends State<PaymentScreen>
   _onTapNewOrder() {
     if (_isPaymentDone) {
       Navigator.of(context).pop(_getOrderInfoToSendBack(true));
+      P2PConnectionManager.shared.updateData(
+          action: StaffActionConst.goToSplash,
+          data: "goToSplash");
     }
   }
 

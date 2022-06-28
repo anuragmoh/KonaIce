@@ -60,7 +60,7 @@ class AssetsConstants {
   static const creditCardScan = assetsPath + 'ic_credit_card_scan.png';
   static const insertCardAnimationPath =
       assetsAnimationsPath + 'insertCard.json';
-  static const progressAnimationPath = assetsAnimationsPath + 'progress.json';
+  static const progressAnimationPath = assetsAnimationsPath + 'progress_new.json';
   static const removeCardAnimationPath =
       assetsAnimationsPath + 'removeCard.json';
 

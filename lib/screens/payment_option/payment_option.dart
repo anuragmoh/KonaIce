@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 // import 'package:blinkcard_flutter/microblink_scanner.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
@@ -76,15 +78,18 @@ class _PaymentOptionState extends State<PaymentOption>
                   Center(
                     child: Visibility(
                         visible: _isAnimation,
-                        child: Lottie.asset(
-                            _isProgress
-                                ? AssetsConstants.progressAnimationPath
-                                : _isInsertCard
-                                    ? AssetsConstants.insertCardAnimationPath
-                                    : AssetsConstants.removeCardAnimationPath,
-                            height: 350,
-                            width: 350,
-                            animate: true)),
+                        child: BackdropFilter(
+                          filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                          child: Lottie.asset(
+                              _isProgress
+                                  ? AssetsConstants.progressAnimationPath
+                                  : _isInsertCard
+                                      ? AssetsConstants.insertCardAnimationPath
+                                      : AssetsConstants.removeCardAnimationPath,
+                              height: 350,
+                              width: 350,
+                              animate: true),
+                        ),),
                   ),
                 ],
               ),
@@ -260,10 +265,7 @@ class _PaymentOptionState extends State<PaymentOption>
     } else if (response.action ==
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
-    } else if (response.action ==
-        StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
-      FunctionalUtils.showCustomerSplashScreen();
-    } else if (response.action == StaffActionConst.paymentStatus) {
+    }  else if (response.action == StaffActionConst.paymentStatus) {
       setState(() {
         if (response.data.toString() == StringConstants.paymentStatusSucc ||
             response.data.toString() == StringConstants.paymentStatusFailed) {
