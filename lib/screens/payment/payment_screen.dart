@@ -168,11 +168,11 @@ class _PaymentScreenState extends State<PaymentScreen>
   }
 
   _paymentStatus(status) async {
-    debugPrint("Payment Status: $status");
+    debugPrint("Payment Status1: $status");
     _paymentStatusValue = 'paymentStatus';
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.paymentStatus,
-        data: _paymentStatusValue.toString());
+        data: status);
   }
 
   _getPaymentToken(token) async {

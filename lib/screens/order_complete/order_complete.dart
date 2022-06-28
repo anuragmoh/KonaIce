@@ -59,58 +59,63 @@ class _OrderCompleteState extends State<OrderComplete>
       ),
     );
   }
-  Widget _paymentSuccess() => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const SizedBox(height: 68.0),
-          CommonWidgets().image(
-              image: AssetsConstants.success,
-              width: 9.3 * SizeConfig.imageSizeMultiplier,
-              height: 9.3 * SizeConfig.imageSizeMultiplier),
-          const SizedBox(height: 21.0),
-          CommonWidgets().textWidget(
-              StringConstants.orderCompleted,
-              StyleConstants.customTextStyle(
-                  fontSize: 22.0,
-                  color: AppColors.textColor1,
-                  fontFamily: FontConstants.montserratBold)),
-          const SizedBox(height: 8.0),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+  Widget _paymentSuccess() => SingleChildScrollView(
+    child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 68.0),
+            CommonWidgets().image(
+                image: AssetsConstants.success,
+                width: 9.3 * SizeConfig.imageSizeMultiplier,
+                height: 9.3 * SizeConfig.imageSizeMultiplier),
+            const SizedBox(height: 21.0),
             CommonWidgets().textWidget(
-                '${StringConstants.transactionId}:',
+                StringConstants.orderCompleted,
                 StyleConstants.customTextStyle(
-                    fontSize: 12.0,
+                    fontSize: 22.0,
                     color: AppColors.textColor1,
-                    fontFamily: FontConstants.montserratSemiBold)),
+                    fontFamily: FontConstants.montserratBold)),
+            const SizedBox(height: 8.0),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              CommonWidgets().textWidget(
+                  '${StringConstants.transactionId}:',
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: AppColors.textColor1,
+                      fontFamily: FontConstants.montserratSemiBold)),
+              CommonWidgets().textWidget(
+                  "35891456",
+                  StyleConstants.customTextStyle(
+                      fontSize: 12.0,
+                      color: AppColors.textColor1,
+                      fontFamily: FontConstants.montserratSemiBold)),
+            ]),
+            const SizedBox(height: 34.0),
             CommonWidgets().textWidget(
-                "35891456",
-                StyleConstants.customTextStyle(
-                    fontSize: 12.0,
-                    color: AppColors.textColor1,
-                    fontFamily: FontConstants.montserratSemiBold)),
-          ]),
-          const SizedBox(height: 34.0),
-          CommonWidgets().textWidget(
-              StringConstants.howWouldYouLikeToReceiveTheReceipt,
-              StyleConstants.customTextStyle16MonsterMedium(
-                  color: AppColors.textColor1)),
-          const SizedBox(height: 15.0),
-          _emailReceiptWidget(),
-          Container(
-            alignment: Alignment.center,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: 23.0,
-                  vertical: 3.90 * SizeConfig.heightSizeMultiplier),
-              child: CommonWidgets().buttonWidget(
-                StringConstants.okay,
-                _onTapOkay,
+                StringConstants.howWouldYouLikeToReceiveTheReceipt,
+                StyleConstants.customTextStyle16MonsterMedium(
+                    color: AppColors.textColor1)),
+            const SizedBox(height: 15.0),
+            _emailReceiptWidget(),
+            Container(
+              alignment: Alignment.center,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 23.0,
+                    vertical: 3.90 * SizeConfig.heightSizeMultiplier),
+                child: Visibility(
+                  visible: true,
+                  child: CommonWidgets().buttonWidget(
+                    StringConstants.okay,
+                    _onTapOkay,
+                  ),
+                ),
               ),
-            ),
-          )
-        ],
-      );
+            )
+          ],
+        ),
+  );
 
   _onTapOkay() {
     _showSplashScreen();
@@ -227,6 +232,9 @@ class _OrderCompleteState extends State<OrderComplete>
         _emailController.clear();
         setState(() {
           _isApiProcess = false;
+          Future.delayed(const Duration(seconds: 3), () {
+              _showSplashScreen();
+          });
         });
       }
     }
