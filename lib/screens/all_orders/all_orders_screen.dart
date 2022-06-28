@@ -413,7 +413,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
           DataCell(
             CommonWidgets().textView(
-                '\$ ${savedOrders.totalAmount}',
+                '\$ ${savedOrders.grandTotalAmount}',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: getMaterialColor(AppColors.textColor1),
@@ -1368,6 +1368,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           discount: 0.0,
           foodCost: event.orderInvoice!.foodTotal!,
           totalAmount: event.orderInvoice!.total!,
+          grandTotalAmount: event.orderInvoice!.grandTotal!,
           payment: event.paymentStatus!,
           orderStatus: event.orderStatus!,
           deleted: false,

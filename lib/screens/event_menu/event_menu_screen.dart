@@ -1496,6 +1496,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         discount: _discount,
         foodCost: totalAmountOfSelectedItems,
         totalAmount: totalAmount,
+        grandTotalAmount: 0.0,
         payment: "NA",
         orderStatus: "saved",
         deleted: false,
