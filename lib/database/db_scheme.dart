@@ -262,6 +262,7 @@ class DBScheme {
    zip_code character varying(50),
    order_date bigint,
    tip numeric(12,2),
+   tax_amount numeric(12,2),
    discount numeric(12,2),
    food_cost numeric(12,2),
    total_amount numeric(12,2),

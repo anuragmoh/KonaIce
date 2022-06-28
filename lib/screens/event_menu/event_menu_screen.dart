@@ -1493,6 +1493,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         zipCode: orderRequestModel.zipCode.toString(),
         orderDate: orderRequestModel.orderDate!,
         tip: _tip,
+        tax_amount: 0.0,
         discount: _discount,
         foodCost: totalAmountOfSelectedItems,
         totalAmount: totalAmount,
