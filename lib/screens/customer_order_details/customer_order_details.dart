@@ -66,9 +66,12 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                       visible: false,
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
-                        child: CommonWidgets().buttonWidgetUnFilled(
-                          StringConstants.addTip,
-                          _onAddTipButtonTap,
+                        child: Visibility(
+                          visible: false,
+                          child: CommonWidgets().buttonWidgetUnFilled(
+                            StringConstants.addTip,
+                            _onAddTipButtonTap,
+                          ),
                         ),
                       ),
                     ),

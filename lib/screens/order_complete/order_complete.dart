@@ -105,7 +105,7 @@ class _OrderCompleteState extends State<OrderComplete>
                     horizontal: 23.0,
                     vertical: 3.90 * SizeConfig.heightSizeMultiplier),
                 child: Visibility(
-                  visible: false,
+                  visible: true,
                   child: CommonWidgets().buttonWidget(
                     StringConstants.okay,
                     _onTapOkay,

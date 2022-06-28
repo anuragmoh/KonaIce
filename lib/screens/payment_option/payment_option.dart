@@ -28,6 +28,9 @@ class _PaymentOptionState extends State<PaymentOption>
   int _paymentModeType = -1;
   String _paymentStatus = "";
   bool _isAnimation = false;
+  bool _isInsertCard = false;
+  bool _isRemoveCard = false;
+  bool _isProgress = false;
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
   }
@@ -74,7 +77,11 @@ class _PaymentOptionState extends State<PaymentOption>
                     child: Visibility(
                         visible: _isAnimation,
                         child: Lottie.asset(
-                            AssetsConstants.progressAnimationPath,
+                            _isProgress
+                                ? AssetsConstants.progressAnimationPath
+                                : _isInsertCard
+                                    ? AssetsConstants.insertCardAnimationPath
+                                    : AssetsConstants.removeCardAnimationPath,
                             height: 350,
                             width: 350,
                             animate: true)),
@@ -261,6 +268,12 @@ class _PaymentOptionState extends State<PaymentOption>
         if (response.data.toString() == StringConstants.paymentStatusSucc ||
             response.data.toString() == StringConstants.paymentStatusFailed) {
           _isAnimation = false;
+        } else if (response.data.toString() == "insertCard") {
+          _isInsertCard = true;
+        } else if (response.data.toString() == "removeCard") {
+          _isRemoveCard = true;
+        } else if (response.data.toString() == "progress") {
+          _isProgress = true;
         } else {
           _isAnimation = true;
         }
