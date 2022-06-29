@@ -36,6 +36,7 @@ import 'package:kona_ice_pos/utils/function_utils.dart';
 import 'package:kona_ice_pos/utils/loader.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/bonjour_utils.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
+import 'package:kona_ice_pos/utils/payment_utils.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
 
@@ -64,14 +65,17 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen>
-    implements OrderResponseContractor, P2PContractor, ResponseContractor {
+    implements
+        OrderResponseContractor,
+        P2PContractor,
+        ResponseContractor,
+        PaymentUtilsContractor {
   int _paymentModeType = -1;
   double _returnAmount = 0.0;
   double _receivedAmount = 0.0;
   double totalAmount = 0.0;
   num _tip = 0.0;
   double _salesTax = 0.0;
-  double _discount = 0.0;
   double _foodCost = 0.0;
   bool _isPaymentDone = false;
   int _receiptMode = 1;
@@ -81,17 +85,12 @@ class _PaymentScreenState extends State<PaymentScreen>
   String _finixSerialNumber = StringExtension.empty();
   String _finixUsername = StringExtension.empty();
   String _finixPassword = StringExtension.empty();
-  String _merchantIdNCP = StringExtension.empty();
-  String _finixNCPaymentToken = StringExtension.empty();
   String _paymentFailMessage = StringExtension.empty();
-  String _stripeTokenId = "", _stripePaymentMethodId = "";
   String _emailValidationMessage = "";
   String _smsValidationMessage = "";
   String _paymentStatusValue = "";
-  bool _isAnimation = false;
   String _countryCode = StringConstants.usCountryCode;
 
-  // FinixResponseModel _finixResponse = FinixResponseModel();
   FinixAuthResponseModel _finixResponse = FinixAuthResponseModel();
 
   TextEditingController _amountReceivedController = TextEditingController();
@@ -101,15 +100,11 @@ class _PaymentScreenState extends State<PaymentScreen>
   late OrderPresenter _orderPresenter;
   bool _isApiProcess = false;
   PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
-  late PaymentPresenter _paymentPresenter;
-
-  static const MethodChannel _cardPaymentChannel =
-      MethodChannel("com.mobisoft.konaicepos/cardPayment");
 
   _PaymentScreenState() {
     _orderPresenter = OrderPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
-    _paymentPresenter = PaymentPresenter(this);
+    PaymentUtils.shared.getPaymentUtilsContractor(this);
   }
 
   @override
@@ -118,7 +113,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     totalAmount = widget.billDetails['totalAmount'];
     _tip = widget.billDetails['tip'];
     debugPrint('>>>>>>>>>>>>$_tip');
-    _discount = widget.billDetails['discount'];
     _foodCost = widget.billDetails['foodCost'];
     _salesTax = widget.billDetails['salesTax'];
     if (widget.placeOrderRequestModel.id != null &&
@@ -127,18 +121,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
     _getFinixdetailsValues();
     _callPlaceOrderAPI();
-    _cardPaymentChannel.setMethodCallHandler((call) async {
-      debugPrint("init state setMethodCallHandler ${call.method}");
-      if (call.method == "paymentSuccess") {
-        _paymentSuccess(call.arguments.toString());
-      } else if (call.method == "paymentFailed") {
-        _paymentFailed();
-      } else if (call.method == "paymentStatus") {
-        _paymentStatus(call.arguments.toString());
-      } else if (call.method == "getPaymentToken") {
-        _getPaymentToken(call.arguments.first);
-      }
-    });
   }
 
   _paymentSuccess(msg) async {
@@ -148,12 +130,11 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isPaymentDone = true;
     });
     _finixResponse = finixAuthResponseModelFromJson(msg);
-    // _finixResponse = finixResponseFromJson(msg);
     _paymentStatusValue = 'paymentSuccess';
     P2PConnectionManager.shared.updateData(
         action: StaffActionConst.paymentStatus,
         data: _paymentStatusValue.toString());
-    //Finix recipt Api Call
+    //Finix receipt Api Call
     PayReceipt payReceipt = _getPayReceiptModel(false);
   }
 
@@ -173,14 +154,12 @@ class _PaymentScreenState extends State<PaymentScreen>
   _paymentStatus(status) async {
     debugPrint("Payment Status1: $status");
     _paymentStatusValue = 'paymentStatus';
-    P2PConnectionManager.shared.updateData(
-        action: StaffActionConst.paymentStatus,
-        data: status);
+    P2PConnectionManager.shared
+        .updateData(action: StaffActionConst.paymentStatus, data: status);
   }
 
   _getPaymentToken(token) async {
     debugPrint("Payment Token: $token");
-    _finixNCPaymentToken = token;
 
     if (token.toString().isNotEmpty) {
       _finixManualApiCall();
@@ -492,7 +471,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               )),
           SingleChildScrollView(
               child: _isPaymentDone
-                  ? paymentSuccess(StringConstants.dummyOrder)
+                  ? getPaymentSuccess(StringConstants.dummyOrder)
                   : const Text('')),
         ]),
       );
@@ -548,7 +527,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         ),
       );
 
-  Widget paymentSuccess(String transactionId) => Column(
+  Widget getPaymentSuccess(String transactionId) => Column(
         children: [
           const SizedBox(height: 68.0),
           CommonWidgets().image(
@@ -1164,7 +1143,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     _finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     _finixUsername = await FunctionalUtils.getFinixUserName();
     _finixPassword = await FunctionalUtils.getFinixPassword();
-    _merchantIdNCP = await FunctionalUtils.getFinixMerchantIdNCP();
   }
 
   Future _performCardPayment() async {
@@ -1191,7 +1169,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       FinixTagsKey.serialNumber.name: _finixSerialNumber,
       FinixTagsKey.tags.name: tags
     };
-    await _cardPaymentChannel.invokeListMethod('performCardPayment', values);
+    await PaymentUtils.performPayment(values);
   }
 
   _onTapNewOrder() {
@@ -1304,8 +1282,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       _phoneNumberController.clear();
       _emailController.clear();
       P2PConnectionManager.shared.updateData(
-          action: StaffActionConst.receiptEmailProgress,
-          data: "Sucess" );
+          action: StaffActionConst.receiptEmailProgress, data: "Sucess");
     } else {
       setState(() {
         _updatePaymentSuccess();
@@ -1352,16 +1329,13 @@ class _PaymentScreenState extends State<PaymentScreen>
     } else if (response.action == CustomerActionConst.editOrderDetails) {
       _showEventMenuScreen();
     } else if (response.action == StaffActionConst.paymentStatus) {
-      setState(() {
-        _isAnimation = true;
-      });
+      setState(() {});
       setState(() {
         _paymentStatusValue = response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
-    }
-    else if (response.action == StaffActionConst.receiptEmail) {
-      String emailFromCustomer=response.data;
+    } else if (response.action == StaffActionConst.receiptEmail) {
+      String emailFromCustomer = response.data;
       _sendReciptMailOrSmsApiCall("", "", emailFromCustomer);
       debugPrint('>>>>>>>>>>$emailFromCustomer');
     }
@@ -1370,16 +1344,16 @@ class _PaymentScreenState extends State<PaymentScreen>
   //FinixMannual CardDetails
   _onTapConfirmPayment(String cardNumber, int expirationYear, int cardCvvNumber,
       int cardExpiryMonth, String zipcode) async {
-    final valuesCardDetails = {
+    final cardDetails = {
       CardDetails.cardNumber.name: cardNumber,
       CardDetails.expirationYear.name: expirationYear,
       CardDetails.expirationMonth.name: cardExpiryMonth,
       CardDetails.cvv.name: cardCvvNumber,
       CardDetails.zipcode.name: zipcode
     };
-    debugPrint(valuesCardDetails.toString());
-    await _cardPaymentChannel.invokeListMethod(
-        'getPaymentToken', valuesCardDetails);
+    debugPrint(cardDetails.toString());
+
+    await PaymentUtils.getToken(cardDetails);
   }
 
   //ApiCall After getting Manual Card token
@@ -1512,8 +1486,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
 
     setState(() {
-      double? newAmount = _finixResponse
-          .finixCaptureResponse?.amount;
+      double? newAmount = _finixResponse.finixCaptureResponse?.amount;
       _isApiProcess = true;
       _tip = _finixResponse.tipAmount;
       totalAmount = newAmount!;
@@ -1583,5 +1556,30 @@ class _PaymentScreenState extends State<PaymentScreen>
       _isApiProcess = true;
     });
     _orderPresenter.finixSendReceipt(_orderID, finixSendReceiptRequest);
+  }
+
+  @override
+  void getPaymentToken(response) {
+    _getPaymentToken(response.arguments.first);
+  }
+
+  @override
+  void paymentFailed(response) {
+    _paymentFailed();
+  }
+
+  @override
+  void paymentStatus(response) {
+    _paymentStatus(response);
+  }
+
+  @override
+  void paymentSuccess(response) {
+    _paymentSuccess(response);
+  }
+
+  @override
+  void getCustomerEnteredTipAmount(double amount) {
+    debugPrint("Customer Entered Tip Amount $amount");
   }
 }

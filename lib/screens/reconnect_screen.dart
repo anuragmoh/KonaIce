@@ -266,4 +266,3 @@ class _ReconnectScreenDialogState extends State<ReconnectScreenDialog> {
     }
   }
 }
-

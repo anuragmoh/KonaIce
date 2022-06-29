@@ -20,6 +20,6 @@ class StaffActionConst {
   static const tip = "tip";
   static const paymentStatus = "paymentStatus";
   static const receiptEmail = "receiptEmail";
-  static const receiptEmailProgress="receiptEmailProgress";
-  static const goToSplash="goToSplash";
+  static const receiptEmailProgress = "receiptEmailProgress";
+  static const goToSplash = "goToSplash";
 }

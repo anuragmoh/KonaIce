@@ -45,7 +45,8 @@ class _OrderCompleteState extends State<OrderComplete>
   Widget build(BuildContext context) {
     return Loader(isCallInProgress: _isApiProcess, child: _mainUi(context));
   }
-  Widget _mainUi(BuildContext context){
+
+  Widget _mainUi(BuildContext context) {
     return Scaffold(
       body: Container(
         color: AppColors.textColor3.withOpacity(0.2),
@@ -59,8 +60,9 @@ class _OrderCompleteState extends State<OrderComplete>
       ),
     );
   }
+
   Widget _paymentSuccess() => SingleChildScrollView(
-    child: Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -115,7 +117,7 @@ class _OrderCompleteState extends State<OrderComplete>
             )
           ],
         ),
-  );
+      );
 
   _onTapOkay() {
     _showSplashScreen();
@@ -225,19 +227,18 @@ class _OrderCompleteState extends State<OrderComplete>
   void receivedDataFromP2P(P2PDataModel response) {
     debugPrint("EmailsResponse{$response}");
     if (response.action == StaffActionConst.receiptEmailProgress) {
-      if (response.data=="Sucess") {
+      if (response.data == "Sucess") {
         CommonWidgets().showSuccessSnackBar(
-            message: StringConstants.emailSendSuccessfully,
-            context: context);
+            message: StringConstants.emailSendSuccessfully, context: context);
         _emailController.clear();
         setState(() {
           _isApiProcess = false;
           Future.delayed(const Duration(seconds: 3), () {
-              _showSplashScreen();
+            _showSplashScreen();
           });
         });
       }
-    }else if (response.action == StaffActionConst.goToSplash) {
+    } else if (response.action == StaffActionConst.goToSplash) {
       _showSplashScreen();
     }
   }

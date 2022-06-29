@@ -55,6 +55,16 @@ import PaymentsSDK
                 self.getFinixPaymentToken(cardNumber: cardNumber, expMonth: expMonth, expYear: expYear, cvv: cvv, zipcode: zipcode) { token in
                     self.cardPaymentChannel.invokeMethod("getPaymentToken", arguments: [token])
                 }
+            case "showTipScreen":
+                self.loadTipView(nil)
+           
+            case "captureTipAmount":
+                guard let args = call.arguments as? [String: Any] else { return }
+                let tipAmount = args["tipAmount"] as? Double ?? 0
+                NotificationCenter.default.post(name: Notification.Name("CapturePayment"),
+                                                object: nil,
+                                                userInfo: ["tip": tipAmount])
+                
             default: result(FlutterMethodNotImplemented)
             }
         })
@@ -75,17 +85,20 @@ import PaymentsSDK
         window.rootViewController?.present(navigationController, animated: true)
     }
     
-    func loadTipView(_ amount: Double) {
+    func loadTipView(_ amount: Double?) {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         guard let tipViewController = storyBoard.instantiateViewController(withIdentifier: "TipViewController") as? TipViewController else { return }
         
-        tipViewController.billAmount = amount
+        if(amount != nil) {
+            tipViewController.billAmount = amount
+        }
         tipViewController.view.backgroundColor = UIColor.clear
         tipViewController.modalPresentationStyle = .overFullScreen
         
-        tipViewController.selectedTipAmount = { (tipAmount) in
+        tipViewController.selectedTipAmount = { [weak self] (tipAmount) in
             print(tipAmount)
+            self?.cardPaymentChannel.invokeMethod("getTipAmount", arguments: [tipAmount])
         }
         
         window.rootViewController?.present(tipViewController, animated: true)

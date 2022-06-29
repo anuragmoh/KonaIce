@@ -197,18 +197,9 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             self.showTransactionAnimationView(with: .progress)
             
+            self.tipAmount = tipAmount
+
             self.performCapture()
-            
-            /*self.tipAmount = tipAmount
-            
-            if tipAmount > 0 {
-                
-                self.performVoid()
-                
-            } else {
-                
-                self.performCapture()
-            }*/
         }
         
         DispatchQueue.main.async {
@@ -450,6 +441,8 @@ extension PaymentViewController: FinixHelperDelegate {
         DispatchQueue.main.async {
             self.statusLabel.text = "==========Authorization Response Success With Receipt: \(String(describing: authorizationResponseModel))=========="
         }
+        // Update Payment Status
+        AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentStatus", arguments: ["authorizationSuccess"])
         
         let jsonEncoder = JSONEncoder()
         
@@ -471,6 +464,8 @@ extension PaymentViewController: FinixHelperDelegate {
                     self.loadTipView(payment.amount)
                     
                 } else {
+                    
+                    self.showTransactionAnimationView(with: .progress)
                     
                     self.performCapture()
                 }
