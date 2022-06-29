@@ -274,7 +274,7 @@ class FinixHelper {
     }
     
     func performVoid(authorizationId: String) {
-                
+        
         FinixClient.shared.voidAuthorization(authorizationId: authorizationId) { response, error in
             
             guard let response = response else {
@@ -292,7 +292,7 @@ class FinixHelper {
             let responseText = String(describing: response)
             
             if response.success {
-                                
+                
                 print(items:"==========Success void response: \(responseText), Trace Id: \(response.id)==========")
                 
                 if let delegate = self.finixHelperDelegate {

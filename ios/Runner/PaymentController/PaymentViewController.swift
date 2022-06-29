@@ -35,6 +35,26 @@ class PaymentViewController: UIViewController, ShowAlert {
         performPayment()
     }
     
+    func registerObserver() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.customerEnteredTipNotification(notification:)),
+                                               name: Notification.Name("CustomerEnteredTip"),
+                                               object: nil)
+    }
+    
+    @objc func customerEnteredTipNotification(notification: Notification) {
+        
+        if let userInfo = notification.userInfo {
+            
+            if let customerTipAmount = userInfo["tip"] as? Double {
+                
+                self.tipAmount = customerTipAmount
+                
+                self.performCapture()
+            }
+        }
+    }
+    
     func setupView() {
         
         addVisualEffectBlurrView()

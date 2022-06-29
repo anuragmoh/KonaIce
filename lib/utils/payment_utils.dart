@@ -22,8 +22,10 @@ class PaymentUtils {
     _cardPaymentChannel.setMethodCallHandler((call) async {
       debugPrint("init state setMethodCallHandler ${call.method}");
       if (call.method == "paymentSuccess") {
+        debugPrint("Payment Success!");
         _view.paymentSuccess(call.arguments.toString());
       } else if (call.method == "paymentFailed") {
+        debugPrint("Payment Failed!");
         _view.paymentFailed("");
       } else if (call.method == "paymentStatus") {
         _view.paymentStatus(call.arguments.toString());
