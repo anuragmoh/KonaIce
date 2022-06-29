@@ -159,6 +159,9 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _paymentFailed() async {
     debugPrint("Payment Failure");
+    setState(() {
+      _paymentModeType=-1;
+    });
     showDialog(
         barrierColor: AppColors.textColor1.withOpacity(0.7),
         context: context,
@@ -1196,7 +1199,7 @@ class _PaymentScreenState extends State<PaymentScreen>
       Navigator.of(context).pop(_getOrderInfoToSendBack(true));
       P2PConnectionManager.shared.updateData(
           action: StaffActionConst.goToSplash,
-          data: "goToSplash");
+          data: StringConstants.goToSplash);
     }
   }
 
