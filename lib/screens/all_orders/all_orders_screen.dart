@@ -752,7 +752,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             visible: eventName.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
-              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
                     '${StringConstants.tip}: ',
                     StyleConstants.customTextStyle(
