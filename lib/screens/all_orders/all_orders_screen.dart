@@ -755,14 +755,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               child:
                   Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 CommonWidgets().textView(
-                    '${StringConstants.tip}: ',
+                    '${StringConstants.tip} ',
                     StyleConstants.customTextStyle(
                         fontSize: 9.0,
                         color: AppColors.textColor1.toMaterialColor(),
                         fontFamily: FontConstants.montserratRegular)),
                 Expanded(
                     child: CommonWidgets().textView(
-                        tip,
+                        "\$$tip",
                         StyleConstants.customTextStyle(
                             fontSize: 9.0,
                             color: AppColors.textColor2.toMaterialColor(),
@@ -774,14 +774,14 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
             visible: eventName.isNotEmpty,
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               CommonWidgets().textView(
-                  '${StringConstants.salesTax}: ',
+                  '${StringConstants.salesTax} ',
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
                       color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratRegular)),
               Expanded(
                   child: CommonWidgets().textView(
-                      taxAmount,
+                      "\$$taxAmount",
                       StyleConstants.customTextStyle(
                           fontSize: 9.0,
                           color: AppColors.textColor2.toMaterialColor(),
@@ -997,7 +997,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
         context: context,
         builder: (context) {
           return RefundPopup(
-              amount: _savedOrdersList[_selectedRow].totalAmount);
+              amount: _savedOrdersList[_selectedRow].grandTotalAmount);
         }).then((value) {
       String amount = value['totalAmount'];
       double totalAmount = double.parse(amount);
