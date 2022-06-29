@@ -18,6 +18,8 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../utils/payment_utils.dart';
+
 class PaymentOption extends StatefulWidget {
   const PaymentOption({Key? key}) : super(key: key);
 
@@ -26,15 +28,17 @@ class PaymentOption extends StatefulWidget {
 }
 
 class _PaymentOptionState extends State<PaymentOption>
-    implements P2PContractor {
+    implements P2PContractor, PaymentUtilsContractor{
   int _paymentModeType = -1;
   String _paymentStatus = "";
   bool _isAnimation = false;
   bool _isInsertCard = false;
   bool _isRemoveCard = false;
   bool _isProgress = false;
+  bool _isShowTipScreen = false;
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
+    PaymentUtils.shared.getPaymentUtilsContractor(this);
   }
   bool _isApiProcess = false;
 
@@ -250,6 +254,11 @@ class _PaymentOptionState extends State<PaymentOption>
         .updateData(action: CustomerActionConst.editOrderDetails);
   }
 
+
+  _showTipCustomerScreen() async {
+    await PaymentUtils.showTipScreen();
+  }
+
   @override
   void receivedDataFromP2P(P2PDataModel response) {
     if (response.action == StaffActionConst.paymentModeSelected) {
@@ -274,10 +283,17 @@ class _PaymentOptionState extends State<PaymentOption>
           _isAnimation = false;
         } else if (response.data.toString() == "insertCard") {
           _isInsertCard = true;
+          _isAnimation = true;
         } else if (response.data.toString() == "removeCard") {
           _isRemoveCard = true;
+          _isAnimation = true;
         } else if (response.data.toString() == "progress") {
           _isProgress = true;
+          _isAnimation = true;
+        }else if (response.data.toString() == "authorizationSuccess") {
+          _isShowTipScreen = true;
+          _isAnimation=false;
+          _showTipCustomerScreen();
         } else {
           _isAnimation = true;
         }
@@ -287,5 +303,39 @@ class _PaymentOptionState extends State<PaymentOption>
       });
       debugPrint('response--->' + response.data.toString());
     }
+  }
+
+  @override
+  Future<void> getCustomerEnteredTipAmount(double amount) async {
+    final values = {
+      "tipAmount": amount
+    };
+    debugPrint(amount.toString());
+    setState(() {
+      _isProgress = true;
+      _isAnimation=true;
+    });
+    await PaymentUtils.captureTipAmount(values);
+
+  }
+
+  @override
+  void getPaymentToken(response) {
+    // TODO: implement getPaymentToken
+  }
+
+  @override
+  void paymentFailed(response) {
+    // TODO: implement paymentFailed
+  }
+
+  @override
+  void paymentStatus(response) {
+    // TODO: implement paymentStatus
+  }
+
+  @override
+  void paymentSuccess(response) {
+    // TODO: implement paymentSuccess
   }
 }
