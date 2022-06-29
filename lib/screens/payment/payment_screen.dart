@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -1343,7 +1345,14 @@ class _PaymentScreenState extends State<PaymentScreen>
       String emailFromCustomer = response.data;
       _sendReciptMailOrSmsApiCall("", "", emailFromCustomer);
       debugPrint('>>>>>>>>>>$emailFromCustomer');
+    } else if (response.action == CustomerActionConst.tipAmountConfirmation) {
+      _tipAmountConfirmation(response.data);
     }
+  }
+
+  _tipAmountConfirmation(String amount) async {
+    final values = {"tipAmount": double.parse(amount)};
+    await PaymentUtils.captureTipAmount(values);
   }
 
   //FinixMannual CardDetails

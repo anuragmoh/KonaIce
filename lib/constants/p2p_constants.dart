@@ -4,6 +4,7 @@ class CustomerActionConst {
   static const editOrderDetails = "editOrderDetails";
   static const tip = "tip";
   static const paymentStatus = "paymentStatus";
+  static const tipAmountConfirmation = "tipAmountConfirmation";
 }
 
 class StaffActionConst {

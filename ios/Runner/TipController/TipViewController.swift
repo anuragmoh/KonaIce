@@ -55,6 +55,10 @@ class TipViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.customerPaymentNotification(_:)),
                                                name: Notification.Name("CapturePayment"),
                                                object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.dismissView),
+                                               name: Notification.Name("PaymentSuccess"),
+                                               object: nil)
     }
     
     @objc func customerPaymentNotification(_ notification: Notification) {
@@ -63,8 +67,10 @@ class TipViewController: UIViewController {
             
             if let customerTipAmount = userInfo["tipAmount"] as? Double {
                 
-                self.customAmountTextField.text = String(customerTipAmount)
-                self.confirmButtonTapped()
+                DispatchQueue.main.async {
+                    self.customAmountTextField.text = String(customerTipAmount)
+                    self.confirmButtonTapped()
+                }
             }
         }
     }
@@ -229,14 +235,13 @@ class TipViewController: UIViewController {
         }
     }
     
-    func dismissView() {
+    @objc func dismissView() {
         if(self.navigationController?.viewControllers.count ?? 0 > 0) {
             self.navigationController?.popViewController(animated: false)
         } else {
             self.dismiss(animated: true)
         }
     }
-    
     
     /*
      // MARK: - Navigation

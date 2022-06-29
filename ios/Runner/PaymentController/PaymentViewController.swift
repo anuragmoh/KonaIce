@@ -195,6 +195,8 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             print(tipAmount)
             
+            // AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentStatus", arguments: [TransactionAnimationName.progress.rawValue])
+            
             self.showTransactionAnimationView(with: .progress)
             
             self.tipAmount = tipAmount

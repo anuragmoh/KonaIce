@@ -63,7 +63,12 @@ import PaymentsSDK
                 let tipAmount = args["tipAmount"] as? Double ?? 0
                 NotificationCenter.default.post(name: Notification.Name("CapturePayment"),
                                                 object: nil,
-                                                userInfo: ["tip": tipAmount])
+                                                userInfo: ["tipAmount": tipAmount])
+                
+            case "paymentSuccess":
+                NotificationCenter.default.post(name: Notification.Name("PaymentSuccess"),
+                                                object: nil,
+                                                userInfo: nil)
                 
             default: result(FlutterMethodNotImplemented)
             }

@@ -258,8 +258,14 @@ class _PaymentOptionState extends State<PaymentOption>
       FunctionalUtils.showCustomerSplashScreen();
     } else if (response.action == StaffActionConst.paymentStatus) {
       debugPrint('=======${response.data.toString()}');
-      if (response.data.toString() == StringConstants.paymentStatusSucc ||
-          response.data.toString() == StringConstants.paymentStatusFailed) {
+      if (response.data.toString() == StringConstants.paymentStatusSucc) {
+        setState(() {
+          _isAnimation = false;
+        });
+        dismissView();
+        _showPaymentSuccessScreen();
+      } else if (response.data.toString() ==
+          StringConstants.paymentStatusFailed) {
         setState(() {
           _isAnimation = false;
         });
@@ -292,6 +298,10 @@ class _PaymentOptionState extends State<PaymentOption>
     }
   }
 
+  dismissView() async {
+    await PaymentUtils.paymentSuccess();
+  }
+
   @override
   Future<void> getCustomerEnteredTipAmount(double amount) async {
     final values = {"tipAmount": amount};
@@ -300,7 +310,9 @@ class _PaymentOptionState extends State<PaymentOption>
       _animationFileName = AssetsConstants.progressAnimationPath;
       _isAnimation = true;
     });
-    await PaymentUtils.captureTipAmount(values);
+    P2PConnectionManager.shared.updateData(
+        action: CustomerActionConst.tipAmountConfirmation,
+        data: amount.toString());
   }
 
   @override

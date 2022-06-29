@@ -29,7 +29,7 @@ class PaymentUtils {
         debugPrint("Payment Failed!");
         _view.paymentFailed("");
       } else if (call.method == "paymentStatus") {
-        _view.paymentStatus(call.arguments.toString());
+        _view.paymentStatus(call.arguments.first);
       } else if (call.method == "getPaymentToken") {
         _view.getPaymentToken(call.arguments.first);
       } else if (call.method == "getTipAmount") {
@@ -53,5 +53,9 @@ class PaymentUtils {
 
   static captureTipAmount(Map<String, Object> details) async {
     await _cardPaymentChannel.invokeListMethod('captureTipAmount', details);
+  }
+
+  static paymentSuccess() async {
+    await _cardPaymentChannel.invokeListMethod('paymentSuccess');
   }
 }
