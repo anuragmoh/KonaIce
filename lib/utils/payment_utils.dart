@@ -50,4 +50,8 @@ class PaymentUtils {
   static showTipScreen() async {
     await _cardPaymentChannel.invokeListMethod('showTipScreen');
   }
+
+  static captureTipAmount(Map<String, Object> details) async {
+    await _cardPaymentChannel.invokeListMethod('captureTipAmount', details);
+  }
 }

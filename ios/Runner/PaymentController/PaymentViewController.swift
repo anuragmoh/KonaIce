@@ -37,18 +37,18 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     func registerObserver() {
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.customerEnteredTipNotification(notification:)),
-                                               name: Notification.Name("CustomerEnteredTip"),
+        NotificationCenter.default.addObserver(self, selector: #selector(self.customerPaymentNotification(_:)),
+                                               name: Notification.Name("CapturePayment"),
                                                object: nil)
     }
     
-    @objc func customerEnteredTipNotification(notification: Notification) {
+    @objc func customerPaymentNotification(_ notification: Notification) {
         
         self.navigationController?.popViewController(animated: false)
         
         if let userInfo = notification.userInfo {
             
-            if let customerTipAmount = userInfo["tip"] as? Double {
+            if let customerTipAmount = userInfo["tipAmount"] as? Double {
                 
                 self.showTransactionAnimationView(with: .progress)
                 

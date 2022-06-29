@@ -58,10 +58,12 @@ import PaymentsSDK
             case "showTipScreen":
                 self.loadTipView(nil)
            
-            case "customerEnteredTipAmount":
-                NotificationCenter.default.post(name: Notification.Name("CustomerEnteredTip"),
+            case "captureTipAmount":
+                guard let args = call.arguments as? [String: Any] else { return }
+                let tipAmount = args["tipAmount"] as? Double ?? 0
+                NotificationCenter.default.post(name: Notification.Name("CapturePayment"),
                                                 object: nil,
-                                                userInfo: ["tip": 3])
+                                                userInfo: ["tip": tipAmount])
                 
             default: result(FlutterMethodNotImplemented)
             }
@@ -96,7 +98,7 @@ import PaymentsSDK
         
         tipViewController.selectedTipAmount = { [weak self] (tipAmount) in
             print(tipAmount)
-            self?.cardPaymentChannel.invokeMethod("getTipAmount", arguments: tipAmount)
+            self?.cardPaymentChannel.invokeMethod("getTipAmount", arguments: [tipAmount])
         }
         
         window.rootViewController?.present(tipViewController, animated: true)
