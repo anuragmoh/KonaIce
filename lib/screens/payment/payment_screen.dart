@@ -156,6 +156,13 @@ class _PaymentScreenState extends State<PaymentScreen>
     _paymentStatusValue = 'paymentStatus';
     P2PConnectionManager.shared
         .updateData(action: StaffActionConst.paymentStatus, data: status);
+    Future.delayed(const Duration(seconds: 4), ()
+    {
+      setState(() {
+        P2PConnectionManager.shared
+            .updateData(action: StaffActionConst.paymentStatus, data: "insertCard");
+      });
+    });
   }
 
   _getPaymentToken(token) async {

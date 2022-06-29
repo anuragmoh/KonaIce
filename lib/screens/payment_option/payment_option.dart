@@ -263,21 +263,31 @@ class _PaymentOptionState extends State<PaymentOption>
         setState(() {
           _isAnimation = false;
         });
-        } else if (response.data.toString() == "insertCard") {
+      } else if (response.data.toString() == "insertCard") {
+        setState(() {
           _animationFileName = AssetsConstants.insertCardAnimationPath;
           _isAnimation = true;
-        } else if (response.data.toString() == "removeCard") {
+        });
+      } else if (response.data.toString() == "removeCard") {
+        setState(() {
           _animationFileName = AssetsConstants.removeCardAnimationPath;
           _isAnimation = true;
-        } else if (response.data.toString() == "progress") {
+        });
+      } else if (response.data.toString() == "progress") {
+        setState(() {
           _animationFileName = AssetsConstants.progressAnimationPath;
           _isAnimation = true;
-        } else if (response.data.toString() == "authorizationSuccess") {
+        });
+      } else if (response.data.toString() == "authorizationSuccess") {
+        setState(() {
           _isAnimation = false;
-          _showTipCustomerScreen();
-        } else {
+        });
+        _showTipCustomerScreen();
+      } else {
+        setState(() {
           _isAnimation = true;
-        }
+        });
+      }
       debugPrint('response--->' + response.data.toString());
     }
   }
