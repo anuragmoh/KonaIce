@@ -31,9 +31,8 @@ class _PaymentOptionState extends State<PaymentOption>
     implements P2PContractor, PaymentUtilsContractor {
   int _paymentModeType = -1;
   bool _isAnimation = false;
-  bool _isInsertCard = false;
-  bool _isProgress = false;
   bool _isApiProcess = false;
+  var _animationFileName = AssetsConstants.progressAnimationPath;
 
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
@@ -83,15 +82,8 @@ class _PaymentOptionState extends State<PaymentOption>
                       child: BackdropFilter(
                         filter:
                             new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                        child: Lottie.asset(
-                            _isProgress
-                                ? AssetsConstants.progressAnimationPath
-                                : _isInsertCard
-                                    ? AssetsConstants.insertCardAnimationPath
-                                    : AssetsConstants.removeCardAnimationPath,
-                            height: 350,
-                            width: 350,
-                            animate: true),
+                        child: Lottie.asset(_animationFileName,
+                            height: 350, width: 350, animate: true),
                       ),
                     ),
                   ),
@@ -273,12 +265,13 @@ class _PaymentOptionState extends State<PaymentOption>
             response.data.toString() == StringConstants.paymentStatusFailed) {
           _isAnimation = false;
         } else if (response.data.toString() == "insertCard") {
-          _isInsertCard = true;
+          _animationFileName = AssetsConstants.insertCardAnimationPath;
           _isAnimation = true;
         } else if (response.data.toString() == "removeCard") {
+          _animationFileName = AssetsConstants.removeCardAnimationPath;
           _isAnimation = true;
         } else if (response.data.toString() == "progress") {
-          _isProgress = true;
+          _animationFileName = AssetsConstants.progressAnimationPath;
           _isAnimation = true;
         } else if (response.data.toString() == "authorizationSuccess") {
           _isAnimation = false;
@@ -296,7 +289,7 @@ class _PaymentOptionState extends State<PaymentOption>
     final values = {"tipAmount": amount};
     debugPrint(amount.toString());
     setState(() {
-      _isProgress = true;
+      _animationFileName = AssetsConstants.progressAnimationPath;
       _isAnimation = true;
     });
     await PaymentUtils.captureTipAmount(values);
