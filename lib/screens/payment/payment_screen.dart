@@ -1319,6 +1319,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   @override
   void receivedDataFromP2P(P2PDataModel response) {
     debugPrint('>>>>>>>>>>');
+    debugPrint('Response>>>>>${response.action}Data>>>>>${response.data}');
     if (response.action == CustomerActionConst.paymentModeSelected) {
       String modeType = response.data;
       setState(() {

@@ -189,11 +189,6 @@ class _PaymentOptionState extends State<PaymentOption>
   _onTapPaymentMode(int index) {
     setState(() {
       _paymentModeType = index;
-      _updateSelectedPaymentMode();
-    });
-    setState(() {
-      _paymentModeType = index;
-      _updateSelectedPaymentMode();
     });
     if (_paymentModeType == PaymentModeConstants.creditCard) {
       P2PConnectionManager.shared.updateData(
@@ -208,6 +203,8 @@ class _PaymentOptionState extends State<PaymentOption>
       P2PConnectionManager.shared.updateData(
           action: CustomerActionConst.paymentModeSelected,
           data: PaymentModeConstants.creditCardManual.toString());
+    } else {
+      _updateSelectedPaymentMode();
     }
   }
 
@@ -260,9 +257,10 @@ class _PaymentOptionState extends State<PaymentOption>
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
     } else if (response.action == StaffActionConst.paymentStatus) {
-      setState(() {
-        if (response.data.toString() == StringConstants.paymentStatusSucc ||
-            response.data.toString() == StringConstants.paymentStatusFailed) {
+      debugPrint('=======${response.data.toString()}');
+      if (response.data.toString() == StringConstants.paymentStatusSucc ||
+          response.data.toString() == StringConstants.paymentStatusFailed) {
+        setState(() {
           _isAnimation = false;
         } else if (response.data.toString() == "insertCard") {
           _animationFileName = AssetsConstants.insertCardAnimationPath;
@@ -278,8 +276,8 @@ class _PaymentOptionState extends State<PaymentOption>
           _showTipCustomerScreen();
         } else {
           _isAnimation = true;
-        }
-      });
+        });
+      }
       debugPrint('response--->' + response.data.toString());
     }
   }
