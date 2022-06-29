@@ -35,30 +35,6 @@ class PaymentViewController: UIViewController, ShowAlert {
         performPayment()
     }
     
-    func registerObserver() {
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.customerPaymentNotification(_:)),
-                                               name: Notification.Name("CapturePayment"),
-                                               object: nil)
-    }
-    
-    @objc func customerPaymentNotification(_ notification: Notification) {
-        
-        self.navigationController?.popViewController(animated: false)
-        
-        if let userInfo = notification.userInfo {
-            
-            if let customerTipAmount = userInfo["tipAmount"] as? Double {
-                
-                self.showTransactionAnimationView(with: .progress)
-                
-                self.tipAmount = customerTipAmount
-                
-                self.performCapture()
-            }
-        }
-    }
-    
     func setupView() {
         
         addVisualEffectBlurrView()
@@ -221,18 +197,9 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             self.showTransactionAnimationView(with: .progress)
             
+            self.tipAmount = tipAmount
+
             self.performCapture()
-            
-            /*self.tipAmount = tipAmount
-            
-            if tipAmount > 0 {
-                
-                self.performVoid()
-                
-            } else {
-                
-                self.performCapture()
-            }*/
         }
         
         DispatchQueue.main.async {
@@ -474,6 +441,8 @@ extension PaymentViewController: FinixHelperDelegate {
         DispatchQueue.main.async {
             self.statusLabel.text = "==========Authorization Response Success With Receipt: \(String(describing: authorizationResponseModel))=========="
         }
+        // Update Payment Status
+        AppDelegate.delegate?.cardPaymentChannel.invokeMethod("paymentStatus", arguments: ["authorizationSuccess"])
         
         let jsonEncoder = JSONEncoder()
         

@@ -43,12 +43,31 @@ class TipViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        registerObservers()
         addVisualEffectBlurrView()
         setupView()
     }
     
+    func registerObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.customerPaymentNotification(_:)),
+                                               name: Notification.Name("CapturePayment"),
+                                               object: nil)
+    }
+    
+    @objc func customerPaymentNotification(_ notification: Notification) {
+        
+        if let userInfo = notification.userInfo {
+            
+            if let customerTipAmount = userInfo["tipAmount"] as? Double {
+                
+                self.customAmountTextField.text = String(customerTipAmount)
+                self.confirmButtonTapped()
+            }
+        }
+    }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
