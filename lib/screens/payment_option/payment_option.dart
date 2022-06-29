@@ -262,6 +262,7 @@ class _PaymentOptionState extends State<PaymentOption>
           response.data.toString() == StringConstants.paymentStatusFailed) {
         setState(() {
           _isAnimation = false;
+        });
         } else if (response.data.toString() == "insertCard") {
           _animationFileName = AssetsConstants.insertCardAnimationPath;
           _isAnimation = true;
@@ -276,8 +277,7 @@ class _PaymentOptionState extends State<PaymentOption>
           _showTipCustomerScreen();
         } else {
           _isAnimation = true;
-        });
-      }
+        }
       debugPrint('response--->' + response.data.toString());
     }
   }
