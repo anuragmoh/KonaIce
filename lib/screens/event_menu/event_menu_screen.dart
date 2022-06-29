@@ -656,10 +656,13 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   hintText: StringConstants.applyCoupon,
                   imageName: AssetsConstants.couponIcon,
                   controller: _applyCouponTextFieldController)),
-          _commonTextFieldContainer(
-              hintText: StringConstants.addTip,
-              imageName: AssetsConstants.dollarIcon,
-              controller: _addTipTextFieldController),
+          Visibility(
+            visible: false,
+            child: _commonTextFieldContainer(
+                hintText: StringConstants.addTip,
+                imageName: AssetsConstants.dollarIcon,
+                controller: _addTipTextFieldController),
+          ),
           _orderBillDetailContainer(),
         ],
       ),
@@ -680,7 +683,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
               text: StringConstants.salesTax, price: _getSalesTax()),
           _commonOrderBillComponents(
               text: StringConstants.subTotal, price: _getSubTotal()),
-          _commonOrderBillComponents(text: StringConstants.tip, price: _tip),
+     /*     _commonOrderBillComponents(text: StringConstants.tip, price: _tip),*/
           Visibility(
             visible: false,
             child: _commonOrderBillComponents(
@@ -1428,9 +1431,11 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         zipCode: orderRequestModel.zipCode.toString(),
         orderDate: orderRequestModel.orderDate!,
         tip: _tip,
+        tax_amount: 0.0,
         discount: _discount,
         foodCost: totalAmountOfSelectedItems,
         totalAmount: totalAmount,
+        grandTotalAmount: 0.0,
         payment: "NA",
         orderStatus: "saved",
         deleted: false,

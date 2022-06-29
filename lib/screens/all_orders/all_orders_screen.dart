@@ -384,7 +384,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
           DataCell(
             CommonWidgets().textView(
-                '\$ ${savedOrders.totalAmount}',
+                '\$ ${savedOrders.grandTotalAmount}',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: AppColors.textColor1.toMaterialColor(),
@@ -603,6 +603,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
               : StringExtension.empty(),
           posPaymentMethod: _selectedRow != -1
               ? _savedOrdersList[_selectedRow].posPaymentMethod
+              : StringExtension.empty(),
+          tip: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].tip.toString()
+              : StringExtension.empty(),
+          taxAmount: _selectedRow != -1
+              ? _savedOrdersList[_selectedRow].tax_amount.toString()
               : StringExtension.empty()),
     );
   }
@@ -645,7 +651,9 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           required String email,
           required String storeAddress,
           required String phone,
-          required String posPaymentMethod}) =>
+          required String posPaymentMethod,
+          required String tip,
+          required String taxAmount}) =>
       Column(
         children: [
           Visibility(
@@ -716,23 +724,69 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
           Visibility(
             visible: eventName.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                CommonWidgets().textView(
+                    '${StringConstants.eventAddress}: ',
+                    StyleConstants.customTextStyle(
+                        fontSize: 9.0,
+                        color: AppColors.textColor1.toMaterialColor(),
+                        fontFamily: FontConstants.montserratRegular)),
+                Expanded(
+                    child: CommonWidgets().textView(
+                        storeAddress,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: AppColors.textColor2.toMaterialColor(),
+                            fontFamily: FontConstants.montserratMedium))),
+              ]),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: _buildPaymentRow(posPaymentMethod),
+          ),
+          Visibility(
+            visible: eventName.isNotEmpty,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                CommonWidgets().textView(
+                    '${StringConstants.tip}: ',
+                    StyleConstants.customTextStyle(
+                        fontSize: 9.0,
+                        color: AppColors.textColor1.toMaterialColor(),
+                        fontFamily: FontConstants.montserratRegular)),
+                Expanded(
+                    child: CommonWidgets().textView(
+                        tip,
+                        StyleConstants.customTextStyle(
+                            fontSize: 9.0,
+                            color: AppColors.textColor2.toMaterialColor(),
+                            fontFamily: FontConstants.montserratMedium))),
+              ]),
+            ),
+          ),
+          Visibility(
+            visible: eventName.isNotEmpty,
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               CommonWidgets().textView(
-                  '${StringConstants.eventAddress}: ',
+                  '${StringConstants.salesTax}: ',
                   StyleConstants.customTextStyle(
                       fontSize: 9.0,
                       color: AppColors.textColor1.toMaterialColor(),
                       fontFamily: FontConstants.montserratRegular)),
               Expanded(
                   child: CommonWidgets().textView(
-                      storeAddress,
+                      taxAmount,
                       StyleConstants.customTextStyle(
                           fontSize: 9.0,
                           color: AppColors.textColor2.toMaterialColor(),
                           fontFamily: FontConstants.montserratMedium))),
             ]),
           ),
-          _buildPaymentRow(posPaymentMethod),
         ],
       );
 
@@ -1326,10 +1380,12 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           city: event.city.toString(),
           zipCode: event.zipCode.toString(),
           orderDate: event.orderDate!,
-          tip: 0.0,
+          tip: event.orderInvoice!.gratuity! /*0.0*/,
+          tax_amount: event.orderInvoice!.taxAmount!,
           discount: 0.0,
           foodCost: event.orderInvoice!.foodTotal!,
           totalAmount: event.orderInvoice!.total!,
+          grandTotalAmount: event.orderInvoice!.grandTotal!,
           payment: event.paymentStatus!,
           orderStatus: event.orderStatus!,
           deleted: false,

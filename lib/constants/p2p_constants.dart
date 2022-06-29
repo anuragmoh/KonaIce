@@ -19,4 +19,7 @@ class StaffActionConst {
   static const customerCardScan = "customerCardScan";
   static const tip = "tip";
   static const paymentStatus = "paymentStatus";
+  static const receiptEmail = "receiptEmail";
+  static const receiptEmailProgress="receiptEmailProgress";
+  static const goToSplash="goToSplash";
 }

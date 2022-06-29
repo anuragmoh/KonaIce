@@ -17,9 +17,11 @@ class SavedOrders {
   String zipCode;
   int orderDate;
   num tip;
+  num tax_amount;
   num discount;
   num foodCost;
   num totalAmount;
+  num grandTotalAmount;
   String payment;
   String orderStatus;
   bool deleted;
@@ -44,9 +46,11 @@ class SavedOrders {
       this.zipCode = "NA",
       required this.orderDate,
       required this.tip,
+      required this.tax_amount,
       required this.discount,
       required this.foodCost,
       required this.totalAmount,
+      required this.grandTotalAmount,
       this.payment = 'NA',
       required this.orderStatus,
       required this.deleted,
@@ -72,9 +76,11 @@ class SavedOrders {
       "zipCode": zipCode,
       "orderDate": orderDate,
       "tip": tip,
+      "tax_amount": tax_amount,
       "discount": discount,
       "foodCost": foodCost,
       "totalAmount": totalAmount,
+      "grandTotal": grandTotalAmount,
       "payment": payment,
       "orderStatus": orderStatus,
       "deleted": deleted,
@@ -102,9 +108,11 @@ class SavedOrders {
         zipCode: map["zip_code"].toString(),
         orderDate: map["order_date"],
         tip: map["tip"],
+        tax_amount: map["tax_amount"],
         discount: map["discount"],
         foodCost: map["food_cost"],
         totalAmount: map["total_amount"],
+        grandTotalAmount: map["grand_total"],
         payment: map["payment"],
         orderStatus: map["order_status"],
         deleted: map["deleted"] == 1,

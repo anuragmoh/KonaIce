@@ -62,11 +62,17 @@ class _CustomerOrderDetailsState extends State<CustomerOrderDetails>
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: CommonWidgets().buttonWidgetUnFilled(
-                        StringConstants.addTip,
-                        _onAddTipButtonTap,
+                    Visibility(
+                      visible: false,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Visibility(
+                          visible: false,
+                          child: CommonWidgets().buttonWidgetUnFilled(
+                            StringConstants.addTip,
+                            _onAddTipButtonTap,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 40),
