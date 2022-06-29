@@ -22,6 +22,10 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     var authorizationResponseModel: AuthorizationResponseModel?
     
+    var tipAmount: Double?
+    
+    var isShowTipView: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -52,7 +56,7 @@ class PaymentViewController: UIViewController, ShowAlert {
         
         if FINIXHELPER.isSDKInitialized() {
             
-            self.performSale()
+            self.performAuthorization(amount: Decimal(payment.amount))
             
         } else {
             
@@ -132,12 +136,26 @@ class PaymentViewController: UIViewController, ShowAlert {
                                        serialNumber: deviceSerialNumber)
     }
     
-    func performSale() {
+    func performAuthorization(amount: Decimal) {
         
-        FINIXHELPER.performaAuthorization(billAmount: Decimal(payment.amount),
+        let authorizationAmount = amount + (amount*0.2)
+        
+        FINIXHELPER.performaAuthorization(billAmount: authorizationAmount,
                                           testTags: payment.tags)
+    }
+    
+    func performCapture() {
         
-        //performSale(billAmount: Decimal(payment.amount), testTags: payment.tags)
+        let billAmount = (tipAmount ?? 0) + self.payment.amount
+        
+        FINIXHELPER.performCapture(authorizationId: self.authorizationResponseModel?.finixAuthorizationResponse.transferId ?? "",
+                                   billAmount: Decimal(billAmount),
+                                   tipAmount: tipAmount ?? 0)
+    }
+    
+    func performVoid() {
+        
+        FINIXHELPER.performVoid(authorizationId: self.authorizationResponseModel?.finixAuthorizationResponse.transferId ?? "")
     }
     
     func showAlert(title: String, message: String, transactionModelString: String? = nil) {
@@ -167,7 +185,7 @@ class PaymentViewController: UIViewController, ShowAlert {
     func loadTipView(_ amount: Double) {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        
+         
         guard let tipViewController = storyBoard.instantiateViewController(withIdentifier: "TipViewController") as? TipViewController else { return }
         
         tipViewController.billAmount = amount
@@ -179,11 +197,18 @@ class PaymentViewController: UIViewController, ShowAlert {
             
             self.showTransactionAnimationView(with: .progress)
             
-            let billAmount = tipAmount + self.payment.amount
+            self.performCapture()
             
-            FINIXHELPER.performCapture(authorizationId: self.authorizationResponseModel?.finixAuthorizationResponse.transferId ?? "",
-                                       billAmount: Decimal(billAmount),
-                                       tipAmount: tipAmount)
+            /*self.tipAmount = tipAmount
+            
+            if tipAmount > 0 {
+                
+                self.performVoid()
+                
+            } else {
+                
+                self.performCapture()
+            }*/
         }
         
         DispatchQueue.main.async {
@@ -307,7 +332,7 @@ extension PaymentViewController: FinixHelperDelegate {
             self.statusLabel.text = "Device Did Connect:\nDescription:\(description)\nmodel:\(model)\nserial:\(serialNumber)"
         }
         
-        self.performSale()
+        self.performAuthorization(amount: Decimal(payment.amount))
     }
     
     func deviceDidDisconnect() {
@@ -441,7 +466,14 @@ extension PaymentViewController: FinixHelperDelegate {
                 
                 self.authorizationResponseModel = authorizationResponseModel
                 
-                self.loadTipView(payment.amount)
+                if self.isShowTipView {
+                    
+                    self.loadTipView(payment.amount)
+                    
+                } else {
+                    
+                    self.performCapture()
+                }
             }
         }
     }
@@ -486,5 +518,32 @@ extension PaymentViewController: FinixHelperDelegate {
                 self.dismissView()
             }
         }
+    }
+    
+    func voidResponseFailed(error: Error?) {
+        
+        print("==========Void Response Failed with error : \(String(describing: error))==========")
+        
+        DispatchQueue.main.async {
+            
+            self.statusLabel.text = "==========Void Response Failed with error : \(String(describing: error))=========="
+        }
+        
+        showAlert(title: "Error", message: "\(String(describing: error))")
+    }
+    
+    func voidResponseSuccess(voidResponseText: String) {
+        
+        print("==========Void Response Success: \(voidResponseText)==========")
+        
+        DispatchQueue.main.async {
+            self.statusLabel.text = "==========Void Response Success: \(voidResponseText)=========="
+        }
+        
+        self.isShowTipView = false
+        
+        let totalAmount = (self.tipAmount ?? 0) + self.payment.amount
+        
+        self.performAuthorization(amount: Decimal(totalAmount))
     }
 }

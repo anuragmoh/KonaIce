@@ -96,6 +96,7 @@ class TipViewController: UIViewController {
         customAmountTextField.font = UIFont(name: "Montserrat-Bold", size: 16)
         customAmountTextField.textColor = UIColor.textColor
         customAmountTextField.leftViewMode = .always
+        customAmountTextField.keyboardType = .numberPad
         
         let dollarLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         dollarLabel.text = "$"

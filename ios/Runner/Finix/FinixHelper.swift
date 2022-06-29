@@ -65,6 +65,12 @@ public protocol FinixHelperDelegate : AnyObject {
     
     /// Capture Performed with Success, but check for any error
     func captureResponseSuccess(transactionResponseModel: TransactionResponseModel?)
+    
+    /// Void Performed with Error
+    func voidResponseFailed(error: Error?)
+    
+    /// Void Performed with Success, but check for any error
+    func voidResponseSuccess(voidResponseText: String)
 }
 
 let FINIXHELPER = FinixHelper.sharedFinixHelper
@@ -262,6 +268,45 @@ class FinixHelper {
                 if let delegate = self.finixHelperDelegate {
                     
                     delegate.captureResponseFailed(error: nil)
+                }
+            }
+        }
+    }
+    
+    func performVoid(authorizationId: String) {
+                
+        FinixClient.shared.voidAuthorization(authorizationId: authorizationId) { response, error in
+            
+            guard let response = response else {
+                
+                print(items:"==========Failed with error : \(error!)==========")
+                
+                if let delegate = self.finixHelperDelegate {
+                    
+                    delegate.voidResponseFailed(error: error!)
+                }
+                
+                return
+            }
+            
+            let responseText = String(describing: response)
+            
+            if response.success {
+                                
+                print(items:"==========Success void response: \(responseText), Trace Id: \(response.id)==========")
+                
+                if let delegate = self.finixHelperDelegate {
+                    
+                    delegate.voidResponseSuccess(voidResponseText: responseText)
+                }
+                
+            } else {
+                
+                print(items:"==========Not Successful response: \(responseText)==========")
+                
+                if let delegate = self.finixHelperDelegate {
+                    
+                    delegate.voidResponseFailed(error: nil)
                 }
             }
         }
