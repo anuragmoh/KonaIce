@@ -141,7 +141,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   _paymentFailed() async {
     debugPrint("Payment Failure");
     setState(() {
-      _paymentModeType=-1;
+      _paymentModeType = -1;
     });
     showDialog(
         barrierColor: AppColors.textColor1.withOpacity(0.7),

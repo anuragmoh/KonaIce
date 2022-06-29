@@ -28,19 +28,18 @@ class PaymentOption extends StatefulWidget {
 }
 
 class _PaymentOptionState extends State<PaymentOption>
-    implements P2PContractor, PaymentUtilsContractor{
+    implements P2PContractor, PaymentUtilsContractor {
   int _paymentModeType = -1;
   String _paymentStatus = "";
   bool _isAnimation = false;
   bool _isInsertCard = false;
-  bool _isRemoveCard = false;
   bool _isProgress = false;
-  bool _isShowTipScreen = false;
+  bool _isApiProcess = false;
+
   _PaymentOptionState() {
     P2PConnectionManager.shared.getP2PContractor(this);
     PaymentUtils.shared.getPaymentUtilsContractor(this);
   }
-  bool _isApiProcess = false;
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +253,6 @@ class _PaymentOptionState extends State<PaymentOption>
         .updateData(action: CustomerActionConst.editOrderDetails);
   }
 
-
   _showTipCustomerScreen() async {
     await PaymentUtils.showTipScreen();
   }
@@ -285,14 +283,12 @@ class _PaymentOptionState extends State<PaymentOption>
           _isInsertCard = true;
           _isAnimation = true;
         } else if (response.data.toString() == "removeCard") {
-          _isRemoveCard = true;
           _isAnimation = true;
         } else if (response.data.toString() == "progress") {
           _isProgress = true;
           _isAnimation = true;
-        }else if (response.data.toString() == "authorizationSuccess") {
-          _isShowTipScreen = true;
-          _isAnimation=false;
+        } else if (response.data.toString() == "authorizationSuccess") {
+          _isAnimation = false;
           _showTipCustomerScreen();
         } else {
           _isAnimation = true;
@@ -307,16 +303,13 @@ class _PaymentOptionState extends State<PaymentOption>
 
   @override
   Future<void> getCustomerEnteredTipAmount(double amount) async {
-    final values = {
-      "tipAmount": amount
-    };
+    final values = {"tipAmount": amount};
     debugPrint(amount.toString());
     setState(() {
       _isProgress = true;
-      _isAnimation=true;
+      _isAnimation = true;
     });
     await PaymentUtils.captureTipAmount(values);
-
   }
 
   @override
