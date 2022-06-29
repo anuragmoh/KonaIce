@@ -101,9 +101,6 @@ class _PaymentScreenState extends State<PaymentScreen>
   bool _isApiProcess = false;
   PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
 
-  // static const MethodChannel _cardPaymentChannel =
-  //     MethodChannel("com.mobisoft.konaicepos/cardPayment");
-
   _PaymentScreenState() {
     _orderPresenter = OrderPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
@@ -124,18 +121,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     }
     _getFinixdetailsValues();
     _callPlaceOrderAPI();
-    // _cardPaymentChannel.setMethodCallHandler((call) async {
-    //   debugPrint("init state setMethodCallHandler ${call.method}");
-    //   if (call.method == "paymentSuccess") {
-    //     _paymentSuccess(call.arguments.toString());
-    //   } else if (call.method == "paymentFailed") {
-    //     _paymentFailed();
-    //   } else if (call.method == "paymentStatus") {
-    //     _paymentStatus(call.arguments.toString());
-    //   } else if (call.method == "getPaymentToken") {
-    //     _getPaymentToken(call.arguments.first);
-    //   }
-    // });
   }
 
   _paymentSuccess(msg) async {
@@ -1182,7 +1167,6 @@ class _PaymentScreenState extends State<PaymentScreen>
       FinixTagsKey.tags.name: tags
     };
     await PaymentUtils.performPayment(values);
-    //await _cardPaymentChannel.invokeListMethod('performCardPayment', values);
   }
 
   _onTapNewOrder() {
@@ -1366,8 +1350,6 @@ class _PaymentScreenState extends State<PaymentScreen>
     debugPrint(cardDetails.toString());
 
     await PaymentUtils.getToken(cardDetails);
-    // await _cardPaymentChannel.invokeListMethod(
-    //     'getPaymentToken', valuesCardDetails);
   }
 
   //ApiCall After getting Manual Card token
@@ -1590,5 +1572,10 @@ class _PaymentScreenState extends State<PaymentScreen>
   @override
   void paymentSuccess(response) {
     _paymentSuccess(response);
+  }
+
+  @override
+  void getCustomerEnteredTipAmount(double amount) {
+    debugPrint("Customer Entered Tip Amount $amount");
   }
 }

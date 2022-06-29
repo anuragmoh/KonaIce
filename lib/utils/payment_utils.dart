@@ -6,6 +6,7 @@ abstract class PaymentUtilsContractor {
   void paymentFailed(dynamic response);
   void paymentStatus(dynamic response);
   void getPaymentToken(dynamic response);
+  void getCustomerEnteredTipAmount(double amount);
 }
 
 class PaymentUtils {
@@ -31,6 +32,9 @@ class PaymentUtils {
         _view.paymentStatus(call.arguments.toString());
       } else if (call.method == "getPaymentToken") {
         _view.getPaymentToken(call.arguments.first);
+      } else if (call.method == "getTipAmount") {
+        debugPrint("Tip Amount --- ${call.arguments.toString()}");
+        _view.getCustomerEnteredTipAmount(call.arguments.first);
       }
     });
   }
@@ -41,5 +45,9 @@ class PaymentUtils {
 
   static getToken(Map<String, Object> details) async {
     await _cardPaymentChannel.invokeListMethod('getPaymentToken', details);
+  }
+
+  static showTipScreen() async {
+    await _cardPaymentChannel.invokeListMethod('showTipScreen');
   }
 }
