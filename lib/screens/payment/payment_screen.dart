@@ -1477,7 +1477,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     finixCaptureResponse.updated = _finixResponse.finixCaptureResponse?.updated;
     finixCaptureResponse.traceId = _finixResponse.finixCaptureResponse?.traceId;
     finixCaptureResponse.transferId =
-        _finixResponse.finixCaptureResponse?.traceId;
+        _finixResponse.finixCaptureResponse?.transferId;
     finixCaptureResponse.transferState =
         _finixResponse.finixCaptureResponse?.transferState;
 
