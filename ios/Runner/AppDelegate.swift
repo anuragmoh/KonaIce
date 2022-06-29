@@ -58,6 +58,11 @@ import PaymentsSDK
             case "showTipScreen":
                 self.loadTipView(nil)
            
+            case "customerEnteredTipAmount":
+                NotificationCenter.default.post(name: Notification.Name("CustomerEnteredTip"),
+                                                object: nil,
+                                                userInfo: ["tip": 3])
+                
             default: result(FlutterMethodNotImplemented)
             }
         })

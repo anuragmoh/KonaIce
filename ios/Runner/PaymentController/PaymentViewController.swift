@@ -44,9 +44,13 @@ class PaymentViewController: UIViewController, ShowAlert {
     
     @objc func customerEnteredTipNotification(notification: Notification) {
         
+        self.navigationController?.popViewController(animated: false)
+        
         if let userInfo = notification.userInfo {
             
             if let customerTipAmount = userInfo["tip"] as? Double {
+                
+                self.showTransactionAnimationView(with: .progress)
                 
                 self.tipAmount = customerTipAmount
                 
@@ -491,6 +495,8 @@ extension PaymentViewController: FinixHelperDelegate {
                     self.loadTipView(payment.amount)
                     
                 } else {
+                    
+                    self.showTransactionAnimationView(with: .progress)
                     
                     self.performCapture()
                 }
