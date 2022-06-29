@@ -211,10 +211,13 @@ class TipViewController: UIViewController {
     }
     
     func dismissView() {
-        
-        // dismiss(animated: true)
-        self.navigationController?.popViewController(animated: false)
+        if(self.navigationController?.viewControllers.count ?? 0 > 0) {
+            self.navigationController?.popViewController(animated: false)
+        } else {
+            self.dismiss(animated: true)
+        }
     }
+    
     
     /*
      // MARK: - Navigation
