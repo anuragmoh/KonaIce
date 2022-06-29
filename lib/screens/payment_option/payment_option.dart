@@ -30,7 +30,6 @@ class PaymentOption extends StatefulWidget {
 class _PaymentOptionState extends State<PaymentOption>
     implements P2PContractor, PaymentUtilsContractor {
   int _paymentModeType = -1;
-  String _paymentStatus = "";
   bool _isAnimation = false;
   bool _isInsertCard = false;
   bool _isProgress = false;
@@ -196,10 +195,6 @@ class _PaymentOptionState extends State<PaymentOption>
   onTapCashMode() {}
 
   _onTapPaymentMode(int index) {
-    _paymentStatus = 'insert';
-    P2PConnectionManager.shared.updateData(
-        action: StaffActionConst.paymentStatus,
-        data: _paymentStatus.toString());
     setState(() {
       _paymentModeType = index;
       _updateSelectedPaymentMode();
@@ -209,20 +204,18 @@ class _PaymentOptionState extends State<PaymentOption>
       _updateSelectedPaymentMode();
     });
     if (_paymentModeType == PaymentModeConstants.creditCard) {
-      _paymentStatus = 'progress';
       P2PConnectionManager.shared.updateData(
-          action: StaffActionConst.paymentStatus,
-          data: _paymentStatus.toString());
+          action: CustomerActionConst.paymentModeSelected,
+          data: PaymentModeConstants.creditCard.toString());
       Future.delayed(const Duration(seconds: 2), () {
         setState(() {
           _paymentModeType = -1;
         });
       });
     } else if (_paymentModeType == PaymentModeConstants.creditCardManual) {
-      _paymentStatus = 'progress';
       P2PConnectionManager.shared.updateData(
-          action: StaffActionConst.paymentStatus,
-          data: _paymentStatus.toString());
+          action: CustomerActionConst.paymentModeSelected,
+          data: PaymentModeConstants.creditCardManual.toString());
     }
   }
 
@@ -293,9 +286,6 @@ class _PaymentOptionState extends State<PaymentOption>
         } else {
           _isAnimation = true;
         }
-      });
-      setState(() {
-        _paymentStatus = response.data.toString();
       });
       debugPrint('response--->' + response.data.toString());
     }

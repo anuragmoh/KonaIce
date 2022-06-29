@@ -1334,6 +1334,9 @@ class _PaymentScreenState extends State<PaymentScreen>
       setState(() {
         _paymentStatusValue = response.data.toString();
       });
+      if (_paymentStatusValue == "creditCard") {
+        _performCardPayment();
+      }
       debugPrint('response--->' + response.data.toString());
     } else if (response.action == StaffActionConst.receiptEmail) {
       String emailFromCustomer = response.data;
