@@ -197,11 +197,6 @@ class _PaymentOptionState extends State<PaymentOption>
   _onTapPaymentMode(int index) {
     setState(() {
       _paymentModeType = index;
-      _updateSelectedPaymentMode();
-    });
-    setState(() {
-      _paymentModeType = index;
-      _updateSelectedPaymentMode();
     });
     if (_paymentModeType == PaymentModeConstants.creditCard) {
       P2PConnectionManager.shared.updateData(
@@ -216,6 +211,8 @@ class _PaymentOptionState extends State<PaymentOption>
       P2PConnectionManager.shared.updateData(
           action: CustomerActionConst.paymentModeSelected,
           data: PaymentModeConstants.creditCardManual.toString());
+    } else {
+      _updateSelectedPaymentMode();
     }
   }
 
@@ -268,25 +265,36 @@ class _PaymentOptionState extends State<PaymentOption>
         StaffActionConst.showSplashAtCustomerForHomeAndSettings) {
       FunctionalUtils.showCustomerSplashScreen();
     } else if (response.action == StaffActionConst.paymentStatus) {
-      setState(() {
-        if (response.data.toString() == StringConstants.paymentStatusSucc ||
-            response.data.toString() == StringConstants.paymentStatusFailed) {
+      debugPrint('=======${response.data.toString()}');
+      if (response.data.toString() == StringConstants.paymentStatusSucc ||
+          response.data.toString() == StringConstants.paymentStatusFailed) {
+        setState(() {
           _isAnimation = false;
-        } else if (response.data.toString() == "insertCard") {
+        });
+      } else if (response.data.toString() == "insertCard") {
+        setState(() {
           _isInsertCard = true;
           _isAnimation = true;
-        } else if (response.data.toString() == "removeCard") {
+        });
+      } else if (response.data.toString() == "removeCard") {
+        setState(() {
           _isAnimation = true;
-        } else if (response.data.toString() == "progress") {
+        });
+      } else if (response.data.toString() == "progress") {
+        setState(() {
           _isProgress = true;
           _isAnimation = true;
-        } else if (response.data.toString() == "authorizationSuccess") {
+        });
+      } else if (response.data.toString() == "authorizationSuccess") {
+        setState(() {
           _isAnimation = false;
-          _showTipCustomerScreen();
-        } else {
+        });
+        _showTipCustomerScreen();
+      } else {
+        setState(() {
           _isAnimation = true;
-        }
-      });
+        });
+      }
       debugPrint('response--->' + response.data.toString());
     }
   }

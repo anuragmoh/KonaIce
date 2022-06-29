@@ -74,6 +74,7 @@ import PaymentsSDK
     }
     
     func loadPaymentView(_ payment: PaymentModel) {
+        
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         guard let paymentViewController = storyBoard.instantiateViewController(withIdentifier: "PaymentViewController") as? PaymentViewController else { return }
         paymentViewController.payment = payment
