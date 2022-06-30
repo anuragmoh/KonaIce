@@ -48,13 +48,22 @@ class _LoginScreenState extends State<LoginScreen>
   bool _isApiProcess = false;
   String _osVersion = '';
   String _deviceName = '';
+  String _populateEmail = '';
   String _emailValidationMessage = "";
   String _passwordValidationMessage = "";
 
   @override
   void initState() {
     super.initState();
+    _getUserInfo();
     _removeModeSelectionScreen();
+  }
+
+  _getUserInfo() async{
+    var result = await SessionDAO().getValueForKey(DatabaseKeys.email);
+    debugPrint('emailId------->${result!.value}');
+    _populateEmail = result.value;
+    _emailController.text=_populateEmail;
   }
 
   @override

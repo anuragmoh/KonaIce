@@ -267,6 +267,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         _buildDateColumn(),
                         _buildPaymentColumn(),
                         _buildPriceColumn(),
+                        _buildTipColumn(),
+                        _buildTaxColumn(),
                         _buildStatusColumn(),
                       ],
                       rows: List.generate(
@@ -285,6 +287,28 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
     return DataColumn(
       label: CommonWidgets().textView(
           StringConstants.status,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: AppColors.textColor1.toMaterialColor(),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
+  DataColumn _buildTipColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.all_order_tip,
+          StyleConstants.customTextStyle(
+              fontSize: 12.0,
+              color: AppColors.textColor1.toMaterialColor(),
+              fontFamily: FontConstants.montserratBold)),
+    );
+  }
+
+  DataColumn _buildTaxColumn() {
+    return DataColumn(
+      label: CommonWidgets().textView(
+          StringConstants.all_order_taxAmount,
           StyleConstants.customTextStyle(
               fontSize: 12.0,
               color: AppColors.textColor1.toMaterialColor(),
@@ -391,7 +415,23 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     fontFamily: FontConstants.montserratMedium)),
           ),
           DataCell(
-              _getOrderStatusView(savedOrders.orderStatus, savedOrders.payment))
+            CommonWidgets().textView(
+                '\$ ${savedOrders.tip}',
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1.toMaterialColor(),
+                    fontFamily: FontConstants.montserratMedium)),
+          ),
+          DataCell(
+            CommonWidgets().textView(
+                '\$ ${savedOrders.tax_amount}',
+                StyleConstants.customTextStyle(
+                    fontSize: 12.0,
+                    color: AppColors.textColor1.toMaterialColor(),
+                    fontFamily: FontConstants.montserratMedium)),
+          ),
+          DataCell(_getOrderStatusView(
+              savedOrders.orderStatus, savedOrders.payment)),
         ]);
   }
 
