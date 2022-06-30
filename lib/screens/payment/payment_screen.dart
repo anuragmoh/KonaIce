@@ -560,19 +560,19 @@ class _PaymentScreenState extends State<PaymentScreen>
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 _cashAmountView(
-                  "5",
+                  "\$ 5",
                   1,
                 ),
                 _cashAmountView(
-                  "10",
+                  "\$ 10",
                   2,
                 ),
                 _cashAmountView(
-                  "15",
+                  "\$ 15",
                   3,
                 ),
                 _cashAmountView(
-                  "25",
+                  "\$ 20",
                   4,
                 ),
               ],
@@ -583,11 +583,12 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   Widget _cashAmountView(String title, int index) => GestureDetector(
         onTap: () {
-          debugPrint(">>>>>>>>>$title");
-          _amountReceivedController.text = title;
+          var cashAmountWithDoller = title.split('\$');
+          String cashAmount = cashAmountWithDoller[1];
+          _amountReceivedController.text = cashAmount;
           setState(() {
             _cashAmountType = index;
-            _onAmountEnter(double.parse(title));
+            _onAmountEnter(double.parse(cashAmount));
           });
         },
         child: Row(
@@ -600,7 +601,7 @@ class _PaymentScreenState extends State<PaymentScreen>
                   borderRadius: const BorderRadius.all(Radius.circular(8.0))),
               child: Padding(
                 padding: const EdgeInsets.only(
-                    left: 15.0, right: 15.0, top: 10.0, bottom: 10.0),
+                    left: 25.0, right: 25.0, top: 15.0, bottom: 15.0),
                 child: CommonWidgets().textWidget(
                     title,
                     StyleConstants.customTextStyle12MonsterMedium(
