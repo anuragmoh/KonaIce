@@ -89,6 +89,8 @@ class StringConstants {
   static const subTotal = 'Subtotal:';
   static const discount = 'Discount:';
   static const tip = 'Tip:';
+  static const all_order_tip = 'Tip';
+  static const all_order_taxAmount = 'Tax Amount';
   static const total = 'Total:';
   static const foodOrders = 'Food Orders';
   static const filterOrders = 'Filter Orders';
