@@ -86,7 +86,7 @@ class _PaymentOptionState extends State<PaymentOption>
                         child: Container(
                           height: double.infinity,
                           width: double.infinity,
-                          color: Colors.black.withOpacity(0.6),
+                          color: Colors.black.withOpacity(0.65),
                           child: SizedBox(
                             height: 320,
                             width: 320,
