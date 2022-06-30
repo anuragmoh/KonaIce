@@ -61,7 +61,7 @@ class AssetsConstants {
   static const insertCardAnimationPath =
       assetsAnimationsPath + 'insertCard.json';
   static const progressAnimationPath =
-      assetsAnimationsPath + 'progress_new.json';
+      assetsAnimationsPath + 'progress.json';
   static const removeCardAnimationPath =
       assetsAnimationsPath + 'removeCard.json';
 

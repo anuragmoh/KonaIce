@@ -50,7 +50,8 @@ class _PaymentOptionState extends State<PaymentOption>
       color: AppColors.textColor3.withOpacity(0.2),
       child: Column(
         children: [
-          CommonWidgets().topEmptyBar(),
+          Visibility(
+              visible: !_isAnimation, child: CommonWidgets().topEmptyBar()),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 20),
@@ -82,8 +83,21 @@ class _PaymentOptionState extends State<PaymentOption>
                       child: BackdropFilter(
                         filter:
                             new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                        child: Lottie.asset(_animationFileName,
-                            height: 350, width: 350, animate: true),
+                        child: Container(
+                          height: double.infinity,
+                          width: double.infinity,
+                          color: Colors.black.withOpacity(0.6),
+                          child: SizedBox(
+                            height: 320,
+                            width: 320,
+                            child: OverflowBox(
+                              minHeight: 390,
+                              maxHeight: 390,
+                              child: Lottie.asset(_animationFileName,
+                                  animate: true),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -91,7 +105,8 @@ class _PaymentOptionState extends State<PaymentOption>
               ),
             ),
           ),
-          CommonWidgets().bottomEmptyBar(),
+          Visibility(
+              visible: !_isAnimation, child: CommonWidgets().bottomEmptyBar()),
         ],
       ),
     ));
