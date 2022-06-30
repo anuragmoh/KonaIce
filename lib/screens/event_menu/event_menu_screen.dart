@@ -133,7 +133,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
     if (result != null) {
       setState(() {
         _itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
-            eventId: eventId, name: StringConstants.customMenu));
+            eventId: eventId, name: StringConstants.customAmount));
         _itemCategoriesList.add(ItemCategories.getCustomMenuCategory(
             eventId: eventId, name: StringConstants.allCategories));
         _itemCategoriesList.addAll(result);
@@ -213,7 +213,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                 showCenterWidget: true,
                 onTapCallBack: _onTapCallBack,
                 //onDrawerTap: onDrawerTap,
-                onProfileTap: _onProfileChange,
+                onProfileTap: _showPopupMenu,
                 isProduct: _isProduct),
             Expanded(
               child: _isProduct
@@ -1140,6 +1140,26 @@ class _EventMenuScreenState extends State<EventMenuScreen>
       _discount = double.parse(discountText.isEmpty ? '0.0' : discountText);
     });
     FocusScope.of(context).unfocus();
+  }
+
+  void _showPopupMenu() async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(900, 80, 20, 100),
+      items: [
+        PopupMenuItem<String>(
+            child: const Text(StringConstants.profile), value: 'profile'),
+        PopupMenuItem<String>(
+            child: const Text(StringConstants.signOut), value: 'signout'),
+      ],
+      elevation: 8.0,
+    ).then((value){
+      if (value=="profile") {
+        _onProfileChange();
+      }
+      if (value=="signout") {
+      }
+    });
   }
 
   _onProfileChange() {

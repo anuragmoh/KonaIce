@@ -155,7 +155,7 @@ class CommonWidgets {
         child: CommonWidgets().textWidget(
             title,
             StyleConstants.customTextStyle(
-                fontSize: 12.0,
+                fontSize: 14.0,
                 color: AppColors.textColor4,
                 fontFamily: FontConstants.montserratSemiBold),
             textAlign: TextAlign.center),

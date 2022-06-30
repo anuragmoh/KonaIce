@@ -95,6 +95,7 @@ class _TopBarState extends State<TopBar> {
     // drawer: NotificationDrawer(),
   }
 
+
   Widget notificationWithCount() {
     return GestureDetector(
       onTap: () {

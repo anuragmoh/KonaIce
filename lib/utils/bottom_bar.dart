@@ -102,7 +102,7 @@ class _BottomBarWidgetState extends State<BottomBarWidget> {
         Container(
           color: AppColors.primaryColor1,
           child: Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 5.0,bottom: 5.0),
             child: CommonWidgets().image(
                 image: ServiceNotifier.count == index
                     ? bottomItemList[index].selectedImage

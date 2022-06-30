@@ -73,6 +73,7 @@ class _PaymentScreenState extends State<PaymentScreen>
         ResponseContractor,
         PaymentUtilsContractor {
   int _paymentModeType = -1;
+  int _cashAmountType = -1;
   double _returnAmount = 0.0;
   double _receivedAmount = 0.0;
   double totalAmount = 0.0;
@@ -195,7 +196,7 @@ class _PaymentScreenState extends State<PaymentScreen>
           showCenterWidget: false,
           onTapCallBack: _onTapCallBack,
           //    onDrawerTap: onDrawerTap,
-          onProfileTap: _onProfileChange,
+          onProfileTap: _showPopupMenu,
         ),
 
         Expanded(child: _bodyWidget()),
@@ -207,6 +208,25 @@ class _PaymentScreenState extends State<PaymentScreen>
         // CommonWidgets().bottomBar(false),
       ],
     );
+  }
+
+  void _showPopupMenu() async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(900, 80, 20, 100),
+      items: [
+        PopupMenuItem<String>(
+            child: const Text(StringConstants.profile), value: 'profile'),
+        PopupMenuItem<String>(
+            child: const Text(StringConstants.signOut), value: 'signout'),
+      ],
+      elevation: 8.0,
+    ).then((value) {
+      if (value == "profile") {
+        _onProfileChange();
+      }
+      if (value == "signout") {}
+    });
   }
 
   _onProfileChange() {
@@ -462,6 +482,7 @@ class _PaymentScreenState extends State<PaymentScreen>
               child: Column(
                 children: [
                   _paymentModeWidget(),
+                  _cashAmountWidget(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: Divider(
@@ -525,6 +546,67 @@ class _PaymentScreenState extends State<PaymentScreen>
                 title,
                 StyleConstants.customTextStyle12MonsterMedium(
                     color: AppColors.textColor1)),
+          ],
+        ),
+      );
+
+  Widget _cashAmountWidget() => Visibility(
+        visible: _isPaymentDone == false && _paymentModeType == 0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+          child: Padding(
+            padding: const EdgeInsets.only(left: 50.0, right: 35.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _cashAmountView(
+                  "5",
+                  1,
+                ),
+                _cashAmountView(
+                  "10",
+                  2,
+                ),
+                _cashAmountView(
+                  "15",
+                  3,
+                ),
+                _cashAmountView(
+                  "25",
+                  4,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+  Widget _cashAmountView(String title, int index) => GestureDetector(
+        onTap: () {
+          debugPrint(">>>>>>>>>$title");
+          _amountReceivedController.text = title;
+          setState(() {
+            _cashAmountType = index;
+            _onAmountEnter(double.parse(title));
+          });
+        },
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color:
+                      _cashAmountType == index ? AppColors.primaryColor2 : null,
+                  border: Border.all(color: AppColors.primaryColor2),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0))),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 15.0, right: 15.0, top: 10.0, bottom: 10.0),
+                child: CommonWidgets().textWidget(
+                    title,
+                    StyleConstants.customTextStyle12MonsterMedium(
+                        color: AppColors.textColor1)),
+              ),
+            ),
           ],
         ),
       );

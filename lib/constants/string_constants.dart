@@ -32,7 +32,7 @@ class StringConstants {
 
 //DASHBOARD TEXT
   static const dashboard = 'DASHBOARD';
-  static const createAdhocEvent = 'Create Adhoc Event +';
+  static const createAdhocEvent = 'Misc Sale +';
   static const home = 'Home';
   static const notification = 'Notifications';
   static const settings = 'Settings';
@@ -50,6 +50,7 @@ class StringConstants {
   static const minusSymbol = '-';
 
   static const customMenu = 'Custom Menu';
+  static const customAmount = 'Custom Amount';
   static const allCategories = 'All Categories';
   static const addFoodItems = 'Add food items ${StringConstants.plusSymbol}';
   static const addFoodItemsExtras =
@@ -58,6 +59,7 @@ class StringConstants {
   static const clear = 'CLEAR';
   static const cancel = 'CANCEL';
   static const cancelProfile = 'Cancel';
+  static const profile="Profile";
   static const addCustomer = 'Select Customer';
   static const guestCustomer = 'Guest Customer';
   static const charge = 'CHARGE';

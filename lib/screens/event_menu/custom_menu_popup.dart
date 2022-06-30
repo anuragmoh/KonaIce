@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
@@ -49,7 +50,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonWidgets().popUpTopView(
-                title: StringConstants.customMenu,
+                title: StringConstants.customAmount,
                 onTapCloseButton: _onTapCloseButton),
             _isEditingMenuName ? _customMenuNameEditable() : _customMenuName(),
             _amountTextFieldContainer(),
@@ -140,6 +141,9 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
     return TextField(
       controller: _amountTextFieldController,
       keyboardType: TextInputType.number,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.digitsOnly,
+      ],
       style: StyleConstants.customTextStyle(
           fontSize: 22.0,
           color: AppColors.textColor6,
