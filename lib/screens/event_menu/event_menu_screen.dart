@@ -8,7 +8,6 @@ import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
-import 'package:kona_ice_pos/database/daos/food_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_categories_dao.dart';
 import 'package:kona_ice_pos/database/daos/item_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
@@ -43,7 +42,6 @@ import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_data_model.dart';
 import 'package:kona_ice_pos/utils/p2p_utils/p2p_models/p2p_order_details_model.dart';
 import 'package:kona_ice_pos/utils/size_configuration.dart';
 import 'package:kona_ice_pos/utils/top_bar.dart';
-import 'dart:math' as math;
 import '../../models/network_model/order_model/order_request_model.dart';
 import '../../models/network_model/order_model/order_response_model.dart';
 import '../../utils/number_formatter.dart';
@@ -63,18 +61,13 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   late EventPresenter _eventPresenter;
   PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
   P2POrderDetailsModel dataModel = P2POrderDetailsModel();
-
   _EventMenuScreenState() {
     _orderPresenter = OrderPresenter(this);
     _eventPresenter = EventPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
   }
-
   bool _isApiProcess = false;
-
   List<ItemCategories> _itemCategoriesList = [];
-  List<FoodExtraItems> _foodExtraItemList = [];
-
   bool _isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isSearchCustomer = false;
@@ -1099,16 +1092,19 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   _onTapGridItem(int index) {
     setState(() {
       if (_itemList[index].isItemSelected) {
-        _itemList[index].selectedItemQuantity = 0;
-        _selectedMenuItems.remove(_itemList[index]);
-        _itemList[index].removeAllExtraItems();
+        //_itemList[index].selectedItemQuantity = 0;
+        // _selectedMenuItems.remove(_itemList[index]);
+        //_itemList[index].removeAllExtraItems();
+        final selectedListIndex=_selectedMenuItems.indexWhere((element) => element.id == _itemList[index].id);
+        debugPrint('index match----->$selectedListIndex');
+        _onTapIncrementCountButton(selectedListIndex);
       } else {
         _itemList[index].selectedItemQuantity = 1;
         _selectedMenuItems.add(_itemList[index]);
         _itemList[index].selectedExtras = [];
       }
 
-      _itemList[index].isItemSelected = !_itemList[index].isItemSelected;
+      _itemList[index].isItemSelected = true;
     });
     // }
   }
