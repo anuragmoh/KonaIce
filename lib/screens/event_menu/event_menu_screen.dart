@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/font_constants.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
@@ -13,6 +14,7 @@ import 'package:kona_ice_pos/database/daos/item_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_extra_items_dao.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_items_dao.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/food_extra_items.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
@@ -25,11 +27,13 @@ import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/general_success_model.dart';
 import 'package:kona_ice_pos/network/repository/event/event_presenter.dart';
 import 'package:kona_ice_pos/network/repository/orders/order_presenter.dart';
+import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
 import 'package:kona_ice_pos/screens/all_orders/all_orders_screen.dart';
 import 'package:kona_ice_pos/screens/event_menu/custom_menu_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/food_extra_popup.dart';
 import 'package:kona_ice_pos/screens/event_menu/search_customer/search_customers_widget.dart';
+import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_screen.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
@@ -64,9 +68,12 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   _EventMenuScreenState() {
     _orderPresenter = OrderPresenter(this);
     _eventPresenter = EventPresenter(this);
+    _userPresenter = UserPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
   }
   bool _isApiProcess = false;
+  bool _callSignoutApi = false;
+  late UserPresenter _userPresenter;
   List<ItemCategories> _itemCategoriesList = [];
   bool _isProduct = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -1095,7 +1102,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         //_itemList[index].selectedItemQuantity = 0;
         // _selectedMenuItems.remove(_itemList[index]);
         //_itemList[index].removeAllExtraItems();
-        final selectedListIndex=_selectedMenuItems.indexWhere((element) => element.id == _itemList[index].id);
+        final selectedListIndex = _selectedMenuItems
+            .indexWhere((element) => element.id == _itemList[index].id);
         debugPrint('index match----->$selectedListIndex');
         _onTapIncrementCountButton(selectedListIndex);
       } else {
@@ -1149,11 +1157,12 @@ class _EventMenuScreenState extends State<EventMenuScreen>
             child: const Text(StringConstants.signOut), value: 'signout'),
       ],
       elevation: 8.0,
-    ).then((value){
-      if (value=="profile") {
+    ).then((value) {
+      if (value == "profile") {
         _onProfileChange();
       }
-      if (value=="signout") {
+      if (value == "signout") {
+        _onTapSignOutButton();
       }
     });
   }
@@ -1161,6 +1170,26 @@ class _EventMenuScreenState extends State<EventMenuScreen>
   _onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
+  }
+
+  _onTapSignOutButton() {
+    _callLogoutApi();
+  }
+
+  //API Call
+  _callLogoutApi() {
+    setState(() {
+      _isApiProcess = true;
+      _callSignoutApi = true;
+    });
+    _userPresenter.logOut();
+  }
+
+  //DB Operations
+  _deleteUserInformation() async {
+    await SessionDAO().delete(DatabaseKeys.sessionKey);
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   _onBackFromAllOrder(
@@ -1378,15 +1407,22 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   @override
   void showSuccess(response) {
-    GeneralSuccessModel responseModel = response;
-    setState(() {
-      _isApiProcess = false;
-    });
-    CommonWidgets().showSuccessSnackBar(
-        message: responseModel.general![0].message ??
-            StringConstants.eventCreatedSuccessfully,
-        context: context);
-    _clearCart();
+    if (_callSignoutApi == true) {
+      _deleteUserInformation();
+      setState(() {
+        _callSignoutApi = false;
+      });
+    } else {
+      GeneralSuccessModel responseModel = response;
+      setState(() {
+        _isApiProcess = false;
+      });
+      CommonWidgets().showSuccessSnackBar(
+          message: responseModel.general![0].message ??
+              StringConstants.eventCreatedSuccessfully,
+          context: context);
+      _clearCart();
+    }
   }
 
   @override

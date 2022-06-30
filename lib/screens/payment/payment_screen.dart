@@ -8,11 +8,13 @@ import 'package:kona_ice_pos/common/extensions/string_extension.dart';
 import 'package:kona_ice_pos/constants/app_colors.dart';
 import 'package:kona_ice_pos/constants/app_constant.dart';
 import 'package:kona_ice_pos/constants/asset_constants.dart';
+import 'package:kona_ice_pos/constants/database_keys.dart';
 import 'package:kona_ice_pos/constants/other_constants.dart';
 import 'package:kona_ice_pos/constants/p2p_constants.dart';
 import 'package:kona_ice_pos/constants/string_constants.dart';
 import 'package:kona_ice_pos/constants/style_constants.dart';
 import 'package:kona_ice_pos/database/daos/saved_orders_dao.dart';
+import 'package:kona_ice_pos/database/daos/session_dao.dart';
 import 'package:kona_ice_pos/models/data_models/events.dart';
 import 'package:kona_ice_pos/models/data_models/item.dart';
 import 'package:kona_ice_pos/models/network_model/order_model/order_request_model.dart';
@@ -26,7 +28,9 @@ import 'package:kona_ice_pos/network/repository/payment/finix_auth_response_mode
 import 'package:kona_ice_pos/network/repository/payment/payment_presenter.dart';
 import 'package:kona_ice_pos/network/repository/payment/payreceipt_model.dart';
 import 'package:kona_ice_pos/network/repository/payment/payrecipt_finix_model.dart';
+import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
+import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/screens/my_profile/my_profile.dart';
 import 'package:kona_ice_pos/screens/payment/payment_fails_popup.dart';
 import 'package:kona_ice_pos/screens/payment/validation_popup.dart';
@@ -81,6 +85,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   double _salesTax = 0.0;
   double _foodCost = 0.0;
   bool _isPaymentDone = false;
+  bool _callSignoutApi = false;
   int _receiptMode = 1;
   String _orderID = StringConstants.na;
   String _finixMerchantId = StringExtension.empty();
@@ -101,6 +106,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   TextEditingController _phoneNumberController = TextEditingController();
   int _currentIndex = 0;
   late OrderPresenter _orderPresenter;
+  late UserPresenter _userPresenter;
   bool _isApiProcess = false;
   PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
 
@@ -108,6 +114,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     _orderPresenter = OrderPresenter(this);
     P2PConnectionManager.shared.getP2PContractor(this);
     PaymentUtils.shared.getPaymentUtilsContractor(this);
+    _userPresenter = UserPresenter(this);
   }
 
   @override
@@ -225,13 +232,35 @@ class _PaymentScreenState extends State<PaymentScreen>
       if (value == "profile") {
         _onProfileChange();
       }
-      if (value == "signout") {}
+      if (value == "signout") {
+        _onTapSignOutButton();
+      }
     });
   }
 
   _onProfileChange() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const MyProfile()));
+  }
+
+  _onTapSignOutButton() {
+    _callLogoutApi();
+  }
+
+  //API Call
+  _callLogoutApi() {
+    setState(() {
+      _isApiProcess = true;
+      _callSignoutApi = true;
+    });
+    _userPresenter.logOut();
+  }
+
+  //DB Operations
+  _deleteUserInformation() async {
+    await SessionDAO().delete(DatabaseKeys.sessionKey);
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   Widget _bodyWidget() => Container(
@@ -1369,6 +1398,11 @@ class _PaymentScreenState extends State<PaymentScreen>
       _emailController.clear();
       P2PConnectionManager.shared.updateData(
           action: StaffActionConst.receiptEmailProgress, data: "Sucess");
+    } else if (_callSignoutApi == true) {
+      _deleteUserInformation();
+      setState(() {
+        _callSignoutApi = false;
+      });
     } else {
       setState(() {
         _updatePaymentSuccess();

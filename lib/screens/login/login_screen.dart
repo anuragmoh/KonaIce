@@ -59,11 +59,11 @@ class _LoginScreenState extends State<LoginScreen>
     _removeModeSelectionScreen();
   }
 
-  _getUserInfo() async{
+  _getUserInfo() async {
     var result = await SessionDAO().getValueForKey(DatabaseKeys.email);
     debugPrint('emailId------->${result!.value}');
     _populateEmail = result.value;
-    _emailController.text=_populateEmail;
+    _emailController.text = _populateEmail;
   }
 
   @override

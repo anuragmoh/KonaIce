@@ -13,6 +13,7 @@ import 'package:kona_ice_pos/models/network_model/my_profile_model/my_profile_re
 import 'package:kona_ice_pos/network/general_error_model.dart';
 import 'package:kona_ice_pos/network/repository/user/user_presenter.dart';
 import 'package:kona_ice_pos/network/response_contractor.dart';
+import 'package:kona_ice_pos/screens/login/login_screen.dart';
 import 'package:kona_ice_pos/utils/ServiceNotifier.dart';
 import 'package:kona_ice_pos/utils/bottom_bar.dart';
 import 'package:kona_ice_pos/utils/check_connectivity.dart';
@@ -45,6 +46,7 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
   bool _isLastNameValid = true;
   bool _isContactValid = true;
   bool _isPasswordValid = true;
+  bool _callSignoutApi = false;
 
   MyProfileUpdateRequestModel _myProfileUpdateRequestModel =
       MyProfileUpdateRequestModel();
@@ -236,7 +238,9 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
                       color: AppColors.whiteColor)),
             ),
           ),
-          CommonWidgets().profileComponent(_userName),
+          GestureDetector(
+              onTap: _showPopupMenu,
+              child: CommonWidgets().profileComponent(_userName))
         ],
       ),
     );
@@ -247,6 +251,42 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         image: AssetsConstants.topBarAppIcon,
         width: 4.03 * SizeConfig.imageSizeMultiplier,
         height: 4.03 * SizeConfig.imageSizeMultiplier);
+  }
+
+  void _showPopupMenu() async {
+    await showMenu(
+      context: context,
+      position: RelativeRect.fromLTRB(900, 80, 20, 100),
+      items: [
+        PopupMenuItem<String>(
+            child: const Text(StringConstants.signOut), value: 'signout'),
+      ],
+      elevation: 8.0,
+    ).then((value) {
+      if (value == "signout") {
+        _onTapSignOutButton();
+      }
+    });
+  }
+
+  _onTapSignOutButton() {
+    _callLogoutApi();
+  }
+
+  //API Call
+  _callLogoutApi() {
+    setState(() {
+      _isApiProcess = true;
+      _callSignoutApi = true;
+    });
+    _userPresenter.logOut();
+  }
+
+  //DB Operations
+  _deleteUserInformation() async {
+    await SessionDAO().delete(DatabaseKeys.sessionKey);
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()));
   }
 
   Widget _changeProfileButtons() {
@@ -737,6 +777,11 @@ class _MyProfileState extends State<MyProfile> implements ResponseContractor {
         _isApiProcess = false;
         _getMyProfile.add(response);
         _getUserDetails();
+      });
+    } else if (_callSignoutApi == true) {
+      _deleteUserInformation();
+      setState(() {
+        _callSignoutApi = false;
       });
     } else {
       setState(() {

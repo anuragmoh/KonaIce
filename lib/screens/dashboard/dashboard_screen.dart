@@ -57,7 +57,7 @@ class _DashboardState extends State<Dashboard>
   List<POsSyncEventItemExtrasDataDtoList>
       _pOsSyncDeletedEventItemExtrasDataDtoList = [];
   bool _isApiProcess = false;
-  bool _callSignoutApi=false;
+  bool _callSignoutApi = false;
   int _currentIndex = 0;
   String _userName = StringExtension.empty();
   late UserPresenter _userPresenter;
@@ -205,7 +205,6 @@ class _DashboardState extends State<Dashboard>
     });
   }
 
-
   void _showPopupMenu() async {
     await showMenu(
       context: context,
@@ -217,11 +216,11 @@ class _DashboardState extends State<Dashboard>
             child: const Text(StringConstants.signOut), value: 'signout'),
       ],
       elevation: 8.0,
-    ).then((value){
-      if (value=="profile") {
+    ).then((value) {
+      if (value == "profile") {
         _onProfileChange();
       }
-      if (value=="signout") {
+      if (value == "signout") {
         _onTapSignOutButton();
       }
     });
@@ -234,17 +233,20 @@ class _DashboardState extends State<Dashboard>
       _onReloadDashboardScreen(value);
     });
   }
+
   _onTapSignOutButton() {
     _callLogoutApi();
   }
+
   //API Call
   _callLogoutApi() {
     setState(() {
       _isApiProcess = true;
-      _callSignoutApi=true;
+      _callSignoutApi = true;
     });
     _userPresenter.logOut();
   }
+
   //DB Operations
   _deleteUserInformation() async {
     await SessionDAO().delete(DatabaseKeys.sessionKey);
@@ -270,15 +272,12 @@ class _DashboardState extends State<Dashboard>
 
   @override
   void showSuccess(response) {
-
-
-    if (_callSignoutApi==true) {
+    if (_callSignoutApi == true) {
       _deleteUserInformation();
       setState(() {
         _callSignoutApi = false;
       });
-    }
-    else{
+    } else {
       setState(() {
         _isApiProcess = false;
         _syncEventMenuResponseModel.add(response);

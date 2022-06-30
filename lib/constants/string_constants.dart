@@ -59,7 +59,7 @@ class StringConstants {
   static const clear = 'CLEAR';
   static const cancel = 'CANCEL';
   static const cancelProfile = 'Cancel';
-  static const profile="Profile";
+  static const profile = "Profile";
   static const addCustomer = 'Select Customer';
   static const guestCustomer = 'Guest Customer';
   static const charge = 'CHARGE';
