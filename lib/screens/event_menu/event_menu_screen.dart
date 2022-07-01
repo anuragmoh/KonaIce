@@ -543,10 +543,11 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   Expanded(
                       flex: 5, child: _selectedItemDetailsComponent(index)),
                   Expanded(
-                    flex: 4,
+                    flex:5,
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                             CommonWidgets().quantityIncrementDecrementContainer(
                               quantity: _selectedMenuItems[index]
@@ -585,9 +586,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   Padding buildDeleteIcon() {
     return Padding(
-      padding: EdgeInsets.only(left: 2.0, right: 2.0),
+      padding: EdgeInsets.only(left: 15.0),
       child: Icon(
-        Icons.delete,
+        Icons.delete_forever_outlined,
         color: AppColors.primaryColor2,
         size: 20.0,
       ),
