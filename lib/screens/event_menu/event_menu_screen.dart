@@ -550,11 +550,13 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   Expanded(
                       flex: 5, child: _selectedItemDetailsComponent(index)),
                   Expanded(
-                    flex: 3,
+                    flex:5,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: CommonWidgets()
-                          .quantityIncrementDecrementContainer(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                            CommonWidgets().quantityIncrementDecrementContainer(
                               quantity: _selectedMenuItems[index]
                                   .selectedItemQuantity,
                               onTapPlus: () {
@@ -563,12 +565,40 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                               onTapMinus: () {
                                 _onTapDecrementCountButton(index);
                               }),
+                          GestureDetector(
+                            onTap: () {
+                              onTapDeleteIcon(index);
+                            },
+                            child: buildDeleteIcon(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             );
           }),
+    );
+  }
+
+  onTapDeleteIcon(var index) {
+    setState(() {
+      _itemList[index].selectedItemQuantity = 0;
+      _selectedMenuItems[index].isItemSelected = false;
+      _selectedMenuItems.removeAt(index);
+      _itemList[index].removeAllExtraItems();
+    });
+  }
+
+  Padding buildDeleteIcon() {
+    return Padding(
+      padding: EdgeInsets.only(left: 15.0),
+      child: Icon(
+        Icons.delete_forever_outlined,
+        color: AppColors.primaryColor2,
+        size: 20.0,
+      ),
     );
   }
 
