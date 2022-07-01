@@ -543,11 +543,12 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                   Expanded(
                       flex: 5, child: _selectedItemDetailsComponent(index)),
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Align(
                       alignment: Alignment.centerRight,
-                      child: CommonWidgets()
-                          .quantityIncrementDecrementContainer(
+                      child: Row(
+                        children: [
+                            CommonWidgets().quantityIncrementDecrementContainer(
                               quantity: _selectedMenuItems[index]
                                   .selectedItemQuantity,
                               onTapPlus: () {
@@ -556,12 +557,40 @@ class _EventMenuScreenState extends State<EventMenuScreen>
                               onTapMinus: () {
                                 _onTapDecrementCountButton(index);
                               }),
+                          GestureDetector(
+                            onTap: () {
+                              onTapDeleteIcon(index);
+                            },
+                            child: buildDeleteIcon(),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             );
           }),
+    );
+  }
+
+  onTapDeleteIcon(var index) {
+    setState(() {
+      _itemList[index].selectedItemQuantity = 0;
+      _selectedMenuItems[index].isItemSelected = false;
+      _selectedMenuItems.removeAt(index);
+      _itemList[index].removeAllExtraItems();
+    });
+  }
+
+  Padding buildDeleteIcon() {
+    return Padding(
+      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+      child: Icon(
+        Icons.delete,
+        color: AppColors.primaryColor2,
+        size: 20.0,
+      ),
     );
   }
 
@@ -1095,7 +1124,8 @@ class _EventMenuScreenState extends State<EventMenuScreen>
         //_itemList[index].selectedItemQuantity = 0;
         // _selectedMenuItems.remove(_itemList[index]);
         //_itemList[index].removeAllExtraItems();
-        final selectedListIndex=_selectedMenuItems.indexWhere((element) => element.id == _itemList[index].id);
+        final selectedListIndex = _selectedMenuItems
+            .indexWhere((element) => element.id == _itemList[index].id);
         debugPrint('index match----->$selectedListIndex');
         _onTapIncrementCountButton(selectedListIndex);
       } else {
