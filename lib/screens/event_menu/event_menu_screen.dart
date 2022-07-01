@@ -535,7 +535,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   Widget _selectedItemList() {
     return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+      padding: const EdgeInsets.only(left: 15.0, right: 5.0),
       child: ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -593,9 +593,9 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   Padding buildDeleteIcon() {
     return Padding(
-      padding: EdgeInsets.only(left: 15.0),
+      padding: EdgeInsets.only(left: 10.0),
       child: Icon(
-        Icons.delete_forever_outlined,
+        Icons.close,
         color: AppColors.primaryColor2,
         size: 20.0,
       ),

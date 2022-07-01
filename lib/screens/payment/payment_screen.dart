@@ -539,10 +539,10 @@ class _PaymentScreenState extends State<PaymentScreen>
                 StringConstants.creditCard,
                 PaymentModeConstants.creditCard,
                 AssetsConstants.creditCardScan),
-            /*_paymentModeView(
+            _paymentModeView(
                 StringConstants.creditCardManual,
                 PaymentModeConstants.creditCardManual,
-                AssetsConstants.creditCard),*/
+                AssetsConstants.creditCard),
           ],
         ),
       );

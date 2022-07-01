@@ -156,10 +156,10 @@ class _PaymentOptionState extends State<PaymentOption>
             _paymentModeView(StringConstants.creditCard,
                 PaymentModeConstants.creditCard, AssetsConstants.creditCard),
             // paymentModeView(StringConstants.qrCode, PaymentModeConstants.qrCode, AssetsConstants.qrCode),
-/*            _paymentModeView(
+            _paymentModeView(
                 StringConstants.creditCardManual,
                 PaymentModeConstants.creditCardManual,
-                AssetsConstants.creditCardScan),*/
+                AssetsConstants.creditCardScan),
           ],
         ),
       );
