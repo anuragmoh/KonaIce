@@ -593,7 +593,7 @@ class _EventMenuScreenState extends State<EventMenuScreen>
 
   Padding buildDeleteIcon() {
     return Padding(
-      padding: EdgeInsets.only(left: 10.0),
+      padding: EdgeInsets.only(left: 12.0,top: 5.0,bottom: 5.0),
       child: Icon(
         Icons.close,
         color: AppColors.primaryColor2,

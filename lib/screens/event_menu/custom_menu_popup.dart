@@ -139,6 +139,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
 
   TextField _buildTextField() {
     return TextField(
+      maxLength: 5,
       controller: _amountTextFieldController,
       keyboardType: TextInputType.number,
       inputFormatters: <TextInputFormatter>[

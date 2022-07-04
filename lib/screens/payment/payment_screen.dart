@@ -597,12 +597,16 @@ class _PaymentScreenState extends State<PaymentScreen>
                   2,
                 ),
                 _cashAmountView(
-                  "\$ 15",
+                  "\$ 20",
                   3,
                 ),
                 _cashAmountView(
-                  "\$ 20",
+                  "\$ 50",
                   4,
+                ),
+                _cashAmountView(
+                  "\$ 100",
+                  5,
                 ),
               ],
             ),

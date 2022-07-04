@@ -267,8 +267,8 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                         _buildDateColumn(),
                         _buildPaymentColumn(),
                         _buildPriceColumn(),
-                        _buildTipColumn(),
                         _buildTaxColumn(),
+                        _buildTipColumn(),
                         _buildStatusColumn(),
                       ],
                       rows: List.generate(
@@ -414,9 +414,10 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
                     color: AppColors.textColor1.toMaterialColor(),
                     fontFamily: FontConstants.montserratMedium)),
           ),
+
           DataCell(
             CommonWidgets().textView(
-                '\$ ${savedOrders.tip}',
+                '\$ ${savedOrders.tax_amount}',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: AppColors.textColor1.toMaterialColor(),
@@ -424,7 +425,7 @@ class _AllOrdersScreenState extends State<AllOrdersScreen>
           ),
           DataCell(
             CommonWidgets().textView(
-                '\$ ${savedOrders.tax_amount}',
+                '\$ ${savedOrders.tip}',
                 StyleConstants.customTextStyle(
                     fontSize: 12.0,
                     color: AppColors.textColor1.toMaterialColor(),

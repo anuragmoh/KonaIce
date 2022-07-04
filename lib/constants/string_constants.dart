@@ -92,14 +92,14 @@ class StringConstants {
   static const discount = 'Discount:';
   static const tip = 'Tip:';
   static const all_order_tip = 'Tip';
-  static const all_order_taxAmount = 'Tax Amount';
+  static const all_order_taxAmount = 'Sales \nTax';
   static const total = 'Total:';
   static const foodOrders = 'Food Orders';
   static const filterOrders = 'Filter Orders';
   static const orderId = 'Order ID';
   static const date = 'Date';
   static const payment = 'Payment';
-  static const price = 'Price';
+  static const price = 'Food \nTotal';
   static const status = 'Status';
   static const items = 'ITEMS';
   static const inProcess = 'IN PROGRESS';
