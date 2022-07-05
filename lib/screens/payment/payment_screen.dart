@@ -98,6 +98,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   String _smsValidationMessage = "";
   String _paymentStatusValue = "";
   String _countryCode = StringConstants.usCountryCode;
+  String _finixNCPaymentToken = StringExtension.empty();
 
   FinixAuthResponseModel _finixResponse = FinixAuthResponseModel();
 
@@ -109,6 +110,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   late UserPresenter _userPresenter;
   bool _isApiProcess = false;
   PlaceOrderResponseModel _placeOrderResponseModel = PlaceOrderResponseModel();
+  String _merchantIdNCP = StringExtension.empty();
 
   _PaymentScreenState() {
     _orderPresenter = OrderPresenter(this);
@@ -171,6 +173,7 @@ class _PaymentScreenState extends State<PaymentScreen>
   _getPaymentToken(token) async {
     debugPrint("Payment Token: $token");
     if (token.toString().isNotEmpty) {
+      _finixNCPaymentToken = token;
       _finixManualApiCall();
     } else {
       CommonWidgets().showErrorSnackBar(
@@ -1264,6 +1267,7 @@ class _PaymentScreenState extends State<PaymentScreen>
     _finixSerialNumber = await FunctionalUtils.getFinixSerialNumber();
     _finixUsername = await FunctionalUtils.getFinixUserName();
     _finixPassword = await FunctionalUtils.getFinixPassword();
+    _merchantIdNCP = await FunctionalUtils.getFinixMerchantIdNCP();
   }
 
   Future _performCardPayment() async {
@@ -1618,8 +1622,8 @@ class _PaymentScreenState extends State<PaymentScreen>
       payReceiptModel.orderId = _orderID;
       payReceiptModel.stripePaymentMethodId = null;
       payReceiptModel.stripeCardId = null;
-      // payReceiptModel.finixNCPaymentToken = _finixNCPaymentToken;
-      // payReceiptModel.finixNCPMerchantId = _merchantIdNCP;
+      payReceiptModel.finixNCPaymentToken = _finixNCPaymentToken;
+      payReceiptModel.finixNCPMerchantId = _merchantIdNCP;
     }
 
     setState(() {

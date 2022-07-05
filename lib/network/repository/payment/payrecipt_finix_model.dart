@@ -16,6 +16,8 @@ class PayReceipt {
     this.stripePaymentMethodId,
     this.stripeCardId,
     this.finixResponseDto,
+    this.finixNCPaymentToken,
+    this.finixNCPMerchantId
   });
 
   String? paymentMethod;
@@ -23,6 +25,8 @@ class PayReceipt {
   dynamic stripePaymentMethodId;
   dynamic stripeCardId;
   FinixResponseDto? finixResponseDto;
+  String? finixNCPaymentToken;
+  String? finixNCPMerchantId;
 
   factory PayReceipt.fromJson(Map<String, dynamic> json) => PayReceipt(
         paymentMethod: json["paymentMethod"],
@@ -30,6 +34,9 @@ class PayReceipt {
         stripePaymentMethodId: json["stripePaymentMethodId"],
         stripeCardId: json["stripeCardId"],
         finixResponseDto: FinixResponseDto.fromJson(json["finixResponseDto"]),
+      finixNCPaymentToken: json["finixNCPaymentToken"],
+      finixNCPMerchantId: json["finixNCPMerchantId"]
+
       );
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +45,8 @@ class PayReceipt {
         "stripePaymentMethodId": stripePaymentMethodId,
         "stripeCardId": stripeCardId,
         "finixResponseDto": finixResponseDto!.toJson(),
+    "finixNCPaymentToken": finixNCPaymentToken,
+    "finixNCPMerchantId": finixNCPMerchantId
       };
 }
 
