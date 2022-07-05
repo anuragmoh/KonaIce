@@ -158,7 +158,7 @@ class StringConstants {
   static const enterZipcode = 'Please Enter ZipCode';
 
   // Create adhoc event popup
-  static const popHeading = "Create Adhoc Event";
+  static const popHeading = "Create Misc Sale +";
   static const name = "Name";
   static const enterName = "Enter event name";
   static const address = "Address";
