@@ -59,11 +59,14 @@ class _SettingScreenState extends State<SettingScreen>
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        CommonWidgets().buttonWidget(
-          StringConstants.signOut,
-          () {
-            _onTapSignOutButton();
-          },
+        Visibility(
+          visible: false,
+          child: CommonWidgets().buttonWidget(
+            StringConstants.signOut,
+            () {
+              _onTapSignOutButton();
+            },
+          ),
         ),
         const SizedBox(
           width: 20,

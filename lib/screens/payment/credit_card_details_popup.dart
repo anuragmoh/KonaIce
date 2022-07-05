@@ -375,6 +375,18 @@ class _CreditCardDetailsPopupState extends State<CreditCardDetailsPopup> {
       });
       _isCardNumberValid = false;
     }
+    if (_zipCodeController.text.isEmpty) {
+      setState(() {
+        _zipcodeValidationMessage = StringConstants.enterZipcode;
+      });
+      _isZipCodeValid = false;
+    }
+    if (_cvvController.text.isEmpty) {
+      setState(() {
+        _cvvValidationMessage = StringConstants.cvvEnterMsg;
+      });
+      _isCvvValid = false;
+    }
     if (_isCardNumberValid &&
         _isExpiryValid &&
         _isCvvValid &&

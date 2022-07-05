@@ -143,7 +143,7 @@ class StringConstants {
   static const cardExpiryMonthYear = 'Month/Year';
   static const cardExpiryYear = 'Expiry Year';
   static const cardExpiryMsg = 'Expiry Date';
-  static const cardExpiryEnterMsg = 'Please Enter Month/Year';
+  static const cardExpiryEnterMsg = 'Please Enter CardNumber';
   static const cardExpiryCheckkMsg = "Please Check Month/Year";
   static const cardExpiryYearEnterMsg = "Please Enter Year";
   static const cardExpiryYearCheckMsg = "Please Check Year";

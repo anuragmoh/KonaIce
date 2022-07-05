@@ -50,7 +50,7 @@ class _CustomMenuPopupState extends State<CustomMenuPopup> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonWidgets().popUpTopView(
-                title: StringConstants.customAmount,
+                title: StringConstants.customMenuPackage,
                 onTapCloseButton: _onTapCloseButton),
             _isEditingMenuName ? _customMenuNameEditable() : _customMenuName(),
             _amountTextFieldContainer(),

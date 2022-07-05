@@ -170,7 +170,6 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   _getPaymentToken(token) async {
     debugPrint("Payment Token: $token");
-
     if (token.toString().isNotEmpty) {
       _finixManualApiCall();
     } else {
