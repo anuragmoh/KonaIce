@@ -1625,8 +1625,15 @@ class _PaymentScreenState extends State<PaymentScreen>
     setState(() {
       double? newAmount = _finixResponse.finixCaptureResponse?.amount;
       _isApiProcess = true;
-      _tip = _finixResponse.tipAmount;
-      totalAmount = newAmount!;
+      if (_finixResponse.tipAmount==null) {
+        _tip=0.0;
+      }  else{
+        _tip = _finixResponse.tipAmount;
+      }
+      if (_paymentModeType !=PaymentModeConstants.creditCardManual) {
+        totalAmount = newAmount!;
+      }
+
     });
     _orderPresenter.finixReceipt(payReceiptModel);
     return payReceiptModel;
@@ -1697,7 +1704,7 @@ class _PaymentScreenState extends State<PaymentScreen>
 
   @override
   void getPaymentToken(response) {
-    _getPaymentToken(response.arguments.first);
+    _getPaymentToken(response);
   }
 
   @override
