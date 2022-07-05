@@ -443,6 +443,9 @@ class _PaymentScreenState extends State<PaymentScreen>
               onChanged: (value) {
                 if (value.isNotEmpty) {
                   _onAmountEnter(double.parse(value));
+                  setState(() {
+                    _cashAmountType = -1;
+                  });
                 }
               },
             ),
