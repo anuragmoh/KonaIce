@@ -2,5 +2,5 @@ projectKey=flutter:KonaIcePOS
 serverUrl=https://gitlab.mobisoftinfotech.com:8443
 serverVersion=7.4.0.18908
 dashboardUrl=https://gitlab.mobisoftinfotech.com:8443/dashboard?id=flutter%3AKonaIcePOS
-ceTaskId=AYGVRkb32q_ekJ8_UNKF
-ceTaskUrl=https://gitlab.mobisoftinfotech.com:8443/api/ce/task?id=AYGVRkb32q_ekJ8_UNKF
+ceTaskId=AYIz7xqG4qmrdWaDNXRt
+ceTaskUrl=https://gitlab.mobisoftinfotech.com:8443/api/ce/task?id=AYIz7xqG4qmrdWaDNXRt
